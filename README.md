@@ -56,7 +56,7 @@ under ["New Installation"](#new-installation), below.
 ## Upgrading an existing lens
 
 Once you've imported a lens, you may want to check periodically for updates. 
-You can check the `__output__` directory of the repository to see if there's a new major version available (as of writing, the current version is 1.3.2). 
+You can check the `wafr-operational-readiness-lens` directory of the repository to see if there's a new major version available (as of writing, the current version is 1.3.2). 
 If there is, download the file and go back to the Well Architected Console. Go to Custom Lenses and select the `AWS Internal Operational Readiness Review` custom lens item. 
 Click "Edit" and then click "Choose File" and navigate to the new lens version you are interested in. If everything goes well, you'll get a green "Imported successfully" message, 
 and then click "Publish lens." 
