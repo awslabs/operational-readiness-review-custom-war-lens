@@ -24,7 +24,7 @@ under ["New Installation"](#new-installation), below.
 
 ## New Installation
 
-1. Check the `wafr-operational-readiness-lens` directory for a file named "orr-(version)-PUBLISHED.json", and select the highest version available. File names appended with the PUBLISHED tag have been tested by the repository maintainer to pass all validation checks that the Well Architected Tool service console performs at time of import. Any files in the output directory without "PUBLISHED" in the name are a work-in-progress version that may not import correctly without making some minor adjustments.
+1. Check the `wafr-operational-readiness-lens` directory for a file named "orr-(version)-PUBLISHED.json", and select the highest version available. File names appended with the PUBLISHED tag have been tested by the repository maintainer to pass all validation checks that the Well Architected Tool service console performs at time of import. Any files in the `wafr-operational-readiness-lens` directory without "PUBLISHED" in the name are a work-in-progress version that may not import correctly without making some minor adjustments.
 
 2. Once you've identified the file, pass that file to the Well Architected console by going to https://us-east-1.console.aws.amazon.com/wellarchitected/ (or your preferred region's equivalent) and then going to the Custom Lens page.  Select "Create Custom Lens".
 
