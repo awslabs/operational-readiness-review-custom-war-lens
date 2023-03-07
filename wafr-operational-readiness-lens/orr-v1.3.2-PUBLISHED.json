@@ -1,0 +1,2044 @@
+{
+    "schemaVersion": "2021-11-01",
+    "name": "AWS Operational Readiness Review",
+    "description": "This Well Architected Lense is an adaptation of the AWS Operational Readiness Review program-- a set of questions designed to capture and help correct common failure-points.  It is intended to aid customer and account teams in capturing potential issues prior to go-live.",
+    "pillars": [
+        {
+            "id": "architecture",
+            "name": "01 - Architecture",
+            "questions": [
+                {
+                    "id": "well_architected",
+                    "title": "AWS Well-Architected Framework Review (H)",
+                    "description": "Have you addressed the issues identified as the result of an AWS Well-Architected Framework Review (WAFR)?",
+                    "choices": [
+                        {
+                            "id": "wafr",
+                            "title": "AWS Well-Architected Framework Review (WAFR) has been completed on this workload.",
+                            "improvementPlan": {
+                                "displayText": "Complete a WAFR. Your AWS Account team can help!",
+                                "url": "https://aws.amazon.com/well-architected-tool/"
+                            },
+                            "helpfulResource": {
+                                "displayText": "AWS Well-Architected",
+                                "url": "https://aws.amazon.com/architecture/well-architected"
+                            }
+                        },
+                        {
+                            "id": "no_high_risk",
+                            "title": "There are no outstanding or unresolved high-risk findings from the AWS Well-Architected Framework Review (WAFR).",
+                            "improvementPlan": {
+                                "displayText": "Resolve the WAFR high-risk findings and re-assess.",
+                                "url": "https://www.wellarchitectedlabs.com"
+                            },
+                            "helpfulResource": {
+                                "displayText": "AWS Well-Architected",
+                                "url": "https://aws.amazon.com/architecture/well-architected"
+                            }
+                        },
+                        {
+                            "id": "no_medium_risk",
+                            "title": "There are no outstanding or unresolved medium-risk findings from the AWS Well-Architected Framework Review (WAFR).",
+                            "improvementPlan": {
+                                "displayText": "Resolve the WAFR medium-risk findings and re-assess.",
+                                "url": "https://www.wellarchitectedlabs.com"
+                            },
+                            "helpfulResource": {
+                                "displayText": "AWS Well-Architected",
+                                "url": "https://aws.amazon.com/architecture/well-architected"
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "!wafr || !no_high_risk",
+                            "risk": "HIGH_RISK"
+                        },
+                        {
+                            "condition": "wafr && no_high_risk && !no_medium_risk",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "NO_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_architecture_diagram",
+                    "title": "Architecture Diagram (H)",
+                    "description": "Please provide a diagram of your system or application architecture, both at the infrastructure level and at the data/network flow level. Note the locations in the notes section below.",
+                    "choices": [
+                        {
+                            "id": "architecture_diagram",
+                            "title": "Architecture diagram provided.",
+                            "helpfulResource": {
+                                "displayText": "An architecture diagram shows the (multi)-regional setup of the underlying infrastructure, relevant ELBs, ASGs, how they are split across AZ's, etc."
+                            },
+                            "improvementPlan": {
+                                "displayText": "A review of the architecture diagram is highly recommended prior to go-live in order to sanity check there are no visibile single points of failures. "
+                            }
+                        },
+                        {
+                            "id": "data_flow_diagram",
+                            "title": "Data/network flow diagram provided.",
+                            "helpfulResource": {
+                                "displayText": "A data or network flow diagram shows the flow of data through the system in order to identify external dependencies or internal single points of failure/bottle necks to performance."
+                            },
+                            "improvementPlan": {
+                                "displayText": "A review of the network/data flow diagram is highly recommended prior to go-live in order to ensure there are no noticable bottlenecks or external dependencies that could impact service operation."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "data_flow_diagram && architecture_diagram",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(!data_flow_diagram && architecture_diagram) || (!architecture_diagram && data_flow_diagram)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_services_used",
+                    "title": "AWS Services Used (H)",
+                    "description": "What AWS services, in which accounts and regions, is your workload using? Please break it out by component (Application/Workload/Service-- logical units). ",
+                    "choices": [
+                        {
+                            "id": "onlyAWS",
+                            "title": "All AWS services in-use are known and documented by account and region.",
+                            "helpfulResource": {
+                                "displayText": "All AWS services in-use are known and documented by account and region."
+                            },
+                            "improvementPlan": {
+                                "displayText": "The customer and the account team should leverage Cost Explorer or CUDOS to identify what services are in use across what accounts and regions. The application team should be consulted for calls to externally managed dependencies."
+                            }
+                        },
+                        {
+                            "id": "thirdParty",
+                            "title": "Third party dependencies exist but are known and documented.",
+                            "helpfulResource": {
+                                "displayText": "Third party dependenices are services that are ran, managed, or controlled by a team that exists outside of the customer's organization and outside of AWS."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Third party dependencies should be documented, including known SLAs for uptime and escalation paths that can be engaged in the event of an issue."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "(onlyAWS && !thirdParty)",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(!onlyAWS || thirdParty)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_api_matrix",
+                    "title": "Impacted API Matrix (H)",
+                    "description": "Provide a table with all customer-facing APIs, an explanation of what each does, and the components and dependencies of your service that each API impacts. ",
+                    "choices": [
+                        {
+                            "id": "table_provided",
+                            "title": "Matrix has provided below in the notes section.",
+                            "helpfulResource": {
+                                "displayText": "The API Matrix, or a link to it, has been noted below."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Key Customer-facing APIs that are expecting high traffic should be documented along with its component pieces and dependencies, and expected traffic load if known."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "table_provided",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_failure_models",
+                    "title": "Failure Models (H)",
+                    "description": "Construct a failure model listing soft and hard failures for each of your system's components and dependencies, how they would be detected, and mitigation efforts. Note them below.",
+                    "choices": [
+                        {
+                            "id": "soft_failures_known",
+                            "title": "Soft failures known and documented.",
+                            "helpfulResource": {
+                                "displayText": "Soft failures are failures where an application is partially operating; for example high latency rendering a high percentage of response errors."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Known soft failure scenarios for the application or workload should be documented and discussed in order to identify mitigations."
+                            }
+                        },
+                        {
+                            "id": "soft_failures_detection",
+                            "title": "Soft failures conditions are actively monitored for occurrence.",
+                            "helpfulResource": {
+                                "displayText": "Soft failures such as high latency can be monitored through p90 / p99 transaction monitoring, response error rates can be emitted by the application. Alarms should be set for known soft-failure conditions."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Known soft failure scenarios should be discussed and documented and alarms set to detect such scenarios, if possible."
+                            }
+                        },
+                        {
+                            "id": "soft_failures_runbooks",
+                            "title": "Known soft failure conditions have documented mitigations or playbooks",
+                            "helpfulResource": {
+                                "displayText": "On-call engineers should ideally not be scrambling to 'figure out' what to do. If a failure condition is known ahead of time, playbooks should be written that can be followed in the event of occurence."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Known soft failure scenarios should have runbooks built that on-call engineers can leverage in the event of occurance. Links to the relevant runbooks should be added to the detection alarms."
+                            }
+                        },
+                        {
+                            "id": "hard_failures_known",
+                            "title": "Hard failures known and documented",
+                            "helpfulResource": {
+                                "displayText": "*Hard failures are failures where an application is entirely non-operational."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Known hard failure scenarios should be discussed and documented and alarms set to detect such scenarios, if possible."
+                            }
+                        },
+                        {
+                            "id": "hard_failures_detection",
+                            "title": "Known hard failure conditions are actively monitored for occurrence.",
+                            "helpfulResource": {
+                                "displayText": "Hard failure conditions can be monitored through things like health checks, or instance status checks."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Known hard failure scenarios should be discussed and documented and alarms set to detect such scenarios, if possible."
+                            }
+                        },
+                        {
+                            "id": "hard_failures_runbooks",
+                            "title": "Known hard failure conditions have documented mitigations or playbooks",
+                            "helpfulResource": {
+                                "displayText": "On-call engineers should ideally not be scrambling to 'figure out' what to do. If a failure condition is known ahead of time, playbooks should be written that can be followed in the event of occurence."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Known hard failure scenarios should have runbooks built that on-call engineers can leverage in the event of occurance. Links to the relevant runbooks should be added to the detection alarms."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "hard_failures_runbooks && hard_failures_detection && hard_failures_known && soft_failures_runbooks && soft_failures_detection && soft_failures_known",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "hard_failures_known && soft_failures_known && (!hard_failures_detection || !soft_failures_detection || !hard_failures_runbooks || !soft_failures_runbooks)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_plane_redundency",
+                    "title": "Control & Data Plane Redundency (H)",
+                    "description": "What level of redundancy does your application or service support for its control and data plane components?",
+                    "choices": [
+                        {
+                            "id": "ctrl_regionally_redundant",
+                            "title": "Control plane is redundant within a region.",
+                            "helpfulResource": {
+                                "displayText": "Control plane is a management layer of software, generally dictating where and how the data should move."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Most applications and services can, and should, be run out of multiple AWS availability zones rather than being limited to a single AZ. Work with the account team to discuss options to spread out within a region."
+                            }
+                        },
+                        {
+                            "id": "ctrl_globally_redundent",
+                            "title": "Control plane is redundant between regions.",
+                            "helpfulResource": {
+                                "displayText": "Control plane is a management layer of software, generally dictating where and how the data should move."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Multi-region control plane support is less common but can be achieved with custom software. Work the account team to identify if this is a possibility given the architecture and cost considerations."
+                            }
+                        },
+                        {
+                            "id": "data_regionally_redundant",
+                            "title": "Data plane is redundant within a region.",
+                            "helpfulResource": {
+                                "displayText": "Data plane is the layer that is responsible for routing and handling data that passes through the network."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Most applications and services can, and should, be run out of multiple AWS availability zones rather than being limited to a single AZ. Work with the account team to discuss options to spread out within a region."
+                            }
+                        },
+                        {
+                            "id": "data_globally_redundant",
+                            "title": "Data plane is redundant between regions.",
+                            "helpfulResource": {
+                                "displayText": "Data plane is the layer that is responsible for routing and handling data that passes through the network."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Multi-region data plane support is possible for many architectures with design choices such as infrastructure-as-code, DNS-based routing, and software choices such as DynamoDB Global Tables. Work the account team to identify if this is a possibility given the applicaiton architecture and cost considerations.."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "data_regionally_redundant && ctrl_regionally_redundant",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_retry_timeouts",
+                    "title": "Retries & Socket Timeouts (H)",
+                    "description": "Have you reviewed your retry and socket timeouts?",
+                    "choices": [
+                        {
+                            "id": "reviewed",
+                            "title": "Retry count and socket timeouts reviewed.",
+                            "helpfulResource": {
+                                "displayText": "If misconfigured, multiple retries could push the system above the timeout value even if the call could succeed on the final retry."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review application code to check for number of retries, the timeout per retry, and the length of the overall timeout on either the client side or receiving end."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "reviewed",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_health_checks",
+                    "title": "Health Checks (H)",
+                    "description": "Have you configured DNS and load balancer health checks?",
+                    "choices": [
+                        {
+                            "id": "lb_health_checks",
+                            "title": "Load balancer health checks implemented",
+                            "helpfulResource": {
+                                "displayText": "Health checks at the load balancer level ensure that traffic is routed only to health hosts supporting the application."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Ensure that ELB Health Checks are enabled for event-relevant ELBs.",
+                                "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/as-add-elb-healthcheck.html"
+                            }
+                        },
+                        {
+                            "id": "dns_health_checks",
+                            "title": "DNS Health Checks",
+                            "helpfulResource": {
+                                "displayText": "DNS health checks allow for more granular control of how and which endpoints (hosts, ELBs, cloudfront distributions) receive application traffic. One benefit can be failing over to an alternative implementation (on-prem, other-cloud, other-region) in the event of an issue."
+                            },
+                            "improvementPlan": {
+                                "displayText": "DNS Healthchecks should be enabled where applicable."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "lb_health_checks && dns_health_checks",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(!lb_health_checks && !dns_health_checks) || (!dns_health_checks && !lb_health_checks)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_failure_testing",
+                    "title": "Failure Testing (H)",
+                    "description": "Have you tested single-AZ and single-host failures to ensure that automated fail-away occurs where expected?",
+                    "choices": [
+                        {
+                            "id": "single_host",
+                            "title": "Single host failure has been successfully tested",
+                            "helpfulResource": {
+                                "displayText": "Ensure relevant applications are leveraging autoscaling groups or container orchestration that allows for automatic replacement of failed nodes."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Single host failure testing can be tested by either terminating an in-use EC2 instance at random or by causing a BSOD/Kernel Panic from within the OS."
+                            }
+                        },
+                        {
+                            "id": "single_az",
+                            "title": "Single availability-zone failure has been successfully tested.",
+                            "helpfulResource": {
+                                "displayText": "Ensure that applications are leveraging autoscaling groups across multiple AZs, RDS instances have configured for multi-AZ configurations, ELBs are configured across multiple AZs, and Elasticache instances are configured for mutliple AZs with redundancy."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Single AZ failures can be tested by leveraging VPC NACLs to block all traffic going to those subnets. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "single_host && single_az",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(single_host && !single_az) || (!single_host && single_az)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_demand_estimates",
+                    "title": "Demand Estimations (H)",
+                    "description": "What are your forecasted estimates for customer demand? Have you tested your services to ensure they can handle your estimates? Are there specific performance requirements the applicatio must meet? Note what those demand expectations are.",
+                    "choices": [
+                        {
+                            "id": "firmly_known",
+                            "title": "Customer demand well known or throttled.",
+                            "helpfulResource": {
+                                "displayText": "The level of demand is well known, or throttling mechanisms exist in order to limit the level of demand to sustainable levels. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "Engage with business leadership to understand the expected level of traffic, or if throttling is acceptable. In the event of neither option being available, considering pre-warming any autoscaling groups or static nodes and then scaling down once load is understood."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "firmly_known",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_load_testing",
+                    "title": "Load & Penetration Testing (H)",
+                    "description": "Have you performed multiple rounds of load testing to discover and address any unexpected performance bottlenecks and establish known breaking points? Has penetration testing been completed to detect security vulnerabilities?  Note any issues that have arisen in the course of testing.",
+                    "choices": [
+                        {
+                            "id": "load_known",
+                            "title": "The anticipated load and capacity plan are documented.  Provide a link to the load documentation and capacity plan in the notes.",
+                            "helpfulResource": {
+                                "displayText": "Document the expected traffic load / traffic requirements for the service,"
+                            },
+                            "improvementPlan": {
+                                "displayText": "Document the expected load and capacity plan in order to ensure stability."
+                            }
+                        },
+                        {
+                            "id": "lb_1x",
+                            "title": "Tested to expected load / capacity requirement.",
+                            "helpfulResource": {
+                                "displayText": "Load balancing was done to level of or beyond 1x the expected traffic load / traffic requirements"
+                            },
+                            "improvementPlan": {
+                                "displayText": "Assuming that load levels are known, the application stack should be tested to the expected load in order to ensure stability.",
+                                "url": "https://aws.amazon.com/solutions/implementations/distributed-load-testing-on-aws/"
+                            }
+                        },
+                        {
+                            "id": "lb_2x",
+                            "title": "Two times expected load / requirement.",
+                            "helpfulResource": {
+                                "displayText": "Load balancing was done to level of or beyond 2x the expected traffic load / traffic requirements"
+                            },
+                            "improvementPlan": {
+                                "displayText": "Assuming that load levels are known, the application stack should be tested to 2x the expected load in order to ensure stability."
+                            }
+                        },
+                        {
+                            "id": "lb_3x",
+                            "title": "Three times expected load / requirement.",
+                            "helpfulResource": {
+                                "displayText": "Load balancing was done to level of or beyond 3x the expected traffic load / traffic requirements"
+                            },
+                            "improvementPlan": {
+                                "displayText": "Assuming that load levels are known, the application stack should be tested to 3x the expected load in order to ensure stability."
+                            }
+                        },
+                        {
+                            "id": "lb_xx",
+                            "title": "Load balancing performed to break-point.",
+                            "helpfulResource": {
+                                "displayText": "Load balancing was pressed to the breaking point above and beyond any specific targets. Note the break-point."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If expected user loads are not known, or if the operators are especially cautious, the application/service should be tested and pushed until it, or any other component, breaks down. This establishes the true 'upper limit' of what the stack can support and gives the operators a dry-run test of what such failure may look like once the application is live."
+                            }
+                        },
+                        {
+                            "id": "pen",
+                            "title": "Security penetration testing has been completed.",
+                            "helpfulResource": {
+                                "displayText": "Test the AWS environment against defined security standards.",
+                                "url": "https://aws.amazon.com/security/penetration-testing/"
+                            },
+                            "improvementPlan": {
+                                "displayText": "Conduct penetration testing against defined security standards.",
+                                "url": "https://aws.amazon.com/security/penetration-testing/"
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "load_known && lb_1x && lb_2x && lb_3x && pen",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "load_known && lb_1x && pen && (!lb_2x || !lb_3x || !lb_xx)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_defensive_throttling",
+                    "title": "Defensive Throttling (H)",
+                    "description": "What defensive mechanisms are you using to protect your service from customers?",
+                    "choices": [
+                        {
+                            "id": "cdn",
+                            "title": "Content delivery network",
+                            "helpfulResource": {
+                                "displayText": "A content delivery network protects a service by distributing its assets to a variety of locations closer to the user's locations, limiting the number of requests that need to be serviced by the origin."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Speak with the account team on implementing a CDN in front of your application, such as AWS Cloudfront, in order to cache assets.",
+                                "url": "https://aws.amazon.com/cloudfront/"
+                            }
+                        },
+                        {
+                            "id": "waf",
+                            "title": "Web application firewall",
+                            "helpfulResource": {
+                                "displayText": "A web application firewall helps to protect a service from a variety of common attacks such as distributed denial of service, injection attacks, geological location of users or known bad IPs."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Speak with the account team on implementing a web application firewall, such as AWS WAF, in order to protect the service from common attack patterns and exploits.",
+                                "url": "https://aws.amazon.com/waf/"
+                            }
+                        },
+                        {
+                            "id": "autoscaling",
+                            "title": "Autoscaling compute nodes",
+                            "helpfulResource": {
+                                "displayText": "Autoscaling allows for scaling the compute nodes to meet customer demand. While this does not prevent users from hitting the origin srevice, it does allow the origin service to attempt to meet the demand."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Applications should leverage AWS EC2 Autoscaling and load testing should be done in order to verify that the application, and all its downstream dependencies, can handle scaling out to the maximum configured.",
+                                "url": "https://aws.amazon.com/ec2/autoscaling/"
+                            }
+                        },
+                        {
+                            "id": "queueing",
+                            "title": "Users sessions are queued",
+                            "helpfulResource": {
+                                "displayText": "An alternative to autoscaling, limiting the number of concurrent users that can interact with the application or system, a waiting room based system, is a highly effective way to ensure that the system does not get overwhelmed by requests."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If appropriate to the application type, sit down with the account team to discuss methods to include a waiting room or lobby to the application's user flow. "
+                            }
+                        },
+                        {
+                            "id": "async_execution",
+                            "title": "Users requests are received and processed asynchronously.",
+                            "helpfulResource": {
+                                "displayText": "An alternative to queueing user sessions, asynchronous execution of user requests involves accepting the user provided input and adding it to a queueing mechanism or other storage and then processing them as resources allow with a notification back to the user (such as an email) when their request has been completed."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If appropriate to the application type, work with the account to discuss methods to modify the application workflow to be asynchronous and prompt the user for a callback-style mechanism to inform them of when their request has been completed."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "autoscaling && waf && cdn",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "autoscaling && (!waf || !cdn)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_data_corruption",
+                    "title": "Data Corruption Recovery (H)",
+                    "description": "In the case of logical or physical data corruption, how do you detect, recover, and verify your data and service?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Relevant risk has been mitigated",
+                            "helpfulResource": {
+                                "displayText": "Detecting data corruptiong is dependent upon how the data is collected and what type of data it is. Regular expressions, comparing against JSON schemas, or type checking can detect malformed input data. What may be more difficult is detecting inputs that are technically correct but junk. Recovering data depends on sanitization or on having backups."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Refer to question's notes on the exact data integrity concerns and consult with the account team TAM & SA to identify potential remediations or mitigations."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_rpo_rto",
+                    "title": "Recovery Objectives (M)",
+                    "description": "Assuming your service or workload suffers data loss, have you defined your Recovery Point Objective? If many varying RPOs exist per component, define them in notes.",
+                    "choices": [
+                        {
+                            "id": "rto_defined",
+                            "title": "RTO has been defined",
+                            "helpfulResource": {
+                                "displayText": "Recovery Time Objective is a measure of the amount of acceptable downtime per incident, for example five minutes, 30 minutes, an hour, a day, etc."
+                            },
+                            "improvementPlan": {
+                                "displayText": "The account team, application and ops teams should work together with the business team in order to identify a supportable recovery time objective based upon design and customer agreements."
+                            }
+                        },
+                        {
+                            "id": "rto_verified",
+                            "title": "RTO has been verified through a dry-run or game-day exercise",
+                            "helpfulResource": {
+                                "displayText": "A theoretical RTO is a good starting point, but until the teams have verified their ability to support it, it is difficult to rely upon."
+                            },
+                            "improvementPlan": {
+                                "displayText": "A game-day, dry-run or similar exercise should be used to ensure that all relevant teams know what actions need to be taken in the event of an outage. Drafting a written runbook may be useful for documentation purposes. A hot or cold stand-by environment may also be useful in order to achieve faster RTO by evacuating the primary environment."
+                            }
+                        },
+                        {
+                            "id": "rpo_defined",
+                            "title": "RPO has been defined",
+                            "helpfulResource": {
+                                "displayText": "The Recovery Point Objective is a measure of how much data loss is acceptable following each incident. For example, is needing to restore from backups taken the day prior sufficient, or do the backups need to be taken more frequently? "
+                            },
+                            "improvementPlan": {
+                                "displayText": "The account team, application and ops teams should work together with the business team in order to identify a supportable recovery point objective based upon design and customer agreements."
+                            }
+                        },
+                        {
+                            "id": "backups_verified",
+                            "title": "Backups supporting RPO have been verified.",
+                            "helpfulResource": {
+                                "displayText": "Unverified backups cannot be relied upon. Any backups taken in support of recovery efforts should be periodically tested in order to ensure viability."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "rto_defined && rto_verified && rpo_defined && backups_verified",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(rto_defined && rpo_defined) && (!rto_defined || !backups_verified)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_gradeful_recovery",
+                    "title": "Graceful Recovery (H)",
+                    "description": "In the case of a large scale service failure, if your service recovers before its dependencies, does it fail in a way that is acceptable (i.e. a form of graceful degradation, such as an error) or in an unacceptable/unpredictable way?",
+                    "choices": [
+                        {
+                            "id": "health_checks",
+                            "title": "Applications performs health checks against dependent services.",
+                            "helpfulResource": {
+                                "displayText": "The application performs health checks against its dependent services in order to pro-actively catch issues and keep unnecessary load off of those systems. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "The application should "
+                            }
+                        },
+                        {
+                            "id": "error_handling",
+                            "title": "Application catches errors and exceptions correctly.",
+                            "helpfulResource": {
+                                "displayText": "The application's logic code includes error handling and exception catching for issues that arise due to problems with external dependencies."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Have a discussion with the account team on if this risk can or should be further mitigated prior to go-live."
+                            }
+                        },
+                        {
+                            "id": "alternate_codepaths",
+                            "title": "An alternate codepath exists that can be executed in the event of dependency issues.",
+                            "helpfulResource": {
+                                "displayText": "The application has alternative logic and code paths that can be leveraged in the event that its dependencies have issues, such as queueing or otherwise storing transactions to be replayed later."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Work with the account team to mitigate the risk prior to go live."
+                            }
+                        },
+                        {
+                            "id": "tested",
+                            "title": "The application has tested a scenario where its dependencies are non-fuctional.",
+                            "helpfulResource": {
+                                "displayText": "The application has undergone a specific test to see how it responds when its dependencies are nonfunctional, testing error conditions, and to test alternative codepaths if they exist. The testing was successful."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Work with the account team to mitigate the risk prior to go live."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "tested && alternate_codepaths && error_handling && health_checks",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(tested || alternate_codepaths || error_handling || health_checks) && (!tested || !alternate_codepaths || !error_handling || !health_checks)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_dependency_retry",
+                    "title": "Dependency Retry/Backoff (M)",
+                    "description": "What is the retry/back-off strategy for each of your service's dependencies?",
+                    "choices": [
+                        {
+                            "id": "aws_services",
+                            "title": "Code calling out to AWS APIs implement proper retry and backoff strategies.",
+                            "helpfulResource": {
+                                "displayText": "It is an AWS best practice, and a required practice for large applications, to properly catch ThrottlingExceptions and implement retry, backoff, and jitter strategies."
+                            },
+                            "improvementPlan": {
+                                "displayText": "While some of the AWS SDKs will properly capture ThrottlingExceptions and automatically handle retries and backoff conditions, those retries are limited to a set number of attempts and those errors could still be raised to the application. Those errors should be caught and handled appropriately with fail-safe code paths."
+                            }
+                        },
+                        {
+                            "id": "third_parties",
+                            "title": "Code calling out to non-AWS APIs implement retry and backoff strategies.",
+                            "helpfulResource": {
+                                "displayText": "It is a recommended best practice to implement retries and backoff strategies for dependencies which emit dedicated throttling errors."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Assuming that the third party APIs properly emit throttling or other performance errors, those errors should be caught and sane-failure modes should be enacted, either slowing down the rate that the application talks to that third party or skipping over it entirely. Similar failure conditions should be implemented for the third party service being hard-down."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "aws_services && third_parties",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_mulitaccount_stragy",
+                    "title": "Multi-account Strategy (M)",
+                    "description": "Does your system use at least one AWS account for every stage and fault container (Region or zone) pair?",
+                    "choices": [
+                        {
+                            "id": "acct_separated_by_stage",
+                            "title": "Stages of development separated by account",
+                            "helpfulResource": {
+                                "displayText": "Separating Development/Staging/Production from one another through account boundaries is a highly effective way to segregate failure domains as well as security borders."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If time allows, development and staging should be broken out from production into separate accounts. This reduces the blast radius of security events and makes it easier to manage limits & API throttling across the environments.",
+                                "url": "https://docs.aws.amazon.com/managedservices/latest/userguide/malz-net-arch-section.html"
+                            }
+                        },
+                        {
+                            "id": "acct_separated_by_region",
+                            "title": "Deployed regions are separated by account.",
+                            "helpfulResource": {
+                                "displayText": "For highly critical applications, separating the production account for us-east-1 from the production account supporting us-west-2 can be beneficial in order to prevent multi-region failures due to scripts running awry or a security incident."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If multi-region durability is a major concern, an architecture review with the account team may be warranted in order to discuss how to break out a multi-region production environment to a multi-account architecture.",
+                                "url": "https://docs.aws.amazon.com/managedservices/latest/userguide/malz-net-arch-section.html"
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "acct_separated_by_stage && acct_separated_by_region",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_mutliaccount_credentials",
+                    "title": "Multiaccount Credentials (M)",
+                    "description": "If you're using multiple AWS accounts, how are your accounts and credentials segregated?",
+                    "choices": [
+                        {
+                            "id": "credentials_separated",
+                            "title": "Relevant risk has been mitigated",
+                            "helpfulResource": {
+                                "displayText": "Separation of accounts and the credentials to access them are an important component of minimizing access. Engineers should not typically have access to systems that they are not responsible for. Greater-than-required levels of access are prime opportunities for accidental impact or for security incidents."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Work with the account team to segregate levels of access to teams that need it, AD Groups & SAML can be used to limit the accounts that engineers have access to, if using SSO, and hard-coded AWS credentials should be segrated to the teams that may need them, or at the executive level for root credentials."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "credentials_separated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_shared_resources_redundancy",
+                    "title": "Resources shared across regions (M)",
+                    "description": "Do you currently use any resources that are shared across redundant zones? For example, if your service is regionally redundant, are any resources shared across those regions?",
+                    "choices": [
+                        {
+                            "id": "regional_isolation",
+                            "title": "No cross-region resources exist",
+                            "helpfulResource": {
+                                "displayText": "An example of this setup would be a multi-region setup where each region is fully isolated, likely requiring that a USA user be serviced from a specific USA region."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Improving this item depends on the exact busienss objectives and applicable laws & regulations. It may be desirable to have a silo'd architecture due to legal requirements regarding user data."
+                            }
+                        },
+                        {
+                            "id": "geographically_redundant",
+                            "title": "All cross-region resources are redundantly available.",
+                            "helpfulResource": {
+                                "displayText": "An example would be redundant databases geographically separated that can support any user connecting from anywhere."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Improving this item depends on the exact business objectives and applicable laws and regulations. It may be desirable for the resources to be silod in order to have a firmly defined blast radius during an outage, or to abide by local laws. DynamoDB Global Tables would be one example of a multi-region database."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "regional_isolation || geographically_redundant",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "architecture_certificates",
+                    "title": "Software Certificates (L)",
+                    "description": "Are SSL/TLS Certificates used within your system stored in AWS Certificate Manager? If not, where are they stored? Non-TLS certificates and API keys are handled in another question. ",
+                    "choices": [
+                        {
+                            "id": "exp_alarm",
+                            "title": "Certificate expiration has notifications or alarms in place in the days leading up.",
+                            "helpfulResource": {
+                                "displayText": "Alarms are in place in order to alert operators to soon-to-be expired TLS certificates."
+                            },
+                            "improvementPlan": {
+                                "displayText": "CloudWatch alarms should be created that alarm on soon-to-be-expiring certificates for key certificates.",
+                                "url": "https://docs.aws.amazon.com/acm/latest/userguide/monitoring-and-logging.html"
+                            }
+                        },
+                        {
+                            "id": "automated_renewal",
+                            "title": "The renewal of certificates is an automated process.",
+                            "helpfulResource": {
+                                "displayText": "Automated systems handle the renewal of TLS certificates with alerts to operators in the event of failure."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Automated workflows (scripts, SSM Runbooks, other) should be leveraged to generate replacement certificates and stage them for deployment.",
+                                "url": "https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html"
+                            }
+                        },
+                        {
+                            "id": "automated_deployments",
+                            "title": "Renewed certificates are automatically deployed to relevant systems.",
+                            "helpfulResource": {
+                                "displayText": "Automated systems are leveraged in order to automatically switch out the old TLS certificates with new ones, with alarms in place to alert operators in the event of failure."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Automated workflows (scripts, SSM Runbooks, config management) should be leveraged to deploy staged replacement certificates to relevant resources."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "exp_alarm && automated_renewal && automated_deployments",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "!exp_alarm || !automated_renewal || !automated_deployments",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "release_quality",
+            "name": "02 - Release Quality & Procedures",
+            "questions": [
+                {
+                    "id": "releases_deployment",
+                    "title": "Deployment Mechanisms (H)",
+                    "description": "What mechanisms are you utilizing to deploy to your production systems?",
+                    "choices": [
+                        {
+                            "id": "automated_in_place",
+                            "title": "In-place updates are made to production systems using automation",
+                            "helpfulResource": {
+                                "displayText": "Automated deployments are done to existing systems, updating them in place. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "Have a discussion with the account team on if this risk can or should be further mitigated prior to go-live. What does the rollback plan look like for a failed deployment or bad release?",
+                                "url": "https://docs.aws.amazon.com/whitepapers/latest/overview-deployment-options/welcome.html"
+                            }
+                        },
+                        {
+                            "id": "blue_green",
+                            "title": "Blue/Green deployments are leveraged.",
+                            "helpfulResource": {
+                                "displayText": "Automated systems handle blue/green deployments to production systems. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "Blue/Green deployments are not applicable"
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "blue_green && !automated_in_place",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "automated_in_place && !blue_green",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_change_management",
+                    "title": "Change Management (H)",
+                    "description": "Do you have a mechanism to ensure all code changes (software, configuration, infrastructure, and operational tooling) to production systems are reviewed and approved by someone other than the code author?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Relevant risk has been mitigated",
+                            "helpfulResource": {
+                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_manual_changes",
+                    "title": "Manual Changes (H)",
+                    "description": "What changes (software, configuration, and infrastructure) do you need to perform manually? Have these changes been modeled in a pre-approved template prior to executing?",
+                    "choices": [
+                        {
+                            "id": "no_manual_changes",
+                            "title": "No manual changes performed",
+                            "helpfulResource": {
+                                "displayText": "Manual changes introduce risk of missed steps, typos, or other human errors."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Any manual tasks should be documented and turned into automated scripts or other automated processes to remove the opportunity for human error. Any task that cannot be automated should be documented in a clearly defined step-by-step process in order to reduce the opportunity for errors."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "no_manual_changes",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_canaries",
+                    "title": "Deployment Canaries (H)",
+                    "description": "Does your service have canaries that call your service through its public endpoints to validate happy path functionality for all public and private APIs, critical customer scenarios, and UIs in all regions?",
+                    "choices": [
+                        {
+                            "id": "availability_canaries",
+                            "title": "Canaries are leveraged to monitor application availability post deployment.",
+                            "helpfulResource": {
+                                "displayText": "Even after a 'technically' successful deployment, things could go wrong that lead to the application being unavailable to the consumer. Canaries can check for those errors by loading the application."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Synthetic canaries should be in place to continually monitor the uptime and stability of the application in order to ensure that successful deployments do not impact availability."
+                            }
+                        },
+                        {
+                            "id": "performance_canaries",
+                            "title": "Canaries are leveraged to monitor application performance post deployment.",
+                            "helpfulResource": {
+                                "displayText": "Even if the application is up and running, performance canaries can inform operators if the last deployment had a noticable impact to user experience."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If transaction tracing or other performance-monitoring is available, synthetic transactions or canaries should be setup in order to monitor the performance characteristics of the application and compare that data against historical averages to ensure that a deployment does not significantly degrade the user experience."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "availability_canaries && performance_canaries",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(performance_canaries && !availability_canaries) || (!performance_canaries && availability_canaries)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_staged_deployments",
+                    "title": "Staged Deployments (M)",
+                    "description": "Are your deployments first staged in a pre-production or staging environment before reaching a production environment?",
+                    "choices": [
+                        {
+                            "id": "preprod_testing",
+                            "title": "Deployments are tested in pre-production environments",
+                            "helpfulResource": {
+                                "displayText": "Whether through automated or manual systems, deployments should be tested in pre-production environments prior to being admitted to the production environment."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Pre-production testing and the development of a testing matrix are critical for ensuring minimal user-impaction."
+                            }
+                        },
+                        {
+                            "id": "automated_progression",
+                            "title": "Deployments automatically proceed using the same code from one environment to the next.",
+                            "helpfulResource": {
+                                "displayText": "In order to ease the burden on engineers, testing pipelines should automatically test and then promote changes from one environment to the next."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Have a discussion with the account team on if this risk can or should be further mitigated prior to go-live."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "preprod_testing",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_onebox_deployments",
+                    "title": "One Box Deployments (M)",
+                    "description": "Are your deployments tested in a production one-box stage before deploying to the region's production stage? How does the deploy escalate to the full deployment?",
+                    "choices": [
+                        {
+                            "id": "onebox",
+                            "title": "Relevant risk has been mitigated",
+                            "helpfulResource": {
+                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        },
+                        {
+                            "id": "one_az",
+                            "title": "Relevant risk has been mitigated",
+                            "helpfulResource": {
+                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        },
+                        {
+                            "id": "one_region",
+                            "title": "Relevant risk has been mitigated",
+                            "helpfulResource": {
+                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "onebox && one_az && one_region",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "!onebox",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_deployment_rollback",
+                    "title": "Automated Deployment Rollback (M)",
+                    "description": "Do your deployments automatically rollback incorrect deployments before they breach SLAs?",
+                    "choices": [
+                        {
+                            "id": "manual_rollback",
+                            "title": "Manual rollbacks can be initiated by operators",
+                            "helpfulResource": {
+                                "displayText": "Simple rollback mechanisms allow for operators to make the call on whether a given deployment is going to succeed or not after problems arise."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If manual rollback is not being used currently because it is not supported, then the fail-forward plan should be clearly documented "
+                            }
+                        },
+                        {
+                            "id": "auto_rollback",
+                            "title": "Automatic rollbacks are initiated by monitoring systems.",
+                            "helpfulResource": {
+                                "displayText": "Automated rollback mechanisms free up operator time and allows for faster response to a deployment that is not going as planned. This requires deployment metrics to be configured, such as canary alarms."
+                            },
+                            "improvementPlan": {
+                                "displayText": "In blue/green deployment environments, automatically reverting back to the previous environment can be a safe choice in order to minimize user-impact. Assuming that the app supports rolling back to a previous version, discuss with the account team what parts of the manual steps can be turned into automation and how that automation can be triggered."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "auto_rollback",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "manual_rollback",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_deployment_gating",
+                    "title": "Deployment Gating (M)",
+                    "description": "Do you prevent your system from deploying to too many hosts at once?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Deployments gated to static number or percent of hosts",
+                            "helpfulResource": {
+                                "displayText": "Limiting deployments to a set number of hosts, or a certain percentage, ensures that there is a healthy capacity of available nodes at a given time."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If using ECS, SSM or CodeDeploy, review relevant feature sets to limit the number of nodes that a given command/upgrade/deployment is against at a time."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_performance_impact",
+                    "title": "Performance Impact (M)",
+                    "description": "If your deployment drastically alters latency and throughput measurements, what mechanisms do you use to detect this change before deploying to production?",
+                    "choices": [
+                        {
+                            "id": "test_profiling",
+                            "title": "Performance is tested as part of standard pre-production tests.",
+                            "helpfulResource": {
+                                "displayText": "Key performance metrics are monitored as part of the pre-production testing phase. Major (negative) alterations to the test result in failed tests."
+                            },
+                            "improvementPlan": {
+                                "displayText": "The performance of an applicaiton is nearly as important as the availability of the application, pre-production tests should not only test code quality and functionality but also the performance of the functionality in order to avoid introducing a negative user experience."
+                            }
+                        },
+                        {
+                            "id": "production_canaries",
+                            "title": "Canaries continually test common API calls.",
+                            "helpfulResource": {
+                                "displayText": "Automated canaries in production can continually test common API calls and measure their user-facing performance, such as latency and time to completion, and alarm if it deviates from expectations."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Automated API calls that test the most common, or most critical, code paths as a user would should be implemented and monitor the latency and time it takes for those code paths to complete. Continual major deviences from that baseline should alarm operators to a potential problem."
+                            }
+                        },
+                        {
+                            "id": "transaction_tracing",
+                            "title": "Per-transaction performance metrics are logged.",
+                            "helpfulResource": {
+                                "displayText": "Each transaction has its performance metrics reported such that percentile metrics can be captured and monitored for downward trends."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Work with the account team to receive an introduction on AWS X-Ray which is an SDK and service that enables transaction tracing."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "test_profiling && production_canaries && transaction_tracing",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(test_profiling && (!production_canaries || !transaction_tracing)) || (transaction_tracing && (!production_canaries || !test_profiling)) || (production_canaries && (!test_profiling || !transaction_tracing))",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_validation",
+                    "title": "Deployment Validation (L)",
+                    "description": "Do your deployments run on-host validation tests to verify that the software has started successfully and is responding correctly to health checks?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "On-host validation",
+                            "helpfulResource": {
+                                "displayText": "Post-deployment validation is critical to ensure that the software which was deployed correctly executes and functions as intended. Such as certain files being in place, services in running states, configuration as expected."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Depending on deployment methodology (updating existing instances vs blue/green), look to adding a validation step to existing deploymenting mechanisms to validate seemingly successful deployments. In the event an error is found, that error needs to be propagated to operators and the deployment failed."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_canary_errors",
+                    "title": "Independent Canary Errors (L)",
+                    "description": "Do you publish your canary errors to an independent metric? Subsequently, do you alarm on this metric?",
+                    "choices": [
+                        {
+                            "id": "canaries_exist",
+                            "title": "Canary alarms have been configured",
+                            "helpfulResource": {
+                                "displayText": "Canary alarms can include things such as heartbeat checks, broken link detection, "
+                            },
+                            "improvementPlan": {
+                                "displayText": "Speak with the account team about getting a deep dive on Cloudwatch Synthetics and its canary capabilities.",
+                                "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_Create.html"
+                            }
+                        },
+                        {
+                            "id": "canary_ops",
+                            "title": "Canary Metrics have alarms tied to them that engage the operations team.",
+                            "helpfulResource": {
+                                "displayText": "Canary alarms primary purpose to proactively catch downward trends in application or service health. As such, those alarms should notify operator teams so that they can investigate potential issues."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Canaries failing should be set to engage relevant teams (content teams for broken links, operators for heartbeats / API failures, etc) at an appropriate severity level. Such as tickets for broken links, or perhaps paging for failed heartbeats. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "canaries_exist && canary_ops",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "canaries_exist && !canary_ops",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_traffic_draining",
+                    "title": "Traffic Draining (L)",
+                    "description": "How is traffic diverted from a host before shutting down the processes?",
+                    "choices": [
+                        {
+                            "id": "elb_draining",
+                            "title": "ELB Connection Draining is turned on and configured.",
+                            "helpfulResource": {
+                                "displayText": "Host draining dis-allows new connections to the backend node prior to it being taken out of commission, this reduces the user-facing impact to scale-in & maintenance operations."
+                            },
+                            "improvementPlan": {
+                                "displayText": "ELB Connection Draining should be enabled if required within the ELB console and an appropriate time-out set. ALB and NLB refer to Connection Draining as 'Deregistration Delay'. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "elb_draining",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "releases_custom_amis",
+                    "title": "Custom AMIs (L)",
+                    "description": "If your system uses custom EC2 AMIs, do you have dedicated AMIs for non-production AWS accounts and production AWS accounts?",
+                    "choices": [
+                        {
+                            "id": "prebuilt_amis",
+                            "title": "AMIs are leveraged in order to prebake in software and configuration",
+                            "helpfulResource": {
+                                "displayText": "By pre-baking software installation and configuration, customers get closer to immutable infrastructure and improve deployment times by ensuring there is minimal stand-up time required."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Common software (security agents or server packages) can be baked into the AMI along with their configuration. This ensures "
+                            }
+                        },
+                        {
+                            "id": "distinct_amis",
+                            "title": "Distinct AMIs are used for production vs non-production environments.",
+                            "helpfulResource": {
+                                "displayText": "Leveraging distinct AMIs for each environment ensures that accidental deletions or changes to lower environments do not impact higher ones."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        },
+                        {
+                            "id": "regenerated",
+                            "title": "AMIs are regenerated on a consistent basis in order to keep them up to date.",
+                            "helpfulResource": {
+                                "displayText": "Security updates are regularly released for operating systems, regenerating the AMIs on a consistent basis improves deployment times and improves security posture."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "regenerated && distinct_amis && prebuilt_amis",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(prebuilt_amis && (distinct_amis && !regenerated)) || (prebuilt_amis && (regenerated && !distinct_amis))",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "automation_of_test_coverage",
+                    "title": "Test Coverage (H)",
+                    "description": "What tests and code scans are in place with adequate code coverage?",
+                    "choices": [
+                        {
+                            "id": "test_int",
+                            "title": "Automated Integration Tests are implemented and run during the release process with sufficient coverage.",
+                            "improvementPlan": {
+                                "displayText": "Ensure you have comprehensive integration test coverage."
+                            }
+                        },
+                        {
+                            "id": "test_unit",
+                            "title": "Automated Unit Tests are implemented and run during the release process with sufficient coverage.",
+                            "improvementPlan": {
+                                "displayText": "Ensure you have comprehensive unit test coverage."
+                            }
+                        },
+                        {
+                            "id": "smoke",
+                            "title": "Automated tests are run after deployment to ensure success.",
+                            "improvementPlan": {
+                                "displayText": "Add deployment smoke testing to the deployment pipeline to verify successful deployment."
+                            }
+                        },
+                        {
+                            "id": "scan",
+                            "title": "Automated code vunerability scanning and linting are performed during CICD.",
+                            "improvementPlan": {
+                                "displayText": "Add code vunerability scanning and linting to the deployment pipeline."
+                            }
+                        },
+                        {
+                            "id": "manual",
+                            "title": "Manual Test Suites and Code Scans are run.",
+                            "improvementPlan": {
+                                "displayText": "Ensure you have comprehensive test coverage."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "test_int && test_unit && scan && smoke",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "!test_int && !test_unit && !scan && !smoke && manual",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": "event_management",
+            "name": "03 - Incident & Event Management",
+            "questions": [
+                {
+                    "id": "underlying_dependencies",
+                    "title": "Underlying Dependencies (H)",
+                    "description": "What are the underlying dependencies for the service?  Include a list of other services, systems, and infrastructure outside the boundary of this application.  Explain how your service will be impacted based on a failure of each of your dependencies.",
+                    "choices": [
+                        {
+                            "id": "table_provided",
+                            "title": "A link of the list of underlying dependencies is provided below in the notes section.",
+                            "helpfulResource": {
+                                "displayText": "The list of underlying dependencies, or a link to it, has been noted below."
+                            },
+                            "improvementPlan": {
+                                "displayText": "The key list of underlying dependencies should be inventoried and documented."
+                            }
+                        },
+                        {
+                            "id": "impact_provided",
+                            "title": "The impact of underlying dependency failure is provided below in the notes section.",
+                            "helpfulResource": {
+                                "displayText": "The list of underlying dependencies failure impact, or a link to it, has been noted below."
+                            },
+                            "improvementPlan": {
+                                "displayText": "The list of impacts of underlying dependency failure should be inventories and documented."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "table_provided && impact_provided",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_kpis",
+                    "title": "Operational KPIs (H)",
+                    "description": "What operational goals or KPIs (latency, throughput/TPS, etc.) have you identified for your service?",
+                    "choices": [
+                        {
+                            "id": "kpis_documented",
+                            "title": "KPIs are known and documented in the notes section.",
+                            "helpfulResource": {
+                                "displayText": "Knowing your KPIs are an important piece in understanding if you are meeting the needs of the users during an event. KPIs could include uptime/availability, number of active users or session, number of transactions per second, amount of time each transaction takes or the amount of latency a user is experiencing."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Work with business leadership to understand the KPIs that will determine whether the event is a success, and then work to implement those KPIs as metrics and alarms."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "kpis_documented",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_oncall_rotation",
+                    "title": "On-call Rotation (H)",
+                    "description": "Do you have an on-call rotation configured? Are there runbooks written for use by the oncalls? Have those runbooks been tested and validated? In the event the oncall needs help, what are your escalation procedures?",
+                    "choices": [
+                        {
+                            "id": "oncall_rotation",
+                            "title": "Oncall rotation is agreed upon and known.",
+                            "helpfulResource": {
+                                "displayText": "A clear and well documented on-call plan ensures that each engineer knows who is responsible and who should be engaged in the event of an issue."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        },
+                        {
+                            "id": "alarm_engagement",
+                            "title": "Oncall engineers are automatically engaged by metric alarms / ticketing systems.",
+                            "helpfulResource": {
+                                "displayText": "High-impact alarms should automatically engage relevant oncall engineers, or cut tickets which will then engage the oncall. This ensures that there is minimal delay from the time an issue begins to the time operators are engaged. Highly-critical alarms should be configured to engage engineers within five minutes."
+                            },
+                            "improvementPlan": {
+                                "displayText": "High-impact alarms should automatically engage relevant oncall engineers, or cut tickets which will then engage the oncall. Highly-critical alarms should be configured to engage engineers within five minutes."
+                            }
+                        },
+                        {
+                            "id": "oncall_sla",
+                            "title": "Oncall engineers have an SLA for check-in time once an engagement ",
+                            "helpfulResource": {
+                                "displayText": "As part of the oncall process and documentation, expectations should be clearly defined and understood by the oncall engineers. This includes an expected SLA on when they need to check in by once an event begins and they are notified."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Discuss and implement, or update, a document for oncall responsibilities and expectations."
+                            }
+                        },
+                        {
+                            "id": "runbooks_written",
+                            "title": "Oncall engineers have documented runbooks they can rely on",
+                            "helpfulResource": {
+                                "displayText": "Runbooks can be a critical component of a success incident, taking the guess-work out of how engineers should respond and empowering more junior engineers."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Frequently executed commands should be documented as runbooks or, ideally, written as scripts that can be executed with minimal human involvement."
+                            }
+                        },
+                        {
+                            "id": "runbooks_validated",
+                            "title": "Runbooks have been validated for permissions issues, typos, etc, and are re-validated on a schedule.",
+                            "helpfulResource": {
+                                "displayText": "Runbooks, like any other form of documentation, can be subject of bit-rot. It is important that they be validated and re-validated over time as changes are made to the system and engineer permissions."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Runbooks should be tested and validated in non-production environments to identify typos, permissions issues, or errors, and the runbooks should be re-validated on a schedule or following major system changes."
+                            }
+                        },
+                        {
+                            "id": "escalation_documented",
+                            "title": "Escalation procedures for the oncall are documented.",
+                            "helpfulResource": {
+                                "displayText": "Engineers will inevitably come across as issue that they do not know how to handle or multiple issues will trigger simultaneously. In such events, it is important that engineers know how to escalate for assistance."
+                            },
+                            "improvementPlan": {
+                                "displayText": "As part of the oncall process, escalation procedures should be clearly documented so that, in the event the oncall is overwhelmed with simultaneous issues or there is a knowledge gap, they know the most effective way to gain assistance."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "escalation_documented && oncall_sla && runbooks_validated && runbooks_written && alarm_engagement && oncall_rotation",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(oncall_rotation && runbooks_written && alarm_engagement) && (!escalation_documented || !runbooks_validated) ",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_alarms",
+                    "title": "Alarms & Runbooks (H)",
+                    "description": "What automated alarms do you have for your system? Do you have a runbook/SOP documented for how to investigate and troubleshoot each?",
+                    "choices": [
+                        {
+                            "id": "alarms_exist",
+                            "title": "Alarms documented",
+                            "helpfulResource": {
+                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        },
+                        {
+                            "id": "runbooks_exist",
+                            "title": "Alarms documented",
+                            "helpfulResource": {
+                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        },
+                        {
+                            "id": "alarms_include_runbook_links",
+                            "title": "Alarms documented",
+                            "helpfulResource": {
+                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        },
+                        {
+                            "id": "alarms_auto_trigger_runbooks",
+                            "title": "Alarms documented",
+                            "helpfulResource": {
+                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "alarms_auto_trigger_runbooks && alarms_include_runbook_links && runbooks_exist && alarms_exist",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(alarms_exist && runbooks_exist) && (!alarms_include_runbook_links || !alarms_auto_trigger_runbooks)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_automated_data_gathering",
+                    "title": "Automated Data Gathering (L)",
+                    "description": "Following or during an event, ",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Automated data gathering is used in the event of an alarm or event",
+                            "helpfulResource": {
+                                "displayText": "When alarms auto-cut tickets to engineers, it can be very useful for the automation to also include cloudwatch metrics or log files from the affected resource(s). This frees up engineer time from needing to collect that data by hand, allowing them to focus on the 'why' of the event."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Work with the account team to get a deep dive on Systems Manager - Incident Manager for inspiration and to see how relevant resource metrics can be collected"
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_host_fs_alarms",
+                    "title": "On-host Filesystem Alarms (H)",
+                    "description": "Do you monitor and alarm on your hosts for file system, index node, and file descriptor utilization? What about CPU utilization, memory utilization, or other resource metrics?",
+                    "choices": [
+                        {
+                            "id": "fs_capacity",
+                            "title": "Filesystem space capacity",
+                            "helpfulResource": {
+                                "displayText": "For non-autoscaled systems, monitoring and alarming the level free capacity on the filesystem can be critical for catching problems early and preventing a crash."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Non-autoscaled systems that ingest data should have filesystem capacity alarmed on in order to avoid a situation where the drive is filled to capacity, resulting in a crash."
+                            }
+                        },
+                        {
+                            "id": "inode_capacity",
+                            "title": "Filesystem inode capacity",
+                            "helpfulResource": {
+                                "displayText": "Particularly EXT4 based systems may want to monitor inode capacity given that EXT4 inode capacity is hard-coded at creation time and cannot be expanded. Inode exhaustion is a concern on systems that deal with many small files rather than fewer medium to large files."
+                            },
+                            "improvementPlan": {
+                                "displayText": "On systems which primarily deal with many small files (logging servers, for example), monitoring inode capacity can be critical for ensuring application availability. "
+                            }
+                        },
+                        {
+                            "id": "fd_utilization",
+                            "title": "File descriptor utilization.",
+                            "helpfulResource": {
+                                "displayText": "File descriptors are a measurement of how many files can be opened at a single time. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "File descriptor utilization should be metriced and alarmed on if the server in question handles many services or if one of those services primarily opens and closes many files simultaneously."
+                            }
+                        },
+                        {
+                            "id": "cpu_utilization",
+                            "title": "CPU utilization",
+                            "helpfulResource": {
+                                "displayText": "CPU Utilization is a default metric that is available within EC2, and its monitoring can be critical to detecting problems such as processing running out of control. This is a common scale-out metric for autoscaling groups."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Non-autoscaled systems should alarm on CPU utilization around 75-80%, or use CW Synthetics for dynamic alarms, in order to detect a server that is being overwhelmed."
+                            }
+                        },
+                        {
+                            "id": "mem_utilization",
+                            "title": "Memory utilization",
+                            "helpfulResource": {
+                                "displayText": "Memory utilization is not a default metric that is available within EC2. Its monitoring can be critical to detecting problems such as processing running out of control. This is a common scale-out metric for autoscaling groups."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Non-autoscaled systems should alarm on memory utilization, either statically defined thresholds or Cloudwatch synthetics, in orrder to detect memory leaks or being under-provisioned."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "mem_utilization && cpu_utilization && fd_utilization && inode_capacity && fs_capacity",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "(mem_utilization && cpu_utilization) && (!inode_capacity || !fs_capacity)",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_database_alarms",
+                    "title": "Database Alarms",
+                    "description": "Do you have alarms on database (relational and non-relational) utilization? Do you alarm with enough room to troubleshoot and mitigate the issue before it becomes customer-impacting?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Database utilization and performance is alarmed",
+                            "helpfulResource": {
+                                "displayText": "Pro-actively identifying a downward trend on critical databases is important to ensure that a problem does not become a user-impacting issue."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Application-critical databases should be proactively monitored for utilization or performance metrics that could indicate a problem, such as average query time increasing or memory utilization reaching critical levels."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_jvm_metrics",
+                    "title": "JVM Metrics & Alarms",
+                    "description": "Do you monitor and alarm on your JVM metrics? Note what metrics are monitored and where they are published to and how.",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "JVM metrics monitored and alarmed on as needed.",
+                            "helpfulResource": {
+                                "displayText": "Applicable JVM metrics could include, but are not limited to: memory utilization, garbage collection, heap usage, thread summary."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Relevant JVM metrics (thread summary, memory utilization, garbage collection, heap usage) should be metriced and alarmed upon. The CloudWatch Agent can collect the JVM metrics via its collectd plugin."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_frontend_alarms",
+                    "title": "Frontend Alarms (M)",
+                    "description": "Do you monitor and alarm on your frontend components (DNS systems, load balancers, VIPs, proxy services, etc.)?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Frontend components alarmed on for availability and critical performance metrics.",
+                            "helpfulResource": {
+                                "displayText": "Monitoring and alarming of critical-path frontend components, by the owning team, are critical to ensuring the availability of downstream applications and services."
+                            },
+                            "improvementPlan": {
+                                "displayText": "In-scope critical path components should be alarmed on in order to detect issues and remediate them efficiently."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_delayed_consistency",
+                    "title": "Delayed Consistency Alarms (L)",
+                    "description": "Do you monitor and alarm on any delayed convergence of eventually consistent processes in your system?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Latency of eventual consistency is measured and alarmed",
+                            "helpfulResource": {
+                                "displayText": "Eventual consistency is a common feature of distributed systems where data is stored on multiple nodes but only one node accepts the incoming write to start with, for example: Amazon S3 uses eventual consistency for updating existing objects."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If possible, the latency of eventually consistent systems should be measured and alarmed in. A delay in consistency could pose a risk to user experience, data consistency, or could indict an otherwise silent problem in the system."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_transaction_tracing",
+                    "title": "Transaction Tracing (M)",
+                    "description": "How do you trace a customer request through components in your service?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Transaction tracing implemented.",
+                            "helpfulResource": {
+                                "displayText": "Transaction tracing allows for the finely-tuned monitoring of each transaction as it moves through the system, capturing individual return codes at each step, as well as the latency of each step and which nodes received which requests. This makes it much easier to identify exactly where a problem may have occurred for a given request."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Work with the account team to get a deep dive on AWS X-Ray and integrating the X-Ray SDK into the relevant applications.",
+                                "url": "https://aws.amazon.com/xray/"
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_mutating_access",
+                    "title": "Mutating Access (M)",
+                    "description": "Have you limited the individuals who have mutating access to production systems and AWS accounts?",
+                    "choices": [
+                        {
+                            "id": "seniors_only",
+                            "title": "Production access is limited to (senior) personnel on relevant teams under normal scenarios.",
+                            "helpfulResource": {
+                                "displayText": "Limiting mutating access to production accounts is critical for ensuring accidental changes are not made."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If limiting to automation-only is not possible, mutating access to production should be limited to engineers on teams who have a need to make changes, potentially limited more to senior engineers on those teams. "
+                            }
+                        },
+                        {
+                            "id": "automation_only",
+                            "title": "Mutating changes to production systems is limited to automated systems only under normal scenarios.",
+                            "helpfulResource": {
+                                "displayText": "Limiting access to automated systems only ensures that each and every change can be tested and validated in lower environments prior to moving into production."
+                            },
+                            "improvementPlan": {
+                                "displayText": "CI/CD pipelines that promote changes from lower environments to higher ones are one method to ensure that each change is tested"
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "seniors_only",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_queue_backlog",
+                    "title": "Queue Backlog (M)",
+                    "description": "Does your system queue requests? If so, do you take preventative measure to ensure that your queue does not exceed a pre-determined size?",
+                    "choices": [
+                        {
+                            "id": "backlog_alarm",
+                            "title": "Alarms configured to alert on excessive queue depth.",
+                            "helpfulResource": {
+                                "displayText": "Monitoring the backlog of a queue is a critical component to ensure that all systems, both upstream and downstream, are functioning as expected. Sibling metrics for the number of items being worked off the queue and the number of items being put on the queue can then be critical pieces in identifying the source of an issue when it arises."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Ensure that all queueing systems in the application report their respective backlogs with alarms configured for thresholds of concern or synthetic alarms configured for dynamic thresholds."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "backlog_alarm",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_expiring_materials",
+                    "title": "Expiring Materials (M)",
+                    "description": "Does your system or host contain any materials that expire? If so, what monitoring and alarming is in place to prevent disruptive expirations?",
+                    "choices": [
+                        {
+                            "id": "risk_mitigated",
+                            "title": "Relevant risk has been mitigated",
+                            "helpfulResource": {
+                                "displayText": "Examples could include software validation certifications, time-bound licenses, or API keys."
+                            },
+                            "improvementPlan": {
+                                "displayText": "If there are materials that are scheduled to expire on a consistent schedule, alarms should be in place around those expiration times in order to ensure that they can be rotated in time, as well as a runbook developed for what should be done in the event of rotation failure."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "risk_mitigated",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
