@@ -112,12 +112,11 @@ of the application, the risk to the business, and how much time is left to make 
 
 ---
 
-## Feedback and Support
+## Feedback, Suggestions, and Support
 
-If you run into  issues, please double check the official [Well Architected Tool documentation](https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html) for  updated guidance on importing a new custom lens, 
-upgrading a custom lens, or beginning a review.
+If you run into issues, please double check the official [Well Architected Tool documentation](https://docs.aws.amazon.com/wellarchitected/latest/userguide/intro.html) for updated guidance on importing a new custom lens, upgrading a custom lens, or beginning a review.
 
-If you have any feedback about the lens, please raise it either as a Gitlab Issue or by reaching out to the maintainer.
+If you have any feedback about the lens, suggestions for new questions, or further ideas on remediation text, please raise it as a [Gitlab Issue](https://github.com/awslabs/operational-readiness-review-custom-war-lens/issues).
 
 If you would like to help improve this lens, please see the README & Contributing file at the root level of the repository. 
 
