@@ -1,7 +1,7 @@
 {
     "schemaVersion": "2021-11-01",
-    "name": "AWS Operational Readiness Review v1.3.3",
-    "description": "This Well Architected Lense is an adaptation of the AWS Operational Readiness Review program-- a set of questions designed to capture and help correct common failure-points.  It is intended to aid customer and account teams in capturing potential issues prior to go-live.",
+    "name": "AWS Operational Readiness Review v1.3.4",
+    "description": "This Operational Readiness Review (ORR) Well Architected Custom Lens is an adaptation of the AWS Operational Readiness Review program -- a set of questions designed to capture and help correct common failure-points.",
     "pillars": [
         {
             "id": "architecture",
@@ -10,7 +10,7 @@
                 {
                     "id": "well_architected",
                     "title": "AWS Well-Architected Framework Review (H)",
-                    "description": "Have you addressed the issues identified as the result of an AWS Well-Architected Framework Review (WAFR)?",
+                    "description": "Have you completed an AWS Well-Architected Framework Review (WAFR) on this workload, and addressed any issues identified during the review?",
                     "choices": [
                         {
                             "id": "wafr",
@@ -76,14 +76,14 @@
                                 "displayText": "An architecture diagram shows the (multi)-regional setup of the underlying infrastructure, relevant ELBs, ASGs, how they are split across AZ's, etc."
                             },
                             "improvementPlan": {
-                                "displayText": "A review of the architecture diagram is highly recommended prior to go-live in order to sanity check there are no visibile single points of failures. "
+                                "displayText": "A review of the architecture diagram is highly recommended prior to go-live in order to validate there are no visibile single points of failures. "
                             }
                         },
                         {
                             "id": "data_flow_diagram",
                             "title": "Data/network flow diagram provided.",
                             "helpfulResource": {
-                                "displayText": "A data or network flow diagram shows the flow of data through the system in order to identify external dependencies or internal single points of failure/bottle necks to performance."
+                                "displayText": "A data or network flow diagram shows the flow of data through the system in order to identify external dependencies, internal single points of failure, and bottle necks to performance."
                             },
                             "improvementPlan": {
                                 "displayText": "A review of the network/data flow diagram is highly recommended prior to go-live in order to ensure there are no noticable bottlenecks or external dependencies that could impact service operation."
@@ -91,13 +91,13 @@
                         },
                         {
                             "id": "dataimpact_radius_flow_diagram",
-                            "title": "Architecture designed to reduce the impact radius of failures.",
+                            "title": "The workload architecture is designed to reduce the impact radius of failures.",
                             "helpfulResource": {
                                 "displayText": "Design the architecture so that it is resilient to individual component failures.",
                                 "url": "https://aws.amazon.com/blogs/architecture/a-multi-dimensional-approach-helps-you-proactively-prepare-for-failures-part-1-application-layer/"
                             },
                             "improvementPlan": {
-                                "displayText": "A review of the network/data flow diagram is highly recommended prior to go-live in order to ensure there are no noticeable bottlenecks or external dependencies that could impact service operation.."
+                                "displayText": "A review of the network/data flow diagram is highly recommended prior to go-live to ensure there are no noticeable bottlenecks or external dependencies that could impact service operation."
                             }
                         }
 
@@ -120,21 +120,21 @@
                 {
                     "id": "architecture_services_used",
                     "title": "AWS Services Used (H)",
-                    "description": "What AWS services, in which accounts and regions, is your workload using? Please break it out by component (Application/Workload/Service-- logical units). ",
+                    "description": "What AWS services, in which accounts and regions, is your workload using? Please list the services by component (Application/Workload/Service-- logical units). ",
                     "choices": [
                         {
                             "id": "onlyAWS",
-                            "title": "All AWS services in-use are known and documented by account and region.",
+                            "title": "All AWS services used are known and documented by account and region.",
                             "helpfulResource": {
-                                "displayText": "All AWS services in-use are known and documented by account and region."
+                                "displayText": "All AWS services used are known and documented by account and region."
                             },
                             "improvementPlan": {
-                                "displayText": "The customer and the account team should leverage Cost Explorer or CUDOS to identify what services are in use across what accounts and regions. The application team should be consulted for calls to externally managed dependencies."
+                                "displayText": "The customer and the account team can leverage AWS Cost Explorer or CUDOS to identify what services are in use across what accounts and regions. The application team should be consulted for calls to externally managed dependencies."
                             }
                         },
                         {
                             "id": "thirdParty",
-                            "title": "Third party dependencies exist but are known and documented.",
+                            "title": "Third party dependencies are known and documented.",
                             "helpfulResource": {
                                 "displayText": "Third party dependenices are services that are ran, managed, or controlled by a team that exists outside of the customer's organization and outside of AWS."
                             },
@@ -188,8 +188,18 @@
                 {
                     "id": "architecture_failure_models",
                     "title": "Failure Models (H)",
-                    "description": "Construct a failure model listing soft and hard failures for each of your system's components and dependencies, how they would be detected, and mitigation efforts. Note them below.",
+                    "description": "Please construct a failure model listing soft and hard failure modes for each of your workload's components and dependencies.",
                     "choices": [
+                        {
+                            "id": "failure_model_documented",
+                            "title": "Failure model documented.",
+                            "helpfulResource": {
+                                "displayText": "Your failure model should include columns for Component/Dependency, Failure Type, Service Impact, and Customer Impact."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Please address an outage of your service in its largest impact radius unit (a cell, an AZ, a or region) plus a total infrastructure outage in its largest impact radius (an AZ)."
+                            }
+                        },
                         {
                             "id": "soft_failures_known",
                             "title": "Soft failures known and documented.",
@@ -212,19 +222,19 @@
                         },
                         {
                             "id": "soft_failures_runbooks",
-                            "title": "Known soft failure conditions have documented mitigations or playbooks",
+                            "title": "Known soft failure conditions have documented mitigations or playbooks.",
                             "helpfulResource": {
-                                "displayText": "On-call engineers should ideally not be scrambling to 'figure out' what to do. If a failure condition is known ahead of time, playbooks should be written that can be followed in the event of occurence."
+                                "displayText": "On-call engineers should ideally not be scrambling to 'figure out' what to do. If a failure condition is known ahead of time, playbooks should be written that can be followed in the event of occurrence."
                             },
                             "improvementPlan": {
-                                "displayText": "Known soft failure scenarios should have runbooks built that on-call engineers can leverage in the event of occurance. Links to the relevant runbooks should be added to the detection alarms."
+                                "displayText": "Known soft failure scenarios should have runbooks built that on-call engineers can leverage in the event of occurrence. Links to the relevant runbooks should be added to the detection alarms."
                             }
                         },
                         {
                             "id": "hard_failures_known",
-                            "title": "Hard failures known and documented",
+                            "title": "Hard failures known and documented.",
                             "helpfulResource": {
-                                "displayText": "*Hard failures are failures where an application is entirely non-operational."
+                                "displayText": "Hard failures are failures where an application is entirely non-operational."
                             },
                             "improvementPlan": {
                                 "displayText": "Known hard failure scenarios should be discussed and documented and alarms set to detect such scenarios, if possible."
@@ -242,22 +252,22 @@
                         },
                         {
                             "id": "hard_failures_runbooks",
-                            "title": "Known hard failure conditions have documented mitigations or playbooks",
+                            "title": "Known hard failure conditions have documented mitigations or playbooks.",
                             "helpfulResource": {
-                                "displayText": "On-call engineers should ideally not be scrambling to 'figure out' what to do. If a failure condition is known ahead of time, playbooks should be written that can be followed in the event of occurence."
+                                "displayText": "On-call engineers should ideally not be scrambling to 'figure out' what to do. If a failure condition is known ahead of time, playbooks should be written that can be followed in the event of occurrence."
                             },
                             "improvementPlan": {
-                                "displayText": "Known hard failure scenarios should have runbooks built that on-call engineers can leverage in the event of occurance. Links to the relevant runbooks should be added to the detection alarms."
+                                "displayText": "Known hard failure scenarios should have playbooks built that on-call engineers can leverage in the event of occurrence. Links to the relevant playbooks should be added to the detection alarms."
                             }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "hard_failures_runbooks && hard_failures_detection && hard_failures_known && soft_failures_runbooks && soft_failures_detection && soft_failures_known",
+                            "condition": "failure_model_documented && hard_failures_runbooks && hard_failures_detection && hard_failures_known && soft_failures_runbooks && soft_failures_detection && soft_failures_known",
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "hard_failures_known && soft_failures_known && (!hard_failures_detection || !soft_failures_detection || !hard_failures_runbooks || !soft_failures_runbooks)",
+                            "condition": "failure_model_documented && hard_failures_known && soft_failures_known && (!hard_failures_detection || !soft_failures_detection || !hard_failures_runbooks || !soft_failures_runbooks)",
                             "risk": "MEDIUM_RISK"
                         },
                         {
@@ -326,16 +336,17 @@
                 {
                     "id": "architecture_retry_timeouts",
                     "title": "Retries & Socket Timeouts (H)",
-                    "description": "Have you reviewed your retry and socket timeouts?",
+                    "description": "Have you intentionally set appropriate retry and socket timeout configuration for all SDK usage?",
                     "choices": [
                         {
                             "id": "reviewed",
                             "title": "Retry count and socket timeouts reviewed.",
                             "helpfulResource": {
-                                "displayText": "If misconfigured, multiple retries could push the system above the timeout value even if the call could succeed on the final retry."
+                                "displayText": "Not setting the appropriate retry and timeout logic for your AWS SDK clients can lead to a thread pool with all threads engaged in dependency operations.",
+                                "url": "https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html"
                             },
                             "improvementPlan": {
-                                "displayText": "Review application code to check for number of retries, the timeout per retry, and the length of the overall timeout on either the client side or receiving end."
+                                "displayText": "It's better to fail fast and a return a response to the client for dependency calls made within the context of sync calls from customers to let the client decide how and when to retry then timeout customer requests."
                             }
                         }
                     ],
@@ -650,14 +661,14 @@
                     "title": "Recovery Objectives (M)",
                     "description": "Assuming your service or workload suffers data loss, have you defined your Recovery Point Objective? If many varying RPOs exist per component, define them in notes.",
                     "choices": [
-                        {
+                        {              
                             "id": "rto_defined",
                             "title": "RTO has been defined",
                             "helpfulResource": {
                                 "displayText": "Recovery Time Objective is a measure of the amount of acceptable downtime per incident, for example five minutes, 30 minutes, an hour, a day, etc."
                             },
                             "improvementPlan": {
-                                "displayText": "The account team, application and ops teams should work together with the business team in order to identify a supportable recovery time objective based upon design and customer agreements."
+                                "displayText": "The application and operations teams should work together with the business team in order to identify a supportable recovery time objective based upon design and end customer agreements."
                             }
                         },
                         {
@@ -667,7 +678,7 @@
                                 "displayText": "A theoretical RTO is a good starting point, but until the teams have verified their ability to support it, it is difficult to rely upon."
                             },
                             "improvementPlan": {
-                                "displayText": "A game-day, dry-run or similar exercise should be used to ensure that all relevant teams know what actions need to be taken in the event of an outage. Drafting a written runbook may be useful for documentation purposes. A hot or cold stand-by environment may also be useful in order to achieve faster RTO by evacuating the primary environment."
+                                "displayText": "A game-day, dry-run or similar exercise should be used to ensure that all relevant teams know what actions need to be taken in the event of an outage. Drafting a written runbook may be useful for documentation purposes. A hot or cold stand-by environment may also be useful in order to achieve faster RTO by evacuating the primary environment. Also consider if there are any off-box dependencies that are mandatory for a restart. Confirm that there are no circular dependencies."
                             }
                         },
                         {
@@ -773,10 +784,21 @@
                     "description": "What is the retry/back-off strategy for each of your service's dependencies?",
                     "choices": [
                         {
-                            "id": "aws_services",
-                            "title": "Code calling out to AWS APIs implement proper retry and backoff strategies.",
+                            "id": "sync_API",
+                            "title": "Safety for code calling out to dependencies within the context of a Sync API established",
                             "helpfulResource": {
-                                "displayText": "It is an AWS best practice, and a required practice for large applications, to properly catch ThrottlingExceptions and implement retry, backoff, and jitter strategies."
+                                "displayText": "For dependency calls made within the context of a sync API call, you should generally retry once immediately, then give up."
+                            },
+                            "improvementPlan": {
+                                "displayText": "For dependency calls made within the context of a sync API call, you should generally retry once immediately, then give up."
+                            }
+                        },
+                        {
+                            "id": "aws_services",
+                            "title": "Safety for code calling out to dependencies within the context of an async API call established",
+                            "helpfulResource": {
+                                "displayText": "It is an AWS best practice, and a required practice for large applications, to properly catch ThrottlingExceptions and implement retry, backoff, and jitter strategies.",
+                                "Url": "https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/"
                             },
                             "improvementPlan": {
                                 "displayText": "While some of the AWS SDKs will properly capture ThrottlingExceptions and automatically handle retries and backoff conditions, those retries are limited to a set number of attempts and those errors could still be raised to the application. Those errors should be caught and handled appropriately with fail-safe code paths."
@@ -784,18 +806,19 @@
                         },
                         {
                             "id": "third_parties",
-                            "title": "Code calling out to non-AWS APIs implement retry and backoff strategies.",
+                            "title": "Throttling techniques to defensively protect your service from customers established",
                             "helpfulResource": {
-                                "displayText": "It is a recommended best practice to implement retries and backoff strategies for dependencies which emit dedicated throttling errors."
+                                "displayText": "Are you using distributed throttling on your front-end? Do you have pre-authentication throttles? Are limits on request size enforced before authentication?",
+                                "url": "https://aws.amazon.com/builders-library/fairness-in-multi-tenant-systems"
                             },
                             "improvementPlan": {
-                                "displayText": "Assuming that the third party APIs properly emit throttling or other performance errors, those errors should be caught and sane-failure modes should be enacted, either slowing down the rate that the application talks to that third party or skipping over it entirely. Similar failure conditions should be implemented for the third party service being hard-down."
+                                "displayText": "Throttling techniques to defensively protect your service from customers established."
                             }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "aws_services && third_parties",
+                            "condition": "sync_API && aws_services && third_parties",
                             "risk": "NO_RISK"
                         },
                         {
@@ -816,7 +839,7 @@
                                 "displayText": "Separating Development/Staging/Production from one another through account boundaries is a highly effective way to segregate failure domains as well as security borders."
                             },
                             "improvementPlan": {
-                                "displayText": "If time allows, development and staging should be broken out from production into separate accounts. This reduces the blast radius of security events and makes it easier to manage limits & API throttling across the environments.",
+                                "displayText": "If time allows, development and staging should be broken out from production into separate accounts. This reduces the impact radius of security events and makes it easier to manage limits & API throttling across the environments.",
                                 "url": "https://docs.aws.amazon.com/managedservices/latest/userguide/malz-net-arch-section.html"
                             }
                         },
@@ -845,7 +868,7 @@
                 },
                 {
                     "id": "architecture_mutliaccount_credentials",
-                    "title": "Multiaccount Credentials (M)",
+                    "title": "Multi-account Credentials (M)",
                     "description": "If you're using multiple AWS accounts, how are your accounts and credentials segregated?",
                     "choices": [
                         {
@@ -892,7 +915,7 @@
                                 "displayText": "An example would be redundant databases geographically separated that can support any user connecting from anywhere."
                             },
                             "improvementPlan": {
-                                "displayText": "Improving this item depends on the exact business objectives and applicable laws and regulations. It may be desirable for the resources to be silod in order to have a firmly defined blast radius during an outage, or to abide by local laws. DynamoDB Global Tables would be one example of a multi-region database."
+                                "displayText": "Improving this item depends on the exact business objectives and applicable laws and regulations. It may be desirable for the resources to be silod in order to have a firmly defined impact radius during an outage, or to abide by local laws. DynamoDB Global Tables would be one example of a multi-region database."
                             }
                         }
                     ],
@@ -964,8 +987,35 @@
         },
         {
             "id": "release_quality",
-            "name": "02 - Release Quality & Procedures",
+            "name": "02 - Release Quality",
             "questions": [
+                {
+                    "id": "releases_manual_changes",
+                    "title": "Manual Changes (H)",
+                    "description": "What changes (software, configuration, and infrastructure) do you need to perform manually? Have these changes been modeled in a pre-approved template prior to executing?",
+                    "choices": [
+                        {
+                            "id": "no_manual_changes",
+                            "title": "No manual changes performed",
+                            "helpfulResource": {
+                                "displayText": "Manual changes introduce risk of missed steps, typos, or other human errors."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Any manual tasks should be documented and turned into automated scripts or other automated processes to remove the opportunity for human error. Any task that cannot be automated should be documented in a clearly defined step-by-step process in order to reduce the opportunity for errors."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "no_manual_changes",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
                 {
                     "id": "releases_deployment",
                     "title": "Deployment Mechanisms (H)",
@@ -1015,45 +1065,19 @@
                     "choices": [
                         {
                             "id": "risk_mitigated",
-                            "title": "Relevant risk has been mitigated",
+                            "title": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on.",
                             "helpfulResource": {
-                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                                "displayText": "Add a manual approval action into your CodePipeline pipelines and limit permissions to a set of approvers. See example.",
+                                "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals-action-add.html"
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "Add a manual approval action into the CICD pipeline if appropriate."
                             }
                         }
                     ],
                     "riskRules": [
                         {
                             "condition": "risk_mitigated",
-                            "risk": "NO_RISK"
-                        },
-                        {
-                            "condition": "default",
-                            "risk": "HIGH_RISK"
-                        }
-                    ]
-                },
-                {
-                    "id": "releases_manual_changes",
-                    "title": "Manual Changes (H)",
-                    "description": "What changes (software, configuration, and infrastructure) do you need to perform manually? Have these changes been modeled in a pre-approved template prior to executing?",
-                    "choices": [
-                        {
-                            "id": "no_manual_changes",
-                            "title": "No manual changes performed",
-                            "helpfulResource": {
-                                "displayText": "Manual changes introduce risk of missed steps, typos, or other human errors."
-                            },
-                            "improvementPlan": {
-                                "displayText": "Any manual tasks should be documented and turned into automated scripts or other automated processes to remove the opportunity for human error. Any task that cannot be automated should be documented in a clearly defined step-by-step process in order to reduce the opportunity for errors."
-                            }
-                        }
-                    ],
-                    "riskRules": [
-                        {
-                            "condition": "no_manual_changes",
                             "risk": "NO_RISK"
                         },
                         {
@@ -1210,10 +1234,11 @@
                             "id": "auto_rollback",
                             "title": "Automatic rollbacks are initiated by monitoring systems.",
                             "helpfulResource": {
-                                "displayText": "Automated rollback mechanisms free up operator time and allows for faster response to a deployment that is not going as planned. This requires deployment metrics to be configured, such as canary alarms."
+                                "displayText": "Automated rollback mechanisms free up operator time and allows for faster response to a deployment that is not going as planned. This requires deployment metrics to be configured, such as canary alarms. See example of automatic rollback on CloudWatch alarm.",
+                                "url": "http://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html#deployments-rollback-and-redeploy-automatic-rollbacks"
                             },
                             "improvementPlan": {
-                                "displayText": "In blue/green deployment environments, automatically reverting back to the previous environment can be a safe choice in order to minimize user-impact. Assuming that the app supports rolling back to a previous version, discuss with the account team what parts of the manual steps can be turned into automation and how that automation can be triggered."
+                                "displayText": "In blue/green deployment environments, automatically reverting back to the previous environment can be a safe choice in order to minimize user-impact. Assuming that the app supports rolling back to a previous version, discuss as a team what parts of the manual steps can be turned into automation and how that automation can be triggered."
                             }
                         }
                     ],
@@ -1319,10 +1344,11 @@
                             "id": "risk_mitigated",
                             "title": "On-host validation",
                             "helpfulResource": {
-                                "displayText": "Post-deployment validation is critical to ensure that the software which was deployed correctly executes and functions as intended. Such as certain files being in place, services in running states, configuration as expected."
+                                "displayText": "Post-deployment validation is critical to ensure that the software which was deployed correctly executes and functions as intended. Such as certain files being in place, services in running states, configuration as expected. For example, verify that the software has started successfully and is responding correctly to health checks on local host before re-registering with the load balancer. See example of CodeDeploy lifecycle hook to perform post deploy validations.",
+                                "url": "http://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#reference-appspec-file-structure-hooks-list"
                             },
                             "improvementPlan": {
-                                "displayText": "Depending on deployment methodology (updating existing instances vs blue/green), look to adding a validation step to existing deploymenting mechanisms to validate seemingly successful deployments. In the event an error is found, that error needs to be propagated to operators and the deployment failed."
+                                "displayText": "Depending on deployment methodology (updating existing instances vs blue/green), look to adding a validation step to existing deployment mechanisms to validate seemingly successful deployments. In the event an error is found, that error needs to be propagated to operators and the deployment failed."
                             }
                         }
                     ],
@@ -1346,10 +1372,10 @@
                             "id": "canaries_exist",
                             "title": "Canary alarms have been configured",
                             "helpfulResource": {
-                                "displayText": "Canary alarms can include things such as heartbeat checks, broken link detection, "
+                                "displayText": "Ensure that your canary synthetics errors are published to their own metrics, as opposed to being combined with all errors. This allows your service to alarm on an individual canary error rate."
                             },
                             "improvementPlan": {
-                                "displayText": "Speak with the account team about getting a deep dive on Cloudwatch Synthetics and its canary capabilities.",
+                                "displayText": "Canary alarms should include things such as heartbeat checks, broken link detection.",
                                 "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_Create.html"
                             }
                         },
@@ -1517,7 +1543,7 @@
         },
         {
             "id": "event_management",
-            "name": "03 - Incident & Event Management",
+            "name": "03 - Event Management",
             "questions": [
                 {
                     "id": "underlying_dependencies",
@@ -1559,8 +1585,18 @@
                 {
                     "id": "event_kpis",
                     "title": "Operational KPIs (H)",
-                    "description": "What operational goals or KPIs (latency, throughput/TPS, etc.) have you identified for your service?",
+                    "description": "When do you look at your weekly and operator dashboards? What operational goals or KPIs (latency, throughput/TPS, etc.) have you identified for your service?",
                     "choices": [
+                        {
+                            "id": "kpis_reviewed",
+                            "title": "Key metrics reviewed in Ops meeting at cadence (weekly/bi-weekly).",
+                            "helpfulResource": {
+                                "displayText": "During a regular schedule of Ops meeting review the following: 1/ Review outstanding action items from the previous week. 2/ Review last week\u2019s high severity tickets. 3/ Review pipelines for things like rollbacks or blocks. 4/ Review open customer support tickets. 5/ Review open high severity tickets. 6/ What new runbook entries were added this week? 7/ Review the detailed metrics dashboard for one of your components. 8/ Discuss on-call rotation."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Work with business leadership to understand the KPIs that will determine whether the operational goals are being achieved or at risk thereby showing how operations is contributing towards business outcomes."
+                            }
+                        },
                         {
                             "id": "kpis_documented",
                             "title": "KPIs are known and documented in the notes section.",
@@ -1574,7 +1610,7 @@
                     ],
                     "riskRules": [
                         {
-                            "condition": "kpis_documented",
+                            "condition": "kpis_reviewed && kpis_documented",
                             "risk": "NO_RISK"
                         },
                         {
@@ -1671,42 +1707,44 @@
                     "choices": [
                         {
                             "id": "alarms_exist",
-                            "title": "Alarms documented",
+                            "title": "Automated alarms are implemented.",
                             "helpfulResource": {
-                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                                "displayText": "Create automated alarms and alerts to the workload's Key Performance Indicators.",
+                                "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html"
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "Create automated alarms and alerts to the workload's Key Performance Indicators."
                             }
                         },
                         {
                             "id": "runbooks_exist",
-                            "title": "Alarms documented",
+                            "title": "Runbooks have been created, documenting the proper response each alarm.",
                             "helpfulResource": {
-                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                                "displayText": "Create detailed steps and checklists for the proper response to each alarm."
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "Create runbooks for each alarm. "
                             }
                         },
                         {
                             "id": "alarms_include_runbook_links",
-                            "title": "Alarms documented",
+                            "title": "Alarm messaging contains direct links to the appropriate Runbook to minimize time to resolution.",
                             "helpfulResource": {
-                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                                "displayText": "Alarms should direct resolvers to the proper runbook to expedite resolution."
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "The alarm messaging should guide the resolvers to the proper runbook to expedite resolution. "
                             }
                         },
                         {
                             "id": "alarms_auto_trigger_runbooks",
-                            "title": "Alarms documented",
+                            "title": "Alarms trigger automatic steps to resolve the alarming condition.",
                             "helpfulResource": {
-                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                                "displayText": "Alarm resolution should be scripted and triggered on the alarm event.",
+                                "url": "https://aws.amazon.com/blogs/mt/alarms-incident-management-and-remediation-in-the-cloud-with-amazon-cloudwatch/"
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "Where possible, alarms should trigger automatic resolution."
                             }
                         }
                     ],
@@ -1726,9 +1764,51 @@
                     ]
                 },
                 {
+                    "id": "event_canary_alarms",
+                    "title": "Independent Canary Alarms (L)",
+                    "description": "Does your canary synthetic tests detect and alarm on shallow API test failures in under five minutes?",
+                    "choices": [
+                        {
+                            "id": "canaries_exist",
+                            "title": "Performance synthetics measure P50, P99 and P99.9s to track variability (including tail latency)",
+                            "helpfulResource": {
+                                "displayText": "Performance variability should be measured along with median performance since there are edge cases which can affect both overall performance as well as the customer perception. Understanding this variability will allow your service to improve customer experience."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Integrate business KPIs with continuous synthetic transaction testing (canaries). Canaries help verify your customer experience and discover issues before your customers do.",
+                                "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html"
+                            }
+                        },
+                        {
+                            "id": "canary_ops",
+                            "title": "Canary Metrics have alarms tied to them that engage the operations team.",
+                            "helpfulResource": {
+                                "displayText": "Canary alarms primary purpose is to proactively catch downward trends in application or service health. As such, those alarms should notify operator teams so that they can investigate potential issues."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Canaries failing should be set to engage relevant teams (content teams for broken links, operators for heartbeats / API failures, etc) at an appropriate severity level. Such as tickets for broken links, or perhaps paging for failed heartbeats. "
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "canaries_exist && canary_ops",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "canaries_exist && !canary_ops",
+                            "risk": "MEDIUM_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
                     "id": "event_automated_data_gathering",
                     "title": "Automated Data Gathering (L)",
-                    "description": "Following or during an event, ",
+                    "description": "Following or during an event, data is automatically captured and presented to resolvers to expedite resolution.",
                     "choices": [
                         {
                             "id": "risk_mitigated",
@@ -1853,23 +1933,77 @@
                 {
                     "id": "event_jvm_metrics",
                     "title": "JVM Metrics & Alarms",
-                    "description": "Do you monitor and alarm on your JVM metrics? Note what metrics are monitored and where they are published to and how.",
+                    "description": "Do you monitor (and alarm) on your JVM metrics? Do you monitor (and alarm on) your hosts for file system, inode, and file descriptor utilization? Do you monitor (and alarm on) your hosts for CPU and memory utilization?",
                     "choices": [
                         {
-                            "id": "risk_mitigated",
+                            "id": "jvm_metrics",
                             "title": "JVM metrics monitored and alarmed on as needed.",
                             "helpfulResource": {
                                 "displayText": "Applicable JVM metrics could include, but are not limited to: memory utilization, garbage collection, heap usage, thread summary."
                             },
                             "improvementPlan": {
-                                "displayText": "Relevant JVM metrics (thread summary, memory utilization, garbage collection, heap usage) should be metriced and alarmed upon. The CloudWatch Agent can collect the JVM metrics via its collectd plugin."
+                                "displayText": "Relevant JVM metrics (thread summary, memory utilization, garbage collection, heap usage) should be metriced and alarmed upon. The CloudWatch Agent can collect the JVM metrics via it's collectd plugin."
+                            }
+                        },
+                        {
+                            "id": "fs_capacity",
+                            "title": "Filesystem space capacity",
+                            "helpfulResource": {
+                                "displayText": "For non-autoscaled systems, monitoring and alarming the level free capacity on the filesystem can be critical for catching problems early and preventing a crash."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Non-autoscaled systems that ingest data should have filesystem capacity alarmed on in order to avoid a situation where the drive is filled to capacity, resulting in a crash."
+                            }
+                        },
+                        {
+                            "id": "inode_capacity",
+                            "title": "Filesystem inode capacity",
+                            "helpfulResource": {
+                                "displayText": "Particularly EXT4 based systems may want to monitor inode capacity given that EXT4 inode capacity is hard-coded at creation time and cannot be expanded. Inode exhaustion is a concern on systems that deal with many small files rather than fewer medium to large files."
+                            },
+                            "improvementPlan": {
+                                "displayText": "On systems which primarily deal with many small files (logging servers, for example), monitoring inode capacity can be critical for ensuring application availability. "
+                            }
+                        },
+                        {
+                            "id": "fd_utilization",
+                            "title": "File descriptor utilization.",
+                            "helpfulResource": {
+                                "displayText": "File descriptors are a measurement of how many files can be opened at a single time. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "File descriptor utilization should be metriced and alarmed on if the server in question handles many services or if one of those services primarily opens and closes many files simultaneously."
+                            }
+                        },
+                        {
+                            "id": "cpu_utilization",
+                            "title": "CPU utilization",
+                            "helpfulResource": {
+                                "displayText": "CPU Utilization is a default metric that is available within EC2, and its monitoring can be critical to detecting problems such as processing running out of control. This is a common scale-out metric for autoscaling groups."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Non-autoscaled systems should alarm on CPU utilization around 75-80%, or use CW Synthetics for dynamic alarms, in order to detect a server that is being overwhelmed."
+                            }
+                        },
+                        {
+                            "id": "mem_utilization",
+                            "title": "Memory utilization",
+                            "helpfulResource": {
+                                "displayText": "Memory utilization is not a default metric that is available within EC2. Its monitoring can be critical to detecting problems such as processing running out of control. This is a common scale-out metric for autoscaling groups."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Non-autoscaled systems should alarm on memory utilization, either statically defined thresholds or CloudWatch synthetics, in order to detect memory leaks or being under-provisioned."
                             }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "risk_mitigated",
+                            "condition": "jvm_metrics && mem_utilization && cpu_utilization && fd_utilization && inode_capacity && fs_capacity",
                             "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "jvm_metrics && (mem_utilization && cpu_utilization) && (!inode_capacity || !fs_capacity)",
+                            "risk": "MEDIUM_RISK"
                         },
                         {
                             "condition": "default",
@@ -2008,7 +2142,7 @@
                                 "displayText": "Monitoring the backlog of a queue is a critical component to ensure that all systems, both upstream and downstream, are functioning as expected. Sibling metrics for the number of items being worked off the queue and the number of items being put on the queue can then be critical pieces in identifying the source of an issue when it arises."
                             },
                             "improvementPlan": {
-                                "displayText": "Ensure that all queueing systems in the application report their respective backlogs with alarms configured for thresholds of concern or synthetic alarms configured for dynamic thresholds."
+                                "displayText": "Ensure that all queueing systems in the application report their respective backlogs with alarms configured for thresholds of concern, or synthetic alarms configured for dynamic thresholds."
                             }
                         }
                     ],
@@ -2047,6 +2181,72 @@
                         {
                             "condition": "default",
                             "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_gameday",
+                    "title": "Event preparedness through game days (H)",
+                    "description": "Have you performed a gameday to verify that your service's monitoring and alarming function as expected and your on-call engineers are engaged and able to rapidly diagnose and remediate failures?",
+                    "choices": [
+                        {
+                            "id": "gameday_practiced",
+                            "title": "Gameday conducted and lessons learnt documented/procedures updated.",
+                            "helpfulResource": {
+                                "displayText": "While incidents are opportunities to measure, report and learn from the effectiveness of the established practices, failure modes and how personnel and systems will respond are hard to predict. Test your failure scenarios and validate your understanding of their impact. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "Test your response procedures to ensure that they are effective, and that teams are familiar with their execution."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "gameday_practiced",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_resilience_recoveries",
+                    "title": "Withstand failures & fast recoveries (M)",
+                    "description": "What resilience measures implemented when dependencies are impaired? What procedures exist for faster recoveries?",
+                    "choices": [
+                        {
+                            "id": "runbooks_exist",
+                            "title": "Have the ability to weigh workload traffic  out of an AZ within 15 minutes.",
+                            "helpfulResource": {
+                                "displayText": "Create Runbook that clearly documents the process to weigh workload out of an AZ at a minimum. Ideally the steps should be automated."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Create Runbook that clearly documents the process to weigh workload out of an AZ at a minimum. Ideally the steps should be automated."
+                            }
+                        },
+                        {
+                            "id": "withstand_failure",
+                            "title": "Workload can withstand loss of AZ without customer impact",
+                            "helpfulResource": {
+                                "displayText": "Architect your workload to be statically stable during an AZ failure thereby avoiding the need to make changes or deploy new capacity in response. See statically stable article for details.",
+                                "url": "https://aws.amazon.com/builders-library/static-stability-using-availability-zones/"
+                            },
+                            "improvementPlan": {
+                                "displayText": "Architect your workload to be statically stable during an AZ failure thereby avoiding the need to make changes or deploy new capacity in response. See statically stable article for details.",
+                                "url": "https://aws.amazon.com/builders-library/static-stability-using-availability-zones/"
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "runbooks_exist && withstand_failure",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 }
