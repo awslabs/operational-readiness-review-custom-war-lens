@@ -165,12 +165,12 @@
                     "choices": [
                         {
                             "id": "table_provided",
-                            "title": "Matrix (or wiki link) has provided below in the notes section.",
+                            "title": "Matrix (or wiki link) has been provided below in the notes section.",
                             "helpfulResource": {
                                 "displayText": "The API Matrix, or a link to it, has been noted below."
                             },
                             "improvementPlan": {
-                                "displayText": "Key Customer-facing APIs that are expecting high traffic should be documented along with its component pieces and dependencies, and expected traffic load if known."
+                                "displayText": "Key Customer-facing APIs that are expecting high traffic should be documented along with their components and dependencies, and expected traffic load if known."
                             }
                         }
                     ],
@@ -447,7 +447,7 @@
                 {
                     "id": "architecture_demand_estimates",
                     "title": "Demand Estimations (H)",
-                    "description": "What are your forecasted estimates for customer demand? Have you tested your services to ensure they can handle your estimates? Are there specific performance requirements the applicatio must meet? Note what those demand expectations are.",
+                    "description": "What are your forecasted estimates for customer demand? Have you tested your services to ensure they can handle your estimates? Are there specific performance requirements the application must meet? Note what those demand expectations are.",
                     "choices": [
                         {
                             "id": "firmly_known",
@@ -499,7 +499,7 @@
                         },
                         {
                             "id": "lb_2x",
-                            "title": "Two times expected load / requirement.",
+                            "title": "Tested two times expected load / requirement.",
                             "helpfulResource": {
                                 "displayText": "Load balancing was done to level of or beyond 2x the expected traffic load / traffic requirements"
                             },
@@ -509,7 +509,7 @@
                         },
                         {
                             "id": "lb_3x",
-                            "title": "Three times expected load / requirement.",
+                            "title": "Tested three times expected load / requirement.",
                             "helpfulResource": {
                                 "displayText": "Load balancing was done to level of or beyond 3x the expected traffic load / traffic requirements"
                             },
@@ -638,7 +638,7 @@
                             "id": "risk_mitigated",
                             "title": "Relevant risk has been mitigated",
                             "helpfulResource": {
-                                "displayText": "Detecting data corruptiong is dependent upon how the data is collected and what type of data it is. Regular expressions, comparing against JSON schemas, or type checking can detect malformed input data. What may be more difficult is detecting inputs that are technically correct but junk. Recovering data depends on sanitization or on having backups."
+                                "displayText": "Detecting data corruption is dependent upon how the data is collected and what type of data it is. Regular expressions, comparing against JSON schemas, or type checking can detect malformed input data. What may be more difficult is detecting inputs that are technically correct but junk. Recovering data depends on sanitization or on having backups."
                             },
                             "improvementPlan": {
                                 "displayText": "Refer to question's notes on the exact data integrity concerns and consult with the account team TAM & SA to identify potential remediations or mitigations."
@@ -724,9 +724,9 @@
                     "choices": [
                         {
                             "id": "health_checks",
-                            "title": "Applications performs health checks against dependent services.",
+                            "title": "Applications perform health checks against dependent services.",
                             "helpfulResource": {
-                                "displayText": "The application performs health checks against its dependent services in order to pro-actively catch issues and keep unnecessary load off of those systems. "
+                                "displayText": "The application perform health checks against its dependent services in order to pro-actively catch issues and keep unnecessary load off of those systems. "
                             },
                             "improvementPlan": {
                                 "displayText": "The application should "
@@ -754,7 +754,7 @@
                         },
                         {
                             "id": "tested",
-                            "title": "The application has tested a scenario where its dependencies are non-fuctional.",
+                            "title": "The application has tested a scenario where its dependencies are non-functional.",
                             "helpfulResource": {
                                 "displayText": "The application has undergone a specific test to see how it responds when its dependencies are nonfunctional, testing error conditions, and to test alternative codepaths if they exist. The testing was successful."
                             },
@@ -1167,11 +1167,11 @@
                 {
                     "id": "releases_onebox_deployments",
                     "title": "One Box Deployments (M)",
-                    "description": "Are your deployments tested in a production one-box stage before deploying to the region's production stage? How does the deploy escalate to the full deployment?",
+                    "description": "Are your deployments tested in a production one-box stage before deploying to the region's production stage? How does the deployment escalate to the full deployment?",
                     "choices": [
                         {
                             "id": "onebox",
-                            "title": "Relevant risk has been mitigated",
+                            "title": "One box : Relevant risk has been mitigated",
                             "helpfulResource": {
                                 "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
                             },
@@ -1181,7 +1181,7 @@
                         },
                         {
                             "id": "one_az",
-                            "title": "Relevant risk has been mitigated",
+                            "title": "One AZ : Relevant risk has been mitigated",
                             "helpfulResource": {
                                 "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
                             },
@@ -1191,7 +1191,7 @@
                         },
                         {
                             "id": "one_region",
-                            "title": "Relevant risk has been mitigated",
+                            "title": "One Region : Relevant risk has been mitigated",
                             "helpfulResource": {
                                 "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
                             },
@@ -1439,7 +1439,7 @@
                     "choices": [
                         {
                             "id": "prebuilt_amis",
-                            "title": "AMIs are leveraged in order to prebake in software and configuration",
+                            "title": "AMIs are leveraged in order to pre-bake in software and configuration",
                             "helpfulResource": {
                                 "displayText": "By pre-baking software installation and configuration, customers get closer to immutable infrastructure and improve deployment times by ensuring there is minimal stand-up time required."
                             },
@@ -1511,9 +1511,9 @@
                         },
                         {
                             "id": "scan",
-                            "title": "Automated code vunerability scanning and linting are performed during CICD.",
+                            "title": "Automated code vulnerability scanning and linting are performed during CICD.",
                             "improvementPlan": {
-                                "displayText": "Add code vunerability scanning and linting to the deployment pipeline."
+                                "displayText": "Add code vulnerability scanning and linting to the deployment pipeline."
                             }
                         },
                         {
@@ -1718,7 +1718,7 @@
                         },
                         {
                             "id": "runbooks_exist",
-                            "title": "Runbooks have been created, documenting the proper response each alarm.",
+                            "title": "Runbooks have been created, documenting the proper response for each alarm.",
                             "helpfulResource": {
                                 "displayText": "Create detailed steps and checklists for the proper response to each alarm."
                             },
@@ -1766,7 +1766,7 @@
                 {
                     "id": "event_canary_alarms",
                     "title": "Independent Canary Alarms (L)",
-                    "description": "Does your canary synthetic tests detect and alarm on shallow API test failures in under five minutes?",
+                    "description": "Do your canary synthetic tests detect and alarm on shallow API test failures in under five minutes?",
                     "choices": [
                         {
                             "id": "canaries_exist",
@@ -2218,7 +2218,7 @@
                     "choices": [
                         {
                             "id": "runbooks_exist",
-                            "title": "Have the ability to weigh workload traffic  out of an AZ within 15 minutes.",
+                            "title": "Have the ability to weigh workload traffic out of an AZ within 15 minutes.",
                             "helpfulResource": {
                                 "displayText": "Create Runbook that clearly documents the process to weigh workload out of an AZ at a minimum. Ideally the steps should be automated."
                             },
