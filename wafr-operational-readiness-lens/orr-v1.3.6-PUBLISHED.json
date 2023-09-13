@@ -50,7 +50,14 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Complete a WAFR. Your AWS Account team can help!",
+                                "url": "https://aws.amazon.com/well-architected-tool/"
+                            }
                         }
                     ],
                     "riskRules": [
@@ -106,7 +113,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
 
                     ],
@@ -152,7 +165,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -187,7 +206,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "Not available."
+                            "title": "Not available.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -278,7 +303,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -343,7 +374,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                         
                     ],
@@ -380,7 +417,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "Not yet reviewed."
+                            "title": "Not yet reviewed.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -417,12 +460,18 @@
                                 "displayText": "DNS health checks allow for more granular control of how and which endpoints (hosts, ELBs, cloudfront distributions) receive application traffic. One benefit can be failing over to an alternative implementation (on-prem, other-cloud, other-region) in the event of an issue."
                             },
                             "improvementPlan": {
-                                "displayText": "DNS Healthchecks should be enabled where applicable."
+                                "displayText": "DNS health checks should be enabled where applicable."
                             }
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -467,7 +516,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -512,7 +567,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "Demand is unknown / not documented."
+                            "title": "Demand is unknown / not documented.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -600,7 +661,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -678,7 +745,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -713,7 +786,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "Not yet mitigated."
+                            "title": "Not yet mitigated.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -774,7 +853,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -804,7 +889,7 @@
                                 "displayText": "The application perform health checks against its dependent services in order to pro-actively catch issues and keep unnecessary load off of those systems. "
                             },
                             "improvementPlan": {
-                                "displayText": "The application should "
+                                "displayText": "Add health checks against dependent services."
                             }
                         },
                         {
@@ -819,12 +904,12 @@
                         },
                         {
                             "id": "alternate_codepaths",
-                            "title": "An alternate codepath exists that can be executed in the event of dependency issues.",
+                            "title": "An alternate code path exists that can be executed in the event of dependency issues.",
                             "helpfulResource": {
                                 "displayText": "The application has alternative logic and code paths that can be leveraged in the event that its dependencies have issues, such as queueing or otherwise storing transactions to be replayed later."
                             },
                             "improvementPlan": {
-                                "displayText": "Work with the account team to mitigate the risk prior to go live."
+                                "displayText": "Add a code path to handle dependency issues gracefully."
                             }
                         },
                         {
@@ -834,12 +919,18 @@
                                 "displayText": "The application has undergone a specific test to see how it responds when its dependencies are nonfunctional, testing error conditions, and to test alternative codepaths if they exist. The testing was successful."
                             },
                             "improvementPlan": {
-                                "displayText": "Work with the account team to mitigate the risk prior to go live."
+                                "displayText": "Fully test the application against a scenario where its dependencies are non-functional to understand it's behavior."
                             }
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -896,7 +987,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -939,7 +1036,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -970,7 +1073,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "Account access is not segregated."
+                            "title": "Account access is not segregated.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1011,7 +1120,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     
                     ],
@@ -1028,7 +1143,7 @@
                 },
                 {
                     "id": "architecture_certificates",
-                    "title": "Software Certificates (L)",
+                    "title": "Software Certificates (H)",
                     "description": "Are SSL/TLS Certificates used within your system stored in AWS Certificate Manager? If not, where are they stored? Non-TLS certificates and API keys are handled in another question. ",
                     "choices": [
                         {
@@ -1065,7 +1180,13 @@
                         },
                         {
                             "id": "noneofthese",
-                            "title": "None of these."
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1095,6 +1216,26 @@
                     "description": "What changes (software, configuration, and infrastructure) do you need to perform manually? Have these changes been modeled in a pre-approved template prior to executing?",
                     "choices": [
                         {
+                            "id": "manual_changes",
+                            "title": "Manual changes performed without a pre-approved template",
+                            "helpfulResource": {
+                                "displayText": "Manual changes performed without a pre-approved template. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "Any manual release tasks should be documented and turned into automated scripts or other automated processes to remove the opportunity for human error. Any task that cannot be automated should be documented in a clearly defined step-by-step process in order to reduce the opportunity for errors."
+                            }
+                        },
+                        {
+                            "id": "manual_changes_template",
+                            "title": "Manual changes performed to a pre-approved template",
+                            "helpfulResource": {
+                                "displayText": "Manual changes performed to a pre-approved template. "
+                            },
+                            "improvementPlan": {
+                                "displayText": "Any manual release tasks should be documented and turned into automated scripts or other automated processes to remove the opportunity for human error. Any task that cannot be automated should be documented in a clearly defined step-by-step process in order to reduce the opportunity for errors."
+                            }
+                        },
+                        {
                             "id": "no_manual_changes",
                             "title": "No manual changes performed",
                             "helpfulResource": {
@@ -1103,16 +1244,30 @@
                             "improvementPlan": {
                                 "displayText": "Any manual tasks should be documented and turned into automated scripts or other automated processes to remove the opportunity for human error. Any task that cannot be automated should be documented in a clearly defined step-by-step process in order to reduce the opportunity for errors."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "no_manual_changes",
-                            "risk": "NO_RISK"
+                            "condition": "manual_changes || noneofthese",
+                            "risk": "HIGH_RISK"
+                        }, 
+                        {
+                            "condition": "manual_changes_template",
+                            "risk": "MEDIUM_RISK"
                         },
                         {
-                            "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "condition": "no_manual_changes",
+                            "risk": "NO_RISK"
                         }
                     ]
                 },
@@ -1141,15 +1296,25 @@
                             "improvementPlan": {
                                 "displayText": "Blue/Green deployments are not applicable"
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "blue_green && !automated_in_place",
+                            "condition": "blue_green && automated_in_place",
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "automated_in_place && !blue_green",
+                            "condition": "!automated_in_place || !blue_green",
                             "risk": "MEDIUM_RISK"
                         },
                         {
@@ -1172,6 +1337,16 @@
                             },
                             "improvementPlan": {
                                 "displayText": "Add a manual approval action into the CICD pipeline if appropriate."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "Not yet mitigated.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1210,6 +1385,16 @@
                             "improvementPlan": {
                                 "displayText": "If transaction tracing or other performance-monitoring is available, synthetic transactions or canaries should be setup in order to monitor the performance characteristics of the application and compare that data against historical averages to ensure that a deployment does not significantly degrade the user experience."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1218,7 +1403,7 @@
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "(performance_canaries && !availability_canaries) || (!performance_canaries && availability_canaries)",
+                            "condition": "!performance_canaries || !availability_canaries ",
                             "risk": "MEDIUM_RISK"
                         },
                         {
@@ -1251,12 +1436,26 @@
                             "improvementPlan": {
                                 "displayText": "Have a discussion with the account team on if this risk can or should be further mitigated prior to go-live."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "preprod_testing",
+                            "condition": "preprod_testing && automated_progression",
                             "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "preprod_testing && !automated_progression",
+                            "risk": "MEDIUM_RISK"
                         },
                         {
                             "condition": "default",
@@ -1266,27 +1465,31 @@
                 },
                 {
                     "id": "releases_onebox_deployments",
-                    "title": "One Box Deployments (M)",
+                    "title": "One Box EC2 Deployments (M)",
                     "description": "Are your deployments tested in a production one-box stage before deploying to the region's production stage? How does the deployment escalate to the full deployment?",
                     "choices": [
                         {
                             "id": "onebox",
-                            "title": "One box : Relevant risk has been mitigated",
+                            "title": "One box : deploy the latest code to the smallest unit of deployment for an initial test.",
                             "helpfulResource": {
-                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                                "displayText": "Deployments are first released with the smallest unit of deployment, running alongside the prior version for testing.",
+                                "url": "https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/"
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "A one-box stage deploys the latest code to the smallest unit of deployment, such as to a single virtual machine or single container, or to a small percentage of AWS Lambda function invocations.",
+                                "url": "https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/"
                             }
                         },
                         {
                             "id": "one_az",
-                            "title": "One AZ : Relevant risk has been mitigated",
+                            "title": "One AZ : deploy to one AZ first to limit impact.",
                             "helpfulResource": {
-                                "displayText": "The risk presented here has been fully mitigated with no lingering questions or concerns that need to be followed up on."
+                                "displayText": "Deployments are released to one AZ at a time to mitigate release risk.",
+                                "url": "https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/"
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "Deployments can be released to one AZ at a time to mitigate release risk.",
+                                "url": "https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/"
                             }
                         },
                         {
@@ -1298,6 +1501,16 @@
                             "improvementPlan": {
                                 "displayText": "Risk has been mitigated, no further improvements needed. "
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1306,18 +1519,14 @@
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "!onebox",
-                            "risk": "MEDIUM_RISK"
-                        },
-                        {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
                 {
                     "id": "releases_deployment_rollback",
-                    "title": "Automated Deployment Rollback (M)",
+                    "title": "Automated Deployment Rollback (H)",
                     "description": "Do your deployments automatically rollback incorrect deployments before they breach SLAs?",
                     "choices": [
                         {
@@ -1340,6 +1549,16 @@
                             "improvementPlan": {
                                 "displayText": "In blue/green deployment environments, automatically reverting back to the previous environment can be a safe choice in order to minimize user-impact. Assuming that the app supports rolling back to a previous version, discuss as a team what parts of the manual steps can be turned into automation and how that automation can be triggered."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1359,7 +1578,7 @@
                 },
                 {
                     "id": "releases_deployment_gating",
-                    "title": "Deployment Gating (M)",
+                    "title": "EC2 Deployment Gating (M)",
                     "description": "Do you prevent your system from deploying to too many hosts at once?",
                     "choices": [
                         {
@@ -1371,6 +1590,16 @@
                             "improvementPlan": {
                                 "displayText": "If using ECS, SSM or CodeDeploy, review relevant feature sets to limit the number of nodes that a given command/upgrade/deployment is against at a time."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "Deployments are not gated.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1380,7 +1609,7 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
@@ -1401,7 +1630,7 @@
                         },
                         {
                             "id": "production_canaries",
-                            "title": "Canaries continually test common API calls.",
+                            "title": "Synthetic canaries continually test common API calls.",
                             "helpfulResource": {
                                 "displayText": "Automated canaries in production can continually test common API calls and measure their user-facing performance, such as latency and time to completion, and alarm if it deviates from expectations."
                             },
@@ -1417,6 +1646,16 @@
                             },
                             "improvementPlan": {
                                 "displayText": "Work with the account team to receive an introduction on AWS X-Ray which is an SDK and service that enables transaction tracing."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1437,7 +1676,7 @@
                 },
                 {
                     "id": "releases_validation",
-                    "title": "Deployment Validation (L)",
+                    "title": "EC2 Deployment Validation (M)",
                     "description": "Do your deployments run on-host validation tests to verify that the software has started successfully and is responding correctly to health checks?",
                     "choices": [
                         {
@@ -1450,6 +1689,16 @@
                             "improvementPlan": {
                                 "displayText": "Depending on deployment methodology (updating existing instances vs blue/green), look to adding a validation step to existing deployment mechanisms to validate seemingly successful deployments. In the event an error is found, that error needs to be propagated to operators and the deployment failed."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "No on-host validation.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1459,13 +1708,13 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
                 {
                     "id": "releases_canary_errors",
-                    "title": "Independent Canary Errors (L)",
+                    "title": "Independent Canary Errors (M)",
                     "description": "Do you publish your canary errors to an independent metric? Subsequently, do you alarm on this metric?",
                     "choices": [
                         {
@@ -1488,6 +1737,16 @@
                             "improvementPlan": {
                                 "displayText": "Canaries failing should be set to engage relevant teams (content teams for broken links, operators for heartbeats / API failures, etc) at an appropriate severity level. Such as tickets for broken links, or perhaps paging for failed heartbeats. "
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1496,18 +1755,14 @@
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "canaries_exist && !canary_ops",
-                            "risk": "MEDIUM_RISK"
-                        },
-                        {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
                 {
                     "id": "releases_traffic_draining",
-                    "title": "Traffic Draining (L)",
+                    "title": "Traffic Draining (M)",
                     "description": "How is traffic diverted from a host before shutting down the processes?",
                     "choices": [
                         {
@@ -1519,6 +1774,16 @@
                             "improvementPlan": {
                                 "displayText": "ELB Connection Draining should be enabled if required within the ELB console and an appropriate time-out set. ALB and NLB refer to Connection Draining as 'Deregistration Delay'. "
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "ELB Connection Draining is not used.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1528,13 +1793,13 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
                 {
                     "id": "releases_custom_amis",
-                    "title": "Custom AMIs (L)",
+                    "title": "Custom AMIs (M)",
                     "description": "If your system uses custom EC2 AMIs, do you have dedicated AMIs for non-production AWS accounts and production AWS accounts?",
                     "choices": [
                         {
@@ -1554,7 +1819,7 @@
                                 "displayText": "Leveraging distinct AMIs for each environment ensures that accidental deletions or changes to lower environments do not impact higher ones."
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "Use distinct AMIs for production vs non-production environments to ensure production AMI's are not accidentally corrupted or deleted."
                             }
                         },
                         {
@@ -1564,7 +1829,17 @@
                                 "displayText": "Security updates are regularly released for operating systems, regenerating the AMIs on a consistent basis improves deployment times and improves security posture."
                             },
                             "improvementPlan": {
-                                "displayText": "Risk has been mitigated, no further improvements needed. "
+                                "displayText": "Regenerate AMIs on a consistent basis. "
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1574,12 +1849,8 @@
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "(prebuilt_amis && (distinct_amis && !regenerated)) || (prebuilt_amis && (regenerated && !distinct_amis))",
-                            "risk": "MEDIUM_RISK"
-                        },
-                        {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
@@ -1622,6 +1893,16 @@
                             "improvementPlan": {
                                 "displayText": "Ensure you have comprehensive test coverage."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1630,7 +1911,7 @@
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "!test_int && !test_unit && !scan && !smoke && manual",
+                            "condition": "(!test_int || !test_unit || !scan || !smoke) && manual",
                             "risk": "MEDIUM_RISK"
                         },
                         {
@@ -1648,7 +1929,7 @@
                 {
                     "id": "underlying_dependencies",
                     "title": "Underlying Dependencies (H)",
-                    "description": "What are the underlying dependencies for the service?  Include a list of other services, systems, and infrastructure outside the boundary of this application.  Explain how your service will be impacted based on a failure of each of your dependencies.",
+                    "description": "What are the underlying dependencies for the service? Include a list of other services, systems, and infrastructure outside the boundary of this application.  Explain how your service will be impacted based on a failure of each of your dependencies.",
                     "choices": [
                         {
                             "id": "table_provided",
@@ -1662,12 +1943,22 @@
                         },
                         {
                             "id": "impact_provided",
-                            "title": "The impact of underlying dependency failure is provided below in the notes section.",
+                            "title": "The impact of underlying dependency failure is annotated in the dependencies document noted above.",
                             "helpfulResource": {
                                 "displayText": "The list of underlying dependencies failure impact, or a link to it, has been noted below."
                             },
                             "improvementPlan": {
                                 "displayText": "The list of impacts of underlying dependency failure should be inventories and documented."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1699,12 +1990,22 @@
                         },
                         {
                             "id": "kpis_documented",
-                            "title": "KPIs are known and documented in the notes section.",
+                            "title": "KPIs are known and documented, link to the documentation is provided in the notes section.",
                             "helpfulResource": {
                                 "displayText": "Knowing your KPIs are an important piece in understanding if you are meeting the needs of the users during an event. KPIs could include uptime/availability, number of active users or session, number of transactions per second, amount of time each transaction takes or the amount of latency a user is experiencing."
                             },
                             "improvementPlan": {
                                 "displayText": "Work with business leadership to understand the KPIs that will determine whether the event is a success, and then work to implement those KPIs as metrics and alarms."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1746,7 +2047,7 @@
                         },
                         {
                             "id": "oncall_sla",
-                            "title": "Oncall engineers have an SLA for check-in time once an engagement ",
+                            "title": "Oncall engineers have an SLA for check-in time once an engagement begins.",
                             "helpfulResource": {
                                 "displayText": "As part of the oncall process and documentation, expectations should be clearly defined and understood by the oncall engineers. This includes an expected SLA on when they need to check in by once an event begins and they are notified."
                             },
@@ -1756,7 +2057,7 @@
                         },
                         {
                             "id": "runbooks_written",
-                            "title": "Oncall engineers have documented runbooks they can rely on",
+                            "title": "Oncall engineers have documented runbooks they can rely on.",
                             "helpfulResource": {
                                 "displayText": "Runbooks can be a critical component of a success incident, taking the guess-work out of how engineers should respond and empowering more junior engineers."
                             },
@@ -1782,6 +2083,16 @@
                             },
                             "improvementPlan": {
                                 "displayText": "As part of the oncall process, escalation procedures should be clearly documented so that, in the event the oncall is overwhelmed with simultaneous issues or there is a knowledge gap, they know the most effective way to gain assistance."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1846,6 +2157,16 @@
                             "improvementPlan": {
                                 "displayText": "Where possible, alarms should trigger automatic resolution."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -1865,12 +2186,12 @@
                 },
                 {
                     "id": "event_canary_alarms",
-                    "title": "Independent Canary Alarms (L)",
+                    "title": "Independent Canary Alarms (H)",
                     "description": "Do your canary synthetic tests detect and alarm on shallow API test failures in under five minutes?",
                     "choices": [
                         {
                             "id": "canaries_exist",
-                            "title": "Performance synthetics measure P50, P99 and P99.9s to track variability (including tail latency)",
+                            "title": "Performance synthetics measure P50, P99 and P99.9s to track variability.",
                             "helpfulResource": {
                                 "displayText": "Performance variability should be measured along with median performance since there are edge cases which can affect both overall performance as well as the customer perception. Understanding this variability will allow your service to improve customer experience."
                             },
@@ -1881,12 +2202,22 @@
                         },
                         {
                             "id": "canary_ops",
-                            "title": "Canary Metrics have alarms tied to them that engage the operations team.",
+                            "title": "Canary Metrics have alarms that directly engage the operations team.",
                             "helpfulResource": {
                                 "displayText": "Canary alarms primary purpose is to proactively catch downward trends in application or service health. As such, those alarms should notify operator teams so that they can investigate potential issues."
                             },
                             "improvementPlan": {
                                 "displayText": "Canaries failing should be set to engage relevant teams (content teams for broken links, operators for heartbeats / API failures, etc) at an appropriate severity level. Such as tickets for broken links, or perhaps paging for failed heartbeats. "
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1907,17 +2238,27 @@
                 },
                 {
                     "id": "event_automated_data_gathering",
-                    "title": "Automated Data Gathering (L)",
+                    "title": "Automated Data Gathering (M)",
                     "description": "Following or during an event, data is automatically captured and presented to resolvers to expedite resolution.",
                     "choices": [
                         {
                             "id": "risk_mitigated",
-                            "title": "Automated data gathering is used in the event of an alarm or event",
+                            "title": "Automated data gathering is used in the event of an alarm or event.",
                             "helpfulResource": {
                                 "displayText": "When alarms auto-cut tickets to engineers, it can be very useful for the automation to also include cloudwatch metrics or log files from the affected resource(s). This frees up engineer time from needing to collect that data by hand, allowing them to focus on the 'why' of the event."
                             },
                             "improvementPlan": {
                                 "displayText": "Work with the account team to get a deep dive on Systems Manager - Incident Manager for inspiration and to see how relevant resource metrics can be collected"
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "Not yet automated.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1928,7 +2269,7 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
@@ -1939,7 +2280,7 @@
                     "choices": [
                         {
                             "id": "fs_capacity",
-                            "title": "Filesystem space capacity",
+                            "title": "Filesystem space capacity is monitored and alarms are in place.",
                             "helpfulResource": {
                                 "displayText": "For non-autoscaled systems, monitoring and alarming the level free capacity on the filesystem can be critical for catching problems early and preventing a crash."
                             },
@@ -1949,7 +2290,7 @@
                         },
                         {
                             "id": "inode_capacity",
-                            "title": "Filesystem inode capacity",
+                            "title": "Filesystem inode capacity is monitored and alarms are in place.",
                             "helpfulResource": {
                                 "displayText": "Particularly EXT4 based systems may want to monitor inode capacity given that EXT4 inode capacity is hard-coded at creation time and cannot be expanded. Inode exhaustion is a concern on systems that deal with many small files rather than fewer medium to large files."
                             },
@@ -1959,7 +2300,7 @@
                         },
                         {
                             "id": "fd_utilization",
-                            "title": "File descriptor utilization.",
+                            "title": "File descriptor utilization is monitored and alarms are in place.",
                             "helpfulResource": {
                                 "displayText": "File descriptors are a measurement of how many files can be opened at a single time. "
                             },
@@ -1969,7 +2310,7 @@
                         },
                         {
                             "id": "cpu_utilization",
-                            "title": "CPU utilization",
+                            "title": "CPU utilization is monitored and alarms are in place.",
                             "helpfulResource": {
                                 "displayText": "CPU Utilization is a default metric that is available within EC2, and its monitoring can be critical to detecting problems such as processing running out of control. This is a common scale-out metric for autoscaling groups."
                             },
@@ -1979,12 +2320,22 @@
                         },
                         {
                             "id": "mem_utilization",
-                            "title": "Memory utilization",
+                            "title": "Memory utilization is monitored and alarms are in place.",
                             "helpfulResource": {
                                 "displayText": "Memory utilization is not a default metric that is available within EC2. Its monitoring can be critical to detecting problems such as processing running out of control. This is a common scale-out metric for autoscaling groups."
                             },
                             "improvementPlan": {
                                 "displayText": "Non-autoscaled systems should alarm on memory utilization, either statically defined thresholds or Cloudwatch synthetics, in orrder to detect memory leaks or being under-provisioned."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -1994,7 +2345,7 @@
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "(mem_utilization && cpu_utilization) && (!inode_capacity || !fs_capacity)",
+                            "condition": "(mem_utilization && cpu_utilization) && (!inode_capacity || !fs_capacity || !fd_utilization)",
                             "risk": "MEDIUM_RISK"
                         },
                         {
@@ -2005,17 +2356,27 @@
                 },
                 {
                     "id": "event_database_alarms",
-                    "title": "Database Alarms",
+                    "title": "Database Alarms (H)",
                     "description": "Do you have alarms on database (relational and non-relational) utilization? Do you alarm with enough room to troubleshoot and mitigate the issue before it becomes customer-impacting?",
                     "choices": [
                         {
                             "id": "risk_mitigated",
-                            "title": "Database utilization and performance is alarmed",
+                            "title": "Database utilization and performance are monitored and alarms are in place.",
                             "helpfulResource": {
                                 "displayText": "Pro-actively identifying a downward trend on critical databases is important to ensure that a problem does not become a user-impacting issue."
                             },
                             "improvementPlan": {
                                 "displayText": "Application-critical databases should be proactively monitored for utilization or performance metrics that could indicate a problem, such as average query time increasing or memory utilization reaching critical levels."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "Not monitored.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -2032,12 +2393,12 @@
                 },
                 {
                     "id": "event_jvm_metrics",
-                    "title": "JVM Metrics & Alarms",
+                    "title": "JVM Metrics & Alarms (M)",
                     "description": "Do you monitor (and alarm) on your JVM metrics? Do you monitor (and alarm on) your hosts for file system, inode, and file descriptor utilization? Do you monitor (and alarm on) your hosts for CPU and memory utilization?",
                     "choices": [
                         {
                             "id": "jvm_metrics",
-                            "title": "JVM metrics monitored and alarmed on as needed.",
+                            "title": "JVM metrics are monitored and alarms are in place.",
                             "helpfulResource": {
                                 "displayText": "Applicable JVM metrics could include, but are not limited to: memory utilization, garbage collection, heap usage, thread summary."
                             },
@@ -2046,68 +2407,24 @@
                             }
                         },
                         {
-                            "id": "fs_capacity",
-                            "title": "Filesystem space capacity",
+                            "id": "noneofthese",
+                            "title": "Not monitored.",
                             "helpfulResource": {
-                                "displayText": "For non-autoscaled systems, monitoring and alarming the level free capacity on the filesystem can be critical for catching problems early and preventing a crash."
+                                "displayText": "Select this option if all actions are still pending."
                             },
                             "improvementPlan": {
-                                "displayText": "Non-autoscaled systems that ingest data should have filesystem capacity alarmed on in order to avoid a situation where the drive is filled to capacity, resulting in a crash."
-                            }
-                        },
-                        {
-                            "id": "inode_capacity",
-                            "title": "Filesystem inode capacity",
-                            "helpfulResource": {
-                                "displayText": "Particularly EXT4 based systems may want to monitor inode capacity given that EXT4 inode capacity is hard-coded at creation time and cannot be expanded. Inode exhaustion is a concern on systems that deal with many small files rather than fewer medium to large files."
-                            },
-                            "improvementPlan": {
-                                "displayText": "On systems which primarily deal with many small files (logging servers, for example), monitoring inode capacity can be critical for ensuring application availability. "
-                            }
-                        },
-                        {
-                            "id": "fd_utilization",
-                            "title": "File descriptor utilization.",
-                            "helpfulResource": {
-                                "displayText": "File descriptors are a measurement of how many files can be opened at a single time. "
-                            },
-                            "improvementPlan": {
-                                "displayText": "File descriptor utilization should be metriced and alarmed on if the server in question handles many services or if one of those services primarily opens and closes many files simultaneously."
-                            }
-                        },
-                        {
-                            "id": "cpu_utilization",
-                            "title": "CPU utilization",
-                            "helpfulResource": {
-                                "displayText": "CPU Utilization is a default metric that is available within EC2, and its monitoring can be critical to detecting problems such as processing running out of control. This is a common scale-out metric for autoscaling groups."
-                            },
-                            "improvementPlan": {
-                                "displayText": "Non-autoscaled systems should alarm on CPU utilization around 75-80%, or use CW Synthetics for dynamic alarms, in order to detect a server that is being overwhelmed."
-                            }
-                        },
-                        {
-                            "id": "mem_utilization",
-                            "title": "Memory utilization",
-                            "helpfulResource": {
-                                "displayText": "Memory utilization is not a default metric that is available within EC2. Its monitoring can be critical to detecting problems such as processing running out of control. This is a common scale-out metric for autoscaling groups."
-                            },
-                            "improvementPlan": {
-                                "displayText": "Non-autoscaled systems should alarm on memory utilization, either statically defined thresholds or CloudWatch synthetics, in order to detect memory leaks or being under-provisioned."
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "jvm_metrics && mem_utilization && cpu_utilization && fd_utilization && inode_capacity && fs_capacity",
+                            "condition": "jvm_metrics",
                             "risk": "NO_RISK"
                         },
                         {
-                            "condition": "jvm_metrics && (mem_utilization && cpu_utilization) && (!inode_capacity || !fs_capacity)",
-                            "risk": "MEDIUM_RISK"
-                        },
-                        {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
@@ -2117,41 +2434,71 @@
                     "description": "Do you monitor and alarm on your frontend components (DNS systems, load balancers, VIPs, proxy services, etc.)?",
                     "choices": [
                         {
-                            "id": "risk_mitigated",
-                            "title": "Frontend components alarmed on for availability and critical performance metrics.",
+                            "id": "monitored_risk_mitigated",
+                            "title": "Frontend components are monitored for availability and critical performance metrics.",
                             "helpfulResource": {
-                                "displayText": "Monitoring and alarming of critical-path frontend components, by the owning team, are critical to ensuring the availability of downstream applications and services."
+                                "displayText": "Monitoring of critical-path frontend components, by the owning team, is critical to ensure the availability of downstream applications and services."
                             },
                             "improvementPlan": {
-                                "displayText": "In-scope critical path components should be alarmed on in order to detect issues and remediate them efficiently."
+                                "displayText": "In-scope critical path components should be monitored in order to detect issues."
+                            }
+                        },
+                        {
+                            "id": "alarms_risk_mitigated",
+                            "title": "Alarms are in place for availability and critical performance metrics of frontend components. ",
+                            "helpfulResource": {
+                                "displayText": "Alarms of critical-path frontend components, by the owning team, are critical to ensure the availability of downstream applications and services."
+                            },
+                            "improvementPlan": {
+                                "displayText": "In-scope critical path components should have alarms in order to detect issues and remediate them efficiently."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "risk_mitigated",
+                            "condition": "monitored_risk_mitigated && alarms_risk_mitigated",
                             "risk": "NO_RISK"
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
                 {
                     "id": "event_delayed_consistency",
-                    "title": "Delayed Consistency Alarms (L)",
+                    "title": "Delayed Consistency Alarms (M)",
                     "description": "Do you monitor and alarm on any delayed convergence of eventually consistent processes in your system?",
                     "choices": [
                         {
                             "id": "risk_mitigated",
-                            "title": "Latency of eventual consistency is measured and alarmed",
+                            "title": "Latency of eventual consistency is measured and alarms are in place.",
                             "helpfulResource": {
                                 "displayText": "Eventual consistency is a common feature of distributed systems where data is stored on multiple nodes but only one node accepts the incoming write to start with, for example: Amazon S3 uses eventual consistency for updating existing objects."
                             },
                             "improvementPlan": {
                                 "displayText": "If possible, the latency of eventually consistent systems should be measured and alarmed in. A delay in consistency could pose a risk to user experience, data consistency, or could indict an otherwise silent problem in the system."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "Not measured.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -2161,7 +2508,7 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
@@ -2172,13 +2519,23 @@
                     "choices": [
                         {
                             "id": "risk_mitigated",
-                            "title": "Transaction tracing implemented.",
+                            "title": "Transaction tracing is implemented.",
                             "helpfulResource": {
                                 "displayText": "Transaction tracing allows for the finely-tuned monitoring of each transaction as it moves through the system, capturing individual return codes at each step, as well as the latency of each step and which nodes received which requests. This makes it much easier to identify exactly where a problem may have occurred for a given request."
                             },
                             "improvementPlan": {
                                 "displayText": "Work with the account team to get a deep dive on AWS X-Ray and integrating the X-Ray SDK into the relevant applications.",
                                 "url": "https://aws.amazon.com/xray/"
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "Not implemented.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -2189,13 +2546,13 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
                 {
                     "id": "event_mutating_access",
-                    "title": "Mutating Access (M)",
+                    "title": "Mutating Access (H)",
                     "description": "Have you limited the individuals who have mutating access to production systems and AWS accounts?",
                     "choices": [
                         {
@@ -2210,18 +2567,28 @@
                         },
                         {
                             "id": "automation_only",
-                            "title": "Mutating changes to production systems is limited to automated systems only under normal scenarios.",
+                            "title": "Mutating changes to production systems are limited to automated systems only under normal scenarios.",
                             "helpfulResource": {
                                 "displayText": "Limiting access to automated systems only ensures that each and every change can be tested and validated in lower environments prior to moving into production."
                             },
                             "improvementPlan": {
                                 "displayText": "CI/CD pipelines that promote changes from lower environments to higher ones are one method to ensure that each change is tested"
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "seniors_only",
+                            "condition": "seniors_only || automation_only",
                             "risk": "NO_RISK"
                         },
                         {
@@ -2244,6 +2611,16 @@
                             "improvementPlan": {
                                 "displayText": "Ensure that all queueing systems in the application report their respective backlogs with alarms configured for thresholds of concern, or synthetic alarms configured for dynamic thresholds."
                             }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "No alarms configured.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
                         }
                     ],
                     "riskRules": [
@@ -2253,7 +2630,7 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
@@ -2264,12 +2641,22 @@
                     "choices": [
                         {
                             "id": "risk_mitigated",
-                            "title": "Relevant risk has been mitigated",
+                            "title": "Monitoring and alarms are in place for expiring materials.",
                             "helpfulResource": {
                                 "displayText": "Examples could include software validation certifications, time-bound licenses, or API keys."
                             },
                             "improvementPlan": {
                                 "displayText": "If there are materials that are scheduled to expire on a consistent schedule, alarms should be in place around those expiration times in order to ensure that they can be rotated in time, as well as a runbook developed for what should be done in the event of rotation failure."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "Not in place.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -2280,23 +2667,33 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
                 {
                     "id": "event_gameday",
-                    "title": "Event preparedness through game days (H)",
+                    "title": "Event preparedness through game days (M)",
                     "description": "Have you performed a gameday to verify that your service's monitoring and alarming function as expected and your on-call engineers are engaged and able to rapidly diagnose and remediate failures?",
                     "choices": [
                         {
                             "id": "gameday_practiced",
-                            "title": "Gameday conducted and lessons learnt documented/procedures updated.",
+                            "title": "Gameday conducted and lessons learned documented, with procedures updated as needed.",
                             "helpfulResource": {
                                 "displayText": "While incidents are opportunities to measure, report and learn from the effectiveness of the established practices, failure modes and how personnel and systems will respond are hard to predict. Test your failure scenarios and validate your understanding of their impact. "
                             },
                             "improvementPlan": {
                                 "displayText": "Test your response procedures to ensure that they are effective, and that teams are familiar with their execution."
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "No game days conducted.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
@@ -2307,28 +2704,28 @@
                         },
                         {
                             "condition": "default",
-                            "risk": "HIGH_RISK"
+                            "risk": "MEDIUM_RISK"
                         }
                     ]
                 },
                 {
                     "id": "event_resilience_recoveries",
-                    "title": "Withstand failures & fast recoveries (M)",
+                    "title": "Withstand failures & enable fast recoveries (H)",
                     "description": "What resilience measures implemented when dependencies are impaired? What procedures exist for faster recoveries?",
                     "choices": [
                         {
-                            "id": "runbooks_exist",
-                            "title": "Have the ability to weigh workload traffic out of an AZ within 15 minutes.",
+                            "id": "move_traffic",
+                            "title": "The workload has the ability to direct network traffic out of an AZ within 15 minutes.",
                             "helpfulResource": {
-                                "displayText": "Create Runbook that clearly documents the process to weigh workload out of an AZ at a minimum. Ideally the steps should be automated."
+                                "displayText": "Create Runbook that clearly documents the process to direct workload out of an AZ at a minimum. Ideally the steps should be automated."
                             },
                             "improvementPlan": {
-                                "displayText": "Create Runbook that clearly documents the process to weigh workload out of an AZ at a minimum. Ideally the steps should be automated."
+                                "displayText": "Create Runbook that clearly documents the process to direct workload out of an AZ at a minimum. Ideally the steps should be automated."
                             }
                         },
                         {
                             "id": "withstand_failure",
-                            "title": "Workload can withstand loss of AZ without customer impact",
+                            "title": "Workload can withstand loss of at least one AZ without customer impact.",
                             "helpfulResource": {
                                 "displayText": "Architect your workload to be statically stable during an AZ failure thereby avoiding the need to make changes or deploy new capacity in response. See statically stable article for details.",
                                 "url": "https://aws.amazon.com/builders-library/static-stability-using-availability-zones/"
@@ -2336,12 +2733,61 @@
                             "improvementPlan": {
                                 "displayText": "Architect your workload to be statically stable during an AZ failure thereby avoiding the need to make changes or deploy new capacity in response. See statically stable article for details.",
                                 "url": "https://aws.amazon.com/builders-library/static-stability-using-availability-zones/"
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "None of these.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
                             }
                         }
                     ],
                     "riskRules": [
                         {
-                            "condition": "runbooks_exist && withstand_failure",
+                            "condition": "move_traffic && withstand_failure",
+                            "risk": "NO_RISK"
+                        },
+                        {
+                            "condition": "default",
+                            "risk": "HIGH_RISK"
+                        }
+                    ]
+                },
+                {
+                    "id": "event_budget_alerts",
+                    "title": "Alarms for cost management (M)",
+                    "description": "What alarms are in place for cost management?",
+                    "choices": [
+                        {
+                            "id": "set_cost_alarms",
+                            "title": "Do you have an AWS Budget set and alarms for higher than expected utilization costs?",
+                            "helpfulResource": {
+                                "displayText": "The AWS Budget has been set and alarms are in place to notify of expenses.",
+                                "url": "https://aws.amazon.com/aws-cost-management/aws-budgets/"
+                            },
+                            "improvementPlan": {
+                                "displayText": "Set thresholds in AWS Budget and implement alarms to notify of unexpected expenses.",
+                                "url": "https://aws.amazon.com/aws-cost-management/aws-budgets/"
+                            }
+                        },
+                        {
+                            "id": "noneofthese",
+                            "title": "Budget and/or alarms not set.",
+                            "helpfulResource": {
+                                "displayText": "Select this option if all actions are still pending."
+                            },
+                            "improvementPlan": {
+                                "displayText": "Review the improvement plan for the action items above."
+                            }
+                        }
+                    ],
+                    "riskRules": [
+                        {
+                            "condition": "set_cost_alarms",
                             "risk": "NO_RISK"
                         },
                         {
