@@ -1,0 +1,24 @@
+schema: orrlens/lens/1
+key: event
+name: ORR - Mission-Critical Event Readiness
+version: 1.0.0
+file_stem: orr-event
+description: >-
+  ORR - Mission-Critical Event Readiness custom lens {version} for the AWS Well-Architected Tool. Attach it
+  alongside a current Operational Readiness Review (ORR) core review before a planned peak, such as an election,
+  an enrollment or tax deadline, a product launch, ticket sales, a broadcast, or a cutover. Suggested timing:
+  procure 3-6 months before, complete this review at least 8 weeks before, re-test load 30-60 days before, close
+  High risks 4 weeks before, and review within 2 weeks after. High risk means launch-blocking unless remediated
+  or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It
+  is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed
+  your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's
+  suggestions. Provided as is under the MIT-0 license. Source and updates:
+  https://github.com/awslabs/operational-readiness-review-custom-war-lens
+none_exclusive_guard: true
+pillars:
+  - id: evt_prepare
+    name: 01 - Prepare
+  - id: evt_operate
+    name: 02 - Operate
+  - id: evt_after
+    name: 03 - After the event

@@ -1,0 +1,104 @@
+schema: orrlens/question/1
+id: architecture_cold_start
+pillar: architecture
+order: 140
+title: Restart and scale out while dependencies are impaired
+max_risk: MEDIUM
+priority: P1
+core_path: false
+category: Service restart
+lineage: [releases_custom_amis]
+choice_prefix: cs_
+description:
+  question: >-
+    Can the workload start from zero, restart, or scale out quickly while dependencies such as artifact
+    repositories, configuration stores or the internet are impaired?
+  out_of_scope_if: >-
+    every component is a managed service with no start-up path you control (mark the question as not
+    applicable with that reason).
+  evidence_to_collect: >-
+    the restart-from-zero runbook with expected timings. The source of every image, package and binary used at
+    start-up. Configuration and secret caching behavior. The date and duration of the last cold-start exercise.
+helpful:
+  display_text: REL11-BP05 Use static stability (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html
+statements:
+  - id: cs_restart_documented
+    tier: sec
+    title: A restart-from-zero procedure documents start-up order and has no circular dependencies
+    concept: restart-from-zero-procedure
+    wa_bp: REL11-BP05
+    good: >-
+      A tested runbook brings the whole workload up from nothing, lists the start-up order of components and
+      dependencies with expected timings against RTO, and confirms there are no circular dependencies, for example
+      a service that needs a configuration store that itself needs the service. The AWS ORR whitepaper's example
+      questions ask for restart RTO, a runbook and circular-dependency analysis.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+    improvement: >-
+      Draw the start-up dependency graph, break any cycles (for example by caching or bundling bootstrap data),
+      write the runbook with expected timings, and review it after each major architecture change.
+    improvement_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html
+  - id: cs_artifacts_controlled
+    tier: sec
+    title: Images, packages and binaries needed to deploy, restart or scale come from repositories you control, not the internet
+    concept: controlled-startup-artifact-sources
+    wa_bp: REL11-BP05
+    good: >-
+      Every artifact needed to launch capacity (container images, machine images, OS and language packages, agents
+      and models) is stored in repositories you operate, in every Region you run in, so an outage, rate limit or
+      deleted package in a public registry cannot stop a restart or scale-out.
+    platform_notes: >-
+      Containers: Amazon ECR with pull through cache rules for upstream registries. EC2: pre-built machine images
+      and a package mirror you operate. Serverless: deployment packages and layers in your own accounts. Packages:
+      AWS CodeArtifact upstream repositories.
+    partition_notes: >-
+      AWS CodeArtifact is not available in AWS GovCloud (US) as of 2026-10-05; there, use Amazon ECR private
+      repositories (ECR-to-ECR pull through cache rules work only within the partition), Amazon S3-hosted mirrors
+      or a self-managed repository inside the partition; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/AmazonECR/latest/userguide/pull-through-cache.html
+    improvement: >-
+      List every external artifact source used at start-up and scale-out (check user data, Dockerfiles, bootstrap
+      scripts and agents), mirror each into a repository you control and replicate it to every Region you use,
+      block direct internet fetches at start-up, and alarm on failed pulls.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.cd.2-deploy-exclusively-from-trusted-artifact-repositories.html
+    additional_improvement:
+      - display_text: AWS CodeArtifact upstream repositories (where available)
+        url: https://docs.aws.amazon.com/codeartifact/latest/ug/repos-upstream.html
+  - id: cs_config_resilient
+    tier: sec
+    title: Start-up survives an outage of the configuration, secrets or feature-flag store by using replicated or last-known-good values
+    concept: startup-config-last-known-good
+    wa_bp: REL11-BP04
+    good: >-
+      If the configuration, secrets or feature-flag store is slow or unavailable, new and restarting instances
+      still start with last-known-good values (for example a local cache, the AWS AppConfig Agent cache, or values
+      bundled at build time), secrets needed for recovery are replicated to the recovery Region, and start-up
+      never waits on a control-plane call that could be impaired by the same event.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_avoid_control_plane.html
+    improvement: >-
+      List every configuration, secret and flag read at start-up, cache last-known-good values with integrity
+      checks, replicate recovery secrets across Regions, give start-up calls timeouts with safe defaults, and test
+      start-up with the configuration store blocked.
+    improvement_url: https://docs.aws.amazon.com/appconfig/latest/userguide/what-is-appconfig.html
+  - id: cs_exercised
+    tier: sec
+    title: A cold start or large scale-out was exercised in the last 12 months with external dependencies blocked, within RTO
+    concept: cold-start-exercised
+    wa_bp: REL13-BP03
+    good: >-
+      In the last 12 months, in a production-like environment, you restarted the workload from zero, or scaled out
+      several times over, while internet access was blocked and non-critical dependencies were impaired, and
+      recovery completed within RTO. Results and fixes are recorded.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_dr_tested.html
+    improvement: >-
+      Schedule a cold-start exercise at least yearly: block egress to the internet and to non-critical dependencies
+      in a test environment (for example with AWS FIS network actions or security group changes), restart or scale
+      out, measure time to healthy, and track fixes to closure.
+    improvement_url: https://docs.aws.amazon.com/fis/latest/userguide/scenario-library.html
+pes_lesson:
+  statement: cs_restart_documented
+  month: Feb 2017
+  url: https://aws.amazon.com/message/41926/
+  lesson: >-
+    systems that had not been completely restarted for many years took longer than expected to restart, so
+    exercise full restarts before you need them.

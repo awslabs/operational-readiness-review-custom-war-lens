@@ -1,0 +1,121 @@
+schema: orrlens/question/1
+id: event_alarms
+pillar: event_management
+order: 20
+title: Customer-experience SLOs and alarms that fire before breach
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Event detection
+lineage: [event_kpis, event_alarms, event_frontend_alarms]
+choice_prefix: slo_
+description:
+  question: >-
+    Do SLO-based alarms on customer-facing errors and latency page your team before customers notice, and before
+    any SLO or contractual SLA is breached?
+  evidence_to_collect: >-
+    the SLOs for each critical journey and API. The paging alarm definitions (metric, statistic, threshold,
+    period, datapoints to alarm, missing-data treatment). The record of the last operations review with SLO
+    attainment and alarm noise.
+helpful:
+  display_text: OPS04-BP01 Identify KPIs (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_identify_kpis.html
+statements:
+  - id: slo_defined
+    tier: core
+    title: Availability, latency and async-completion SLOs are defined for each critical user journey and API
+    concept: customer-experience-slos
+    severity_basis: "wa:OPS04-BP01 (High)"
+    wa_bp: OPS04-BP01
+    good: >-
+      Each critical user journey and API has written SLOs measured from the customer's side: availability
+      (successful requests over valid requests), latency at a high percentile (for example p99), and, for
+      asynchronous work, time to completion. Each SLO has an owner, a target, a measurement window and an error
+      budget, is derived from business needs, and is tighter than any SLA. CloudWatch Application Signals can
+      track latency and availability SLOs, or you can compute them from your own metrics.
+    partition_notes: >-
+      As of 2026-10-06, CloudWatch Application Signals is available in AWS GovCloud (US) (AWS Capabilities by
+      Region) but not for Lambda functions (AWS GovCloud (US) User Guide); compute Lambda SLOs from your own
+      CloudWatch metrics. Verify per Region.
+    reader_note: >-
+      This page mentions AWS Service Catalog AppRegistry, which is closed to new customers; associating an SLO
+      with an application there is optional and is not needed for this practice.
+    helpful_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-ServiceLevelObjectives.html
+    improvement: >-
+      For each critical journey and API, agree availability, latency-percentile and completion-time targets with
+      the business owner, set them tighter than any SLA, choose the metric that measures each one from the
+      customer's side, and publish them with an owner and an error budget.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_identify_kpis.html
+  - id: slo_alarms_before_breach
+    tier: core
+    title: Paging alarms on customer-facing error rates and latency percentiles fire before the SLO or SLA is breached
+    concept: slo-paging-alarms
+    severity_basis: "wa:OPS08-BP04 (High)"
+    wa_bp: OPS08-BP04
+    good: >-
+      Every SLO has at least one alarm that pages the on-call engineer when the error rate or latency percentile
+      crosses a threshold, or the error budget burns at a rate, that leaves time to act before the SLO or SLA is
+      breached. Alarms use rates and percentiles (for example server errors over requests, p99 latency) rather
+      than averages or raw counts, and cover each Region and entry point. Informational alarms go to a ticket
+      queue, not a pager.
+    platform_notes: >-
+      EC2 and containers behind a load balancer: Application Load Balancer metrics such as HTTPCode_Target_5XX_Count
+      and TargetResponseTime, with metric math for rates. Serverless: API Gateway 5XXError and Latency, and Lambda
+      Errors and Duration. Asynchronous journeys: alarm on completion time or success rate, not only on API
+      errors.
+    reader_note: >-
+      This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30);
+      CloudWatch alarms, composite alarms and CloudWatch anomaly detection meet this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_create_alerts.html
+    improvement: >-
+      Create an alarm for each SLO on error rate and on latency percentile, with thresholds that fire while error
+      budget remains; consider a fast-burn and a slow-burn alarm per SLO. Route them to the paging rotation,
+      test each one by setting it to ALARM, and keep alarm definitions in IaC.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+    additional_improvement:
+      - display_text: REL06-BP03 Send notifications (Real-time processing and alarming)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_monitor.html
+  - id: slo_alarm_quality
+    tier: sec
+    title: Critical alarms use short periods (for example 1 minute), deliberate missing-data handling and M-of-N evaluation
+    concept: alarm-evaluation-settings
+    wa_bp: REL06-BP03
+    good: >-
+      Critical alarms evaluate short periods (for example 1 minute) so they fire within minutes, use M out of N
+      datapoints to alarm (for example 3 of 5) so a single spike does not page, and set missing-data treatment on
+      purpose: breaching for signals that must always report, such as request-count or success metrics that
+      should never drop to zero (canary and heartbeat alarms are scored in event_canary_alarms), and not
+      breaching or ignore where gaps are normal. Composite alarms or anomaly detection reduce noise where static
+      thresholds do not fit.
+    helpful_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html
+    improvement: >-
+      Review every paging alarm's period, datapoints to alarm and missing-data treatment, record the reason for
+      each choice, fix alarms that page on a single datapoint or stay quiet when data stops, and check these
+      settings in code review of the alarm IaC.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html
+    additional_improvement:
+      - display_text: Using CloudWatch anomaly detection
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html
+  - id: slo_reviewed
+    tier: sec
+    title: SLO attainment, error budgets and noisy alarms are reviewed in a recurring operations review and drive fixes
+    concept: slo-operations-review
+    wa_bp: REL06-BP06
+    good: >-
+      A weekly or other regular operations review looks at SLO attainment and error budget burn, alarms that
+      fired without needing action or failed to fire, recent pages and open action items, and turns findings
+      into tracked fixes to thresholds, runbooks or the workload. Attendance includes the people who are on call.
+      A sample agenda is in docs/ops-review-agenda.md in this lens's repository.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_review_monitoring.html
+    improvement: >-
+      Schedule a recurring operations review with a fixed agenda: SLO attainment and error budget, alarms that
+      fired and whether they were actionable, missed detections, and open action items. Give each fix an owner
+      and a due date and track it to closure.
+    improvement_url: https://builder.aws.com/content/3Ev2iw3R3ahQOM8BT4OUR0WP51z/building-dashboards-for-operational-visibility
+pes_lesson:
+  statement: slo_alarm_quality
+  month: Nov 2020
+  url: https://aws.amazon.com/message/11201/
+  lesson: >-
+    CloudWatch saw increased error rates and latencies for metric and log ingestion and alarms transitioned to
+    the INSUFFICIENT_DATA state, so decide deliberately how each critical alarm treats missing data.

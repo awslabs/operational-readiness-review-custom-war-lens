@@ -1,0 +1,99 @@
+# Builds a DRAFT GitHub Release, with every asset attached, when a release-YYYY-MM-DD tag is pushed. It never
+# publishes: a maintainer checks the draft and publishes it by hand (gh release edit <tag> --draft=false --latest).
+name: release
+
+on:
+  push:
+    tags:
+      - "release-*"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    name: Build, verify and create a draft release
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write # create the GitHub Release and upload its assets
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Verify the tag
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          # Only release-YYYY-MM-DD tags on a commit that is already on main are released. Tag creation is also
+          # restricted to maintainers by a repository tag ruleset.
+          if ! printf '%s' "${TAG}" | grep -Eq '^release-[0-9]{4}-[0-9]{2}-[0-9]{2}$'; then
+            echo "tag ${TAG} is not release-YYYY-MM-DD" >&2
+            exit 1
+          fi
+          git fetch --no-tags --quiet origin main
+          if ! git merge-base --is-ancestor "${GITHUB_SHA}" origin/main; then
+            echo "tag ${TAG} points to ${GITHUB_SHA}, which is not on main" >&2
+            exit 1
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r tools/orrlens/requirements-ci.txt
+
+      - name: Offline checks
+        run: python3 -m tools.orrlens check --offline --verbose
+
+      - name: Verify reproducibility
+        run: |
+          python3 -m tools.orrlens check --offline --only reproducibility
+          python3 -m tools.orrlens build
+          git diff --exit-code -- dist templates
+
+      - name: Unit tests
+        run: python3 -m unittest discover -s tools/orrlens/tests
+
+      - name: Manifest, checksums and release assets
+        env:
+          ORRLENS_SOURCE_COMMIT: ${{ github.sha }}
+        run: |
+          python3 -m tools.orrlens manifest
+          (cd build/release && sha256sum -c SHA256SUMS)
+
+      - name: Release notes from CHANGELOG.md
+        env:
+          TAG: ${{ github.ref_name }}
+        run: python3 -m tools.orrlens release-notes --tag "${TAG}" --out build/release-notes.md
+
+      - name: Create the draft GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          # Create a draft with every asset and stop. Immutable releases accept assets only while drafted, and a
+          # maintainer publishes after checking the draft:
+          #   gh release edit <tag> --draft=false --latest
+          gh release create "${TAG}" build/release/* \
+            --draft \
+            --verify-tag \
+            --title "${TAG}" \
+            --notes-file build/release-notes.md
+          {
+            echo "Draft release ${TAG} created with every asset. It is NOT published."
+            echo ""
+            echo "After checking the draft, a maintainer publishes it with:"
+            echo ""
+            echo "    gh release edit ${TAG} --repo ${GH_REPO} --draft=false --latest"
+          } >> "${GITHUB_STEP_SUMMARY}"

@@ -1,0 +1,44 @@
+{
+  "schema": "orrlens/manifest/1",
+  "repository": "https://github.com/awslabs/operational-readiness-review-custom-war-lens",
+  "source_commit": null,
+  "source_dirty": false,
+  "lenses": [
+    {
+      "key": "core",
+      "name": "AWS Operational Readiness Review",
+      "version": "2.0.0",
+      "schemaVersion": "2021-11-01",
+      "pillars": 4,
+      "questions": 36,
+      "statements": 134,
+      "file": "orr-core-2.0.0.json",
+      "sha256": "b12a0bcbac094f3a17a4fa58dd1b958f8c9fdc4ddf25df87710022675b6acb4f",
+      "bytes": 359861,
+      "min_file": "orr-core-2.0.0.min.json",
+      "min_sha256": "1d79355449c71fda3596b5dbe8c4dcf6419c66547062a705557f530990c054e9",
+      "min_bytes": 290365,
+      "latest_alias": "orr-core.json",
+      "latest_min_alias": "orr-core.min.json",
+      "source_commit": null
+    },
+    {
+      "key": "event",
+      "name": "ORR - Mission-Critical Event Readiness",
+      "version": "1.0.0",
+      "schemaVersion": "2021-11-01",
+      "pillars": 3,
+      "questions": 8,
+      "statements": 26,
+      "file": "orr-event-1.0.0.json",
+      "sha256": "cb156cde3a489fa19233ce953ee21f437b931e3e7151889f4126dfb2ebd9c10b",
+      "bytes": 64426,
+      "min_file": "orr-event-1.0.0.min.json",
+      "min_sha256": "16a46e40ddaa91867a597270fedd419e1ab9f6102c98365c31d1dbba5f5d6ddf",
+      "min_bytes": 53151,
+      "latest_alias": "orr-event.json",
+      "latest_min_alias": "orr-event.min.json",
+      "source_commit": null
+    }
+  ]
+}

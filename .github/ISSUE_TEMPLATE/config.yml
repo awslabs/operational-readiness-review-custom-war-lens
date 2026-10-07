@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security issue
+    url: https://aws.amazon.com/security/vulnerability-reporting/
+    about: Please report security issues to AWS Security through this page. Do not open a public issue.
+  - name: AWS Well-Architected Tool documentation
+    url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/
+    about: Questions about importing, publishing, sharing or upgrading custom lenses in the WA Tool itself.

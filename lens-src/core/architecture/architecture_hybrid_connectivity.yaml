@@ -1,0 +1,140 @@
+schema: orrlens/question/1
+id: architecture_hybrid_connectivity
+pillar: architecture
+order: 60
+title: Redundant private connectivity to on-premises and partner networks
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Defense against dependencies
+lineage: []
+choice_prefix: hy_
+description:
+  question: >-
+    If one private link, device, location or provider between AWS and your on-premises, state or partner networks
+    fails, can the workload still reach every system on its critical path that sits behind those links?
+  out_of_scope_if: >-
+    the critical path has no private connection to on-premises, state or partner networks. Select the first
+    statement and keep the evidence.
+  evidence_to_collect: >-
+    a diagram of every private link on the critical path (AWS Direct Connect connections and locations, AWS
+    Site-to-Site VPN tunnels, customer devices and providers) and the routing protocol each uses. The date and
+    result of the last failover test. Recovery plans for on-premises identity, DNS and data dependencies.
+helpful:
+  display_text: REL02-BP02 Redundant private connectivity (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_private_networks.html
+statements:
+  - id: hy_none
+    tier: scope
+    title: The critical path has no private connection to on-premises, state or partner networks
+    concept: hybrid-scope-no-private-links
+    good: >-
+      No request, job or recovery step on the critical path depends on a system reached over AWS Direct Connect,
+      AWS Site-to-Site VPN, a transit or partner network, or another private link. Count indirect dependencies
+      too: DNS forwarded to on-premises resolvers, identity providers or directories hosted on premises, license
+      servers and file transfers. Evidence to collect: route tables and transit gateway or virtual private
+      gateway attachments showing no on-premises or partner routes on the critical path, and a data-flow diagram
+      reviewed by the network owner. When this is selected, the other statements do not change the score.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/hybrid-connectivity.html
+    improvement: >-
+      If any critical-path dependency is reached over a private link, clear this statement and answer the other
+      statements. Recheck at every architecture change, because new integrations often add a private link.
+    improvement_url: https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/introduction.html
+  - id: hy_redundant_paths
+    tier: core
+    title: >-
+      Each private link on the critical path has two independent, dynamically routed paths (separate locations,
+      devices or providers)
+    concept: redundant-hybrid-paths
+    severity_basis: "wa:REL02-BP02 (High)"
+    wa_bp: REL02-BP02
+    good: >-
+      Every private link on the critical path has at least two paths with no shared single point of failure, and BGP
+      moves traffic between them without manual steps. Examples: AWS Direct Connect at two Direct Connect locations,
+      or Direct Connect plus AWS Site-to-Site VPN with tunnels on separate customer devices and, where possible,
+      providers. Two Direct Connect locations still share the Direct Connect path into the Region (Sep 2021 Post-Event
+      Summary), so the most critical paths also keep a VPN backup over the internet. REL02-BP02 anti-patterns: one
+      connection, one VPN tunnel or tunnels ending in the same Availability Zone, one ISP for VPN, no dynamic routing,
+      and VPN bandwidth too small for the backup role.
+    partition_notes: >-
+      AWS Direct Connect and AWS Site-to-Site VPN are available in AWS GovCloud (US) as of 2026-10-05. Direct Connect
+      Partners do not support hosted connections to GovCloud account IDs, so order them with the linked standard
+      account ID; verify per Region.
+    helpful_url: https://aws.amazon.com/directconnect/resiliency-recommendation/
+    improvement: >-
+      Map every private link and the devices, locations and providers behind it. Add a second path with no shared
+      component: a second Direct Connect location (the AWS Direct Connect Resiliency Toolkit guides this) and, for
+      the most critical paths, a Site-to-Site VPN backup over the internet sized for critical traffic, because two
+      Direct Connect locations still share the Direct Connect path into the Region. Run BGP on both paths, and alarm on
+      connection and tunnel state (for example the Direct Connect ConnectionState and VPN TunnelState metrics).
+    improvement_url: https://docs.aws.amazon.com/directconnect/latest/UserGuide/resiliency_toolkit.html
+    additional_helpful:
+      - display_text: Resilience in AWS Site-to-Site VPN
+        url: https://docs.aws.amazon.com/vpn/latest/s2svpn/disaster-recovery-resiliency.html
+      - display_text: Direct Connect in AWS GovCloud (US)
+        url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-dc.html
+    additional_improvement:
+      - display_text: Monitor AWS Direct Connect with Amazon CloudWatch (ConnectionState)
+        url: https://docs.aws.amazon.com/directconnect/latest/UserGuide/monitoring-cloudwatch.html
+      - display_text: Monitor AWS Site-to-Site VPN tunnels with Amazon CloudWatch (TunnelState)
+        url: https://docs.aws.amazon.com/vpn/latest/s2svpn/monitoring-cloudwatch-vpn.html
+      - display_text: Tunnel options for your AWS Site-to-Site VPN connection
+        url: https://docs.aws.amazon.com/vpn/latest/s2svpn/VPNTunnels.html
+  - id: hy_failover_tested
+    tier: sec
+    title: Failover between paths was tested in the last 12 months, and the backup path can carry critical traffic
+    concept: hybrid-failover-tested
+    wa_bp: REL02-BP02
+    good: >-
+      In the last 12 months a scheduled test took the primary path out of service, routing converged to the backup
+      path within your recovery objective, and critical traffic ran over the backup path at expected peak volume
+      within latency and error goals. Time to converge, results and fixes are recorded. Platform notes: Direct
+      Connect: the Resiliency Toolkit failover test brings down a BGP peering session for a set time so you can
+      verify that traffic moves to a redundant virtual interface. Site-to-Site VPN: take one tunnel down from the
+      customer side and confirm traffic continues on the other.
+    partition_notes: >-
+      As of 2026-10-06, AWS Capabilities by Region lists the AWS Direct Connect Resiliency Toolkit in AWS GovCloud
+      (US), but not its failover test (StartBgpFailoverTest). In GovCloud, test failover by shutting down the BGP
+      session or connection from your customer router in a scheduled window, and confirm traffic moves to the
+      redundant path; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/directconnect/latest/UserGuide/resiliency_failover.html
+    improvement: >-
+      Schedule a failover test at least yearly and after network changes: announce it, take down the primary BGP
+      session or connection in a low-risk window, measure time to converge and critical-path latency and errors
+      over the backup path, restore the primary, and track fixes to closure. Add the scenario to your game day
+      plan.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html
+  - id: hy_onprem_deps
+    tier: sec
+    title: >-
+      On-premises dependencies on the critical path (identity, DNS, databases, mainframe) have their own tested
+      recovery plan
+    concept: onprem-dependency-recovery
+    wa_bp: REL13-BP02
+    good: >-
+      Each on-premises or partner system the critical path needs, such as identity providers and directories, DNS,
+      databases, mainframes and file transfer, has a named owner, recovery objectives at least as strict as the
+      workload's, and a recovery plan tested in the last 12 months. Where it fits, the workload removes the
+      dependency from the critical path (for example by caching, by replicating data to AWS, or by running a
+      directory replica or resolver in AWS) or degrades gracefully while it is unreachable. Platform notes: Hybrid
+      DNS: Amazon Route 53 Resolver endpoints with IP addresses in more than one Availability Zone, forwarding to
+      on-premises resolvers at more than one site.
+    partition_notes: >-
+      Route 53 Resolver endpoints are available in AWS GovCloud (US) as of 2026-10-06; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html
+    improvement: >-
+      List every on-premises and partner dependency on the critical path, agree recovery objectives with each
+      owner, and get evidence of a recent recovery test. Where an owner cannot meet the workload's objectives,
+      remove the hard dependency or add a degraded mode, and record the residual risk.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_disaster_recovery.html
+    additional_improvement:
+      - display_text: What is Route 53 VPC Resolver? (hybrid DNS with Resolver endpoints)
+        url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html
+pes_lesson:
+  statement: hy_redundant_paths
+  month: Sep 2021
+  url: https://aws.amazon.com/message/17908/
+  lesson: >-
+    during an AWS Direct Connect event in the Tokyo Region, AWS VPN connectivity, which some customers use as a
+    backup to Direct Connect, was not impacted, so give each private link a backup path that does not share its
+    failure modes.

@@ -1,0 +1,125 @@
+schema: orrlens/question/1
+id: architecture_retry_timeouts
+pillar: architecture
+order: 40
+title: Timeouts, bounded retries and idempotency
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Defense against dependencies
+lineage: [architecture_retry_timeouts, architecture_dependency_retry]
+choice_prefix: rt_
+description:
+  question: >-
+    How do you stop slow or failing dependencies from exhausting threads, connections and memory, and keep
+    retries from multiplying the load on a dependency that is already struggling?
+  evidence_to_collect: >-
+    the client configuration for each remote call (connect and request timeouts, retry mode, maximum attempts).
+    The measured latency used to size each timeout. The list of layers that retry. Idempotency tokens on
+    mutating operations. Timeout and retry metrics per dependency.
+helpful:
+  display_text: REL05-BP03 Control and limit retry calls (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_limit_retries.html
+statements:
+  - id: rt_timeouts
+    tier: core
+    title: Every remote call (AWS SDK, HTTP, database, third party, model) sets connect and request timeouts sized to observed latency
+    concept: remote-call-timeouts
+    severity_basis: "wa:REL05-BP05 (High)"
+    wa_bp: REL05-BP05
+    good: >-
+      Every remote call, including AWS SDK clients, HTTP clients, database drivers, third-party APIs and model
+      endpoints, sets an explicit connect timeout and request or socket timeout chosen from measured latency (for
+      example just above the p99.9 latency) rather than from library defaults. The total time across all attempts
+      fits inside the caller's own timeout, and timeouts are counted in a metric.
+    platform_notes: >-
+      EC2 and containers: also bound connection-pool wait times and worker or thread pools. Serverless: keep
+      downstream timeouts shorter than the Lambda function timeout and any API Gateway integration timeout, and
+      set task timeouts in AWS Step Functions state machines.
+    helpful_url: https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter
+    improvement: >-
+      Inventory every client and driver and record its current timeouts. Measure latency per dependency, set
+      connect and request timeouts from those measurements instead of relying on defaults, emit a timeout metric
+      per dependency, and add a test or code review check that fails when a client is created without explicit
+      timeouts.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_client_timeouts.html
+  - id: rt_bounded_backoff
+    tier: core
+    title: Retries, including asynchronous ones, are capped and use exponential backoff with jitter
+    concept: bounded-retries-backoff-jitter
+    severity_basis: "wa:REL05-BP03 (High)"
+    wa_bp: REL05-BP03
+    good: >-
+      Every retry mechanism, including SDK retries, queue redelivery, Lambda asynchronous retries and Step
+      Functions Retry fields, has a maximum number of attempts and waits with exponential backoff and jitter.
+      Synchronous calls retry little, if at all, and return an error the client can act on; asynchronous work
+      backs off for longer and then goes to a dead-letter queue that is alarmed.
+    platform_notes: >-
+      AWS SDKs: use the standard retry mode, which uses exponential backoff with jitter and a retry quota, and set
+      maximum attempts deliberately. Serverless: set Lambda asynchronous retry attempts (0-2) and maximum event
+      age, an Amazon SQS maxReceiveCount with a dead-letter queue, and Step Functions MaxAttempts, BackoffRate,
+      MaxDelaySeconds and JitterStrategy.
+    helpful_url: https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html
+    improvement: >-
+      Find every retry mechanism in code, SDK configuration, queues, functions and workflows. Cap the attempts,
+      add exponential backoff with jitter, send exhausted asynchronous work to a dead-letter queue with an alarm,
+      and run a test with a dependency failing to confirm that retries do not multiply traffic.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_limit_retries.html
+    additional_improvement:
+      - display_text: Handling errors in AWS Step Functions workflows (Retry, BackoffRate, JitterStrategy)
+        url: https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html
+      - display_text: Configuring error handling for Lambda asynchronous invocations
+        url: https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-configuring.html
+      - display_text: Using dead-letter queues in Amazon SQS
+        url: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html
+      - display_text: Retry with backoff pattern (AWS Prescriptive Guidance)
+        url: https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/retry-backoff.html
+  - id: rt_retry_budget
+    tier: sec
+    title: A retry budget or circuit breaker stops retries to unhealthy or throttling dependencies, and only one layer retries
+    concept: retry-budget-single-layer-retries
+    wa_bp: REL05-BP03
+    large_scale: true
+    good: >-
+      Retries are limited as a share of traffic, with a retry budget or token bucket such as the AWS SDK retry
+      quota, or stopped by a circuit breaker while a dependency is unhealthy or throttling, so retry traffic falls
+      as errors rise. Only one layer in the call chain retries a given failure and the other layers fail fast.
+      Calls to third-party APIs stay within their published rate limits.
+    helpful_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/circuit-breaker.html
+    improvement: >-
+      Map the call chain and remove retries from all but one layer. Enable a retry quota or budget in that layer.
+      Add a circuit breaker only where a dependency can stay unhealthy for long periods, and test it, because
+      circuit breakers add modal behavior. Alarm on the retry rate per dependency, and use client-side rate
+      limiting to stay within third-party limits.
+    improvement_url: https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter
+  - id: rt_idempotent
+    tier: sec
+    title: Retried mutating operations are idempotent (for example client tokens), and only failed batch items are retried
+    concept: idempotent-retried-mutations
+    wa_bp: REL04-BP04
+    good: >-
+      Every mutating operation that can be retried accepts an idempotency key or client token, so a retried
+      create, payment or message has exactly one effect, and consumers of at-least-once queues and streams
+      deduplicate. Batch consumers report only the failed items for retry instead of failing the whole batch.
+    platform_notes: >-
+      AWS APIs: Amazon EC2 and many other AWS APIs accept a client token for idempotent requests. Serverless:
+      turn on partial batch responses (ReportBatchItemFailures) for Lambda event source mappings such as Amazon
+      SQS.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html
+    improvement: >-
+      List the mutating APIs and message handlers. Add an idempotency key that the server stores with the result
+      for a retention window, return the original result for duplicates, pass client tokens on AWS API calls that
+      accept them, and switch batch handlers to report partial failures.
+    improvement_url: https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-errorhandling.html
+    additional_helpful:
+      - display_text: Making retries safe with idempotent APIs (Amazon Builders' Library)
+        url: https://builder.aws.com/content/3Ev0BENTyBr0XxzRk5FDZzgNYos/making-retries-safe-with-idempotent-apis
+      - display_text: Ensuring idempotency in Amazon EC2 API requests
+        url: https://docs.aws.amazon.com/ec2/latest/devguide/ec2-api-idempotency.html
+pes_lesson:
+  statement: rt_retry_budget
+  month: Dec 2021
+  url: https://aws.amazon.com/message/12721/
+  lesson: >-
+    rising latency and errors led to even more connection attempts and retries, which caused persistent
+    congestion, so budget retries and stop retrying to a dependency that is already overloaded.

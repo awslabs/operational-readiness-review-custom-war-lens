@@ -1,0 +1,90 @@
+schema: orrlens/question/1
+id: event_post_incident_analysis
+pillar: event_management
+order: 160
+title: Post-incident analysis and learning loop
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Forensics
+lineage: []
+choice_prefix: pia_
+description:
+  question: >-
+    After a customer-impacting event or near-miss, do you analyze what happened without blame, fix the
+    contributing factors, and feed what you learned back into this review?
+  evidence_to_collect: >-
+    the post-incident analysis template. The analyses of the last few events or near-misses (or of comparable
+    workloads for a new launch). The corrective-action tracker with owners, due dates and closure rate. Any ORR
+    questions added or changed because of an incident.
+helpful:
+  display_text: REL12-BP02 Perform post-incident analysis (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_rca_resiliency.html
+statements:
+  - id: pia_process
+    tier: core
+    title: >-
+      A blameless written analysis (impact, timeline, contributing factors) follows each customer-impacting event or
+      near-miss
+    concept: post-incident-analysis
+    severity_basis: "wa:OPS11-BP02 (High)"
+    wa_bp: OPS11-BP02
+    good: >-
+      A documented process says which events need an analysis (every customer-impacting event and significant
+      near-miss), who writes it and by when. Each analysis records customer impact, a timeline with detection,
+      engagement, mitigation and resolution times, recent changes, the contributing factors found by asking why
+      repeatedly, and what would have detected, diagnosed or mitigated the event sooner. It is blameless: it looks
+      for missing mechanisms rather than people to fault, and it is reviewed by people outside the team.
+    reader_note: >-
+      This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any post-incident
+      analysis process or tool meets this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+    improvement: >-
+      Adopt a short template (impact, timeline, contributing factors, detection and mitigation questions, actions),
+      define which events and near-misses require it and the deadline, collect timeline data automatically from
+      alarms, deployments and chat logs, and review each analysis in a recurring meeting with someone outside the
+      owning team. Before launch, run the process on an exercise or on an event from a similar workload.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.3-conduct-post-incident-analysis-for-continuous-improvement.html
+  - id: pia_actions_tracked
+    tier: core
+    title: Corrective actions have owners and due dates and are tracked to closure in a recurring review
+    concept: corrective-actions-tracked
+    severity_basis: "wa:OPS11-BP02 (High)"
+    wa_bp: OPS11-BP02
+    good: >-
+      Every corrective action from an analysis is recorded in a work tracker with an owner, a due date and a priority
+      that reflects the risk, and open, overdue and recently closed actions are reviewed in a recurring operations
+      review with leadership present. Actions that prevent recurrence are favored over reminders to be careful, and
+      an action closes only when the fix is in production and verified.
+    reader_note: >-
+      The OPS11-BP02 page linked here refers to AWS Systems Manager Incident Manager, which is closed to new
+      customers; any work tracker meets this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+    improvement: >-
+      Put every corrective action in the same tracker as other engineering work (for example AWS Systems Manager
+      OpsCenter or your ticketing system) with owner, due date and priority, add an overdue-actions view to your
+      weekly operations review, escalate actions that slip, and require evidence that the fix is in production before
+      closing.
+    improvement_url: https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html
+  - id: pia_orr_feedback
+    tier: sec
+    title: >-
+      Each analysis asks whether an ORR question would have prevented the impact, and gaps become new or revised
+      questions
+    concept: incident-to-orr-feedback
+    wa_bp: OPS11-BP03
+    good: >-
+      The analysis template asks when the workload's last ORR was done, whether any question would have prevented or
+      reduced the impact, and whether a question was answered incorrectly. When the answer reveals a gap, the team
+      writes a new or revised question with guidance, as described in Appendix A of the AWS ORR whitepaper, and adds
+      it to the organization's own add-on lens; related answers in this lens are revisited.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/inspect-the-process.html
+    additional_helpful:
+      - display_text: AWS ORR whitepaper Appendix A, creating ORR guidance from an incident
+        url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html
+    improvement: >-
+      Add ORR questions to your analysis template. For each gap, draft a question, guidance and links to the analysis,
+      and add it to your own add-on custom lens, starting from the templates/org-addon-lens.json template in this
+      lens's repository rather than editing this lens, so your questions survive lens upgrades. Re-answer the affected
+      questions in this lens.
+    improvement_url: https://github.com/awslabs/operational-readiness-review-custom-war-lens

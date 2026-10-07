@@ -1,0 +1,102 @@
+schema: orrlens/question/1
+id: event_canary_alarms
+pillar: event_management
+order: 30
+title: Independent outside-in monitoring of critical journeys
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Event detection
+lineage: [releases_canaries, releases_canary_errors, event_canary_alarms, event_frontend_alarms]
+choice_prefix: can_
+description:
+  question: >-
+    Do synthetic canaries continuously exercise your critical journeys from the outside, with their own alarms,
+    so you detect customer impact even when internal metrics are missing or misleading?
+  evidence_to_collect: >-
+    the list of critical APIs and journeys mapped to canaries. Canary schedules, Regions and endpoints. Alarm
+    definitions on canary metrics, including missing-data treatment. The accounts and Regions where canaries and
+    their alarms run.
+helpful:
+  display_text: OPS04-BP03 User experience telemetry (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_customer_telemetry.html
+statements:
+  - id: can_coverage
+    tier: core
+    title: >-
+      Synthetic canaries exercise every critical API and user journey, including async, through customer
+      endpoints in every Region
+    concept: synthetic-canary-coverage
+    severity_basis: "wa:OPS04-BP03 (High)"
+    wa_bp: OPS04-BP03
+    good: >-
+      Canaries run every 1 to 5 minutes against the same public or private endpoints customers use, in every
+      Region and entry point, and cover each critical API and journey, including multi-step browser flows and
+      asynchronous work (for example submit a job and check it completes within its SLO). They exercise deep
+      paths that touch data stores and dependencies, not only a health check, use dedicated test accounts or
+      tenants, and are updated when journeys change.
+    platform_notes: >-
+      Private APIs: run canaries inside the VPC. Asynchronous and event-driven journeys: the canary publishes a
+      test event or message and polls for the result.
+    partition_notes: >-
+      CloudWatch Synthetics is available in AWS GovCloud (US) as of 2026-10-06 (AWS Capabilities by Region);
+      verify per Region.
+    helpful_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html
+    improvement: >-
+      Map each critical API and journey to a canary, start from a canary blueprint (for example API canary or
+      multi checks for APIs, and GUI workflow builder or canary recorder for browser flows), run it in every
+      Region and entry point every 1 to 5 minutes, and make canary updates part of the definition of done for
+      journey changes.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_Blueprints.html
+    additional_improvement:
+      - display_text: CloudWatch RUM (optional real-user monitoring for browser clients)
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM.html
+  - id: can_own_metrics_alarms
+    tier: core
+    title: Canary success and latency publish their own metrics, with alarms on failure, latency and missing canary data
+    concept: canary-metrics-and-alarms
+    severity_basis: "wp-orr:Do you publish your canary synthetics errors to an independent metric and alarm on it (No is High Risk)"
+    wa_bp: OPS08-BP04
+    good: >-
+      Each canary publishes its own success and duration metrics (CloudWatch Synthetics publishes SuccessPercent
+      and Duration for each canary), separate from service-wide error metrics. Paging alarms fire on canary
+      failures, on latency above the SLO, and when canary data stops arriving (missing data treated as
+      breaching), and a failing canary is detected within minutes (the whitepaper example asks for under five
+      minutes). The AWS ORR whitepaper's example questions treat not publishing canary errors to an independent
+      metric with an alarm as high risk.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+    improvement: >-
+      Create alarms on SuccessPercent and Duration for every canary, with missing data treated as breaching,
+      route them to the paging rotation, and test them by breaking a canary in pre-production. Confirm that a
+      canary failure is detected within your target, for example five minutes.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_metrics.html
+    additional_improvement:
+      - display_text: Configuring how CloudWatch alarms treat missing data
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html
+  - id: can_independent
+    tier: sec
+    title: >-
+      Canaries and critical alarms keep working if the workload's account, stack, Region or central monitoring
+      account is impaired
+    concept: independent-monitoring-path
+    wa_bp: OPS04-BP03
+    large_scale: true
+    good: >-
+      Canaries, their alarms and the notification path are deployed separately from the workload (for example in
+      a different account and stack that workload deployments cannot change), and at least one canary checks
+      each Region's customer endpoints from another Region. An impaired workload account, Region or central
+      monitoring account therefore does not also silence detection. A heartbeat alarm, with missing data treated
+      as breaching, shows when the monitoring path itself stops.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html
+    improvement: >-
+      Move canaries and their alarms to a separate monitoring account and stack, add a cross-Region canary for
+      each Region's customer endpoints, send critical notifications through a path that does not depend on the
+      workload's Region, and add a heartbeat alarm that pages when canary data stops.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_Create.html
+pes_lesson:
+  statement: can_independent
+  month: Dec 2021
+  url: https://aws.amazon.com/message/12721/
+  lesson: >-
+    customers were impacted by CloudWatch monitoring delays and found it difficult to understand impact to their
+    applications, so keep an outside-in signal that does not depend on the impaired Region.

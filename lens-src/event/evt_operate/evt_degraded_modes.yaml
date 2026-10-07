@@ -1,0 +1,90 @@
+schema: orrlens/question/1
+id: evt_degraded_modes
+pillar: evt_operate
+order: 20
+title: Tested degraded modes and public communications
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Blast radius containment
+lineage: []
+choice_prefix: dm_
+description:
+  question: >-
+    If demand or a dependency failure exceeds what the workload can serve during the event, can you shed load in
+    tested ways and keep customers and stakeholders informed?
+  evidence_to_collect: >-
+    the degraded modes and feature switches, with the date each was last tested under load and how long it took to
+    engage. The pre-approved status messages, approvers and stakeholder notification list.
+helpful:
+  display_text: REL05-BP01 Implement graceful degradation (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html
+statements:
+  - id: dm_degraded_mode
+    tier: alt:A
+    title: A waiting room or visitor prioritization, static fallback, read-only or async-intake mode was tested
+    concept: event-degraded-mode-tested
+    severity_basis: "wa:REL05-BP01 (High)"
+    wa_bp: REL05-BP01
+    good: >-
+      At least one degraded mode protects the critical journey when demand passes tested capacity or a dependency
+      fails: an admission queue that lets users in at a sustainable rate (a partner product or your own), a static
+      version of key pages, a read-only mode, or accepting requests for later processing with a confirmation. It is
+      turned on by configuration or automatically, it was tested under load before the event, and customers see a
+      clear message instead of errors. This extends the core question 'Core journeys keep
+      working when dependencies fail' to event surges.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html
+    improvement: >-
+      Choose the degraded mode that fits the critical journey, build it so the normal code path serves it rather than
+      a rarely used fallback, add a configuration switch and an automatic trigger where safe, and test it at event-like
+      load during the re-test or game day, timing how long it takes to engage.
+    improvement_url: https://builder.aws.com/content/3Eun1EEyX6p2e3VYNyRLSJzLuMV/using-load-shedding-to-avoid-overload
+    additional_helpful:
+      - display_text: Avoiding fallback in distributed systems (Amazon Builders' Library)
+        url: https://builder.aws.com/content/3EuS9Sakq7L3VLQIF3qzfMfke1Y/avoiding-fallback-in-distributed-systems
+  - id: dm_kill_switches
+    tier: alt:A
+    title: Non-essential features can be shed within minutes without a deployment
+    concept: event-feature-kill-switches
+    severity_basis: >-
+      deviation:REL05-BP07 is rated Medium; during a fixed-date peak, demand above forecast has to be absorbed within
+      minutes and a code deployment during the window adds risk, so shedding features by configuration is one of the
+      two acceptable floors.
+    wa_bp: REL05-BP07
+    good: >-
+      Non-essential features (for example recommendations, search suggestions, rich media, analytics calls or report
+      generation) each have a switch that operators can turn off within minutes through validated, versioned
+      configuration, without building or deploying code, and turning them off was tested under load. The runbook lists
+      the switches in the order to use them and who may use them during the window. This adds feature shedding to the
+      emergency levers in the core question 'Overload protection and tenant fairness'.
+    platform_notes: >-
+      For example AWS AppConfig feature flags, or your own flag service that caches a last-known-good value so a flag
+      store outage cannot block requests.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html
+    improvement: >-
+      List the features the event does not need, rank them by cost and value, wrap each in a feature flag read from
+      dynamic configuration with a safe default, deploy flag changes through a validated configuration pipeline, and
+      practice turning them off at load, recording how long each takes.
+    improvement_url: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile-feature-flags.html
+  - id: dm_status_comms
+    tier: sec
+    title: Pre-approved public status messages and a stakeholder notification list are ready for the event window
+    concept: event-status-messages-ready
+    wa_bp: OPS10-BP05
+    good: >-
+      Pre-approved public messages exist for the likely situations (slow service, queueing, partial outage, full
+      outage, resolved), with the channels, the approver on each shift and the update cadence, plus a list of
+      stakeholders to notify (for example partners, executives, regulators or election officials) with contact details.
+      They extend the communication plan in the core question 'Identify impacted customers and keep them informed',
+      and can be published through a channel that does not depend on the workload.
+    reader_note: >-
+      Some services named on this page are closed to new customers or have an announced end of support (for example
+      AWS Systems Manager Incident Manager, closed to new customers, and Amazon Pinpoint, end of support 2026-10-30, as
+      of 2026-10-06). Any incident-management, paging or notification tool meets this
+      practice, for example Amazon SNS, AWS End User Messaging or a partner tool.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
+    improvement: >-
+      Draft and pre-approve status messages for each likely situation with your communications and legal owners, list
+      the stakeholders to notify and how, assign an approver to every shift, and rehearse publishing one message
+      through the independent channel during the tabletop.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_dashboards.html

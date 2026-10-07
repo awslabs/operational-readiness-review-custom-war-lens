@@ -1,0 +1,1481 @@
+# Partition availability for every AWS service, feature, program and policy named in lens text
+# (see CONTRIBUTING.md, "Content rules", and docs/govcloud.md). Values are only "available", "not available" or
+# "n/a"; future availability is never recorded. "n/a" means the item has no partition-specific availability
+# (for example open-source tools, public programs, or the partition itself).
+# Sources: the AWS GovCloud (US) User Guide service pages, and AWS Capabilities by Region
+# (https://builder.aws.com/build/capabilities, also used through its public catalog of features, APIs and
+# CloudFormation resources). Lens text must still say "verify per Region" and date each statement.
+# aws: availability in the commercial partition to new customers. aws-us-gov: availability in AWS GovCloud (US).
+# not_services: AWS or Amazon names that lens text uses but that are not services, features, programs or
+# policies (whitepaper titles, GitHub sample names, certificate authority names, phrase fragments).
+schema: orrlens/partition-availability/1
+as_of: 2026-10-06
+not_services:
+- AWS Fault Isolation Boundaries
+- AWS Best Practices for DDoS Resiliency
+- AWS Break Glass Role
+- AWS DDoS
+- AWS DDoS Test Partner
+- Amazon Trust Services
+entries:
+- name: AWS GovCloud (US)
+  aliases:
+  - GovCloud
+  - AWS GovCloud (US-West)
+  - AWS GovCloud (US-East)
+  - aws-us-gov
+  kind: non-service
+  aws: available
+  aws-us-gov: n/a
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/whatis.html
+  notes: The partition itself, listed so CI recognizes the name. aws records that GovCloud accounts are obtained
+    through a standard AWS account; aws-us-gov is n/a.
+- name: AWS Capabilities by Region
+  aliases:
+  - Capabilities by Region
+  kind: program
+  aws: available
+  aws-us-gov: n/a
+  source: https://builder.aws.com/build/capabilities
+  notes: Public catalog of service, feature, API and CloudFormation availability by Region, including the GovCloud
+    Regions. Readers check it for current status.
+- name: AWS Post-Event Summaries
+  aliases:
+  - Post-Event Summary
+  - Post-Event Summaries
+  - PES
+  kind: program
+  aws: available
+  aws-us-gov: n/a
+  source: https://aws.amazon.com/premiumsupport/technology/pes/
+  notes: Published summaries of AWS service events, kept available for a minimum of 5 years.
+- name: Amazon EC2 Testing Policy
+  aliases:
+  - EC2 Testing Policy
+  kind: policy
+  aws: available
+  aws-us-gov: available
+  source: https://aws.amazon.com/ec2/testing/
+  notes: Applies to load and network stress tests. The GovCloud User Guide penetration testing page points to the
+    same AWS customer support policy for penetration testing (https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/pen-testing.html).
+- name: AWS DDoS Simulation Testing Policy
+  aliases:
+  - DDoS Simulation Testing Policy
+  - Public DDoS Testing Policy
+  - DDoS simulation testing
+  - AWS DDoS Test Partner
+  kind: policy
+  aws: available
+  aws-us-gov: not available
+  source: https://aws.amazon.com/security/ddos-simulation-testing/
+  notes: Tests must be run by an approved AWS DDoS Test Partner against a resource protected by AWS Shield Advanced
+    (or an edge-optimized API Gateway endpoint in a Shield Advanced account). Neither Shield Advanced nor edge-optimized
+    APIs are available in AWS GovCloud (US), so GovCloud-only workloads cannot run one; rehearse DDoS response as
+    a tabletop.
+- name: AWS penetration testing policy
+  aliases:
+  - penetration testing policy
+  - AWS Customer Support Policy for Penetration Testing
+  kind: policy
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/pen-testing.html
+  notes: GovCloud customers follow the same AWS customer support policy for penetration testing (https://aws.amazon.com/security/penetration-testing/).
+- name: AWS WAF
+  aliases:
+  - WAF
+  - AWS WAF web ACL
+  - web ACL
+  - protection pack
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-waf.html
+  notes: In GovCloud only the AWS managed rule groups provided with AWS WAF are available; AWS Marketplace seller
+    rule groups are not.
+- name: AWS WAF rate-based rules
+  aliases:
+  - rate-based rule
+  - rate-based rules
+  - rate-based rule statement
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-waf.html
+  notes: No GovCloud difference is listed for rate-based rules; AWS Capabilities by Region lists Advanced Rate-Based
+    Rules as available in both GovCloud Regions.
+- name: AWS WAF Anti-DDoS managed rule group
+  aliases:
+  - Anti-DDoS managed rule group
+  - Anti-DDoS rule group
+  - AWSManagedRulesAntiDDoSRuleSet
+  - Anti-DDoS AMR
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-06
+  source: https://builder.aws.com/build/capabilities
+  notes: 'Lower confidence for aws-us-gov; no GovCloud page names the rule group, so readers confirm with
+    ListAvailableManagedRuleGroups in their Region. On 2026-10-06 AWS Capabilities by Region listed the AWS WAF
+    feature "DDoS Protection" (the rule group) as available in both GovCloud Regions, and the GovCloud WAF page
+    states that the AWS managed rule groups provided with AWS WAF are available. The "L7AM" entry, which is not
+    listed in GovCloud, tracks Shield Advanced application-layer automatic mitigation: it has the same Region
+    pattern as AWS Shield Advanced, and it is absent in Asia Pacific (Taipei), where the 2025-09 AWS WAF launch
+    announcement made the DDoS rule group available.'
+- name: AWS Shield Standard
+  aliases:
+  - Shield Standard
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: Automatic network and transport layer protection for all AWS customers at no additional charge (https://docs.aws.amazon.com/waf/latest/developerguide/ddos-standard-summary.html).
+    AWS Capabilities by Region lists AWS Shield as available in both GovCloud Regions.
+- name: AWS Shield Advanced
+  aliases:
+  - Shield Advanced
+  - Shield Response Team
+  - SRT
+  - Shield Advanced proactive engagement
+  - application-layer automatic mitigation
+  kind: service
+  aws: available
+  aws-us-gov: not available
+  source: https://builder.aws.com/build/capabilities
+  notes: 'Not in the GovCloud services list; AWS Capabilities by Region shows it as not available in both GovCloud
+    Regions; the Shield CreateProtection API and AWS::Shield::Protection resource are not offered there; the GovCloud
+    Firewall Manager page states that Firewall Manager does not support Shield Advanced. Commercial Regions: application-layer
+    automatic mitigation moves to the Anti-DDoS managed rule group (auto-upgrade of eligible web ACLs from 2026-10-25).'
+- name: Amazon CloudFront
+  aliases:
+  - CloudFront
+  - CloudFront distribution
+  kind: service
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/setting-up-cloudfront.html
+  notes: Not available in AWS GovCloud (US). You can use CloudFront in a standard account with GovCloud resources
+    as origins, which is analogous to a non-AWS origin.
+- name: AWS Global Accelerator
+  aliases:
+  - Global Accelerator
+  kind: service
+  aws: available
+  aws-us-gov: not available
+  source: https://builder.aws.com/build/capabilities
+  notes: Not in the GovCloud services list; not available in the GovCloud Regions per AWS Capabilities by Region.
+- name: AWS Firewall Manager
+  aliases:
+  - Firewall Manager
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-fms.html
+  notes: In GovCloud it does not support AWS Shield Advanced, AWS WAF Classic, or AWS Marketplace rule groups.
+- name: AWS Network Firewall
+  aliases:
+  - Network Firewall
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-nf.html
+  notes: No GovCloud differences listed.
+- name: AWS Fault Injection Service
+  aliases:
+  - AWS FIS
+  - FIS
+  - Fault Injection Simulator
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-fis.html
+  notes: In GovCloud the experiment schedule and experiment report configuration features are not available.
+- name: 'AWS FIS scenario AZ Availability: Power Interruption'
+  aliases:
+  - 'AZ Availability: Power Interruption'
+  - AZ power interruption scenario
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-fis.html
+  notes: The GovCloud FIS page lists no scenario library differences (only experiment schedule and experiment reports).
+    Verify per Region.
+- name: AWS FIS gray-failure scenarios
+  aliases:
+  - 'AZ: Application Slowdown'
+  - 'Cross-AZ: Traffic Slowdown'
+  - gray failure scenarios
+  - partial AZ impairment scenarios
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-fis.html
+  notes: The GovCloud FIS page lists no scenario library differences. Verify per Region.
+- name: Amazon Application Recovery Controller (ARC)
+  aliases:
+  - ARC
+  - Application Recovery Controller
+  - Amazon ARC
+  - Route 53 Application Recovery Controller
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-arc-zonal-shift.html
+  notes: In GovCloud, readiness checks and routing control are not available.
+- name: ARC zonal shift
+  aliases:
+  - zonal shift
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-arc-zonal-shift.html
+  notes: Zonal shift for Amazon EKS is supported in GovCloud (https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-eks.html).
+- name: ARC zonal autoshift
+  aliases:
+  - zonal autoshift
+  - autoshift
+  - autoshift practice runs
+  - practice runs
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists zonal autoshift as available in both GovCloud Regions, and the practice-run
+    configuration API is offered there.
+- name: ARC Region switch
+  aliases:
+  - Region switch
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-arc-zonal-shift.html
+  notes: ''
+- name: ARC routing control
+  aliases:
+  - routing control
+  - routing controls
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-arc-zonal-shift.html
+  notes: ''
+- name: ARC readiness check
+  aliases:
+  - readiness check (ARC)
+  - ARC readiness checks
+  kind: feature
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/r53recovery/latest/dg/arc-readiness-availability-change.html
+  notes: Closed to new customers (see data/lifecycle-denylist.yaml); never available in GovCloud. aws records availability
+    to new customers.
+- name: AWS Resilience Hub
+  aliases:
+  - Resilience Hub
+  - classic Resilience Hub
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-arh.html
+  notes: The classic experience. In GovCloud the LLM-generated assessment summary is not available, and resources
+    cannot be imported across partitions.
+- name: Next generation Resilience Hub
+  aliases:
+  - next-generation Resilience Hub
+  - next generation AWS Resilience Hub
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/resilience-hub/latest/userguide/next-gen-supported-regions.html
+  notes: Available in the 15 commercial Regions listed on the supported Regions page; no GovCloud Region is listed.
+- name: AWS Elastic Disaster Recovery
+  aliases:
+  - Elastic Disaster Recovery
+  - AWS DRS
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-drs.html
+  notes: In GovCloud, cross-partition failback is not available; cross-Region failback between the two GovCloud
+    Regions is.
+- name: AWS Backup
+  aliases:
+  - Backup
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bkp.html
+  notes: In GovCloud, restore testing and Backup Audit Manager multi-account, multi-Region reporting are not available.
+- name: AWS Backup Vault Lock
+  aliases:
+  - Vault Lock
+  - backup vault lock
+  - compliance mode
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: The vault lock configuration API is offered in both GovCloud Regions; no GovCloud difference is listed.
+- name: AWS Backup logically air-gapped vaults
+  aliases:
+  - logically air-gapped vault
+  - logically air-gapped vaults
+  - air-gapped vault
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region does not show it as available in either GovCloud Region, and the vault creation
+    API is not offered there. Use a separate backup account with Vault Lock in compliance mode instead.
+- name: AWS Backup restore testing
+  aliases:
+  - restore testing
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bkp.html
+  notes: Schedule and automate restores yourself (for example with AWS Step Functions or Systems Manager Automation)
+    and validate the results.
+- name: AWS AppConfig
+  aliases:
+  - AppConfig
+  - AppConfig feature flags
+  - AppConfig deployment strategies
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-appc.html
+  notes: In GovCloud (US-East), CodePipeline resources are not available for AppConfig; the CodePipeline AppConfig
+    deploy action is supported in the CLI but not the console.
+- name: AWS AppConfig Agent
+  aliases:
+  - AppConfig Agent
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: AWS CodePipeline
+  aliases:
+  - CodePipeline
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-acp.html
+  notes: In GovCloud, custom actions and cross-Region actions are not available, and several third-party and AWS
+    actions are not offered (see source).
+- name: AWS CodePipeline InspectorScan action
+  aliases:
+  - InspectorScan action
+  - InspectorScan
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-acp.html
+  notes: 'Recorded as not available because no public page confirms it in AWS GovCloud (US): the GovCloud
+    CodePipeline page lists the actions that differ and does not name InspectorScan either way, and the action
+    reference carries no Region statement. The Amazon Inspector Scan API it calls (ScanSbom) is offered in both
+    GovCloud Regions, so the action may well work; docs/govcloud.md asks readers to check the action list in their
+    own GovCloud (US) Region before relying on it.'
+- name: AWS CodeDeploy
+  aliases:
+  - CodeDeploy
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-codedeploy.html
+  notes: In GovCloud, ECS capacity providers and automatic updating of outdated instances are not available.
+- name: AWS CodeBuild
+  aliases:
+  - CodeBuild
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-acb.html
+  notes: ''
+- name: AWS CodeArtifact
+  aliases:
+  - CodeArtifact
+  kind: service
+  aws: available
+  aws-us-gov: not available
+  source: https://builder.aws.com/build/capabilities
+  notes: 'Not in the GovCloud services list and not available in either GovCloud Region. Method-based alternative:
+    mirror packages to a repository you operate inside the partition, and use Amazon ECR for images.'
+- name: AWS CloudFormation
+  aliases:
+  - CloudFormation
+  - change sets
+  - drift detection
+  - stack policies
+  - CloudFormation Hooks
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-cfn.html
+  notes: Resource types vary by Region; check the resource specification for each GovCloud Region.
+- name: AWS CloudFormation Guard
+  aliases:
+  - cfn-guard
+  - CloudFormation Guard
+  kind: feature
+  aws: available
+  aws-us-gov: n/a
+  source: https://github.com/aws-cloudformation/cloudformation-guard
+  notes: Open-source policy-as-code tool you run in your pipeline; no partition dependency.
+- name: Amazon ECR
+  aliases:
+  - ECR
+  - Amazon Elastic Container Registry
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ecr.html
+  notes: In GovCloud, ECR public registries are not available, and ECR-to-ECR pull through cache rules work only
+    within the same partition.
+- name: Amazon ECR pull through cache
+  aliases:
+  - pull through cache
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ecr.html
+  notes: Within the same partition only for ECR-to-ECR rules.
+- name: Amazon ECS
+  aliases:
+  - ECS
+  - Amazon Elastic Container Service
+  - ECS blue/green deployments
+  - ECS canary deployments
+  - ECS linear deployments
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ecs.html
+  notes: The GovCloud ECS page lists only the Bottlerocket ECS-optimized AMI as a difference; no deployment-strategy
+    difference is listed.
+- name: Amazon ECS Service Connect
+  aliases:
+  - ECS Service Connect
+  - Service Connect
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: AWS Fargate
+  aliases:
+  - Fargate
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-fargate.html
+  notes: Amazon EKS on Fargate is not available in GovCloud.
+- name: Amazon EKS
+  aliases:
+  - EKS
+  - Amazon Elastic Kubernetes Service
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-eks.html
+  notes: In GovCloud, EKS on Fargate, EKS Anywhere, EKS Hybrid Nodes and Amazon Managed Service for Prometheus with
+    EKS are not available; ARC zonal shift for EKS is supported.
+- name: Amazon EKS Auto Mode
+  aliases:
+  - EKS Auto Mode
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: Amazon EC2
+  aliases:
+  - EC2
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ec2.html
+  notes: ''
+- name: Amazon EC2 Capacity Reservations
+  aliases:
+  - Capacity Reservations
+  - On-Demand Capacity Reservations
+  - future-dated Capacity Reservations
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ec2.html
+  notes: The GovCloud EC2 page describes billing for future-dated Capacity Reservations, and AWS Capabilities by
+    Region lists EC2 Capacity Reservations as available.
+- name: Amazon EC2 Auto Scaling predictive scaling
+  aliases:
+  - EC2 Auto Scaling predictive scaling
+  - predictive scaling
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-06
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists Predictive Scaling as available in both AWS GovCloud (US) Regions, and the
+    Auto Scaling GetPredictiveScalingForecast API is offered in both. The GovCloud page for Amazon EC2 Auto Scaling
+    lists only one difference, target tracking with high-resolution metrics. The "predictive scaling is not
+    available" line in the GovCloud User Guide is on the page for AWS Auto Scaling, the scaling-plans service, which
+    is a separate entry here.
+- name: AWS Auto Scaling scaling plans
+  aliases:
+  - AWS Auto Scaling
+  - scaling plans
+  - scaling plan
+  kind: service
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-06
+  source: https://docs.aws.amazon.com/general/latest/gr/autoscaling_region.html
+  notes: The AWS Auto Scaling endpoints page lists autoscaling-plans endpoints in us-gov-west-1 and us-gov-east-1,
+    and AWS Capabilities by Region lists the Auto Scaling Plans API operations (for example CreateScalingPlan) as
+    available in both AWS GovCloud (US) Regions. The AWS GovCloud (US) User Guide page for AWS Auto Scaling
+    (https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-awsas.html) lists two differences, recorded
+    as separate entries here, predictive scaling in scaling plans and the AWS::AutoScalingPlans::ScalingPlan
+    CloudFormation resource.
+- name: AWS Auto Scaling scaling plans predictive scaling
+  aliases:
+  - predictive scaling in scaling plans
+  - scaling plan predictive scaling
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  as_of: 2026-10-06
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-awsas.html
+  notes: The AWS GovCloud (US) User Guide page for AWS Auto Scaling says predictive scaling is not available. Set
+    predictive scaling policies on the Auto Scaling group itself (Amazon EC2 Auto Scaling predictive scaling, a
+    separate entry here) instead.
+- name: AWS::AutoScalingPlans::ScalingPlan
+  aliases:
+  - AWS::AutoScalingPlans::ScalingPlan
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  as_of: 2026-10-06
+  source: https://builder.aws.com/build/capabilities
+  notes: The CloudFormation resource type is listed as not available in either GovCloud Region, and the AWS GovCloud
+    (US) User Guide page for AWS Auto Scaling lists it as not available. Create scaling plans through the Auto
+    Scaling Plans API there, or set scaling policies on the Auto Scaling group.
+- name: Amazon EC2 Auto Scaling
+  aliases:
+  - EC2 Auto Scaling
+  - Auto Scaling group
+  - warm pools
+  - instance refresh
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-as.html
+  notes: In GovCloud, the only difference the service page lists is that target tracking with high-resolution
+    metrics is not available.
+- name: Elastic Load Balancing
+  aliases:
+  - ELB
+  - Application Load Balancer
+  - Network Load Balancer
+  - ALB
+  - NLB
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-elb.html
+  notes: In GovCloud, Cognito authentication on load balancers is not available.
+- name: AWS Lambda
+  aliases:
+  - Lambda
+  - Lambda weighted aliases
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-lambda.html
+  notes: In GovCloud, Lambda function URLs, JSON log formatting, Application Signals for Lambda and some event source
+    features are not available.
+- name: AWS Step Functions
+  aliases:
+  - Step Functions
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-step-functions.html
+  notes: In GovCloud, calling HTTPS APIs is not available.
+- name: Amazon API Gateway
+  aliases:
+  - API Gateway
+  - REST API
+  - HTTP API
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-abp.html
+  notes: In GovCloud, edge-optimized APIs and edge-optimized custom domain names are not available.
+- name: Amazon API Gateway usage plans
+  aliases:
+  - usage plans
+  - usage plan
+  - API keys (API Gateway)
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-abp.html
+  notes: No GovCloud difference is listed. Usage plan throttling and quotas are best-effort, not hard limits; never
+    present them as a blocking control (https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html).
+- name: Amazon SQS
+  aliases:
+  - SQS
+  - dead-letter queue
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-sqs.html
+  notes: ''
+- name: Amazon SNS
+  aliases:
+  - SNS
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-sns.html
+  notes: In GovCloud (US-East), SNS cannot send SMS; message archiving and replay and Firehose subscriptions are
+    not available.
+- name: Amazon EventBridge
+  aliases:
+  - EventBridge
+  - CloudWatch Events
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-eventbridge.html
+  notes: In GovCloud, EventBridge Pipes, API destinations and API Gateway as a target are not available.
+- name: AWS End User Messaging
+  aliases:
+  - End User Messaging
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-eum.html
+  notes: ''
+- name: Amazon SES
+  aliases:
+  - SES
+  - Amazon Simple Email Service
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ses.html
+  notes: In GovCloud, email receiving is not available.
+- name: Amazon CloudWatch
+  aliases:
+  - CloudWatch
+  - CloudWatch alarms
+  - composite alarms
+  - CloudWatch dashboards
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-cw.html
+  notes: In GovCloud, dashboard sharing and the GetMetricWidgetImage API are not available.
+- name: Amazon CloudWatch Logs
+  aliases:
+  - CloudWatch Logs
+  - CloudWatch Logs Insights
+  - Logs Insights
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-cwl.html
+  notes: In GovCloud, Live Tail is not available.
+- name: Amazon CloudWatch Synthetics
+  aliases:
+  - CloudWatch Synthetics
+  - Synthetics canaries
+  - canaries
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS::Synthetics::Canary is also available in both GovCloud Regions.
+- name: Amazon CloudWatch Application Signals
+  aliases:
+  - Application Signals
+  - CloudWatch SLOs
+  - service level objectives (Application Signals)
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: The SLO API is offered in both GovCloud Regions; Application Signals for Lambda functions is not available
+    in GovCloud.
+- name: Amazon CloudWatch Contributor Insights
+  aliases:
+  - Contributor Insights
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: Amazon CloudWatch anomaly detection
+  aliases:
+  - CloudWatch anomaly detection
+  - anomaly detection alarms
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: The PutAnomalyDetector API is offered in both GovCloud Regions.
+- name: Amazon CloudWatch RUM
+  aliases:
+  - CloudWatch RUM
+  - real user monitoring
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: Amazon CloudWatch Transaction Search
+  aliases:
+  - Transaction Search
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-cw.html
+  notes: The GovCloud CloudWatch page states Transaction Search is not available. AWS Capabilities by Region lists
+    "Transaction Search and OTLP endpoint" as available; the sources conflict, so do not depend on it in GovCloud
+    without verifying.
+- name: Amazon CloudWatch cross-account observability
+  aliases:
+  - cross-account observability
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://aws.amazon.com/about-aws/whats-new/2025/04/amazon-cloudwatch-cross-account-observability-govcloud/
+  notes: ''
+- name: AWS X-Ray
+  aliases:
+  - X-Ray
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-xray.html
+  notes: The X-Ray SDKs and daemon are in maintenance mode (see data/lifecycle-denylist.yaml); instrument with OpenTelemetry.
+- name: AWS Distro for OpenTelemetry
+  aliases:
+  - ADOT
+  - AWS Distro for OpenTelemetry (ADOT)
+  kind: feature
+  aws: available
+  aws-us-gov: n/a
+  source: https://aws.amazon.com/otel/
+  notes: An AWS-supported distribution of OpenTelemetry that you run with your workload; availability follows the
+    backends it sends to (CloudWatch and X-Ray are available in GovCloud).
+- name: AWS Health
+  aliases:
+  - AWS Health Dashboard
+  - Health Dashboard
+  - AWS Health API
+  - AWS Health events
+  - planned lifecycle events
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-health.html
+  notes: In GovCloud the Health API uses a single endpoint in us-gov-west-1; EventBridge does not deliver public
+    Service Health events (use the API or RSS); account-specific events are delivered to EventBridge, with backup-Region
+    rules; global events need a rule in us-gov-west-1.
+- name: AWS Health organizational view
+  aliases:
+  - organizational view
+  - Health organizational view
+  - delegated administrator for AWS Health
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: The organization-level Health API operations (for example DescribeEventsForOrganization) are offered in
+    both GovCloud Regions.
+- name: AWS Health organizational events in Amazon EventBridge
+  aliases:
+  - organization-wide AWS Health feed to EventBridge
+  - organizational Health events to EventBridge
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://aws.amazon.com/about-aws/whats-new/2023/10/aws-health-aggregates-events-organization-eventbridge/
+  notes: The 2023-10-05 announcement excludes the GovCloud Regions, and no later public page states otherwise (checked
+    2026-10-06). In GovCloud, create EventBridge rules in each account, or poll the organizational view API.
+- name: Amazon Managed Service for Prometheus
+  aliases:
+  - Managed Service for Prometheus
+  - AMP
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-amp.html
+  notes: In GovCloud, the managed collector is not available.
+- name: Amazon Managed Grafana
+  aliases:
+  - Managed Grafana
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/grafana.html
+  notes: ''
+- name: AWS IAM Identity Center
+  aliases:
+  - IAM Identity Center
+  - AWS SSO
+  - AWS access portal
+  - temporary elevated access
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-sso.html
+  notes: ''
+- name: IAM Identity Center multi-Region replication
+  aliases:
+  - multi-Region IAM Identity Center
+  - Identity Center replication
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://aws.amazon.com/about-aws/whats-new/2026/10/aws-iam-identity-center-extends-multi-region-support-to-more-aws-regions/
+  notes: Available between the two GovCloud Regions since 2026-10-01 (replication stays within the partition).
+- name: AWS Identity and Access Management (IAM)
+  aliases:
+  - IAM
+  - IAM roles
+  - IAM Access Analyzer
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-iam.html
+  notes: There is one IAM control plane for the GovCloud Regions.
+- name: Centralized root access for member accounts
+  aliases:
+  - centralized root access
+  - centralized root access management
+  - sts:AssumeRoot
+  - privileged root tasks
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-iam.html
+  notes: GovCloud root user credentials are not provided by default, so there are no root credentials to centrally
+    remove; privileged root tasks on member accounts are supported, and AWS Capabilities by Region lists the feature
+    as available.
+- name: AWS Security Token Service (STS)
+  aliases:
+  - AWS STS
+  - STS
+  - Regional STS endpoints
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: AWS Organizations
+  aliases:
+  - Organizations
+  - service control policies
+  - SCPs
+  - resource control policies
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-organizations.html
+  notes: GovCloud organizations are separate from commercial organizations; only SCPs, RCPs, tag policies and declarative
+    policies for EC2 and S3 are available.
+- name: AWS Control Tower
+  aliases:
+  - Control Tower
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-controltower.html
+  notes: ''
+- name: AWS Certificate Manager
+  aliases:
+  - ACM
+  - Certificate Manager
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-acm.html
+  notes: No GovCloud differences listed.
+- name: AWS Private Certificate Authority
+  aliases:
+  - AWS Private CA
+  - Private CA
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-acmpca.html
+  notes: ''
+- name: AWS Secrets Manager
+  aliases:
+  - Secrets Manager
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-asm.html
+  notes: In GovCloud, managed external secrets are not available.
+- name: AWS Key Management Service
+  aliases:
+  - AWS KMS
+  - KMS
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kms.html
+  notes: ''
+- name: AWS Systems Manager Session Manager
+  aliases:
+  - Session Manager
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: AWS Security Hub
+  aliases:
+  - Security Hub
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ashv2.html
+  notes: In GovCloud, third-party integrations, automation rules for integrations and the Extended plan are not
+    available.
+- name: AWS Security Hub CSPM
+  aliases:
+  - Security Hub CSPM
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ash.html
+  notes: Not all controls and integrations are available in GovCloud; cross-Region aggregation works only between
+    the two GovCloud Regions.
+- name: Amazon GuardDuty
+  aliases:
+  - GuardDuty
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-guardduty.html
+  notes: Some finding types and entity lists are not available in GovCloud.
+- name: Amazon Inspector
+  aliases:
+  - Inspector
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-inspector2.html
+  notes: In GovCloud, Lambda code scanning and managed code repository scanning are not available.
+- name: Amazon Detective
+  aliases:
+  - Detective
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-det.html
+  notes: ''
+- name: Amazon Security Lake
+  aliases:
+  - Security Lake
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-asl.html
+  notes: ''
+- name: AWS Security Incident Response
+  aliases:
+  - Security Incident Response
+  kind: service
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-support-uops.html
+  notes: Not available in GovCloud; security incidents raised through support cases follow standard AWS incident
+    response workflows. The service API is not offered in either GovCloud Region.
+- name: AWS Config
+  aliases:
+  - Config
+  - AWS Config rules
+  - conformance packs
+  - acm-certificate-expiration-check
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-config.html
+  notes: Managed rules vary by Region (see the managed rules by Region list); acm-certificate-expiration-check is
+    listed for GovCloud. Recording of third-party resources is not available.
+- name: AWS CloudTrail
+  aliases:
+  - CloudTrail
+  - CloudTrail trails
+  - CloudTrail Insights
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ct.html
+  notes: ''
+- name: AWS CloudTrail Lake
+  aliases:
+  - CloudTrail Lake
+  kind: feature
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html
+  notes: Closed to new customers since 2026-05-31 (see data/lifecycle-denylist.yaml); values record availability
+    to new customers.
+- name: Service Quotas
+  aliases:
+  - Service Quotas
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-servicequotas.html
+  notes: In GovCloud, quota request templates are not supported.
+- name: AWS Systems Manager
+  aliases:
+  - Systems Manager
+  - SSM
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ssm.html
+  notes: Change Manager and Incident Manager are not available in GovCloud.
+- name: AWS Systems Manager OpsCenter
+  aliases:
+  - OpsCenter
+  - OpsItems
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ssm.html
+  notes: In GovCloud, markdown in the OpsItem description is not available in the console.
+- name: AWS Systems Manager Automation
+  aliases:
+  - Systems Manager Automation
+  - Automation runbooks
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ssm.html
+  notes: Some Automation runbooks are not available in GovCloud.
+- name: AWS Systems Manager Incident Manager
+  aliases:
+  - Incident Manager
+  kind: feature
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ssm.html
+  notes: Closed to new customers since 2025-11-07 and never available in GovCloud (see data/lifecycle-denylist.yaml).
+- name: AWS Systems Manager Change Manager
+  aliases:
+  - Change Manager
+  kind: feature
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ssm.html
+  notes: Closed to new customers since 2025-11-07 and not available in GovCloud.
+- name: AWS Systems Manager Application Manager
+  aliases:
+  - Application Manager
+  kind: feature
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/systems-manager/latest/userguide/application-manager-availability-change.html
+  notes: Closed to new customers from 2026-07-30; values record availability to new customers.
+- name: AWS Trusted Advisor
+  aliases:
+  - Trusted Advisor
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ta.html
+  notes: In GovCloud, organizational view and email summaries are not available, and some checks differ.
+- name: AWS Cost Anomaly Detection
+  aliases:
+  - Cost Anomaly Detection
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/usage-and-payment.html
+  notes: Not offered in the GovCloud Regions; GovCloud usage is billed to the associated standard account, so run
+    cost anomaly detection and budgets from that account.
+- name: AWS Direct Connect
+  aliases:
+  - Direct Connect
+  - Direct Connect gateway
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-dc.html
+  notes: Hosted connections from partners use the commercial account ID; see source for gateway and VPN options.
+- name: AWS Direct Connect Resiliency Toolkit
+  aliases:
+  - Resiliency Toolkit
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: AWS Site-to-Site VPN
+  aliases:
+  - Site-to-Site VPN
+  - AWS VPN
+  - VPN tunnels
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-vpn.html
+  notes: In GovCloud, Accelerated VPN is not available and endpoints use FIPS 140-3 validated modules.
+- name: AWS Transit Gateway
+  aliases:
+  - Transit Gateway
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-transit-gateway.html
+  notes: Inter-Region peering only between the two GovCloud Regions.
+- name: Amazon Route 53
+  aliases:
+  - Route 53
+  - Route 53 health checks
+  - DNS failover
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-r53.html
+  notes: The Route 53 control plane for GovCloud is in us-gov-west-1; latency, geolocation and geoproximity routing
+    are not available in private hosted zones.
+- name: Amazon S3
+  aliases:
+  - S3
+  - S3 Versioning
+  - S3 Object Lock
+  - S3 Replication
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-s3.html
+  notes: In GovCloud, MFA delete and S3 Express One Zone are not available, and buckets cannot be copied directly
+    to or from other partitions.
+- name: Amazon DynamoDB
+  aliases:
+  - DynamoDB
+  - point-in-time recovery
+  - global tables
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ddb.html
+  notes: In GovCloud, DAX and multi-Region strong consistency global tables are not available.
+- name: Amazon RDS
+  aliases:
+  - RDS
+  - Amazon Relational Database Service
+  - Multi-AZ DB instance
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-rds.html
+  notes: In GovCloud, Multi-AZ DB clusters are not available (Multi-AZ DB instances are), and cross-partition replicas
+    and snapshot copies are not available.
+- name: Amazon Aurora
+  aliases:
+  - Aurora
+  - Aurora Global Database
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-aurora.html
+  notes: ''
+- name: Amazon Bedrock
+  aliases:
+  - Bedrock
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock.html
+  notes: Model availability differs by Region; check the model Region table.
+- name: Amazon Bedrock Guardrails
+  aliases:
+  - Bedrock Guardrails
+  - Guardrails for Amazon Bedrock
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://builder.aws.com/build/capabilities
+  notes: ''
+- name: Amazon Bedrock AgentCore
+  aliases:
+  - AgentCore
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  notes: ''
+- name: AWS Wickr
+  aliases:
+  - Wickr
+  - AWS WickrGov
+  - WickrGov
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-wickr.html
+  notes: AWS WickrGov is the GovCloud offering.
+- name: AWS Support plans
+  aliases:
+  - AWS Support
+  - Business Support+
+  - Enterprise Support
+  - Unified Operations
+  - Developer Support
+  - Business Support
+  - Enterprise On-Ramp
+  - AWS Support Center
+  - AWS Support Center console
+  - AWS Support API
+  - support case
+  kind: program
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html
+  notes: Developer, Business and Enterprise On-Ramp are discontinued on 2027-01-01 in commercial Regions and remain
+    available in AWS GovCloud (US). In GovCloud, support cases cannot be created automatically from the GovCloud
+    console; the Support API endpoint is in us-gov-west-1 (https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-support.html).
+- name: AWS Countdown
+  aliases:
+  - Countdown
+  - AWS Countdown Premium
+  - Countdown Premium
+  - Infrastructure Event Management
+  kind: program
+  aws: available
+  aws-us-gov: available
+  source: https://aws.amazon.com/premiumsupport/faqs/
+  notes: The AWS Support FAQ states that AWS Countdown Premium is available for workloads in all available AWS Regions
+    and the AWS GovCloud (US) Regions, except the China Regions.
+- name: Distributed Load Testing on AWS
+  aliases:
+  - Distributed Load Testing
+  - DLT
+  kind: program
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/solutions/latest/distributed-load-testing-on-aws/plan-your-deployment.html
+  notes: An AWS Solution. Supported in both GovCloud Regions with the ALB plus ECS Fargate or headless templates
+    (the CloudFront-hosted console is not available), after mirroring its container images to a private ECR repository
+    (https://docs.aws.amazon.com/solutions/latest/distributed-load-testing-on-aws/deploy-govcloud.html).
+- name: AWS Well-Architected Tool
+  aliases:
+  - WA Tool
+  - Well-Architected Tool
+  - AWS WA Tool
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-wellarchitected.html
+  notes: Account IDs associated with a workload, the workload name, milestone names and the review owner may leave
+    the GovCloud Regions in normal operation; keep sensitive data out of them and out of notes.
+- name: AWS Well-Architected Tool custom lenses
+  aliases:
+  - custom lens
+  - custom lenses
+  - ImportLens
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-wellarchitected.html
+  notes: No GovCloud difference is listed; the lens import API is offered in both GovCloud Regions.
+- name: AWS Well-Architected Tool review templates
+  aliases:
+  - review templates
+  - review template
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-wellarchitected.html
+  notes: No GovCloud difference is listed; the review template API is offered in both GovCloud Regions.
+- name: AWS Well-Architected Tool profiles
+  aliases:
+  - Profiles (WA Tool)
+  - WA Tool profiles
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-wellarchitected.html
+  notes: ''
+- name: AWS Well-Architected Tool Connector for Jira
+  aliases:
+  - Jira connector
+  - WA Tool Jira connector
+  - Connector for Jira
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-wellarchitected.html
+  notes: ''
+- name: AWS Well-Architected Agent (preview)
+  aliases:
+  - Well-Architected Agent
+  - WA Agent
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://aws.amazon.com/about-aws/whats-new/2026/10/aws-well-architected-agent/
+  notes: Preview accessed from US East (N. Virginia), US East (Ohio) and US West (Oregon); it onboards commercial-Region
+    workloads only, and its architecture reviews support only the Well-Architected Framework lens (https://docs.aws.amazon.com/wellarchitected/latest/userguide/agent-architecture-reviews.html).
+- name: AWS::WellArchitected::Lens
+  aliases:
+  - AWS::WellArchitected::Lens
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  source: https://builder.aws.com/build/capabilities
+  notes: The CloudFormation resource type is listed as not available in either GovCloud Region.
+- name: Amazon Pinpoint
+  aliases:
+  - Pinpoint
+  kind: service
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/pinpoint/latest/userguide/migrate.html
+  notes: Closed to new customers since 2025-05-20; end of support 2026-10-30. Values record availability to new
+    customers.
+- name: Amazon DevOps Guru
+  aliases:
+  - DevOps Guru
+  kind: service
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/devops-guru/latest/userguide/devops-guru-end-of-support.html
+  notes: Stops accepting new customers on 2026-10-29; end of support 2027-09-30. Not in the GovCloud services list.
+    Never recommended.
+- name: Amazon CodeGuru Reviewer
+  aliases:
+  - CodeGuru Reviewer
+  kind: service
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/codeguru-reviewer-availability-change.html
+  notes: No new repository associations since 2025-11-07; not in the GovCloud services list.
+- name: AWS Service Catalog AppRegistry
+  aliases:
+  - AppRegistry
+  - Application Registry
+  kind: feature
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/servicecatalog/latest/arguide/app-registry-availability-change.html
+  notes: Closed to new customers from 2026-07-30; the GovCloud WA Tool page lists the AppRegistry integration as
+    not available.
+- name: AWS App Runner
+  aliases:
+  - App Runner
+  kind: service
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/apprunner/latest/dg/apprunner-availability-change.html
+  notes: Closed to new customers; not in the GovCloud services list.
+- name: AWS Management Console myApplications
+  aliases:
+  - myApplications
+  kind: feature
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/aws-myApplications-availability-change.html
+  notes: No new applications can be created; the GovCloud console page lists myApplications as unavailable.
+- name: AWS SDKs and AWS CLI version 2
+  aliases:
+  - AWS SDK
+  - AWS SDKs
+  - AWS CLI
+  - AWS CLI v2
+  - SDK retry modes
+  - standard retry mode
+  - adaptive retry mode
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html
+  notes: Client tools you run; use GovCloud endpoints and credentials in AWS GovCloud (US). AWS CLI v1 and older
+    SDK major versions are in data/lifecycle-denylist.yaml.
+- name: Amazon CodeGuru Security
+  aliases:
+  - CodeGuru Security
+  kind: service
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/cli/latest/reference/codeguru-security/
+  notes: Discontinued on 2025-11-20 (see data/lifecycle-denylist.yaml).
+- name: AWS App Mesh
+  aliases:
+  - App Mesh
+  kind: service
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/app-mesh/latest/userguide/what-is-app-mesh.html
+  notes: End of support on 2026-09-30 (see data/lifecycle-denylist.yaml). Named only in reader notes about linked
+    pages; not listed on the AWS GovCloud (US) User Guide services page (checked 2026-10-06).
+- name: Amazon CodeCatalyst
+  aliases:
+  - CodeCatalyst
+  kind: service
+  aws: not available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/codecatalyst/latest/userguide/migration.html
+  notes: Closed to new customers since 2025-11-07 (see data/lifecycle-denylist.yaml). Named only in reader notes
+    about linked pages; not listed on the AWS GovCloud (US) User Guide services page (checked 2026-10-06).
+- name: AWS Budgets
+  aliases:
+  - Budgets
+  - budget alerts
+  kind: service
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/usage-and-payment.html
+  notes: Not offered in the GovCloud Regions; GovCloud activity, usage and payments are managed through the associated
+    standard account, so create budgets there.
+- name: AWS Cost Explorer
+  aliases:
+  - Cost Explorer
+  kind: service
+  aws: available
+  aws-us-gov: not available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/usage-and-payment.html
+  notes: Not offered in the GovCloud Regions; analyze GovCloud costs from the associated standard account.
+- name: Amazon Data Firehose
+  aliases:
+  - Data Firehose
+  - Kinesis Data Firehose
+  - Firehose
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kinesisfirehose.html
+  notes: ''
+- name: Amazon EBS
+  aliases:
+  - EBS
+  - Amazon Elastic Block Store
+  - EBS snapshots
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-ebs.html
+  notes: ''
+- name: Amazon Kinesis Data Streams
+  aliases:
+  - Kinesis Data Streams
+  - Kinesis
+  kind: service
+  aws: available
+  aws-us-gov: available
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-kinesis.html
+  notes: ''

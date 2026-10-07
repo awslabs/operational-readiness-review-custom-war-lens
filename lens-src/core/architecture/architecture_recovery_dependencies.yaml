@@ -1,0 +1,146 @@
+schema: orrlens/question/1
+id: architecture_recovery_dependencies
+pillar: architecture
+order: 30
+title: Regional isolation and data-plane-only recovery
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Blast radius containment
+lineage: [architecture_plane_redundency, architecture_mulitaccount_stragy, architecture_shared_resources_redundancy]
+choice_prefix: rp_
+description:
+  question: >-
+    Do steady state and recovery avoid depending on control planes, other Regions, or shared resources that can
+    fail at the same time as the failure you are recovering from?
+  evidence_to_collect: >-
+    the failover and recovery runbooks with each API call classified as control plane or data plane. The list of
+    cross-Region and global-service dependencies on the critical path. Resources shared across Availability
+    Zones, cells or Regions. The account structure and organization policies. The last failover test record.
+helpful:
+  display_text: REL11-BP04 Data plane recovery (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_avoid_control_plane.html
+statements:
+  - id: rp_dataplane_recovery
+    tier: core
+    title: Failover uses data-plane actions on pre-provisioned resources, and no recovery step creates resources in the impaired location
+    concept: data-plane-only-recovery
+    severity_basis: >-
+      deviation:REL11-BP04 is rated Medium; the October 2025 Post-Event Summary reports that new EC2 instance
+      launches failed for hours while existing instances remained healthy, so a recovery plan that creates
+      resources can fail exactly when it is needed
+    wa_bp: REL11-BP04
+    good: >-
+      Every failover step moves traffic to, or changes state on, resources that already exist and are sized for the
+      load (for example Route 53 health-check failover records or an ARC zonal shift), with no launches, resource
+      changes, or IAM or DNS edits through a control plane. Under an approved backup-and-restore or pilot-light
+      strategy, steps that create or scale resources run only in the recovery Region or account, need neither the
+      impaired Region nor a global service control plane, fit inside RTO, and were proven in the last DR test.
+      Capacity to survive losing an Availability Zone is scored in event_resilience_recoveries (az_static_capacity).
+    platform_notes: >-
+      Serverless: size concurrency and quotas in the recovery location ahead of time, and never deploy functions or
+      stacks into the impaired Region during recovery.
+    partition_notes: >-
+      ARC routing control is not available in AWS GovCloud (US) as of 2026-10-05; Route 53 failover routing and ARC
+      zonal shift are available there (verify per Region).
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/control-planes-and-data-planes.html
+    improvement: >-
+      List every action in the failover and recovery runbooks and classify each API call as control plane or data
+      plane. Replace control-plane steps with pre-provisioned resources and data-plane mechanisms such as Route 53
+      health checks or ARC zonal shift, pre-scale or reserve the capacity the remaining locations need, and prove
+      the plan in a failover test that does not use the replaced control-plane actions.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_avoid_control_plane.html
+    additional_helpful:
+      - display_text: Static stability using Availability Zones (Amazon Builders' Library)
+        url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
+      - display_text: REL11-BP05 Use static stability to prevent bimodal behavior (AWS Well-Architected)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html
+    additional_improvement:
+      - display_text: Configuring DNS failover (Amazon Route 53)
+        url: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-configuring.html
+      - display_text: Zonal shift in Amazon Application Recovery Controller (ARC)
+        url: https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-shift.html
+  - id: rp_no_cross_region_cp
+    tier: core
+    title: The critical path and recovery steps have no runtime dependency on another Region or on a global service's control plane
+    concept: no-cross-region-control-plane-dependency
+    severity_basis: >-
+      deviation:REL11-BP04 is rated Medium; the AWS Fault Isolation Boundaries whitepaper states that most global
+      services host their control plane in a single Region, so a runtime dependency on one couples the workload
+      to an event in that Region
+    wa_bp: REL11-BP04
+    good: >-
+      Requests and recovery steps make no runtime call that needs another Region or a global service's control plane,
+      which the AWS Fault Isolation Boundaries whitepaper places in a single Region (for example IAM, Route 53 public
+      DNS and CloudFront). Credentials come from Regional AWS STS endpoints, configuration and secrets are replicated
+      or cached in the Region, and global-service changes are never a recovery step. Failing over to a recovery Region
+      meets this, as long as the steps run in the recovery Region and need nothing from the impaired one.
+    platform_notes: >-
+      Some AWS SDKs and CLIs default to the global AWS STS endpoint, so set the STS Regional endpoints setting to
+      regional. Avoid synchronous cross-Region calls on the critical path.
+    partition_notes: >-
+      In AWS GovCloud (US), as of 2026-10-06, the IAM and Route 53 control planes are in AWS GovCloud (US-West), so
+      recovery steps in AWS GovCloud (US-East) must not change IAM or Route 53 configuration, and there is no global
+      AWS STS endpoint.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/global-services.html
+    improvement: >-
+      Trace each critical call and each recovery step to the Region and the plane it uses. Switch clients to
+      Regional AWS STS endpoints, replicate or cache configuration and secrets in each Region, remove calls to
+      global-service control planes from the request path and the runbooks, and create ahead of time anything
+      those steps used to create.
+    improvement_url: https://docs.aws.amazon.com/sdkref/latest/guide/feature-sts-regionalized-endpoints.html
+    additional_improvement:
+      - display_text: Manage AWS STS in an AWS Region (IAM User Guide)
+        url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html
+  - id: rp_no_shared_fate
+    tier: sec
+    title: No configuration, credential or resource shared across AZs, cells or Regions can impair all of them at once
+    concept: no-shared-fate-across-fault-boundaries
+    wa_bp: REL10-BP03
+    large_scale: true
+    good: >-
+      No single configuration value, credential, certificate, data store, deployment or network component is
+      shared by every Availability Zone, cell or Region in a way that one bad change or one failure impairs all of
+      them. Changes to anything shared roll out one fault boundary at a time, and each location keeps running on
+      its last known good copy if the shared source is unavailable.
+    platform_notes: >-
+      Containers: one cluster spanning Availability Zones shares its control plane and add-ons, so larger
+      workloads may use cells or more than one cluster. Serverless: one function configuration or alias serves
+      every Availability Zone, so stage its changes. EC2: one launch template or AMI change can reach every
+      Availability Zone at once unless the rollout is staged.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_use_bulkhead.html
+    improvement: >-
+      List what more than one Availability Zone, cell or Region uses (for example a shared database, a global
+      configuration file, one certificate, or one deployment that targets everything). Split those items per
+      fault boundary where it matters, or stage their changes one boundary at a time with automatic rollback, and
+      keep a last known good copy in each location.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reducing-scope-of-impact-with-cell-based-architecture/reducing-scope-of-impact-with-cell-based-architecture.html
+    additional_helpful:
+      - display_text: Minimizing correlated failures in distributed systems (Amazon Builders' Library)
+        url: https://builder.aws.com/content/3Ev2H7t3l2eZa9xBXiZcAjz12JK/minimizing-correlated-failures-in-distributed-systems
+  - id: rp_prod_isolated
+    tier: sec
+    title: Production runs in dedicated accounts isolated from non-production, with organization guardrails on logging and Regions
+    concept: production-account-isolation
+    wa_bp: SEC01-BP01
+    good: >-
+      Production runs in AWS accounts used only for production, separate from development and test, and managed
+      in AWS Organizations. Service control policies or equivalent guardrails stop anyone from turning off audit
+      logging such as AWS CloudTrail and restrict use to approved Regions, and non-production identities and
+      pipelines have no standing access to production.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_securely_operate_multi_accounts.html
+    improvement: >-
+      Move production resources into dedicated accounts under a production organizational unit, attach service
+      control policies that deny disabling logging and deny unapproved Regions, and remove access paths that let
+      non-production identities or pipelines change production.
+    improvement_url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_best-practices.html
+    additional_improvement:
+      - display_text: Service control policies (SCPs) in AWS Organizations
+        url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
+pes_lesson:
+  statement: rp_dataplane_recovery
+  month: Oct 2025
+  url: https://aws.amazon.com/message/101925/
+  lesson: >-
+    existing EC2 instances remained healthy while new instance launches failed for hours, so recover with
+    capacity that is already running and with data-plane actions rather than by launching or modifying resources.

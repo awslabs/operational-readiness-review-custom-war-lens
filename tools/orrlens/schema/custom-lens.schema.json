@@ -1,0 +1,225 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/awslabs/operational-readiness-review-custom-war-lens/tools/orrlens/schema/custom-lens.schema.json",
+  "title": "AWS Well-Architected Tool custom lens (schemaVersion 2021-11-01)",
+  "description": "Mirrors the public lens format specification (https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-format-specification.html), checked 2026-10-06. Limits here are the specification's; the stricter API and lens-policy limits are enforced by the orrlens limits check.",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "name",
+    "description",
+    "pillars"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "const": "2021-11-01"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "pillars": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 10,
+      "items": {
+        "$ref": "#/$defs/pillar"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_]{3,128}$"
+    },
+    "url": {
+      "type": "string",
+      "pattern": "^https?://\\S+$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2048
+    },
+    "resource": {
+      "type": "object",
+      "required": [
+        "displayText"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "displayText": {
+          "$ref": "#/$defs/text"
+        },
+        "url": {
+          "$ref": "#/$defs/url"
+        }
+      }
+    },
+    "pillar": {
+      "type": "object",
+      "required": [
+        "id",
+        "name",
+        "questions"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "questions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "items": {
+            "$ref": "#/$defs/question"
+          }
+        }
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": [
+        "id",
+        "title",
+        "choices",
+        "riskRules"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "description": {
+          "$ref": "#/$defs/text"
+        },
+        "helpfulResource": {
+          "$ref": "#/$defs/resource"
+        },
+        "choices": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 15,
+          "items": {
+            "$ref": "#/$defs/choice"
+          }
+        },
+        "riskRules": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/riskRule"
+          }
+        }
+      }
+    },
+    "choice": {
+      "type": "object",
+      "required": [
+        "id",
+        "title"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "helpfulResource": {
+          "$ref": "#/$defs/resource"
+        },
+        "improvementPlan": {
+          "$ref": "#/$defs/resource"
+        },
+        "additionalResources": {
+          "type": "array",
+          "maxItems": 2,
+          "items": {
+            "$ref": "#/$defs/additionalResource"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "id": {
+            "pattern": "_no$"
+          }
+        }
+      },
+      "then": true,
+      "else": {
+        "required": [
+          "improvementPlan"
+        ]
+      }
+    },
+    "additionalResource": {
+      "type": "object",
+      "required": [
+        "type",
+        "content"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "type": {
+          "enum": [
+            "HELPFUL_RESOURCE",
+            "IMPROVEMENT_PLAN"
+          ]
+        },
+        "content": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/resource"
+          }
+        }
+      }
+    },
+    "riskRule": {
+      "type": "object",
+      "required": [
+        "condition",
+        "risk"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "condition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "risk": {
+          "enum": [
+            "HIGH_RISK",
+            "MEDIUM_RISK",
+            "NO_RISK"
+          ]
+        }
+      }
+    }
+  }
+}

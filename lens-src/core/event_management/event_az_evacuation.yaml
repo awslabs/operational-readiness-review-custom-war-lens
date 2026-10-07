@@ -1,0 +1,133 @@
+schema: orrlens/question/1
+id: event_az_evacuation
+pillar: event_management
+order: 100
+title: Detect and shift away from an impaired Availability Zone
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Blast radius containment
+lineage: [event_resilience_recoveries]
+choice_prefix: ev_
+description:
+  question: >-
+    If one Availability Zone is impaired, including a partial (gray) failure, can you detect it and move traffic and
+    work away from that Availability Zone within minutes?
+  out_of_scope_if: >-
+    never as a whole question. If the critical path uses only Regional managed services, select the first statement
+    and keep the AZ layout as evidence.
+  evidence_to_collect: >-
+    per-AZ dashboards and alarms. The AZ shift runbook or automation and the resources it covers. Detection and
+    mitigation times from the last practice shift or exercise. The AZ layout of every network path and data store on
+    the critical path.
+helpful:
+  display_text: REL11-BP01 Monitor all components to detect failures
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_monitoring_health.html
+statements:
+  - id: ev_regional_managed
+    tier: scope
+    title: "Only Regional managed services on the critical path: no zonal NAT gateways, single-AZ subnets, instances or databases"
+    concept: az-shift-scope-regional-only
+    good: >-
+      Every component on the critical path is a Regional service whose AZ resilience AWS manages for you, for example
+      AWS Lambda, Amazon DynamoDB, Amazon S3, Amazon SQS or Amazon API Gateway, so there is no zonal capacity of yours
+      to shift. Lambda functions attached to a VPC count only if their subnets span at least two AZs and nothing else
+      on the path is zonal, such as zonal NAT gateways, interface endpoints, instances, containers or databases you
+      place in AZs. Evidence to collect: the AZ layout of every network path and data store on the critical path.
+      When this is selected, the other statements do not change the score.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/availability-zones.html
+    improvement: >-
+      Check your component list against the AWS Fault Isolation Boundaries whitepaper. If any customer-managed zonal
+      resource is on the critical path, clear this statement and answer the other statements.
+    improvement_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html
+  - id: ev_shift_mechanism
+    tier: core
+    title: A data-plane mechanism moves traffic and work away from one AZ within minutes (for example ARC zonal shift or zonal autoshift)
+    concept: az-traffic-shift
+    severity_basis: >-
+      wp-orr:AZ weight-away (Appendix B: weight the workload out of an AZ within 15 minutes, with a runbook that
+      documents the process; No is High Risk)
+    wa_bp: REL11-BP02
+    good: >-
+      A runbook or automation takes one AZ out of service within minutes (the AWS ORR whitepaper's example asks for
+      15) for every zonal path: load-balanced traffic, east-west calls, queue consumers and data store primaries. It
+      uses data-plane actions that keep working during the event, for example Amazon Application Recovery Controller
+      (ARC) zonal shift, or zonal autoshift, where AWS shifts traffic for you when it detects an AZ impairment.
+    platform_notes: >-
+      EC2: zonal shift supports Auto Scaling groups and Application and Network Load Balancers. Containers: Amazon
+      EKS with zonal shift enabled; Amazon ECS tasks behind a shifted load balancer stop receiving its traffic in that
+      AZ. Serverless: only zonal resources on the path need a shift. Data: database failover is usually a
+      control-plane action, so shift traffic first.
+    partition_notes: >-
+      ARC zonal shift, zonal autoshift and practice runs are available in AWS GovCloud (US); ARC routing control is
+      not (as of 2026-10-06; verify per Region).
+    helpful_url: https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-shift.html
+    improvement: >-
+      Enable zonal shift for every supported resource on the critical path, and write a runbook or automation that
+      also covers what ARC does not shift, such as queue consumers, east-west traffic and data store primaries.
+      Measure how long a full AZ evacuation takes against your target, and consider zonal autoshift once every AZ is
+      pre-scaled to carry the load without the impaired one.
+    improvement_url: https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-autoshift.html
+    additional_helpful:
+      - display_text: AWS ORR whitepaper, Appendix B Example ORR questions (AZ weight-away)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+    additional_improvement:
+      - display_text: Supported resources for ARC zonal shift and zonal autoshift
+        url: https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-shift.resource-types.html
+      - display_text: Running multi-day AZ evacuation drills with ARC zonal shift (AWS Architecture Blog)
+        url: https://aws.amazon.com/blogs/architecture/running-multi-day-az-evacuation-drills-with-arc-zonal-shift/
+  - id: ev_per_az_detection
+    tier: sec
+    title: Per-AZ error and latency alarms detect a single-AZ outlier, and an injected partial-AZ (gray) failure proved they fire
+    concept: per-az-outlier-detection
+    wa_bp: REL11-BP01
+    large_scale: true
+    good: >-
+      Error rate and latency are measured and alarmed per AZ, for example with load balancer metrics that carry the
+      AvailabilityZone dimension or application metrics tagged with the AZ, so one AZ that is worse than the others is
+      detected even when Regional averages look healthy, and the alarm names the AZ. A fault-injection experiment that
+      degraded one AZ only partially, for example the AWS FIS scenarios AZ: Application Slowdown or Cross-AZ: Traffic
+      Slowdown, proved the alarms fire.
+    platform_notes: >-
+      EC2 and containers: add the AZ from instance or task metadata to your metrics and logs. Serverless: this applies
+      only to VPC-attached and other zonal components on the path.
+    partition_notes: >-
+      AWS FIS is available in both AWS GovCloud (US) Regions; its experiment scheduling and experiment report
+      features are not (as of 2026-10-06; verify per Region).
+    helpful_url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html
+    improvement: >-
+      Publish error and latency metrics with an AZ dimension for every zonal tier, alarm when one AZ deviates from the
+      others, and link the alarm to the AZ shift runbook. Then run a partial-AZ experiment with stop conditions in
+      pre-production, and later in production, to prove the alarms fire and identify the AZ.
+    improvement_url: https://docs.aws.amazon.com/fis/latest/userguide/az-application-slowdown-scenario.html
+    additional_improvement:
+      - display_text: "AWS FIS scenario: Cross-AZ: Traffic Slowdown"
+        url: https://docs.aws.amazon.com/fis/latest/userguide/cross-az-traffic-slowdown-scenario.html
+      - display_text: AWS FIS scenarios reference
+        url: https://docs.aws.amazon.com/fis/latest/userguide/scenario-library-scenarios.html
+  - id: ev_shift_practiced
+    tier: sec
+    title: AZ shifts are exercised on a schedule, and time to mitigate is measured against your documented target
+    concept: az-shift-practice
+    wa_bp: REL12-BP04
+    good: >-
+      AZ shifts are practiced on a schedule in production or a production-like environment, for example with ARC
+      zonal autoshift practice runs, which ARC schedules about weekly with an outcome alarm and an optional blocking
+      alarm, or with a scheduled evacuation drill. Each practice records the time from detection to mitigation and
+      compares it with your documented target, and problems found become tracked fixes.
+    partition_notes: >-
+      ARC practice runs are available in both AWS GovCloud (US) Regions (as of 2026-10-06; verify per Region).
+    helpful_url: https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-autoshift.how-it-works.html
+    improvement: >-
+      Set a time-to-mitigate target for an AZ impairment, schedule practice shifts (ARC practice runs, or at least a
+      quarterly drill, as a suggestion), alarm on customer impact during each one, record detection and mitigation
+      times, and fix what slowed you down. You can combine practice with fault injection, for example by testing
+      zonal autoshift with AWS FIS.
+    improvement_url: https://docs.aws.amazon.com/r53recovery/latest/dg/testing-zonal-autoshift-fis.html
+pes_lesson:
+  statement: ev_per_az_detection
+  month: Aug 2019
+  url: https://aws.amazon.com/message/56489/
+  lesson: >-
+    a few applications running across multiple Availability Zones still saw unexpected errors during an event in a
+    single Availability Zone, so alarm on per-AZ health and be ready to shift away from the impaired zone.

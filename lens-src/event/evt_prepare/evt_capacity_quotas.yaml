@@ -1,0 +1,111 @@
+schema: orrlens/question/1
+id: evt_capacity_quotas
+pillar: evt_prepare
+order: 30
+title: Quotas and capacity secured for the event dates
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Defense against customers
+lineage: []
+choice_prefix: cq_
+description:
+  question: >-
+    Are the quotas and capacity that the event needs approved and in place for the event dates, with enough lead time,
+    and is there a plan to scale back down afterward?
+  evidence_to_collect: >-
+    applied quota values or approved increase requests for each account and Region, including recovery Regions and
+    third-party APIs. Capacity reservations, scheduled scaling or pre-scaling settings for the event dates. The
+    post-event scale-down and cost plan.
+helpful:
+  display_text: REL01-BP01 Aware of service quotas (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html
+statements:
+  - id: cq_quotas_raised
+    tier: core
+    title: Quota increases for peak plus failover were approved ahead of the event, without relying on automatic adjustment
+    concept: event-quota-increases
+    severity_basis: "wa:REL01-BP01 (High)"
+    wa_bp: REL01-BP01
+    good: >-
+      Every quota and limit the event can reach (for example vCPU, task and function concurrency, API request rates,
+      database and stream throughput, load balancer and IP address limits, and third-party API limits) was compared
+      with the event forecast plus failover. Increases were requested early, large ones months ahead, and show as
+      applied before the freeze. The plan does not count on usage-based automatic increases or on requests filed during
+      the event, and usage against key quotas is alarmed.
+    partition_notes: >-
+      Service Quotas is available in AWS GovCloud (US) as of 2026-10-06, but quota request templates are not; request
+      increases in each GovCloud (US) account.
+    reader_note: >-
+      Some services named on this page are closed to new customers or reaching end of support (Amazon DevOps Guru and
+      Amazon CodeGuru Reviewer). Service Quotas with Amazon CloudWatch alarms meets this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html
+    improvement: >-
+      List the quotas each critical journey uses in every account and Region, including recovery Regions and
+      third-party APIs. Compare them with the event forecast plus failover, request increases as soon as the forecast
+      is agreed (large ones 3-6 months ahead, the rest at least 8 weeks ahead), confirm the applied values before the
+      freeze, and add CloudWatch alarms on usage against the key quotas.
+    improvement_url: https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html
+    additional_improvement:
+      - display_text: Service Quotas and Amazon CloudWatch alarms
+        url: https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html
+  - id: cq_capacity_secured
+    tier: sec
+    title: Capacity is reserved or pre-scaled for the event dates (for example future-dated Capacity Reservations or warm pools)
+    concept: event-capacity-reserved
+    wa_bp: REL07-BP03
+    good: >-
+      The capacity the event needs in its first minutes is already running (pre-scaled) before the window, not
+      launched at the peak. Reservations hold capacity for planned scale-out but still need launches, so they do not
+      replace pre-scaling for the opening peak. The team checked a day before that it is in place.
+    platform_notes: >-
+      EC2: future-dated Capacity Reservations (C, G, I, M, R, T, U and X families) can be requested 5-120 days ahead
+      (AWS recommends at least 56 days), need at least 32 vCPUs, and carry a minimum commitment (14 days for C, G, I,
+      M, R and T; 12 weeks for U and X); also use scheduled scaling and warm pools. Containers: raise minimum task and
+      node counts before the window and check launch-rate quotas. Serverless: AWS Lambda provisioned concurrency, and
+      Amazon DynamoDB warm throughput.
+    partition_notes: >-
+      Future-dated Capacity Reservations, warm pools, Lambda provisioned concurrency and DynamoDB warm throughput are
+      available in AWS GovCloud (US) as of 2026-10-06.
+    helpful_url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-create.html
+    improvement: >-
+      From the forecast, work out the capacity needed at the opening minute and how fast you can add more. Reserve or
+      pre-scale it for the event dates: request future-dated Capacity Reservations at least 8 weeks ahead where
+      eligible and launch into them before the window, schedule minimum capacity to rise before the window, set provisioned concurrency or table throughput
+      ahead of the peak, and confirm it is in place the day before.
+    improvement_url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html
+    additional_improvement:
+      - display_text: Scheduled scaling for Amazon EC2 Auto Scaling
+        url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html
+      - display_text: Configuring provisioned concurrency for an AWS Lambda function
+        url: https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html
+      - display_text: Understanding Amazon DynamoDB warm throughput
+        url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/warm-throughput.html
+  - id: cq_scale_down_plan
+    tier: sec
+    title: A post-event scale-down and cost plan exists
+    concept: event-scale-down-plan
+    wa_bp: COST09-BP03
+    good: >-
+      A written plan says when and in what order the extra capacity, raised minimums, reservations, provisioned
+      concurrency and temporary rules are removed after the event, what triggers each step, who approves it, and the
+      expected cost of the event period. Capacity is not cut while late traffic or backlogs are still draining, and it
+      is not left running for months. Reservation end dates and commitments are known.
+    partition_notes: >-
+      Billing and cost data for AWS GovCloud (US) accounts are viewed from the associated standard AWS account (as of
+      2026-10-06).
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html
+    improvement: >-
+      Write the scale-down plan with the capacity plan: list every temporary resource and setting with its end date,
+      the trigger for removing it (for example backlogs drained and traffic below a threshold for a day) and its owner,
+      set an AWS Budgets alert for the event period, and schedule the scale-down as normal pipeline changes after the
+      window.
+    improvement_url: https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html
+pes_lesson:
+  statement: cq_capacity_secured
+  month: Oct 2025
+  url: https://aws.amazon.com/message/101925/
+  lesson: >-
+    new EC2 instance launches failed for about eight hours in one Region while instances that were already running
+    stayed healthy, so have the capacity a fixed-date event needs already running before the window; a reservation
+    that still needs a launch at the peak does not protect against this.

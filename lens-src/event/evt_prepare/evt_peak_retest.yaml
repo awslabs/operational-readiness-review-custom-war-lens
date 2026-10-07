@@ -1,0 +1,84 @@
+schema: orrlens/question/1
+id: evt_peak_retest
+pillar: evt_prepare
+order: 20
+title: Event-specific load re-test
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Defense against customers
+lineage: []
+choice_prefix: pr_
+description:
+  question: >-
+    Has capacity been re-proven against this event's own forecast, recently enough that later changes cannot have
+    invalidated the result?
+  evidence_to_collect: >-
+    the agreed event forecast (peak, shape, ramp, duration, worst case and margin). The re-test plan and report with
+    its date, achieved rate, latency, errors and first bottleneck. The alarm, scaling and runbook observations recorded
+    during the test.
+helpful:
+  display_text: REL12-BP03 Test scalability and performance requirements
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html
+statements:
+  - id: pr_forecast
+    tier: core
+    title: The event's peak, shape, duration, ramp and worst case are agreed with the business owner
+    concept: event-peak-forecast
+    severity_basis: "wa:REL12-BP03 (High)"
+    wa_bp: REL12-BP03
+    good: >-
+      A written forecast for this event, agreed with the business owner, gives expected and worst-case peak rates for
+      each critical journey (for example requests, sign-ups, transactions or messages per second); the ramp, such as a
+      spike when sales open or a broadcast mentions the site; how long the peak lasts; the mix of reads and writes; and
+      the share of retries and automated traffic. It is based on comparable past events, registrations or marketing
+      plans, and it states the margin the re-test must add. It builds on the demand forecast in the
+      core question 'Peak demand, quotas and capacity headroom' instead of replacing it.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html
+    improvement: >-
+      Hold a forecasting session with the business owner, marketing and partners. Collect data from comparable events,
+      model the opening spike and the sustained peak, add automated traffic, retries and a worst case, and agree in
+      writing the numbers and the margin that the load re-test must prove.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_cost_analysis.html
+  - id: pr_retested
+    tier: core
+    title: The load test was re-run against this event's forecast plus margin within 30-60 days of the event
+    concept: event-load-retest
+    severity_basis: "wa:REL12-BP03 (High)"
+    wa_bp: REL12-BP03
+    good: >-
+      Within 30-60 days before the event and after the last significant change, a production-like environment (or
+      production in an agreed window) was tested with the event's traffic shape (ramp, peak and duration) at forecast
+      plus the agreed margin, with representative data, accounts and dependency paths or approved stubs. Latency and
+      errors stayed within the success criteria, and bottlenecks found were fixed and re-tested. High-volume tests follow
+      the Amazon EC2 Testing Policy and the testing terms of every third-party provider in the path.
+    platform_notes: >-
+      EC2 and containers: include the scale-out ramp, not only steady state. Serverless: confirm that concurrency,
+      account and downstream quotas in the test account match production, or the test proves less than it appears to.
+    helpful_url: https://aws.amazon.com/ec2/testing/
+    improvement: >-
+      Book the re-test 30-60 days before the event and after the last major change. Script the event's ramp, peak and
+      duration at forecast plus margin, include real dependency paths only where each provider (for example a payment
+      or identity provider) has agreed in writing to the test volume and window, otherwise use their sandbox or an
+      approved stub, follow each provider's testing policy and the Amazon EC2 Testing Policy, fix what breaks and test
+      again, and record the achieved rate, latency, errors and
+      first bottleneck.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html
+  - id: pr_alarms_validated
+    tier: sec
+    title: Alarms, scaling and runbooks were validated during the re-test, and the results were recorded
+    concept: event-retest-operations-validated
+    wa_bp: REL12-BP03
+    good: >-
+      During the re-test the team watched the event dashboards and confirmed that the alarms set for the event fired at
+      the expected thresholds, that scaling or pre-scaled capacity behaved as expected, and that the staff for the event
+      window ran at least one runbook step under load, for example turning off a feature or raising a limit. The
+      observations, gaps and fixes are recorded with the test report. This extends the core question
+      'Load testing to peak margin and breaking point' (statement: Alarms, scaling and runbooks were observed working
+      during the test) to the event's own thresholds and staff.
+    helpful_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html
+    improvement: >-
+      Make alarm, scaling and runbook checks an explicit part of the re-test plan: list the alarms and actions you
+      expect at each load step, have the event-window staff run them, record what happened, and fix and re-check any
+      alarm or runbook that did not work.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html

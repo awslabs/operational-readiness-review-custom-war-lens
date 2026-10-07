@@ -1,0 +1,109 @@
+schema: orrlens/question/1
+id: releases_deployment_rollback
+pillar: release_quality
+order: 40
+title: Automatic rollback and rollback safety
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Deployment safety
+lineage: [releases_canaries, releases_deployment_rollback, releases_performance_impact]
+choice_prefix: rb_
+description:
+  question: >-
+    When a deployment of code, infrastructure, configuration or feature flags causes harm, does it stop and roll
+    back automatically, and is rolling back always safe?
+  out_of_scope_if: none. Every workload that changes needs this.
+  evidence_to_collect: >-
+    pipeline and deployment settings that show alarm-based rollback. The alarms used and their evaluation windows.
+    The last rollback, planned or real, and how long it took. The schema and data-format change policy.
+helpful:
+  display_text: OPS06-BP04 Automate testing and rollback (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_auto_testing_and_rollback.html
+statements:
+  - id: rb_auto
+    tier: core
+    title: Deployments of code, infrastructure, configuration and flags stop and roll back automatically when alarms fire
+    concept: automatic-alarm-rollback
+    severity_basis: >-
+      wp-orr:Customer-impacting deployments automatically roll back incorrect deployments before an SLA is
+      breached (ORR whitepaper Appendix B example question; No is High Risk)
+    wa_bp: OPS06-BP04
+    good: >-
+      Every deployment path watches alarms during and after each stage and, when one fires, stops promotion and
+      returns to the last known-good version without waiting for a human decision.
+    platform_notes: >-
+      EC2: AWS CodeDeploy automatic rollback on alarms, or EC2 Auto Scaling instance refresh with automatic
+      rollback. Containers: the Amazon ECS deployment circuit breaker with CloudWatch alarms, or ECS blue/green,
+      linear or canary deployments with bake time. Serverless: Lambda aliases with CodeDeploy traffic shifting and
+      alarms. Infrastructure: CloudFormation rollback triggers. Configuration and flags: AWS AppConfig deployment
+      strategies with alarm-based rollback. CI/CD: CodePipeline stage rollback.
+    partition_notes: >-
+      Amazon ECS built-in blue/green, linear and canary deployments, with bake time, deployment lifecycle hooks and
+      alarm-based rollback, are available in AWS GovCloud (US) as of 2026-10-06.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.2-implement-automatic-rollbacks-for-failed-deployments.html
+    improvement: >-
+      Pick the native rollback mechanism for each deployment path, wire it to the alarms that represent customer
+      impact, and prove that a deliberately bad change rolls back with no human action. Manual-only rollback is a
+      launch-blocking gap unless the accountable owner formally accepts it, for example for commercial software you
+      cannot redeploy.
+    improvement_url: https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html
+    additional_improvement:
+      - display_text: AWS CloudFormation rollback triggers
+        url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html
+      - display_text: Automate rollbacks for Amazon ECS rolling deployments with CloudWatch alarms
+        url: https://aws.amazon.com/blogs/containers/automate-rollbacks-for-amazon-ecs-rolling-deployments-with-cloudwatch-alarms/
+      - display_text: AWS CodePipeline stage rollback
+        url: https://docs.aws.amazon.com/codepipeline/latest/userguide/stage-rollback.html
+      - display_text: AWS AppConfig deployment strategies
+        url: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
+      - display_text: EC2 Auto Scaling instance refresh rollback
+        url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-refresh-rollback.html
+  - id: rb_alarms_scoped
+    tier: sec
+    title: Rollback alarms use customer-experience, canary and new-version metrics
+    concept: rollback-alarm-scope
+    wa_bp: OPS06-BP04
+    good: >-
+      The alarms that trigger rollback measure what customers experience (error rates and latency percentiles),
+      include canary results, and where possible isolate the new version, for example with per-deployment-group or
+      per-version metrics, so a regression shows before it reaches all traffic. How long each stage bakes against
+      these alarms is scored in releases_phased_rollout (pd_bake_time).
+    helpful_url: https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments
+    improvement: >-
+      For each pipeline stage, list the rollback alarms and their evaluation windows, add customer-facing and
+      canary alarms where missing, and add a version dimension to key metrics so the new version can be told apart
+      from the old one.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html
+  - id: rb_backward_compatible
+    tier: sec
+    title: Data-format, protocol and schema changes are backward compatible (readers before writers, expand then contract) and tested
+    concept: rollback-safe-data-changes
+    wa_bp: OPS06-BP01
+    good: >-
+      Any change that alters data written to storage, caches, queues or the wire can be rolled back without
+      corrupting or stranding data: readers that understand the new format deploy before writers start producing
+      it, and destructive schema steps run only after the old version is gone. Rollback of each such change is
+      tested in pre-production.
+    helpful_url: https://builder.aws.com/content/3F04j2yRAAMBuPSPs50xwXZqg01/ensuring-rollback-safety-during-deployments
+    improvement: >-
+      Adopt a two-phase (prepare, then activate) pattern for format and schema changes, add a pipeline test that
+      deploys version N+1, writes data, rolls back to N and verifies that N can read it, and document the rules for
+      destructive migrations.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.5-ensure-backwards-compatibility-for-data-store-and-schema-changes.html
+  - id: rb_exercised
+    tier: sec
+    title: A one-step rollback to the last known-good release, including configuration, was exercised in the last 12 months
+    concept: rollback-exercised
+    wa_bp: OPS06-BP01
+    good: >-
+      In the last 12 months the team performed a rollback, planned or real, of code and configuration in production
+      or a production-like environment with one action, knows how long it takes, and keeps a runbook for the cases
+      where automation does not trigger. The Well-Architected Framework (OPS06-BP01) asks that a rollback plan be
+      documented and tested before deployment so that the time to revert a change is minimized.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_plan_for_unsucessful_changes.html
+    improvement: >-
+      At least once a year, and ideally each quarter and after pipeline changes, run a planned rollback drill:
+      deploy a harmless change, roll it back with the documented single action, time it, and remove any manual step
+      you needed.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_auto_testing_and_rollback.html

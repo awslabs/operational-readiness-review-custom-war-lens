@@ -1,0 +1,144 @@
+schema: orrlens/question/1
+id: architecture_edge_protection
+pillar: architecture
+order: 80
+title: Edge and DDoS baseline for internet-facing endpoints
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Defense against customers
+lineage: [architecture_defensive_throttling]
+choice_prefix: ep_
+description:
+  question: >-
+    Do internet-facing endpoints have a web application firewall with rate limits, alarms that page on
+    application-layer floods, and a rehearsed DDoS response that accounts for AWS Shield Advanced moving
+    application-layer protection to the AWS WAF Anti-DDoS managed rule group?
+  out_of_scope_if: >-
+    the workload has no internet-facing endpoints. Select the first statement and keep the evidence.
+  evidence_to_collect: >-
+    every internet-facing endpoint and the web ACL or network control that protects it. Managed and rate-based
+    rules and their actions (Count or Block). Alarms on rate-based rule and Anti-DDoS rule group metrics and
+    where they page. The DDoS runbook and the date of its last rehearsal. For Shield Advanced subscribers, which
+    web ACLs run the Anti-DDoS managed rule group after the auto-upgrade that starts 2026-10-25 (AWS Security
+    Blog, as updated 2026-10-05) and whether IaC matches.
+helpful:
+  display_text: REL02-BP01 Highly available public endpoints (Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_users.html
+statements:
+  - id: ep_not_internet_facing
+    tier: scope
+    title: The workload has no internet-facing endpoints
+    concept: edge-scope-no-internet-endpoints
+    good: >-
+      Nothing in the workload accepts connections from the internet: no internet-facing load balancers, public
+      API Gateway endpoints, Amazon CloudFront distributions, Lambda function URLs, public IP addresses or other
+      public listeners, and users reach it only over private networks. Evidence to collect: an inventory of DNS
+      names and endpoints showing each is private (for example internal load balancers and private API Gateway
+      endpoints), and route tables showing no internet gateway route to workload resources that accept
+      connections. When this is selected, the other statements do not change the score.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html
+    improvement: >-
+      If any endpoint is reachable from the internet, including through a third-party CDN or front door, clear this
+      statement and answer the other statements. Recheck when new entry points are added.
+    improvement_url: https://docs.aws.amazon.com/waf/latest/developerguide/how-aws-waf-works-resources.html
+  - id: ep_waf_rate_rules
+    tier: core
+    title: >-
+      Internet-facing endpoints use a web application firewall with managed and rate-based rules (network controls
+      for non-HTTP)
+    concept: edge-waf-managed-and-rate-rules
+    severity_basis: "wa:REL02-BP01 (High)"
+    wa_bp: REL02-BP01
+    good: >-
+      Every internet-facing HTTP endpoint has a web ACL with AWS managed rule groups for the application and at least
+      one rate-based rule sized from measured traffic. New rules are tuned in Count mode, then set to Block, and web
+      ACLs are managed as code. Non-HTTP endpoints use security groups, network ACLs or AWS Network Firewall, plus AWS
+      Shield Standard.
+    platform_notes: >-
+      AWS WAF protects CloudFront, Application Load Balancers, API Gateway REST APIs, AppSync GraphQL APIs, Cognito
+      user pools, Bedrock AgentCore Gateway, Verified Access and Amplify (as of 2026-10-06); front HTTP APIs with
+      CloudFront and AWS WAF.
+    partition_notes: >-
+      As of 2026-10-06, AWS GovCloud (US) has AWS WAF with AWS managed, custom and rate-based rules, but no
+      third-party seller rule groups, CloudFront or Shield Advanced; attach web ACLs to Application Load Balancers or
+      REST API stages. Keep export-controlled data out of all AWS WAF metadata (names, conditions, string filters,
+      regex pattern sets).
+    helpful_url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html
+    improvement: >-
+      List every internet-facing endpoint and associate a web ACL with each HTTP endpoint. Add AWS managed rule
+      groups and a rate-based rule per entry point, aggregating by IP, forwarded IP or a custom key such as an API
+      key header. Run new rules in Count mode against real traffic, then switch them to Block, and keep web ACLs
+      in infrastructure as code. For non-HTTP endpoints, restrict sources with security groups and network ACLs,
+      and consider AWS Network Firewall.
+    improvement_url: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups.html
+    additional_helpful:
+      - display_text: Resources that you can protect with AWS WAF
+        url: https://docs.aws.amazon.com/waf/latest/developerguide/how-aws-waf-works-resources.html
+      - display_text: AWS WAF in AWS GovCloud (US)
+        url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-waf.html
+    additional_improvement:
+      - display_text: Aggregating rate-based rules in AWS WAF (custom keys)
+        url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based-aggregation-options.html
+      - display_text: AWS WAF Anti-DDoS managed rule group
+        url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html
+      - display_text: What is AWS Network Firewall?
+        url: https://docs.aws.amazon.com/network-firewall/latest/developerguide/what-is-aws-network-firewall.html
+  - id: ep_l7_detection_pages
+    tier: sec
+    title: >-
+      Layer 7 flood detection raises a paging alarm (for example on AWS WAF rate-based rule or Anti-DDoS rule group
+      metrics)
+    concept: l7-flood-detection-paging
+    wa_bp: REL06-BP03
+    good: >-
+      An application-layer flood pages the on-call engineer within minutes. CloudWatch alarms watch AWS WAF
+      metrics, such as blocked and counted requests for rate-based rules, alongside customer-facing latency and
+      error alarms. Where the Anti-DDoS managed rule group runs, an alarm on its DDoSAttackRequests metric
+      (namespace AWS/WAFV2) uses Sum >= 1; the metric has no data points outside an event, so treat missing data
+      as not breaching. Shield Advanced proactive engagement does not trigger on events that the Anti-DDoS
+      managed rule group detects, so these alarms are needed even with a subscription.
+    partition_notes: >-
+      Amazon CloudWatch and AWS WAF metrics are available in AWS GovCloud (US) as of 2026-10-06. AWS Capabilities by
+      Region lists the Anti-DDoS managed rule group there as of 2026-10-06; confirm with ListAvailableManagedRuleGroups
+      in your Region, and alarm on rate-based rule metrics where it does not run.
+    helpful_url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-srt-proactive-engagement.html
+    improvement: >-
+      For each web ACL, alarm on rate-based and managed rule metrics against a baseline, and on DDoSAttackRequests
+      where the Anti-DDoS managed rule group runs. Route the alarms to your paging system and link each one to the
+      DDoS runbook. If you subscribe to Shield Advanced, review alarms built on its application-layer detection,
+      because its application-layer automatic mitigation receives no further performance updates or priority
+      support from 2027-01-29 (as announced in the AWS Security Blog, updated 2026-10-05).
+    improvement_url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-metrics.html
+    additional_helpful:
+      - display_text: AWS Shield Advanced is embracing the AWS WAF Anti-DDoS managed rule group (AWS Security Blog)
+        url: https://aws.amazon.com/blogs/security/aws-shield-advanced-is-embracing-the-aws-waf-anti-ddos-managed-rule-group-what-changes-and-how-to-prepare/
+    additional_improvement:
+      - display_text: Configuring how CloudWatch alarms treat missing data
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html
+  - id: ep_ddos_runbook
+    tier: sec
+    title: "A tested DDoS runbook names whom to engage: AWS Support and, if you subscribe, the Shield Response Team"
+    concept: ddos-engagement-runbook
+    wa_bp: SEC10-BP04
+    good: >-
+      A DDoS runbook covers how to confirm an attack, which rules to tighten or switch from Count to Block, how to
+      add IP sets or rate-based rules, how to scale or shed load, how to communicate, and whom to engage: AWS
+      Support and, for Shield Advanced subscribers, the Shield Response Team. It was rehearsed in the last 12
+      months; a tabletop rehearsal meets this. A live DDoS simulation must follow the AWS DDoS Simulation Testing
+      Policy, whose standard terms need an approved AWS DDoS Test Partner, a target protected by Shield Advanced,
+      published traffic limits, and no test traffic from AWS resources; any other test needs prior AWS approval
+      through the policy's exception request (submitted at least 14 days ahead).
+    partition_notes: >-
+      AWS Shield Advanced is not available in AWS GovCloud (US) as of 2026-10-05, so GovCloud-only workloads
+      cannot meet the standard simulation terms; rehearse as a tabletop and engage AWS Support.
+    helpful_url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html
+    improvement: >-
+      Write the runbook from the AWS DDoS response guidance: detection signals, decision points, the rule changes
+      to make and who approves them, support case severity and contacts, and communications. Rehearse it as a
+      tabletop at least yearly and after major edge changes, and track gaps. If you subscribe to Shield Advanced,
+      keep SRT access and proactive engagement contacts current.
+    improvement_url: https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html
+    additional_helpful:
+      - display_text: AWS DDoS Simulation Testing Policy
+        url: https://aws.amazon.com/security/ddos-simulation-testing/

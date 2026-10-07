@@ -1,0 +1,116 @@
+schema: orrlens/question/1
+id: event_transaction_tracing
+pillar: event_management
+order: 50
+title: Request correlation, tracing and automated diagnostics
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Forensics
+lineage: [releases_performance_impact, event_automated_data_gathering, event_transaction_tracing]
+choice_prefix: tr_
+description:
+  question: >-
+    When something fails, can responders follow a single request across components, and do alarms give them the
+    data they need to diagnose the problem quickly?
+  evidence_to_collect: >-
+    a sample log line from each component showing the request or trace ID. An error response that returns the
+    ID. The saved queries used in incidents. A trace that crosses an asynchronous hop. The diagnostics an alarm
+    links to or collects.
+helpful:
+  display_text: OPS04-BP02 Application telemetry (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_application_telemetry.html
+statements:
+  - id: tr_correlated_logs
+    tier: core
+    title: Structured logs carry request or trace IDs, appear in error responses, and are centrally queryable during incidents
+    concept: correlated-structured-logs
+    severity_basis: "wa:OPS04-BP02 (High)"
+    wa_bp: OPS04-BP02
+    good: >-
+      Every component writes structured (for example JSON) logs with a timestamp, the request or trace ID, the
+      caller or tenant, the operation, the outcome and the latency, and passes the ID to downstream calls and
+      messages. Error responses return the request ID. Logs from all components, accounts and Regions are retained
+      and queryable from one place within minutes (for example with CloudWatch Logs Insights), and responders know
+      the saved queries. Logs hold no secrets, credentials or personal data beyond an opaque caller or tenant ID,
+      and sensitive fields are masked.
+    platform_notes: >-
+      EC2 and containers: ship logs with the CloudWatch agent, the awslogs log driver or Fluent Bit. Serverless:
+      Lambda can emit JSON logs, and Powertools for AWS Lambda adds correlation IDs. API Gateway: log and return
+      the request ID.
+    partition_notes: >-
+      Lambda JSON log formatting is not available in AWS GovCloud (US) as of 2026-10-06; write JSON from function
+      code instead, for example with the Powertools for AWS Lambda Logger.
+    helpful_url: https://aws.amazon.com/blogs/mt/accelerate-troubleshooting-with-structured-logs-in-amazon-cloudwatch/
+    improvement: >-
+      Adopt one structured log schema with a required request or trace ID, propagate the ID through every call and
+      message, return it in error responses, centralize logs from all accounts and Regions, and save the incident
+      queries responders need. Keep secrets and personal data out of logs, and mask sensitive fields, for example
+      with CloudWatch Logs data protection policies. Test it by tracing one request end to end from a sample error
+      response.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html
+    additional_improvement:
+      - display_text: Configuring JSON and plain text log formats for AWS Lambda
+        url: https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs-logformat.html
+      - display_text: Powertools for AWS Lambda (Python)
+        url: https://docs.aws.amazon.com/powertools/python/latest/
+      - display_text: Help protect sensitive log data with masking (CloudWatch Logs)
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html
+  - id: tr_open_tracing
+    tier: sec
+    title: Requests are traced across components, including async hops, with open-standard instrumentation (for example OpenTelemetry)
+    concept: distributed-tracing
+    wa_bp: OPS04-BP05
+    good: >-
+      Services use OpenTelemetry instrumentation (for example the AWS Distro for OpenTelemetry), propagate trace
+      context through synchronous calls, queues, streams and events, and send traces to a backend such as AWS
+      X-Ray, with sampling that keeps errors and slow requests. Responders can open the trace for a request ID
+      from a log line or an error response.
+    platform_notes: >-
+      EC2 and containers: run an OpenTelemetry Collector or the CloudWatch agent on the host, as a sidecar or as a
+      daemon set. Serverless: the AWS Distro for OpenTelemetry Lambda layer or Lambda active tracing.
+    partition_notes: >-
+      As of 2026-10-06, AWS X-Ray is available in AWS GovCloud (US). For CloudWatch Transaction Search and the
+      OTLP endpoint, the AWS GovCloud (US) User Guide says not available but AWS Capabilities by Region says
+      available; test in your account first.
+    reader_note: >-
+      The linked support timeline covers the AWS X-Ray SDKs and daemon, in maintenance mode since 2026-02-25; use
+      OpenTelemetry for new instrumentation.
+    helpful_url: https://opentelemetry.io/docs/concepts/context-propagation/
+    improvement: >-
+      Instrument each service with OpenTelemetry, starting with automatic instrumentation, propagate context
+      through messaging, choose a sampling policy that keeps errors, and send traces to your tracing backend.
+      Move existing instrumentation built on maintenance-mode tracing SDKs to OpenTelemetry.
+    improvement_url: https://aws.amazon.com/otel/
+    additional_improvement:
+      - display_text: AWS X-Ray support timeline for legacy instrumentation (migrate to OpenTelemetry)
+        url: https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-daemon-timeline.html
+      - display_text: CloudWatch OTLP endpoints
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTLPEndpoint.html
+  - id: tr_alarm_diagnostics
+    tier: sec
+    title: Alarms link to dashboards, saved queries and recent changes, and diagnostics are gathered automatically when they fire
+    concept: alarm-linked-diagnostics
+    wa_bp: REL06-BP04
+    good: >-
+      Each paging alarm's description or ticket links to the dashboard, saved log queries and traces for the
+      affected component, and to recent deployments and configuration changes. When the alarm fires, automation
+      collects the first diagnostics (for example top errors, affected hosts or tenants, recent change events,
+      and thread dumps where safe) and attaches them to the ticket, so responders start with evidence instead of
+      gathering it.
+    platform_notes: >-
+      An Amazon EventBridge rule on alarm state changes, or an alarm action, can start an AWS Lambda function or
+      an AWS Systems Manager Automation runbook that gathers data. Any incident or ticketing tool can hold the
+      results.
+    reader_note: >-
+      This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30);
+      alarm actions, Amazon EventBridge rules and Systems Manager Automation runbooks meet this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_automate_response_monitor.html
+    improvement: >-
+      Add links to dashboards, saved queries and the change log to every paging alarm description, then automate
+      the first diagnostic steps of your most frequent runbooks so they run when the alarm fires and post the
+      results to the incident ticket or channel.
+    improvement_url: https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html
+    additional_helpful:
+      - display_text: Building dashboards for operational visibility (Amazon Builders' Library)
+        url: https://builder.aws.com/content/3Ev2iw3R3ahQOM8BT4OUR0WP51z/building-dashboards-for-operational-visibility

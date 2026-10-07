@@ -1,0 +1,118 @@
+schema: orrlens/question/1
+id: architecture_demand_estimates
+pillar: architecture
+order: 100
+title: Peak demand, quotas and capacity headroom
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Defense against customers
+lineage: [architecture_demand_estimates]
+choice_prefix: dem_
+description:
+  question: >-
+    Do quotas, scaling limits and capacity cover forecast peak demand plus failover in every account and Region
+    the workload uses, with enough lead time to get more?
+  evidence_to_collect: >-
+    the demand forecast (normal and peak, key event dates, growth and failover scenarios) and who approved it.
+    Current quotas and scaling ceilings compared with forecast peak plus failover in each account and Region.
+    Quota usage alarms. Capacity reservations or scheduled scaling, and measured scaling lead times.
+helpful:
+  display_text: REL01-BP01 Aware of service quotas (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_quotas_and_constraints.html
+statements:
+  - id: dem_forecast
+    tier: core
+    title: Normal and peak demand, key event dates and failover scenarios are forecast and documented
+    concept: peak-demand-forecast
+    severity_basis: "wa:REL01-BP01 (High)"
+    wa_bp: REL01-BP01
+    good: >-
+      A documented forecast, owned jointly by the business owner and the engineering team, gives normal and peak
+      demand in the units each component scales on (requests, messages, sessions, data volume), daily and
+      seasonal patterns, known event dates such as deadlines, launches or enrollment periods, expected growth over
+      the next 12 months, and the extra load each component takes when an Availability Zone or Region fails over.
+      It is reviewed at least quarterly and before each known event. REL01-BP01 lists not assessing capacity
+      needs before a new customer event as an anti-pattern.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_cost_analysis.html
+    improvement: >-
+      Build the forecast from historical metrics and business plans: choose the scaling unit for each component,
+      record peaks and their timing, add known event dates and growth, and calculate each component's load when
+      one Availability Zone or the primary Region fails. Get the business owner's sign-off, review it quarterly,
+      and use it as the input for quotas, capacity and the load test.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_proactive_adapt_auto.html
+  - id: dem_quota_headroom
+    tier: core
+    title: >-
+      Quotas and scaling ceilings in every account and Region, including recovery Regions, cover peak plus
+      failover and are alarmed
+    concept: quota-headroom-all-regions
+    severity_basis: "wa:REL01-BP02 (High)"
+    wa_bp: REL01-BP02
+    good: >-
+      Every quota and limit the workload can reach (service quotas, account concurrency and throughput limits,
+      Auto Scaling maximums, IP space, third-party API limits) covers forecast peak plus failover with a
+      documented margin in every production account and Region, including recovery Regions, and CloudWatch alarms
+      fire on usage well before each limit. Fixed quotas are designed around.
+    platform_notes: >-
+      Serverless: Lambda account concurrency and per-function scaling rate. EC2 and containers: vCPU-based instance
+      quotas, Auto Scaling and capacity provider maximums, and subnet IP space.
+    partition_notes: >-
+      Service Quotas is available in AWS GovCloud (US) as of 2026-10-05, but quota request templates are not (checked
+      2026-10-06), so request GovCloud increases per account.
+    reader_note: >-
+      REL01-BP01, BP02 and BP06 list Amazon DevOps Guru (no new customers from 2026-10-29), and REL01-BP01 and BP02
+      list Amazon CodeGuru Reviewer (no new repository associations since 2025-11-07); neither is needed here.
+    helpful_url: https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html
+    improvement: >-
+      Inventory the quotas and limits each component can reach, compare them with forecast peak plus failover in
+      every production and recovery account and Region, request increases with enough lead time, alarm on usage
+      at a threshold you choose (for example 80 percent), and recheck after each forecast update. Where supported,
+      use quota request templates so new accounts start with the quotas you need.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_limits_considered.html
+    additional_improvement:
+      - display_text: REL01-BP06 Keep a gap between quotas and maximum usage for failover
+        url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_suff_buffer_limits.html
+      - display_text: Using Service Quotas request templates
+        url: https://docs.aws.amazon.com/servicequotas/latest/userguide/organization-templates.html
+      - display_text: Lambda scaling behavior
+        url: https://docs.aws.amazon.com/lambda/latest/dg/scaling-behavior.html
+  - id: dem_capacity_ready
+    tier: sec
+    title: >-
+      Capacity lead times are known, and capacity for documented peak is pre-provisioned, scheduled or reserved
+      ahead of known peaks
+    concept: peak-capacity-lead-time
+    wa_bp: REL07-BP03
+    good: >-
+      For each component you know how long adding capacity takes (instance launch and warm-up, task and pod start,
+      cache warm-up, throughput changes), and capacity for the documented peak is already running, scheduled ahead of
+      known peaks, or reserved where launches might be constrained. Reactive scaling starts early enough to finish
+      before demand arrives. Static capacity for losing an Availability Zone is scored in event_resilience_recoveries
+      (az_static_capacity).
+    platform_notes: >-
+      EC2: On-Demand Capacity Reservations (future-dated requests 5 to 120 days ahead, at least 56 days recommended,
+      32 or more vCPUs in the C, G, I, M, R, T, U or X families, with a minimum commitment), warm pools, and scheduled
+      scaling. Serverless: Lambda provisioned concurrency.
+    partition_notes: >-
+      In AWS GovCloud (US) as of 2026-10-06, Capacity Reservations, warm pools, EC2 Auto Scaling predictive scaling
+      and the scaling plans API are available, but scaling plans lack predictive scaling and CloudFormation (verify
+      per Region).
+    helpful_url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/cr-concepts.html
+    improvement: >-
+      Measure the time to add capacity for each component and compare it with how fast demand ramps. Then
+      pre-provision, schedule scaling ahead of known peaks, or reserve capacity for critical instance types,
+      requesting future-dated Capacity Reservations at least 8 weeks before known peaks. Set Auto Scaling
+      minimums so scale-in cannot remove required headroom, and alarm when running capacity falls below target.
+    improvement_url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html
+    additional_improvement:
+      - display_text: Create a Capacity Reservation (future-dated requests)
+        url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-create.html
+      - display_text: Warm pools for Amazon EC2 Auto Scaling
+        url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html
+      - display_text: Scheduled scaling for Amazon EC2 Auto Scaling
+        url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html
+      - display_text: Predictive scaling for Amazon EC2 Auto Scaling
+        url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-predictive-scaling.html
+      - display_text: Configuring provisioned concurrency for a Lambda function
+        url: https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html

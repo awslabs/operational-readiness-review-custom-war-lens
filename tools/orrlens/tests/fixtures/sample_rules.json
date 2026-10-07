@@ -1,0 +1,213 @@
+{
+  "source": "six worked 2.0.0 questions: riskRules as published in dist/orr-core-2.0.0.json; tiers as authored in lens-src",
+  "questions": [
+    {
+      "id": "architecture_defensive_throttling",
+      "max_risk": "HIGH",
+      "statements": [
+        {
+          "id": "tp_per_source_limits",
+          "tier": "core"
+        },
+        {
+          "id": "tp_shed_early",
+          "tier": "core"
+        },
+        {
+          "id": "tp_dynamic_limits",
+          "tier": "sec"
+        },
+        {
+          "id": "tp_surge_tested",
+          "tier": "sec"
+        }
+      ],
+      "riskRules": [
+        {
+          "condition": "tp_per_source_limits && tp_shed_early && tp_dynamic_limits && tp_surge_tested",
+          "risk": "NO_RISK"
+        },
+        {
+          "condition": "tp_per_source_limits && tp_shed_early",
+          "risk": "MEDIUM_RISK"
+        },
+        {
+          "condition": "default",
+          "risk": "HIGH_RISK"
+        }
+      ]
+    },
+    {
+      "id": "architecture_cold_start",
+      "max_risk": "MEDIUM",
+      "statements": [
+        {
+          "id": "cs_restart_documented",
+          "tier": "sec"
+        },
+        {
+          "id": "cs_artifacts_controlled",
+          "tier": "sec"
+        },
+        {
+          "id": "cs_config_resilient",
+          "tier": "sec"
+        },
+        {
+          "id": "cs_exercised",
+          "tier": "sec"
+        }
+      ],
+      "riskRules": [
+        {
+          "condition": "cs_restart_documented && cs_artifacts_controlled && cs_config_resilient && cs_exercised",
+          "risk": "NO_RISK"
+        },
+        {
+          "condition": "default",
+          "risk": "MEDIUM_RISK"
+        }
+      ]
+    },
+    {
+      "id": "releases_deployment_rollback",
+      "max_risk": "HIGH",
+      "statements": [
+        {
+          "id": "rb_auto",
+          "tier": "core"
+        },
+        {
+          "id": "rb_alarms_scoped",
+          "tier": "sec"
+        },
+        {
+          "id": "rb_backward_compatible",
+          "tier": "sec"
+        },
+        {
+          "id": "rb_exercised",
+          "tier": "sec"
+        }
+      ],
+      "riskRules": [
+        {
+          "condition": "rb_auto && rb_alarms_scoped && rb_backward_compatible && rb_exercised",
+          "risk": "NO_RISK"
+        },
+        {
+          "condition": "rb_auto",
+          "risk": "MEDIUM_RISK"
+        },
+        {
+          "condition": "default",
+          "risk": "HIGH_RISK"
+        }
+      ]
+    },
+    {
+      "id": "event_resilience_recoveries",
+      "max_risk": "HIGH",
+      "statements": [
+        {
+          "id": "az_regional_managed",
+          "tier": "scope"
+        },
+        {
+          "id": "az_multi_az",
+          "tier": "core"
+        },
+        {
+          "id": "az_static_capacity",
+          "tier": "core"
+        },
+        {
+          "id": "az_tested_at_load",
+          "tier": "sec"
+        }
+      ],
+      "riskRules": [
+        {
+          "condition": "az_regional_managed || (az_multi_az && az_static_capacity && az_tested_at_load)",
+          "risk": "NO_RISK"
+        },
+        {
+          "condition": "az_multi_az && az_static_capacity",
+          "risk": "MEDIUM_RISK"
+        },
+        {
+          "condition": "default",
+          "risk": "HIGH_RISK"
+        }
+      ]
+    },
+    {
+      "id": "event_customer_impact",
+      "max_risk": "HIGH",
+      "statements": [
+        {
+          "id": "ci_identify",
+          "tier": "alt:A"
+        },
+        {
+          "id": "ci_comms_plan",
+          "tier": "alt:A"
+        },
+        {
+          "id": "ci_status_independent",
+          "tier": "sec"
+        }
+      ],
+      "riskRules": [
+        {
+          "condition": "ci_identify && ci_comms_plan && ci_status_independent",
+          "risk": "NO_RISK"
+        },
+        {
+          "condition": "ci_identify || ci_comms_plan",
+          "risk": "MEDIUM_RISK"
+        },
+        {
+          "condition": "default",
+          "risk": "HIGH_RISK"
+        }
+      ]
+    },
+    {
+      "id": "readiness_signoff",
+      "max_risk": "HIGH",
+      "statements": [
+        {
+          "id": "rd_highs_dispositioned",
+          "tier": "core"
+        },
+        {
+          "id": "rd_criteria_owner",
+          "tier": "core"
+        },
+        {
+          "id": "rd_scope_complete",
+          "tier": "core"
+        },
+        {
+          "id": "rd_next_review",
+          "tier": "sec"
+        }
+      ],
+      "riskRules": [
+        {
+          "condition": "rd_highs_dispositioned && rd_criteria_owner && rd_scope_complete && rd_next_review",
+          "risk": "NO_RISK"
+        },
+        {
+          "condition": "rd_highs_dispositioned && rd_criteria_owner && rd_scope_complete",
+          "risk": "MEDIUM_RISK"
+        },
+        {
+          "condition": "default",
+          "risk": "HIGH_RISK"
+        }
+      ]
+    }
+  ]
+}

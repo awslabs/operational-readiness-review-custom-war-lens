@@ -1,0 +1,136 @@
+schema: orrlens/question/1
+id: architecture_data_corruption
+pillar: architecture
+order: 130
+title: Recovery from corruption, deletion and ransomware
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Data recovery
+lineage: [architecture_data_corruption]
+choice_prefix: dc_
+description:
+  question: >-
+    Can you recover critical data to a known-good point after corruption, accidental or malicious deletion, or
+    ransomware, even if production credentials are compromised?
+  out_of_scope_if: >-
+    the workload stores no persistent data and every store can be rebuilt from source (mark the question as not
+    applicable with that reason and keep the data inventory as evidence).
+  evidence_to_collect: >-
+    the inventory of critical data stores with their point-in-time recovery, versioning or backup settings and
+    retention. The backup account, vault lock and key policy configuration. Alarms for anomalous deletes, writes
+    or encryption. The date and result of the last rehearsed restore to a point before a simulated corruption.
+helpful:
+  display_text: REL09-BP02 Secure and encrypt backups (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_secured_backups_data.html
+statements:
+  - id: dc_pitr
+    tier: core
+    title: Point-in-time recovery, versioning or frequent backups protect every critical data store
+    concept: point-in-time-recovery-critical-data
+    severity_basis: "wa:REL09-BP01 (High)"
+    wa_bp: REL09-BP01
+    good: >-
+      Every critical data store is covered: databases have point-in-time recovery or continuous backups, object
+      stores have versioning, and other stores have frequent automated backups, with a recovery point interval that
+      meets RPO and retention long enough to reach back before corruption is likely to be noticed (often weeks, not
+      days). Replicas, standbys and multi-Region tables do not count as backups, because they copy corruption and
+      deletes too. A workload with no persistent data marks the whole question as not applicable instead.
+    platform_notes: >-
+      Examples: point-in-time recovery for Amazon DynamoDB, Amazon RDS and Amazon Aurora; S3 Versioning; scheduled
+      Amazon EBS snapshots; AWS Backup continuous backups. EC2 and containers: include data on volumes and file
+      systems, not only databases. Serverless: include queues, streams or caches that hold the only copy of data.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_identified_backups_data.html
+    improvement: >-
+      Inventory every data store and classify it by criticality. Turn on point-in-time recovery or versioning
+      where supported, add automated backups elsewhere through a central backup plan, set retention from how long
+      corruption could go unnoticed, and alarm on failed backup jobs and on stores that are not covered. Document
+      which data can be rebuilt from source instead.
+    improvement_url: https://docs.aws.amazon.com/aws-backup/latest/devguide/point-in-time-recovery.html
+    additional_improvement:
+      - display_text: Point-in-time backups for Amazon DynamoDB
+        url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Point-in-time-recovery.html
+      - display_text: Retaining multiple versions of objects with S3 Versioning
+        url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/Versioning.html
+  - id: dc_immutable_isolated
+    tier: core
+    title: Backups are immutable and isolated from production credentials, ideally in a separate account (for example Vault Lock)
+    concept: immutable-isolated-backups
+    severity_basis: "wa:REL09-BP02 (High)"
+    wa_bp: REL09-BP02
+    good: >-
+      Copies of critical backups are kept where production identities, pipelines and administrators cannot delete them
+      or shorten their retention: immutable retention (for example AWS Backup Vault Lock or Amazon S3 Object Lock,
+      each in compliance mode), ideally in a separate backup account with its own access controls and always outside
+      the reach of production credentials, with encryption keys that a compromised production account cannot disable
+      or delete. The Well-Architected Framework lists using the same security domain for production and backup
+      systems, and not implementing immutability, as anti-patterns.
+    platform_notes: >-
+      AWS Backup logically air-gapped vaults combine locked retention with sharing for recovery into another
+      account.
+    partition_notes: >-
+      AWS Backup logically air-gapped vaults are not available in AWS GovCloud (US) as of 2026-10-05; use
+      compliance-mode Vault Lock on a vault in a separate backup account with cross-account copy, or S3 Object Lock in compliance
+      mode; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/aws-backup/latest/devguide/logicallyairgappedvault.html
+    improvement: >-
+      Create a dedicated backup account, copy critical recovery points to a locked vault there (compliance-mode
+      Vault Lock or a logically air-gapped vault), restrict who can change backup and key policies with permission
+      guardrails such as service control policies, keep backup keys out of reach of production administrators, and
+      alarm on attempts to delete recovery points or change vault, lock or key settings. Test that you can restore
+      from the isolated copy into a clean account.
+    improvement_url: https://docs.aws.amazon.com/aws-backup/latest/devguide/vault-lock.html
+    additional_improvement:
+      - display_text: Creating backup copies across AWS accounts (AWS Backup)
+        url: https://docs.aws.amazon.com/aws-backup/latest/devguide/create-cross-account-backup.html
+      - display_text: Locking objects with Amazon S3 Object Lock
+        url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html
+  - id: dc_detection
+    tier: sec
+    title: Integrity checks or alarms detect anomalous deletes, writes or encryption of critical data
+    concept: data-corruption-detection
+    wa_bp: REL09-BP02
+    good: >-
+      The team learns about corruption, mass deletion or ransomware-style encryption in time to restore from a point
+      before it began: alarms watch unusual delete or overwrite rates, write volume, record or object counts and
+      permission or encryption changes; scheduled integrity checks (checksums, invariants, reconciliation with a
+      source of record) run on critical data; threat detection flags anomalous data access; and recovery points are
+      scanned for malware before use. Alarms page the data owner, and the runbook says how to find the last known-good
+      point.
+    platform_notes: >-
+      Examples: Amazon GuardDuty S3 Protection findings for anomalous deletes; GuardDuty Malware Protection for AWS
+      Backup to scan recovery points; CloudWatch alarms on integrity metrics; Amazon S3 checksums.
+    partition_notes: >-
+      In AWS GovCloud (US), GuardDuty Malware Protection for AWS Backup does not scan Amazon EC2 or Amazon EBS
+      recovery points as of 2026-10-06; scan restored copies in an isolated account instead; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_finding-types-s3.html
+    improvement: >-
+      For each critical store, define what abnormal looks like (delete and overwrite rates, record counts, write
+      volume, encryption or permission changes) and alarm on it; add scheduled integrity checks that compare data
+      with its source of record; turn on threat detection for data stores; scan recovery points for malware; and
+      document in the runbook how to identify the last known-good recovery point.
+    improvement_url: https://docs.aws.amazon.com/aws-backup/latest/devguide/malware-protection.html
+    additional_improvement:
+      - display_text: Checking object integrity in Amazon S3
+        url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/checking-object-integrity.html
+  - id: dc_point_restore_rehearsed
+    tier: sec
+    title: Restoring to a point before a simulated corruption was rehearsed, and the restored data was validated
+    concept: corruption-point-restore-rehearsed
+    wa_bp: REL09-BP04
+    good: >-
+      The team rehearsed a corruption scenario in a non-production copy, for example a bad batch job, a faulty
+      migration or mass-deleted records: it identified the last known-good point, restored to it from the isolated
+      backup copy, validated the restored data with integrity checks and a critical journey, and reconciled or
+      replayed changes made after that point. Time to detect, decide and restore was recorded against RTO and RPO,
+      and the runbook was updated.
+    partition_notes: >-
+      AWS Backup restore testing is not available in AWS GovCloud (US) as of 2026-10-05; script the restore and
+      validation steps instead; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_periodic_recovery_testing_data.html
+    improvement: >-
+      Add a corruption drill to the recovery test plan: in a non-production copy, inject a realistic corruption or
+      deletion, practice finding the last known-good point, restore from the isolated backup copy into a clean
+      environment, run validation, and reconcile later changes. Record the timings, fix gaps in tooling and
+      runbooks, and repeat at least yearly.
+    improvement_url: https://docs.aws.amazon.com/aws-backup/latest/devguide/restore-testing.html

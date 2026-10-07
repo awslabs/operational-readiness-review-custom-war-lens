@@ -1,0 +1,48 @@
+name: Broken link
+description: Report a link in a lens or in the documentation that fails, redirects or points to the wrong page.
+title: "[Broken link]: "
+labels: ["broken-link"]
+body:
+  - type: input
+    id: url
+    attributes:
+      label: Link
+      description: The full URL as it appears in the lens or document.
+    validations:
+      required: true
+  - type: textarea
+    id: location
+    attributes:
+      label: Where it appears
+      description: Lens and version, question ID and choice ID (for example core 2.0.0, event_alarms and the choice ID), or the file in this repository.
+    validations:
+      required: true
+  - type: dropdown
+    id: problem
+    attributes:
+      label: What happens
+      options:
+        - Page not found (HTTP 404 or similar)
+        - Redirects to a different page
+        - Redirects to a guide landing page
+        - The page loads but covers a different topic
+        - The page names a service that is closed to new customers or near end of support
+        - Other (explain below)
+    validations:
+      required: true
+  - type: input
+    id: date
+    attributes:
+      label: Date checked
+      placeholder: "YYYY-MM-DD"
+    validations:
+      required: true
+  - type: input
+    id: replacement
+    attributes:
+      label: Suggested replacement (optional)
+      description: A public https URL on docs.aws.amazon.com, aws.amazon.com, builder.aws.com, github.com/aws*, opentelemetry.io, owasp.org or genai.owasp.org.
+  - type: textarea
+    id: details
+    attributes:
+      label: Details

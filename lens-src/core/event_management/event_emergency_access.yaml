@@ -1,0 +1,132 @@
+schema: orrlens/question/1
+id: event_emergency_access
+pillar: event_management
+order: 120
+title: Emergency access that works when normal sign-in fails
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Operator safety
+lineage: []
+choice_prefix: ea_
+description:
+  question: >-
+    If your identity provider, your federation configuration or the Region that hosts your sign-in and identity
+    configuration fails during an incident, can responders still reach the AWS accounts and tools they need to
+    mitigate it?
+  evidence_to_collect: >-
+    the emergency access runbook for each failure mode. The emergency account, roles and credential custody
+    records. The date, participants and result of the last test of each path. Where runbooks, the contact roster
+    and the incident bridge are hosted and how people sign in to them.
+helpful:
+  display_text: SEC03-BP03 Emergency access process (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html
+statements:
+  - id: ea_per_failure_mode
+    tier: sec
+    title: >-
+      Emergency access is defined for each failure mode: identity provider down, sign-in Region impaired, federation
+      broken
+    concept: emergency-access-per-failure-mode
+    wa_bp: SEC03-BP03
+    good: >-
+      A documented emergency access process exists for each way sign-in can fail: your external identity provider is
+      unavailable; the AWS-side federation or SAML configuration was changed or its certificate expired; IAM Identity
+      Center or the Region that hosts it is impaired. Each process states when it may and may not be used, who may
+      start it, who approves it (including out of hours, with secondary approvers), which pre-created emergency
+      account and roles it uses, and how its use is logged, alerted and linked to an incident record. Emergency
+      credentials are rotated after each use, and any use outside a declared incident raises an alert.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html
+    improvement: >-
+      List what responders depend on to sign in (identity provider, IAM Identity Center and its Region, SAML
+      configuration, MFA devices, credential vault) and how each can fail. For each failure mode, write a short
+      runbook with pre-conditions, approvers and steps. Pre-create the emergency account, roles and cross-account
+      trust before you need them (for example with CloudFormation StackSets), protect them with service control
+      policies, and alert on any sign-in or API activity by the emergency roles outside a declared incident.
+    improvement_url: https://docs.aws.amazon.com/singlesignon/latest/userguide/emergency-access.html
+    additional_improvement:
+      - display_text: DevOps Guidance AG.SAD.5 Implement break-glass procedures
+        url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.sad.5-implement-break-glass-procedures.html
+      - display_text: Statically stable break-glass credentials (fault isolation whitepaper)
+        url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/appendix-a---partitional-service-guidance.html
+  - id: ea_tested_independent
+    tier: core
+    title: >-
+      Each emergency path is tested on a schedule, including one that depends on neither your IdP nor the Region
+      hosting identity
+    concept: emergency-access-tested-independent
+    severity_basis: >-
+      deviation:SEC03-BP03 is rated Medium; the lens rates it High because the October 2025 Post-Event Summary
+      describes IAM Identity Center, root and federated console sign-in errors during a Regional event, and an
+      emergency path that has never been used cannot be relied on to mitigate one.
+    wa_bp: SEC03-BP03
+    good: >-
+      Every emergency path was used end to end on a schedule (for example every 6 months, a suggestion) and after
+      identity or account changes, by the people who would use it, reaching production accounts with the expected
+      permissions. At least one path depends on neither your identity provider nor the Region that hosts IAM Identity
+      Center, for example IAM users with MFA in a dedicated emergency account that sign in through a Regional
+      sign-in endpoint for another Region, with credentials and MFA devices pre-provisioned and held in a vault
+      responders can reach during an outage. Responder tools use Regional AWS STS endpoints, and federated paths use
+      more than one Regional SAML endpoint.
+    partition_notes: >-
+      In AWS GovCloud (US), console sign-in as the account root user is not available, so use IAM users with MFA and
+      the AWS GovCloud (US) sign-in endpoints. IAM Identity Center multi-Region replication, including
+      between the AWS GovCloud (US) Regions, is available as of 2026-10-06; verify per Region.
+    helpful_url: https://aws.amazon.com/blogs/security/how-to-use-regional-saml-endpoints-for-failover/
+    improvement: >-
+      Schedule a test of every emergency path, including the independent one. Run it from a clean workstation with
+      only the credentials and devices the runbook names, and record the time to access and every gap. Give each
+      emergency IAM user a Regional console sign-in URL, use that URL in the test, and confirm that the MFA type the
+      user holds works through it: the IAM resilience page warns that Universal 2nd Factor (U2F) MFA might not
+      complete. Configure your identity provider for multiple Regional SAML sign-in endpoints, consider IAM Identity
+      Center multi-Region replication (organization instances with an external identity provider or the Identity
+      Center directory, not Active Directory, and a multi-Region customer managed KMS key) so that access provisioned
+      before a disruption keeps working when the primary Region is impaired, and switch scripts and tools to Regional
+      AWS STS endpoints. Repeat the test after identity, Region or account changes.
+    improvement_url: https://docs.aws.amazon.com/singlesignon/latest/userguide/multi-region-iam-identity-center.html
+    additional_helpful:
+      - display_text: Set up emergency access to the AWS Management Console (IAM Identity Center)
+        url: https://docs.aws.amazon.com/singlesignon/latest/userguide/emergency-access.html
+      - display_text: AWS IAM Identity Center enables account access in multiple AWS Regions (What's New, Feb 2026)
+        url: https://aws.amazon.com/about-aws/whats-new/2026/02/aws-iam-identity-center-multi-region-aws-account-access-and-application-deployment/
+      - display_text: IAM Identity Center extends multi-Region support, including AWS GovCloud (US) (What's New, Oct 2026)
+        url: https://aws.amazon.com/about-aws/whats-new/2026/10/aws-iam-identity-center-extends-multi-region-support-to-more-aws-regions/
+      - display_text: Resilience in AWS Identity and Access Management (Regional sign-in and MFA caveats)
+        url: https://docs.aws.amazon.com/IAM/latest/UserGuide/disaster-recovery-resiliency.html
+    additional_improvement:
+      - display_text: Manage AWS STS in an AWS Region (Regional STS endpoints)
+        url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html
+      - display_text: Regional sign-in endpoints (AWS documentation)
+        url: https://docs.aws.amazon.com/general/latest/gr/signin-service.html
+  - id: ea_out_of_band
+    tier: sec
+    title: >-
+      Runbooks, contact roster and incident bridge stay reachable when your identity provider or primary Region is
+      impaired
+    concept: incident-tools-out-of-band
+    wa_bp: SEC10-BP02
+    good: >-
+      Responders can open the runbooks, reach the on-call and escalation contacts, and join the incident bridge or
+      chat channel when your identity provider, corporate network or the workload's primary Region is impaired. For
+      example, a current copy of runbooks and contacts is kept outside the affected Region and sign-in path, a
+      dial-in bridge and an out-of-band chat channel (for example AWS Wickr or a partner tool) exist, and each
+      responder holds an offline contact list. The
+      runbook names the fallback channel, and it was used in an exercise.
+    partition_notes: >-
+      AWS WickrGov, the AWS GovCloud (US) offering of AWS Wickr and one example of an out-of-band channel, is
+      available only in the AWS GovCloud (US-West) Region as of 2026-10-06; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_develop_management_plans.html
+    improvement: >-
+      List where each incident tool is hosted and how people sign in to it, and remove shared dependencies on your
+      identity provider and the workload's primary Region. Keep a current read-only copy of runbooks and contacts in a
+      second location, set up a fallback bridge and chat channel with independent sign-in, give responders an offline
+      contact list, and switch to the fallbacks during your next game day.
+    improvement_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/global-services.html
+pes_lesson:
+  statement: ea_tested_independent
+  month: Oct 2025
+  url: https://aws.amazon.com/message/101925/
+  lesson: >-
+    console sign-in with IAM users saw increased authentication failures, sign-in through IAM Identity Center
+    configured in us-east-1 failed, and root and global-endpoint federated sign-ins saw errors in other Regions too,
+    so keep and test an emergency path that does not depend on one Region or one sign-in endpoint.

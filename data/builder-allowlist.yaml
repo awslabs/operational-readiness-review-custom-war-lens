@@ -1,0 +1,144 @@
+# Pinned allowlist of Amazon Builders' Library articles (see CONTRIBUTING.md, "Content rules").
+# legacy_url: the aws.amazon.com/builders-library/<slug>/ URL.
+# location:   the 301 Location header returned for legacy_url (curl -sI, no -L), or "no-redirect"
+#             when legacy_url itself serves the article with HTTP 200.
+# article_id: the builder.aws.com content ID taken from location (null for no-redirect).
+# title:      the article title. On builder.aws.com a valid response carries
+#             "<title> | AWS Builder Center"; the generic "AWS Builder Center" shell means unverified,
+#             not broken. Never use body size as a signal.
+# url:        the URL lens text should link (location, or legacy_url for no-redirect).
+# All entries were captured and their titles verified on 2026-10-06 (up to 5 attempts each).
+schema: orrlens/builder-allowlist/1
+# pages: builder.aws.com pages that are not Builders' Library articles (no /content/<id>/ path), with the
+# exact live title, so a link checker can verify them by title instead of by article id.
+pages:
+  - url: https://builder.aws.com/build/capabilities
+    title: Capabilities | Build | AWS Builder Center
+    checked: 2026-10-06
+    notes: AWS Capabilities by Region. Served as an application shell; the title is stable.
+checked: 2026-10-06
+articles:
+  timeouts-retries-and-backoff-with-jitter:
+    legacy_url: https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/
+    location: https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter
+    article_id: 3EumjoZascWd1oZiEgL8ORlv3qE
+    title: Timeouts, retries, and backoff with jitter
+    url: https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter
+  implementing-health-checks:
+    legacy_url: https://aws.amazon.com/builders-library/implementing-health-checks/
+    location: https://builder.aws.com/content/3Ev53O39izHCtWLzp4XU6t8PC1O/implementing-health-checks
+    article_id: 3Ev53O39izHCtWLzp4XU6t8PC1O
+    title: Implementing health checks
+    url: https://builder.aws.com/content/3Ev53O39izHCtWLzp4XU6t8PC1O/implementing-health-checks
+  avoiding-fallback-in-distributed-systems:
+    legacy_url: https://aws.amazon.com/builders-library/avoiding-fallback-in-distributed-systems/
+    location: https://builder.aws.com/content/3EuS9Sakq7L3VLQIF3qzfMfke1Y/avoiding-fallback-in-distributed-systems
+    article_id: 3EuS9Sakq7L3VLQIF3qzfMfke1Y
+    title: Avoiding fallback in distributed systems
+    url: https://builder.aws.com/content/3EuS9Sakq7L3VLQIF3qzfMfke1Y/avoiding-fallback-in-distributed-systems
+  fairness-in-multi-tenant-systems:
+    legacy_url: https://aws.amazon.com/builders-library/fairness-in-multi-tenant-systems/
+    location: https://builder.aws.com/content/3Eupj3d2bo4fEvlzYbICMZNhQ3B/fairness-in-multi-tenant-systems
+    article_id: 3Eupj3d2bo4fEvlzYbICMZNhQ3B
+    title: Fairness in multi-tenant systems
+    url: https://builder.aws.com/content/3Eupj3d2bo4fEvlzYbICMZNhQ3B/fairness-in-multi-tenant-systems
+  using-load-shedding-to-avoid-overload:
+    legacy_url: https://aws.amazon.com/builders-library/using-load-shedding-to-avoid-overload/
+    location: https://builder.aws.com/content/3Eun1EEyX6p2e3VYNyRLSJzLuMV/using-load-shedding-to-avoid-overload
+    article_id: 3Eun1EEyX6p2e3VYNyRLSJzLuMV
+    title: Using load shedding to avoid overload
+    url: https://builder.aws.com/content/3Eun1EEyX6p2e3VYNyRLSJzLuMV/using-load-shedding-to-avoid-overload
+  ensuring-rollback-safety-during-deployments:
+    legacy_url: https://aws.amazon.com/builders-library/ensuring-rollback-safety-during-deployments/
+    location: https://builder.aws.com/content/3F04j2yRAAMBuPSPs50xwXZqg01/ensuring-rollback-safety-during-deployments
+    article_id: 3F04j2yRAAMBuPSPs50xwXZqg01
+    title: Ensuring rollback safety during deployments
+    url: https://builder.aws.com/content/3F04j2yRAAMBuPSPs50xwXZqg01/ensuring-rollback-safety-during-deployments
+  automating-safe-hands-off-deployments:
+    legacy_url: https://aws.amazon.com/builders-library/automating-safe-hands-off-deployments/
+    location: https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments
+    article_id: 3ErTKQOTKc5NIw031UePBPxTQ6I
+    title: Automating safe, hands-off deployments
+    url: https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments
+  static-stability-using-availability-zones:
+    legacy_url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
+    location: no-redirect
+    article_id: null
+    title: Static stability using Availability Zones
+    url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
+    notes: Still served directly from aws.amazon.com (HTTP 200, no redirect).
+  going-faster-with-continuous-delivery:
+    legacy_url: https://aws.amazon.com/builders-library/going-faster-with-continuous-delivery/
+    location: https://builder.aws.com/content/3F08Mhh186qOa4VhG19egs06NJa/going-faster-with-continuous-delivery
+    article_id: 3F08Mhh186qOa4VhG19egs06NJa
+    title: Going faster with continuous delivery
+    url: https://builder.aws.com/content/3F08Mhh186qOa4VhG19egs06NJa/going-faster-with-continuous-delivery
+  instrumenting-distributed-systems-for-operational-visibility:
+    legacy_url: https://aws.amazon.com/builders-library/instrumenting-distributed-systems-for-operational-visibility/
+    location: https://builder.aws.com/content/3EuxPBdIiiUhB5IK47p3O3fxhy7/instrumenting-distributed-systems-for-operational-visibility
+    article_id: 3EuxPBdIiiUhB5IK47p3O3fxhy7
+    title: Instrumenting distributed systems for operational visibility
+    url: https://builder.aws.com/content/3EuxPBdIiiUhB5IK47p3O3fxhy7/instrumenting-distributed-systems-for-operational-visibility
+  building-dashboards-for-operational-visibility:
+    legacy_url: https://aws.amazon.com/builders-library/building-dashboards-for-operational-visibility/
+    location: https://builder.aws.com/content/3Ev2iw3R3ahQOM8BT4OUR0WP51z/building-dashboards-for-operational-visibility
+    article_id: 3Ev2iw3R3ahQOM8BT4OUR0WP51z
+    title: Building dashboards for operational visibility
+    url: https://builder.aws.com/content/3Ev2iw3R3ahQOM8BT4OUR0WP51z/building-dashboards-for-operational-visibility
+  making-retries-safe-with-idempotent-apis:
+    legacy_url: https://aws.amazon.com/builders-library/making-retries-safe-with-idempotent-apis/
+    location: https://builder.aws.com/content/3Ev0BENTyBr0XxzRk5FDZzgNYos/making-retries-safe-with-idempotent-apis
+    article_id: 3Ev0BENTyBr0XxzRk5FDZzgNYos
+    title: Making retries safe with idempotent APIs
+    url: https://builder.aws.com/content/3Ev0BENTyBr0XxzRk5FDZzgNYos/making-retries-safe-with-idempotent-apis
+    notes: Use the lowercase slug. The mixed-case legacy path .../making-retries-safe-with-idempotent-APIs/ returns HTTP 200 with an empty placeholder page (title "references-details-empty"), not the article.
+  avoiding-insurmountable-queue-backlogs:
+    legacy_url: https://aws.amazon.com/builders-library/avoiding-insurmountable-queue-backlogs/
+    location: https://builder.aws.com/content/3EuRcgkTP1MI0c7zM8W6HL3WIqA/avoiding-insurmountable-queue-backlogs
+    article_id: 3EuRcgkTP1MI0c7zM8W6HL3WIqA
+    title: Avoiding insurmountable queue backlogs
+    url: https://builder.aws.com/content/3EuRcgkTP1MI0c7zM8W6HL3WIqA/avoiding-insurmountable-queue-backlogs
+  reliability-and-constant-work:
+    legacy_url: https://aws.amazon.com/builders-library/reliability-and-constant-work/
+    location: https://builder.aws.com/content/3F05oqNtNUWxHJ5r6L6I2HrH4rI/reliability-constant-work-and-a-good-cup-of-coffee
+    article_id: 3F05oqNtNUWxHJ5r6L6I2HrH4rI
+    title: Reliability, constant work, and a good cup of coffee
+    url: https://builder.aws.com/content/3F05oqNtNUWxHJ5r6L6I2HrH4rI/reliability-constant-work-and-a-good-cup-of-coffee
+    notes: The builder.aws.com slug differs from the legacy slug.
+  workload-isolation-using-shuffle-sharding:
+    legacy_url: https://aws.amazon.com/builders-library/workload-isolation-using-shuffle-sharding/
+    location: https://builder.aws.com/content/3F06NpJ8YeoIGP8VHTw4n81pFn8/workload-isolation-using-shuffle-sharding
+    article_id: 3F06NpJ8YeoIGP8VHTw4n81pFn8
+    title: Workload isolation using shuffle-sharding
+    url: https://builder.aws.com/content/3F06NpJ8YeoIGP8VHTw4n81pFn8/workload-isolation-using-shuffle-sharding
+  avoiding-overload-in-distributed-systems-by-putting-the-smaller-service-in-control:
+    legacy_url: https://aws.amazon.com/builders-library/avoiding-overload-in-distributed-systems-by-putting-the-smaller-service-in-control/
+    location: https://builder.aws.com/content/3EukISjbJAGNdrxjKaN6RG0wlHG/avoiding-overload-in-distributed-systems-by-putting-the-smaller-service-in-control
+    article_id: 3EukISjbJAGNdrxjKaN6RG0wlHG
+    title: Avoiding overload in distributed systems by putting the smaller service in control
+    url: https://builder.aws.com/content/3EukISjbJAGNdrxjKaN6RG0wlHG/avoiding-overload-in-distributed-systems-by-putting-the-smaller-service-in-control
+  minimizing-correlated-failures-in-distributed-systems:
+    legacy_url: https://aws.amazon.com/builders-library/minimizing-correlated-failures-in-distributed-systems/
+    location: https://builder.aws.com/content/3Ev2H7t3l2eZa9xBXiZcAjz12JK/minimizing-correlated-failures-in-distributed-systems
+    article_id: 3Ev2H7t3l2eZa9xBXiZcAjz12JK
+    title: Minimizing correlated failures in distributed systems
+    url: https://builder.aws.com/content/3Ev2H7t3l2eZa9xBXiZcAjz12JK/minimizing-correlated-failures-in-distributed-systems
+  leader-election-in-distributed-systems:
+    legacy_url: https://aws.amazon.com/builders-library/leader-election-in-distributed-systems/
+    location: https://builder.aws.com/content/3Ev0vH0hfkcUizISUWYTvHibtcp/leader-election-in-distributed-systems
+    article_id: 3Ev0vH0hfkcUizISUWYTvHibtcp
+    title: Leader Election in Distributed Systems
+    url: https://builder.aws.com/content/3Ev0vH0hfkcUizISUWYTvHibtcp/leader-election-in-distributed-systems
+  caching-challenges-and-strategies:
+    legacy_url: https://aws.amazon.com/builders-library/caching-challenges-and-strategies/
+    location: no-redirect
+    article_id: null
+    title: Caching challenges and strategies
+    url: https://aws.amazon.com/builders-library/caching-challenges-and-strategies/
+    notes: Still served directly from aws.amazon.com (HTTP 200, no redirect).
+  challenges-with-distributed-systems:
+    legacy_url: https://aws.amazon.com/builders-library/challenges-with-distributed-systems/
+    location: https://builder.aws.com/content/3F08f7GPFiZMCgXD8gny6OjxR0Z/challenges-with-distributed-systems
+    article_id: 3F08f7GPFiZMCgXD8gny6OjxR0Z
+    title: Challenges with distributed systems
+    url: https://builder.aws.com/content/3F08f7GPFiZMCgXD8gny6OjxR0Z/challenges-with-distributed-systems

@@ -1,0 +1,101 @@
+schema: orrlens/question/1
+id: underlying_dependencies
+pillar: event_management
+order: 10
+title: Dependency inventory, classification and partition availability
+max_risk: MEDIUM
+priority: P1
+core_path: false
+category: Defense against dependencies
+lineage: [architecture_services_used, underlying_dependencies]
+choice_prefix: dep_
+description:
+  question: >-
+    Do you know every dependency of the workload, how critical each one is, and whether each one is available
+    and authorized in every partition and Region you use?
+  evidence_to_collect: >-
+    the dependency inventory with owner, Regions and criticality for each entry. The documented customer impact
+    and degraded behavior for each hard dependency. The dated availability and authorization check for each
+    target partition and Region.
+helpful:
+  display_text: "AWS Fault Isolation Boundaries: Global services (whitepaper)"
+  url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/global-services.html
+statements:
+  - id: dep_inventory
+    tier: sec
+    title: >-
+      Every dependency is listed: AWS services by Region (including global), identity, DNS, CI/CD, artifact
+      sources, third parties
+    concept: dependency-inventory
+    good: >-
+      A maintained inventory lists everything the workload needs to run, deploy and recover: each AWS service and
+      the Regions it is used in, including partitional and global services whose control planes are in one
+      Region (for example IAM, Route 53 public DNS and Amazon CloudFront), identity providers, DNS, certificate
+      authorities, CI/CD tooling, artifact and image sources, and third-party APIs and SaaS. Each entry has an
+      owner, says whether it is used at runtime, at deploy time or only during recovery, and is updated when the
+      architecture changes. Runtime views such as the CloudWatch application map help find dependencies that
+      documents miss.
+    platform_notes: >-
+      EC2: include AMI sources, configuration management and patch repositories. Containers: include image
+      registries, cluster add-ons and the cluster control plane. Serverless: include event sources, layers and
+      VPC networking such as NAT gateways or interface endpoints.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html
+    improvement: >-
+      Build the inventory from architecture diagrams, IaC templates, IAM policies, network flow logs and trace
+      maps, then confirm it with the team. Record each dependency's owner, Regions, and whether it is needed at
+      runtime, at deploy time or only during recovery. Review the inventory at each ORR and after major
+      architecture changes.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-analysis-framework/workload-review.html
+    additional_improvement:
+      - display_text: CloudWatch application map (discover runtime dependencies from telemetry)
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ServiceMap.html
+  - id: dep_classified
+    tier: sec
+    title: >-
+      Each dependency is classified hard or soft, with the customer impact of its failure and the degraded
+      behavior documented
+    concept: dependency-criticality-classification
+    wa_bp: REL05-BP01
+    good: >-
+      For each dependency the inventory states whether the workload fails (hard) or keeps working in a degraded
+      way (soft) when the dependency is slow or unavailable, which customer journeys are affected and how, and
+      the intended degraded behavior (for example serve cached data, queue writes, or turn off a feature). The
+      classification matches what tests or past incidents showed. The behavior itself is scored in this lens's
+      dependency failure handling, retry and restart questions; this statement checks that the classification
+      exists.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
+    improvement: >-
+      Walk each critical journey and mark every dependency hard or soft, with the customer impact of its failure
+      and the intended degraded behavior. Confirm the classification with a test or fault injection where you
+      can, and record each hard dependency that should become soft as a tracked backlog item.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-analysis-framework/introduction.html
+  - id: dep_partition_verified
+    tier: sec
+    title: >-
+      Every service and feature relied on, including readiness tooling, is verified available and authorized in
+      each target partition
+    concept: partition-availability-verification
+    good: >-
+      Before launch, someone checked every AWS service, feature, API and CloudFormation resource type the
+      workload and its operations rely on, including monitoring, deployment, backup and resilience-testing
+      tools, against current availability in each target Region and partition, and against the compliance
+      authorizations the workload needs (for example FedRAMP or DoD SRG). The check is dated, it is repeated
+      before each launch, and every gap has a documented alternative.
+    partition_notes: >-
+      Feature availability in AWS GovCloud (US) can differ even when the service is available. For example, as
+      of 2026-10-06 the AWS GovCloud (US) User Guide lists CloudWatch dashboard sharing, CloudWatch Logs Live Tail
+      and Lambda JSON log formatting as not available there, and for CloudWatch Transaction Search it disagrees
+      with AWS Capabilities by Region, so check both and test in your account. Check the per-service pages of that
+      guide and AWS Capabilities by Region; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/using-services.html
+    improvement: >-
+      List every service and feature from the inventory and check each one against AWS Capabilities by Region
+      and, for AWS GovCloud (US), the service pages of the GovCloud User Guide. Check the compliance programs you
+      need on AWS Services in Scope by Compliance Program. Record the date and result, design an alternative for
+      anything missing, and repeat the check before each launch and at each recurring review.
+    improvement_url: https://builder.aws.com/build/capabilities
+    additional_improvement:
+      - display_text: AWS Services in Scope by Compliance Program
+        url: https://aws.amazon.com/compliance/services-in-scope/
+      - display_text: Amazon CloudWatch in AWS GovCloud (US) (example of feature differences)
+        url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-cw.html

@@ -1,0 +1,76 @@
+schema: orrlens/question/1
+id: evt_post_event
+pillar: evt_after
+order: 10
+title: Post-event review and scale-down
+max_risk: MEDIUM
+priority: P1
+core_path: false
+category: Forensics
+lineage: []
+choice_prefix: px_
+description:
+  question: >-
+    After the event, did you compare what happened with the plan, feed the lessons back into your reviews and plans,
+    and return capacity and cost to normal?
+  evidence_to_collect: >-
+    the post-event review document and its date. Actions with owners and due dates. The updated core review, the next
+    event plan and the saved milestones. The scale-down record and the cost report for the event period.
+helpful:
+  display_text: OPS11-BP02 Perform post-incident analysis (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+statements:
+  - id: px_retro
+    tier: sec
+    title: A review within two weeks covered incidents, near-misses and capacity against forecast
+    concept: event-post-event-review
+    wa_bp: OPS11-BP02
+    good: >-
+      Within two weeks of the event, a blameless review compared actual traffic with the forecast and the capacity
+      provided, and covered incidents, near-misses, alarms that fired or stayed silent, the decisions made and how long
+      they took, which degraded modes or levers were used, and how escalations to partners and AWS worked. Actions have
+      owners and due dates. This applies the core question 'Post-incident analysis and learning loop' to the event as a
+      whole, not only to its incidents.
+    reader_note: >-
+      This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any post-incident
+      analysis process or tool meets this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+    improvement: >-
+      Book the review before the event so it happens within two weeks. Collect metrics against the forecast, the
+      incident and near-miss log, and observations from the shift, partners and AWS; write the timeline and lessons
+      without blame; and give each action an owner and a due date.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_rca_resiliency.html
+  - id: px_lessons_fed
+    tier: sec
+    title: Lessons were fed into the core ORR and the next event plan, and a milestone was saved
+    concept: event-lessons-fed-back
+    wa_bp: OPS11-BP08
+    good: >-
+      Lessons became changes: core review answers and notes were updated where the event exposed a gap, the event plan
+      and forecast template for the next event were revised (for example new quotas, lead times or scenarios), and
+      milestones were saved in the AWS Well-Architected Tool for the core and event reviews after the event, so the next
+      review starts from evidence.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html
+    improvement: >-
+      For each lesson, decide where it belongs: a core question answer, a new or revised question in your own add-on
+      lens, the next event plan, or a runbook. Make the updates, then save post-event milestones on the core and event
+      reviews and link them from the review document.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html
+  - id: px_cost_review
+    tier: sec
+    title: Scale-down and cost review are complete
+    concept: event-post-event-cost-review
+    wa_bp: COST09-BP03
+    good: >-
+      The scale-down plan was carried out: temporary capacity, raised minimums, reservations, provisioned concurrency
+      and temporary rules were removed or returned to normal once traffic and backlogs settled, and the cost of the
+      event period was compared with the budget, with any surprises explained and fed into the next forecast.
+    partition_notes: >-
+      Billing and cost data for AWS GovCloud (US) accounts are viewed from the associated standard AWS account (as of
+      2026-10-06).
+    helpful_url: https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html
+    improvement: >-
+      Run the scale-down plan as normal pipeline changes, confirm each temporary resource is removed or back at its
+      baseline, compare the event-period cost with the budget in AWS Cost Explorer, and record the cost per unit of
+      event demand to improve the next forecast.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html

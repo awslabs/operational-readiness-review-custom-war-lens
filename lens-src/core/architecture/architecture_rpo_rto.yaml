@@ -1,0 +1,118 @@
+schema: orrlens/question/1
+id: architecture_rpo_rto
+pillar: architecture
+order: 120
+title: Recovery objectives and proven recovery
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Data recovery
+lineage: [architecture_plane_redundency, architecture_failure_testing, architecture_rpo_rto]
+choice_prefix: rec_
+description:
+  question: >-
+    Have the business and the team agreed recovery time and recovery point objectives (RTO and RPO) for each
+    component, and have restores and failovers proven that you can meet them?
+  evidence_to_collect: >-
+    RTO and RPO per component with the business owner's approval. The DR strategy, including the Region decision
+    and residency constraints. The date, scope and measured RTO and RPO of the last end-to-end restore test and of
+    the last failover and failback exercise.
+helpful:
+  display_text: REL13-BP03 Test DR implementation (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_dr_tested.html
+statements:
+  - id: rec_objectives
+    tier: core
+    title: RTO and RPO are defined per component from business impact and approved by the business owner
+    concept: recovery-objectives-defined
+    severity_basis: "wa:REL13-BP01 (High)"
+    wa_bp: REL13-BP01
+    good: >-
+      Each component and data store has a recovery time objective (how long it may be unavailable) and a recovery
+      point objective (how much data may be lost), derived from the business impact of downtime and data loss on
+      the critical journeys it supports. The business owner approved them, they are recorded where the team and
+      incident responders can find them, and each dependency's objectives are at least as strict as those of the
+      components that need it. Objectives are reviewed when the workload or its criticality changes.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_objective_defined_recovery.html
+    improvement: >-
+      Run a business impact analysis with the business owner: for each critical journey, estimate the cost of
+      downtime and of data loss over time, set RTO and RPO per component, check that dependencies (including third
+      parties and shared platforms) can meet them, and record the approved values. Revisit them at each major
+      change and at least yearly.
+    improvement_url: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/business-continuity-plan-bcp.html
+    additional_improvement:
+      - display_text: AWS Resilience Hub resiliency policies (record and assess RTO and RPO targets)
+        url: https://docs.aws.amazon.com/resilience-hub/latest/userguide/resiliency-policies.html
+  - id: rec_restore_tested
+    tier: core
+    title: An end-to-end restore was tested in the last 12 months and met RTO and RPO (or there is no persistent state)
+    concept: restore-tested-against-objectives
+    severity_basis: "wa:REL13-BP03 (High)"
+    wa_bp: REL13-BP03
+    good: >-
+      In the last 12 months the team restored the workload's persistent data from backups into a working
+      environment, brought the application up on it, validated the data and a critical journey end to end, and
+      measured elapsed time and the data-loss window against RTO and RPO. Results, gaps and fixes are recorded. The
+      practice may be in-house or provided by your operations partner under contract, with evidence you can
+      inspect. If there is no persistent state, the evidence is a data inventory showing that every store can be
+      rebuilt from source.
+    partition_notes: >-
+      AWS Backup restore testing is not available in AWS GovCloud (US) as of 2026-10-05; there, script on-demand
+      restore jobs and validation checks instead; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/testing-disaster-recovery.html
+    improvement: >-
+      Schedule a restore test at least yearly and after major changes: take the latest recovery point of every
+      critical data store, restore it into an isolated account or environment, start the application against it,
+      run data validation and a critical-journey test, and record the elapsed time and the age of the restored data
+      against RTO and RPO. Automate the test where possible and track every gap to closure.
+    improvement_url: https://docs.aws.amazon.com/aws-backup/latest/devguide/restore-testing.html
+    additional_helpful:
+      - display_text: REL09-BP04 Perform periodic recovery of the data to verify backup integrity and processes
+        url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_periodic_recovery_testing_data.html
+  - id: rec_strategy
+    tier: sec
+    title: A documented DR strategy meets RTO and RPO, including a deliberate single- or multi-Region decision and residency constraints
+    concept: dr-strategy-documented
+    wa_bp: REL13-BP02
+    good: >-
+      A documented DR strategy (backup and restore, pilot light, warm standby, or multi-site active/active) is
+      chosen per component to meet its RTO and RPO. It records a deliberate decision to recover within one Region
+      or into another Region, the scenarios it covers and excludes (component failure, Availability Zone loss,
+      Regional impairment, data corruption), the residency constraints on where copies may live, and the cost
+      accepted. Where RTO is short, recovery relies on data-plane operations and capacity that already exists.
+    partition_notes: >-
+      In AWS GovCloud (US), the recovery Region for a GovCloud workload is the other GovCloud Region; Amazon S3
+      objects and Amazon RDS and Amazon EBS snapshots cannot be copied directly between GovCloud and other AWS
+      Regions, as of 2026-10-05. ARC Region switch is available in both GovCloud Regions; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html
+    improvement: >-
+      For each component, compare the DR strategies with its RTO, RPO and budget, choose one, and document the
+      Region decision, the scenarios covered and excluded, residency constraints, the recovery runbook and the
+      dependencies the recovery itself needs. Prefer recovery steps that use data-plane operations and
+      pre-provisioned capacity. Review the strategy when objectives or architecture change.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_disaster_recovery.html
+    additional_improvement:
+      - display_text: ARC Region switch (orchestrated multi-Region recovery)
+        url: https://docs.aws.amazon.com/r53recovery/latest/dg/region-switch.html
+      - display_text: AWS Elastic Disaster Recovery
+        url: https://docs.aws.amazon.com/drs/latest/userguide/what-is-drs.html
+  - id: rec_failover_exercised
+    tier: sec
+    title: Failover to the recovery environment and failback were exercised in the last 12 months, with achieved RTO and RPO recorded
+    concept: dr-failover-exercised
+    wa_bp: REL13-BP03
+    good: >-
+      In the last 12 months the team failed the workload over to its recovery environment (another account or
+      Region, as the DR strategy says) with the documented runbook and the same tools it would use in a real event,
+      served traffic or a representative test load there, and then failed back. Achieved RTO and RPO, steps that
+      failed, and configuration drift found between the primary and recovery environments are recorded and fixed.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_dr_tested.html
+    improvement: >-
+      Plan a failover exercise at least yearly: set success criteria from RTO and RPO, run the failover with the
+      documented runbook and tools in a scheduled window (or in a production-like copy until production failover is
+      proven safe), measure time to recover and data loss, fail back, and track fixes. Detect configuration drift
+      between the environments continuously so that the recovery environment matches production.
+    improvement_url: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/testing-disaster-recovery.html
+    additional_helpful:
+      - display_text: REL13-BP04 Manage configuration drift at the DR site or Region
+        url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_config_drift.html

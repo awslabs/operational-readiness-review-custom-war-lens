@@ -1,0 +1,320 @@
+# Services and features that ORR lens text must never recommend (see CONTRIBUTING.md, "Content rules").
+# A curated subset of the AWS General Reference "Services in Maintenance" and "Services in Sunset" pages, read
+# live on 2026-10-06, plus each service's own availability-change or end-of-support page: it carries the items a
+# readiness review might otherwise recommend, not every item on those pages. Check both pages before naming a
+# service in lens text. Refresh at each release and quarterly review.
+#
+# patterns: case-insensitive regular expressions (Python re syntax) that detect a mention of the item.
+# url_patterns: case-insensitive regular expressions matched against every link in lens text (helpful, improvement
+#   and additional-resource URLs). A link to the item's own documentation fails unless the statement carries a
+#   reader note (the reader_note field, or a trailing "Reader note:" in the improvement text). Every entry needs one.
+#   They are deliberately specific so they do not match allowed services or ordinary words, for example
+#   "X-Ray SDK" but not "AWS X-Ray", "ARC readiness check" but not "operational readiness", and
+#   "Amazon Pinpoint" but not the verb "pinpoint". Text marked as a reader note is exempt.
+# status: maintenance | closed to new customers | end of support | discontinued
+#   ("maintenance" on the Services in Maintenance page means closed to new customers and no new features).
+# effective: the date the status took or takes effect, from the source page. Where the source page gives no
+#   date, the announcement date from the Services in Maintenance page is used and the notes say so.
+schema: orrlens/lifecycle-denylist/1
+as_of: 2026-10-06
+source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+sources:
+- https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+- https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
+entries:
+  - name: AWS X-Ray SDKs and daemon
+    patterns: ['x[- ]?ray sdks?\b', 'x[- ]?ray daemon', 'aws-xray-sdk', 'xray-daemon', 'x[- ]?ray (go|java|node\.?js|python|\.net|ruby) sdk', 'x[- ]?ray sdk for']
+    url_patterns: ['docs\.aws\.amazon\.com/xray/latest/devguide/xray-(sdk|daemon)', 'docs\.aws\.amazon\.com/xray-sdk-', 'github\.com/aws/aws-xray-(sdk|daemon)']
+    status: maintenance
+    effective: 2026-02-25
+    alternative: OpenTelemetry instrumentation (for example AWS Distro for OpenTelemetry or the CloudWatch agent) sending traces to AWS X-Ray or the CloudWatch OTLP endpoint
+    source: https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-daemon-timeline.html
+    notes: AWS X-Ray itself remains available and is not denylisted; only the X-Ray SDKs and daemon are in maintenance mode.
+  - name: AWS Systems Manager Incident Manager
+    patterns: ['incident manager', 'ssm contacts', 'ssm-incidents', 'ssm-contacts']
+    url_patterns: ['docs\.aws\.amazon\.com/incident-manager/']
+    status: closed to new customers
+    effective: 2025-11-07
+    alternative: Any incident-management, paging or notification tool, for example Amazon SNS, AWS End User Messaging or a partner tool
+    source: https://docs.aws.amazon.com/incident-manager/latest/userguide/incident-manager-availability-change.html
+    notes: Also not available in AWS GovCloud (US). Lens text should call the role "incident lead" or "incident commander", not "incident manager", so the pattern does not need an exception.
+  - name: AWS Systems Manager Change Manager
+    patterns: ['\bchange manager\b']
+    url_patterns: ['docs\.aws\.amazon\.com/systems-manager/latest/userguide/change-manager']
+    status: closed to new customers
+    effective: 2025-11-07
+    alternative: Change review enforced in the pipeline and IaC workflow, or an AWS Partner ITSM solution
+    source: https://docs.aws.amazon.com/systems-manager/latest/userguide/change-manager-availability-change.html
+  - name: AWS Systems Manager Application Manager
+    patterns: ['\bapplication manager\b']
+    url_patterns: ['docs\.aws\.amazon\.com/systems-manager/latest/userguide/application-manager']
+    status: closed to new customers
+    effective: 2026-07-30
+    alternative: Tagging, AWS Resource Groups, AWS Resource Explorer, or Amazon CloudWatch Application Signals for observability
+    source: https://docs.aws.amazon.com/systems-manager/latest/userguide/application-manager-availability-change.html
+  - name: Amazon DevOps Guru
+    patterns: ['devops guru']
+    url_patterns: ['docs\.aws\.amazon\.com/devops-guru/']
+    status: end of support
+    effective: 2027-09-30
+    alternative: Amazon CloudWatch anomaly detection and CloudWatch alarms
+    source: https://docs.aws.amazon.com/devops-guru/latest/userguide/devops-guru-end-of-support.html
+    notes: No longer accepts new customers beginning 2026-10-29; end of support 2027-09-30.
+  - name: Amazon Pinpoint
+    patterns: ['amazon pinpoint', 'pinpoint (campaigns?|journeys?|console|api|segments?|endpoints?)']
+    url_patterns: ['docs\.aws\.amazon\.com/pinpoint/', 'aws\.amazon\.com/pinpoint/']
+    status: end of support
+    effective: 2026-10-30
+    alternative: AWS End User Messaging (SMS, voice, push) or Amazon SES (email)
+    source: https://docs.aws.amazon.com/pinpoint/latest/userguide/migrate.html
+    notes: Closed to new customers since 2025-05-20; end of support 2026-10-30. SMS, voice, push, OTP and phone number validation APIs continue under AWS End User Messaging.
+  - name: Amazon CodeCatalyst
+    patterns: ['codecatalyst']
+    url_patterns: ['docs\.aws\.amazon\.com/codecatalyst/', 'codecatalyst\.aws']
+    status: closed to new customers
+    effective: 2025-11-07
+    alternative: AWS CodePipeline, AWS CodeBuild or another CI/CD system
+    source: https://docs.aws.amazon.com/codecatalyst/latest/userguide/migration.html
+  - name: Amazon CodeGuru Reviewer
+    patterns: ['codeguru reviewer']
+    url_patterns: ['docs\.aws\.amazon\.com/codeguru/latest/reviewer-ug/']
+    status: closed to new customers
+    effective: 2025-11-07
+    alternative: Amazon Inspector code scanning, or static analysis tools in the build pipeline
+    source: https://docs.aws.amazon.com/codeguru/latest/reviewer-ug/codeguru-reviewer-availability-change.html
+    notes: No new repository associations as of 2025-11-07.
+  - name: Amazon Application Recovery Controller (ARC) readiness check
+    patterns: ['\barc readiness', 'application recovery controller( \(arc\))?( -)? readiness', 'route ?53 (arc )?readiness check', 'route53-recovery-readiness', 'recovery readiness']
+    url_patterns: ['docs\.aws\.amazon\.com/r53recovery/latest/dg/(recovery-readiness|arc-readiness|readiness)']
+    status: closed to new customers
+    effective: 2026-03-31
+    alternative: ARC Region switch for multi-Region readiness and recovery orchestration
+    source: https://docs.aws.amazon.com/r53recovery/latest/dg/arc-readiness-availability-change.html
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page. ARC zonal shift, zonal autoshift, routing control and Region switch are unaffected.
+  - name: AWS CloudTrail Lake
+    patterns: ['cloudtrail lake']
+    url_patterns: ['docs\.aws\.amazon\.com/awscloudtrail/latest/userguide/(cloudtrail-lake|query-|lake-)']
+    status: closed to new customers
+    effective: 2026-05-31
+    alternative: CloudTrail trails delivered to Amazon S3 and Amazon CloudWatch Logs, queried with CloudWatch Logs Insights or Amazon Athena
+    source: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-lake-service-availability-change.html
+    notes: Both pages read live on 2026-10-06. The availability-change page says CloudTrail Lake "will no longer be
+      open to new customers starting on May 31, 2026", so effective is 2026-05-31. The Services in Maintenance page
+      lists "AWS CloudTrail - Lake" with an announcement date of March 31, 2026; that is the announcement, not the
+      closing date. AWS CloudTrail trails, CloudTrail Insights and aggregated events are unaffected.
+  - name: Amazon Bedrock Agents Classic
+    patterns: ['bedrock agents?\b(?! ?core)', 'agents for amazon bedrock', 'bedrock agents classic']
+    url_patterns: ['docs\.aws\.amazon\.com/bedrock/latest/userguide/agents(?:[-.]|$)']
+    status: closed to new customers
+    effective: 2026-07-30
+    alternative: Amazon Bedrock AgentCore
+    source: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html
+    notes: The pattern does not match "Amazon Bedrock AgentCore".
+  - name: AWS Management Console myApplications
+    patterns: ['myapplications']
+    url_patterns: ['docs\.aws\.amazon\.com/awsconsolehelpdocs/latest/gsg/aws-myApplications']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: AWS Resource Groups and tagging
+    source: https://docs.aws.amazon.com/awsconsolehelpdocs/latest/gsg/aws-myApplications-availability-change.html
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page. New applications can no longer be created.
+  - name: AWS Service Catalog AppRegistry
+    patterns: ['appregistry', 'service catalog application registry', 'service catalog - application registry']
+    url_patterns: ['docs\.aws\.amazon\.com/servicecatalog/latest/arguide/']
+    status: closed to new customers
+    effective: 2026-07-30
+    alternative: Tagging, AWS Resource Groups and AWS Resource Explorer
+    source: https://docs.aws.amazon.com/servicecatalog/latest/arguide/app-registry-availability-change.html
+  - name: Virtual Waiting Room on AWS (AWS Solution)
+    patterns: ['virtual waiting room on aws', 'aws virtual waiting room']
+    url_patterns: ['virtual-waiting-room-on-aws']
+    status: discontinued
+    effective: 2026-10-05
+    alternative: A waiting room or visitor prioritization you build or buy (for example from AWS Marketplace); the generic practice "waiting room" is allowed
+    source: https://aws.amazon.com/solutions/implementations/virtual-waiting-room-on-aws/
+    notes: The solution page states "Notice of discontinuation" and "This AWS Solution is no longer available" but publishes no date. effective is the date the notice was first observed for this lens (2026-10-05; re-observed 2026-10-06), not an AWS-published date.
+  - name: AWS App Mesh
+    patterns: ['app mesh', 'appmesh']
+    url_patterns: ['docs\.aws\.amazon\.com/app-mesh/']
+    status: discontinued
+    effective: 2026-09-30
+    alternative: Amazon ECS Service Connect, Amazon VPC Lattice, or an open-source service mesh
+    source: https://docs.aws.amazon.com/app-mesh/latest/userguide/what-is-app-mesh.html
+    notes: End of support 2026-09-30; after that date the console and resources are no longer accessible.
+  - name: Amazon CloudWatch Evidently
+    patterns: ['cloudwatch evidently', 'amazon evidently']
+    url_patterns: ['docs\.aws\.amazon\.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Evidently']
+    status: discontinued
+    effective: 2025-10-17
+    alternative: AWS AppConfig feature flags
+    source: https://aws.amazon.com/blogs/mt/support-for-amazon-cloudwatch-evidently-ending-soon/
+  - name: AWS WAF Classic
+    patterns: ['waf classic']
+    url_patterns: ['docs\.aws\.amazon\.com/waf/latest/developerguide/(classic-|waf-classic)']
+    status: end of support
+    effective: 2026-10-07
+    alternative: AWS WAF (current version)
+    source: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
+    notes: Announced 2025-10-07, end of support 2026-10-07, from the Services in Sunset page. Region-specific
+      milestones are published through AWS Health. An earlier 2024 blog post gave 2025-09-30.
+  - name: AWS Proton
+    patterns: ['aws proton', '\bproton\b']
+    url_patterns: ['docs\.aws\.amazon\.com/proton/']
+    status: end of support
+    effective: 2026-10-07
+    alternative: Your own infrastructure as code (for example AWS CloudFormation or the AWS CDK) with a CI/CD pipeline
+    source: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
+    notes: Announced 2025-10-07, end of support 2026-10-07, from the Services in Sunset page.
+  - name: AWS Infrastructure Composer
+    patterns: ['infrastructure composer', 'application composer']
+    url_patterns: ['docs\.aws\.amazon\.com/infrastructure-composer/']
+    status: end of support
+    effective: 2027-09-29
+    alternative: Author templates directly with AWS CloudFormation, the AWS SAM CLI or the AWS CDK
+    source: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
+    notes: Announced 2026-09-29, end of support 2027-09-29, from the Services in Sunset page.
+  - name: AWS Service Management Connector
+    patterns: ['service management connector']
+    url_patterns: ['docs\.aws\.amazon\.com/smc/']
+    status: end of support
+    effective: 2027-03-31
+    alternative: Your ITSM tool's own AWS integration, or a scheduled export of improvement items with ListLensReviewImprovements
+    source: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
+    notes: Announced 2026-03-31, end of support 2027-03-31, from the Services in Sunset page.
+  - name: AWS Managed Services (AMS) Advanced
+    patterns: ['ams advanced', 'managed services advanced']
+    url_patterns: ['docs\.aws\.amazon\.com/managedservices/']
+    status: end of support
+    effective: 2027-06-30
+    alternative: AWS Managed Services Accelerate, your own operations team, or an AWS Partner managed service
+    source: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
+    notes: Announced 2026-06-30, end of support 2027-06-30, from the Services in Sunset page.
+  - name: AWS re:Post Private
+    patterns: ['re:?post private']
+    url_patterns: ['docs\.aws\.amazon\.com/repostprivate/']
+    status: end of support
+    effective: 2027-06-30
+    alternative: Your own knowledge base or wiki, and public AWS re:Post
+    source: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
+    notes: Announced 2026-06-30, end of support 2027-06-30, from the Services in Sunset page.
+  - name: AWS CLI version 1
+    patterns: ['aws cli v1\b', 'aws cli version 1\b', 'cli v1\b']
+    url_patterns: ['docs\.aws\.amazon\.com/cli/v1/']
+    status: maintenance
+    effective: 2026-08-05
+    alternative: AWS CLI version 2 or the AWS SDKs
+    source: https://docs.aws.amazon.com/cli/v1/reference/
+    notes: Maintenance mode since 2026-08-05; end of support 2027-07-15.
+  - name: AWS SDK for Java 1.x
+    patterns: ['sdk for java 1\.x', 'sdk for java v1\b', 'aws-java-sdk-']
+    url_patterns: ['docs\.aws\.amazon\.com/sdk-for-java/v1/']
+    status: end of support
+    effective: 2025-12-31
+    alternative: AWS SDK for Java 2.x
+    source: https://docs.aws.amazon.com/sdk-for-java/v1/developer-guide/welcome.html
+  - name: AWS SDK for JavaScript v2
+    patterns: ['sdk for javascript v2\b', 'sdk for javascript version 2\b']
+    url_patterns: ['docs\.aws\.amazon\.com/sdk-for-javascript/v2/', 'docs\.aws\.amazon\.com/AWSJavaScriptSDK/latest/']
+    status: end of support
+    effective: 2025-09-08
+    alternative: AWS SDK for JavaScript v3
+    source: https://aws.amazon.com/blogs/developer/announcing-end-of-support-for-aws-sdk-for-javascript-v2/
+  - name: AWS Cloud9
+    patterns: ['cloud9']
+    url_patterns: ['docs\.aws\.amazon\.com/cloud9/']
+    status: closed to new customers
+    effective: 2024-07-25
+    alternative: AWS IDE Toolkits or AWS CloudShell
+    source: https://aws.amazon.com/blogs/devops/how-to-migrate-from-aws-cloud9-to-aws-ide-toolkits-or-aws-cloudshell/
+  - name: AWS App Runner
+    patterns: ['app runner', 'apprunner']
+    url_patterns: ['docs\.aws\.amazon\.com/apprunner/']
+    status: closed to new customers
+    effective: 2026-03-31
+    alternative: Amazon ECS (including AWS Fargate) or AWS Lambda
+    source: https://docs.aws.amazon.com/apprunner/latest/dg/apprunner-availability-change.html
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page.
+  - name: AWS Audit Manager
+    patterns: ['audit manager']
+    url_patterns: ['docs\.aws\.amazon\.com/audit-manager/']
+    status: closed to new customers
+    effective: 2026-04-30
+    alternative: AWS Config conformance packs and AWS Security Hub CSPM standards, or a partner GRC tool
+    source: https://docs.aws.amazon.com/audit-manager/latest/userguide/audit-manager-availability-change.html
+  - name: Amazon SNS message data protection
+    patterns: ['message data protection']
+    url_patterns: ['docs\.aws\.amazon\.com/sns/latest/dg/(sns-)?message-data-protection']
+    status: closed to new customers
+    effective: 2026-04-30
+    alternative: Data classification and masking in the producer, or Amazon Macie for data at rest
+    source: https://docs.aws.amazon.com/sns/latest/dg/sns-message-data-protection-availability-change.html
+  - name: Amazon Kendra
+    patterns: ['kendra']
+    url_patterns: ['docs\.aws\.amazon\.com/kendra/']
+    status: closed to new customers
+    effective: 2026-07-30
+    alternative: Amazon Bedrock Knowledge Bases
+    source: https://docs.aws.amazon.com/kendra/latest/dg/kendra-availability-change.html
+    notes: Maintenance mode from 2026-06-30; closed to new customers from 2026-07-30.
+  - name: Amazon Q Business
+    patterns: ['q business']
+    url_patterns: ['docs\.aws\.amazon\.com/amazonq/latest/qbusiness-ug/']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: Amazon Quick
+    source: https://docs.aws.amazon.com/amazonq/latest/qbusiness-ug/qbusiness-availability-change.html
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page.
+  - name: AWS Directory Service Simple AD
+    patterns: ['simple ad\b']
+    url_patterns: ['docs\.aws\.amazon\.com/directoryservice/latest/admin-guide/(directory_simple_ad|simple_ad)']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: AWS Directory Service for Microsoft Active Directory or AD Connector
+    source: https://docs.aws.amazon.com/directoryservice/latest/admin-guide/simple-ad-availability-change.html
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page.
+  - name: AWS Migration Hub
+    patterns: ['migration hub']
+    url_patterns: ['docs\.aws\.amazon\.com/migrationhub/']
+    status: closed to new customers
+    effective: 2025-11-07
+    alternative: AWS Transform
+    source: https://docs.aws.amazon.com/migrationhub/latest/ug/migrationhub-availability-change.html
+  - name: AWS Application Discovery Service
+    patterns: ['application discovery service']
+    url_patterns: ['docs\.aws\.amazon\.com/application-discovery/']
+    status: closed to new customers
+    effective: 2025-11-07
+    alternative: AWS Transform
+    source: https://docs.aws.amazon.com/application-discovery/latest/userguide/application-discovery-service-availability-change.html
+  - name: Amazon SageMaker Model Monitor
+    patterns: ['model monitor']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/model-monitor']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: Evaluation and monitoring you run in the pipeline and in production, for example with Amazon CloudWatch
+    source: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page.
+  - name: Amazon SageMaker Clarify
+    patterns: ['sagemaker clarify', 'sagemaker ai clarify']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/clarify']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: Evaluation tooling you run in the pipeline, for example Amazon Bedrock Evaluations for generative AI
+    source: https://docs.aws.amazon.com/sagemaker/latest/dg/clarify-availability-change.html
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page.
+  - name: Amazon Comprehend topic modeling, event detection and prompt safety classification
+    patterns: ['prompt safety classification', 'comprehend (topic modeling|event detection)']
+    url_patterns: ['docs\.aws\.amazon\.com/comprehend/latest/dg/(topic-modeling|how-events|events|trust-safety|prompt-safety)']
+    status: closed to new customers
+    effective: 2026-03-31
+    alternative: Amazon Bedrock Guardrails (prompt attack and content filters)
+    source: https://docs.aws.amazon.com/comprehend/latest/dg/comprehend-availability-change.html
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page. Other Amazon Comprehend features are unaffected.
+  - name: Amazon CodeGuru Security
+    patterns: ['codeguru security']
+    url_patterns: ['docs\.aws\.amazon\.com/codeguru/latest/security-ug/']
+    status: discontinued
+    effective: 2025-11-20
+    alternative: Amazon Inspector code scanning, or static analysis and dependency scanning tools in the build pipeline
+    source: https://docs.aws.amazon.com/cli/latest/reference/codeguru-security/
+    notes: After 2025-11-20 the console, service resources and documentation are no longer accessible.

@@ -1,0 +1,111 @@
+schema: orrlens/question/1
+id: evt_calendar_freeze
+pillar: evt_prepare
+order: 10
+title: Event calendar, decision owner and change freeze
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Deployment safety
+lineage: []
+choice_prefix: cf_
+description:
+  question: >-
+    Before a scheduled peak, are the event dates, the accountable owner, the go/no-go criteria and the change controls
+    for the event window fixed and written down?
+  evidence_to_collect: >-
+    the event plan with its dates, partner and dependency dates and success criteria. The named owner, deputy and
+    go/no-go criteria. The deployment blocker configuration for the freeze and the event window, and its emergency
+    path. Notes from the final two-week review.
+helpful:
+  display_text: OPS07-BP05 Informed deployment decisions (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html
+statements:
+  - id: cf_dates
+    tier: core
+    title: The event window, key dates (including partner and dependency dates) and success criteria are documented
+    concept: event-calendar-key-dates
+    severity_basis: "wa:OPS07-BP02 (High)"
+    wa_bp: OPS07-BP02
+    good: >-
+      A dated event plan lists the event window with its time zones; the rehearsal, re-test, freeze and post-event
+      dates; and the dates that partners and dependencies control, such as a partner cutover, a vendor change window,
+      a DNS or certificate change, or a data migration. Success criteria are measurable, for example peak requests per
+      second served within the latency and error objectives of each critical journey. The plan is shared with every
+      team, partner and provider that has a role in the event, and its deadlines are worked back from the event date:
+      purchases 3-6 months out, this review at least 8 weeks out, a load re-test 30-60 days out, High risks closed 4
+      weeks out, and a freeze 2 weeks out.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html
+    improvement: >-
+      Write a one-page event plan: the window, the key dates of every dependency and partner, measurable success
+      criteria, and the readiness deadlines worked back from the event date. Review it with the business owner and
+      every team and provider involved, and put the dates in the shared calendar that your deployment blockers and
+      on-call schedules use.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html
+  - id: cf_owner
+    tier: core
+    title: A named event owner and go/no-go criteria for the event are documented
+    concept: event-owner-go-no-go
+    severity_basis: >-
+      deviation:Without a named owner and pre-agreed go/no-go criteria nobody can decide to proceed, degrade, delay or
+      abort when a late risk appears, and on a fixed-date event that decision cannot wait for a meeting to be arranged.
+    wa_bp: OPS07-BP05
+    good: >-
+      One named person, with a deputy, owns the event and can decide to proceed, degrade, delay or abort. Go/no-go
+      criteria are written in advance and checkable, for example no open High risk without a recorded acceptance, the
+      load re-test passed, quotas and capacity confirmed, and escalation contacts verified. The plan also sets the
+      decision checkpoints (for example 2 weeks, 48 hours and 1 hour before the window), who attends each, and how each
+      decision is recorded. The criteria reference the core question 'Readiness decision and risk acceptance' instead
+      of repeating it.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html
+    improvement: >-
+      Name the event owner and a deputy, write go/no-go criteria and decision checkpoints, agree them with the
+      accountable business owner, and record each checkpoint decision. Reuse the readiness decision from your core ORR
+      review and add only the event-specific criteria.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html
+  - id: cf_freeze
+    tier: sec
+    title: The event window is added to the core lens's deployment blockers, with an emergency path for urgent fixes
+    concept: event-change-freeze-window
+    wa_bp: OPS06-BP03
+    good: >-
+      The freeze period and the event window are blocked dates in the automated deployment blockers scored in the core
+      phased-rollout question, for every pipeline that can change production: application, infrastructure,
+      configuration and feature flags, and operator tools. The freeze does not depend on people remembering it. The
+      emergency path scored in the core question on changes through reviewed pipelines and IaC still uses the pipeline
+      and review, records who overrode the blocker and why, and is known to the event staff.
+    platform_notes: >-
+      For example, an AWS CodePipeline stage entry condition with a DeploymentWindow rule blocks a stage outside the
+      allowed times, and conditions can be overridden at run time for an approved emergency. The rule's cron defines
+      when deployment is allowed, so write a cron that excludes the freeze dates or use a LambdaInvoke rule that
+      checks your event calendar. Other tools need an equivalent calendar check.
+    helpful_url: https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments
+    improvement: >-
+      Add the freeze period and the event window to the deployment blockers of every production pipeline, including
+      configuration, feature-flag and operator-tool pipelines. Test in a non-production copy that a deployment is
+      blocked, and document and rehearse the emergency override: who may approve it, how it is logged, and which checks
+      still apply.
+    improvement_url: https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference-DeploymentWindow.html
+    additional_improvement:
+      - display_text: Configure conditions for a stage (AWS CodePipeline)
+        url: https://docs.aws.amazon.com/codepipeline/latest/userguide/stage-conditions.html
+      - display_text: LambdaInvoke rule (AWS CodePipeline)
+        url: https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference-LambdaInvoke.html
+  - id: cf_final_review
+    tier: sec
+    title: In the final two weeks, open High risks, security findings, edge rules and privileged access were re-reviewed
+    concept: event-final-two-week-review
+    wa_bp: OPS07-BP02
+    good: >-
+      Within 14 days of the event the team re-checked: open High risks in the core and event reviews, and that no
+      recorded acceptance expires before the event ends; new critical or high security findings; edge and AWS WAF
+      rules, rate limits and the mode of any DDoS rule group; and who holds privileged or emergency access, removing
+      access that is no longer needed. The results and any changes are recorded, for example in notes on a saved
+      milestone.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html
+    improvement: >-
+      Schedule a short final review about two weeks before the event with the event owner, security and the on-call
+      lead. Use a fixed checklist (open High risks and acceptance expiry dates, security findings, edge and rate-limit
+      rules, privileged and emergency access), fix or accept each item before the freeze starts, and save a milestone
+      so the pre-event state is recorded.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html

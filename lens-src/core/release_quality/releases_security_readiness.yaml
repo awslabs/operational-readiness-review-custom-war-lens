@@ -1,0 +1,124 @@
+schema: orrlens/question/1
+id: releases_security_readiness
+pillar: release_quality
+order: 50
+title: 'Security launch gate: testing, detection and incident readiness'
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Security readiness
+lineage: [architecture_load_testing]
+choice_prefix: sec_
+description:
+  question: >-
+    Has this release passed security testing with its serious findings closed, and will security events in its
+    accounts reach a responder who has practiced the response?
+  evidence_to_collect: >-
+    the threat model and its last update. The security or penetration test report for this release, with each
+    finding's status. The Regions in use and the detection services enabled in each. The rule that routes findings
+    to on-call. The last security incident exercise report. The log archive account, its retention settings and
+    access policy.
+helpful:
+  display_text: SEC11-BP03 Penetration testing (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_perform_regular_penetration_testing.html
+statements:
+  - id: sec_testing_closed
+    tier: core
+    title: The threat model and security testing are current for this release, and critical or high findings are fixed or accepted
+    concept: security-testing-findings-closed
+    severity_basis: "wa:SEC11-BP03 (High)"
+    wa_bp: SEC11-BP03
+    good: >-
+      A threat model covers this release's architecture, data flows and trust boundaries, and was updated for the
+      changes in it. Security testing in proportion to the risk, for example penetration testing, dynamic scanning
+      or a focused review of new interfaces, ran against this release or a production-like copy. Every critical and
+      high finding is fixed and retested, or formally accepted by the accountable owner with an expiry date.
+      Testing of AWS resources follows the AWS penetration testing policy.
+    helpful_url: https://aws.amazon.com/security/penetration-testing/
+    improvement: >-
+      Update the threat model for this release, plan security testing for the new or changed attack surface, run
+      it against a production-like environment within the AWS penetration testing policy, and track every finding
+      to closure. Before launch, fix and retest critical and high findings, or record a time-bound acceptance in
+      your risk register. Reader note: The Threat Composer page mentions Amazon CodeCatalyst, which is closed to new
+      customers; Threat Composer works without it.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_threat_model.html
+    additional_improvement:
+      - display_text: Threat Composer (open-source threat modeling tool from AWS)
+        url: https://github.com/awslabs/threat-composer
+  - id: sec_detection_routed
+    tier: core
+    title: Threat detection and posture findings are enabled in every Region used and routed to an owned on-call queue
+    concept: threat-detection-routed
+    severity_basis: >-
+      deviation:SEC04-BP01 (High) covers turning on detection sources such as Amazon GuardDuty in every Region
+      used. The lens also requires routing findings to an owned on-call queue, which relates to SEC04-BP03 (rated
+      Low), because a finding that reaches no responder does not shorten a security event.
+    wa_bp: SEC04-BP01
+    good: >-
+      Threat detection and posture management (for example Amazon GuardDuty and AWS Security Hub) run in every
+      account and every Region the workload uses, including recovery Regions, managed from a delegated
+      administrator account. Findings at or above an agreed severity reach an owned on-call queue within minutes,
+      for example through Amazon EventBridge rules, and the route was tested.
+    platform_notes: >-
+      EC2 and containers: add GuardDuty Runtime Monitoring and Amazon Inspector scanning. Serverless: add GuardDuty
+      Lambda Protection and Inspector scanning of Lambda functions.
+    partition_notes: >-
+      GuardDuty, Security Hub, Security Hub CSPM and Inspector are available in AWS GovCloud (US) as of 2026-10-06.
+      There, Security Hub has no third-party integrations and Security Hub CSPM supports only some integrations;
+      route findings with EventBridge.
+    reader_note: >-
+      This page refers to AWS CloudTrail Lake, which is closed to new customers; a CloudTrail trail to Amazon S3 or
+      CloudWatch Logs meets this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_app_service_logging.html
+    improvement: >-
+      Enable threat detection and posture findings organization-wide through a delegated administrator, in every
+      Region the workload uses, and restrict unused Regions, for example with service control policies. Add rules
+      that send findings at or above an agreed severity to the owning team's on-call queue, with a runbook per
+      finding type, and generate sample findings to prove the route works.
+    improvement_url: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_eventbridge.html
+  - id: sec_ir_exercised
+    tier: sec
+    title: Security incident playbooks (credential compromise, ransomware, data exposure) were exercised in the last 12 months
+    concept: security-incident-playbooks-exercised
+    wa_bp: SEC10-BP07
+    good: >-
+      Playbooks exist for the security incidents most likely to harm this workload, at least credential compromise,
+      ransomware or destructive deletion, and exposure of sensitive data. Each names who decides and who acts, and
+      how to contain, preserve evidence, recover and notify. Each was exercised in the last 12 months as a tabletop
+      or simulation with the people who would respond, including any operations partner under contract, and the
+      gaps found were tracked to closure.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html
+    improvement: >-
+      Write or adapt playbooks for credential compromise, ransomware and data exposure, run a tabletop exercise on
+      one of them each quarter with the on-call, security and business contacts, and track each gap to closure.
+      Rotate scenarios so that every playbook is exercised at least once a year.
+    improvement_url: https://github.com/aws-samples/aws-incident-response-playbooks
+  - id: sec_audit_logs
+    tier: sec
+    title: Audit and workload logs are centralized in a restricted account, tamper-resistant, and retained to the applicable mandate
+    concept: centralized-tamper-resistant-audit-logs
+    wa_bp: SEC04-BP02
+    good: >-
+      AWS CloudTrail (an organization trail for all accounts and Regions) and the network, load balancer and
+      application logs that investigations need are delivered to a dedicated log archive account that workload
+      teams cannot change. Log files are protected against change or deletion, for example with S3 Object Lock and
+      CloudTrail log file integrity validation, read access is restricted and audited, and retention meets the
+      longest applicable legal, regulatory or contractual mandate.
+    partition_notes: >-
+      In AWS GovCloud (US), CloudTrail records events from global services such as IAM and AWS STS in AWS GovCloud
+      (US-West); use a multi-Region trail to capture them (as of 2026-10-06).
+    reader_note: >-
+      This page refers to AWS CloudTrail Lake, which is closed to new customers; a CloudTrail organization trail to
+      Amazon S3 meets this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_logs.html
+    improvement: >-
+      Create an organization trail into a log archive account, add the other log sources investigations need, turn
+      on log file integrity validation and write-once protection such as S3 Object Lock, restrict read access to
+      the security team with audited access, and set retention per mandate. Confirm in an exercise that a responder
+      can query recent logs quickly.
+    improvement_url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html
+    additional_improvement:
+      - display_text: Locking objects with Amazon S3 Object Lock
+        url: https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html
+      - display_text: Validating CloudTrail log file integrity
+        url: https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html

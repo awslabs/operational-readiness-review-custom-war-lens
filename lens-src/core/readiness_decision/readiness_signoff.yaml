@@ -1,0 +1,94 @@
+schema: orrlens/question/1
+id: readiness_signoff
+pillar: readiness_decision
+order: 10
+title: Readiness decision and risk acceptance (answer last)
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Readiness governance
+lineage: []
+choice_prefix: rd_
+description:
+  question: >-
+    Has the accountable owner made an explicit, recorded go or no-go decision on a complete review, with every high
+    risk either fixed or formally accepted? Answer this question last.
+  out_of_scope_if: none.
+  evidence_to_collect: >-
+    the list of open high risks with owners and dates. Risk-register or POA&M entries for accepted risks, with
+    expiry dates. Go or no-go criteria and the decision record. The milestone saved at sign-off.
+helpful:
+  display_text: Operational Readiness Reviews whitepaper (AWS)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html
+statements:
+  - id: rd_highs_dispositioned
+    tier: core
+    title: Every HIGH (this and companion lenses) is fixed or accepted by the business owner or authorizing official, with an expiry date
+    concept: high-risks-dispositioned
+    severity_basis: "wa:OPS07-BP02 (High)"
+    wa_bp: OPS07-BP02
+    good: >-
+      Each high risk in this lens and any companion lenses (for example Mission-Critical Event Readiness) is fixed
+      with evidence, or formally accepted by the person accountable for the workload's outcome, such as the
+      business owner or, in government, the authorizing official, with an expiry date. The acceptance, its reason,
+      compensating controls and approver live in your risk register or POA&M. The question notes carry only a tag
+      such as EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>, never names or sensitive details, so
+      acceptances can be reported and revisited.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html
+    improvement: >-
+      Export the high risks from the review report, give each an owner and a date, fix each one or record a
+      time-bound acceptance in your risk register, and add the EXC tag to the question notes before sign-off.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/inspect-the-process.html
+  - id: rd_criteria_owner
+    tier: core
+    title: Go/no-go criteria, the decision owner, and the abort or rollback plan are documented
+    concept: go-no-go-criteria-owner
+    severity_basis: "wa:OPS07-BP02 (High)"
+    wa_bp: OPS07-BP02
+    good: >-
+      Before the review, the team agreed what must be true to launch (for example no unaccepted high risks, load
+      test passed, on-call staffed), who makes the decision, and how to abort or roll back the launch if the
+      criteria fail afterward. The decision and its date are recorded.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html
+    improvement: >-
+      Create a one-page launch decision record with criteria, decision owner, abort triggers and rollback steps,
+      and link it from the review notes.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/inspect-the-process.html
+  - id: rd_scope_complete
+    tier: core
+    title: Every question in this lens is answered or marked not applicable with a reason (a core-path-only session is preliminary)
+    concept: review-scope-complete
+    severity_basis: "wa:OPS07-BP02 (High)"
+    wa_bp: OPS07-BP02
+    good: >-
+      Before the go or no-go decision, every question in this lens, and in any companion lens attached to the same
+      workload, is answered or marked not applicable with a Reason value and a one-line explanation in the question
+      notes, so no unanswered question can hide a launch-blocking risk. Unanswered
+      questions show as Unanswered in the WA Tool, not as High risk. A session that covered only the core path is a
+      triage or check-in, not a launch decision.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html
+    improvement: >-
+      Before sign-off, list the unanswered questions in the lens review, answer each one or mark it not applicable
+      with a reason (console, or UpdateAnswer with IsApplicable, Reason and Notes), and schedule a full-core session if
+      only the core path was covered.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/APIReference/API_UpdateAnswer.html
+  - id: rd_next_review
+    tier: sec
+    title: Changes and incidents since the last review (if any) were reviewed, the next review is scheduled, and a milestone was saved
+    concept: recurring-review-milestone
+    wa_bp: OPS07-BP02
+    good: >-
+      For a recurring review, the team walked through architecture, dependency, traffic and team changes since the
+      last milestone, and confirmed that lessons from recent incidents, near-misses and relevant public AWS
+      Post-Event Summaries are reflected in the answers; for a first review, recent incidents and near-misses were
+      checked. A milestone named for the decision (for example ORR-2026-12-launch) is saved immediately after this
+      question is answered, and the next review is scheduled: at least yearly, and before major launches, architecture changes or peak events.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html
+    # The reader note stays in the improvement text because the improvement URL, OPS11-BP02, is the linked page
+    # that names AWS Systems Manager Incident Manager.
+    improvement: >-
+      Compare current answers with the last milestone and update every answer that changes or incidents affect,
+      save the milestone right after answering this question, add a recurring calendar entry for the next review, and set a reminder for each
+      accepted risk's expiry date. Reader note: This page refers to AWS Systems Manager Incident Manager, which is
+      closed to new customers; any post-incident analysis process or tool meets this practice.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html

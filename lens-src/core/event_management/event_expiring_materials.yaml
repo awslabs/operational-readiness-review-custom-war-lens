@@ -1,0 +1,143 @@
+schema: orrlens/question/1
+id: event_expiring_materials
+pillar: event_management
+order: 140
+title: Certificates, credentials and other expiring materials
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Event detection
+lineage: [architecture_certificates, event_expiring_materials]
+choice_prefix: exp_
+description:
+  question: >-
+    Could an expired or replaced certificate, certificate authority, key, secret, token or other time-bound material
+    take the workload down, and would the owning team know and act well before it expires?
+  evidence_to_collect: >-
+    the inventory of expiring materials with owner, expiry date and renewal method. The expiry and renewal-failure
+    alarms with their lead times. Client, device and partner trust configuration, including any pinning. The record
+    of the last renewal or rotation of each kind of material.
+helpful:
+  display_text: SEC09-BP01 Key and certificate management (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_protect_data_transit_key_cert_mgmt.html
+statements:
+  - id: exp_inventory
+    tier: core
+    title: >-
+      Every expiring material (certificates, CAs, keys, secrets, tokens, IdP metadata, licenses, domains) is
+      inventoried with an owner
+    concept: expiring-materials-inventory
+    severity_basis: "wa:SEC09-BP01 (High)"
+    wa_bp: SEC09-BP01
+    good: >-
+      One inventory lists every material the workload depends on that can expire or be replaced: public and private
+      TLS certificates (including imported and on-host ones), private and cluster certificate authorities, signing
+      and encryption keys, secrets and API keys, third-party and partner tokens, SAML and OIDC identity provider
+      metadata and signing certificates, software licenses and domain registrations. Each entry has an owning team,
+      expiry date, issuer, renewal method and every consumer that must receive the new version. The inventory is
+      generated or reconciled automatically, for example from AWS Certificate Manager, AWS Private CA, AWS Secrets
+      Manager and the IAM credential report, and is reviewed when the architecture changes.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_protect_data_transit_key_cert_mgmt.html
+    improvement: >-
+      Build the inventory from the sources you can query (ACM and AWS Private CA certificates, Secrets Manager
+      secrets, IAM access keys from the credential report, identity provider metadata, registrar and license records)
+      and add the materials you can only find by asking, such as partner-issued tokens and certificates on devices.
+      Assign an owner and a renewal method to each entry, list every consumer, and reconcile the inventory on a
+      schedule and in your deployment pipeline.
+    improvement_url: https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-list.html
+    additional_improvement:
+      - display_text: Generate credential reports for your AWS account (IAM)
+        url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html
+      - display_text: Manage the private CA lifecycle (AWS Private CA)
+        url: https://docs.aws.amazon.com/privateca/latest/userguide/ca-lifecycle.html
+  - id: exp_alarms
+    tier: core
+    title: Expiry and renewal-failure alarms fire with a lead time longer than the renewal window
+    concept: expiry-alarms-lead-time
+    severity_basis: "wa:SEC09-BP01 (High)"
+    wa_bp: SEC09-BP01
+    good: >-
+      Each inventoried material has an alarm that reaches the owning team early enough to renew, distribute and verify
+      by hand if automation fails (for example 30 days or more before a certificate expires, a suggestion), plus an
+      alarm on any failed or stalled renewal. Examples: CloudWatch alarms on the ACM DaysToExpiry metric, EventBridge
+      rules on ACM expiration and renewal-action events, the AWS Config rule acm-certificate-expiration-check, and
+      scheduled checks for materials outside AWS. Imported certificates, which ACM does not renew, are covered.
+      Public certificate lifetimes are shrinking, so expiries come round more often.
+    platform_notes: >-
+      EC2 and containers: ACM cannot see certificates installed on hosts or in images, so check what each endpoint
+      serves. Kubernetes: include the cluster CA. Serverless and managed endpoints: prefer ACM certificates.
+    partition_notes: >-
+      ACM, AWS Config and Amazon EventBridge are available in AWS GovCloud (US) as of 2026-10-06; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/acm/latest/userguide/cloudwatch-metrics.html
+    improvement: >-
+      For each kind of material, pick the signal (ACM metric or event, AWS Config rule, or a scheduled check that
+      reads the expiry date from the served certificate, the secret or the registrar), set the lead time longer than
+      your manual renewal and distribution time, and route it to the owning team's paging or ticket queue. Add alarms
+      on renewal failure, test that each alarm fires, and review open expiry alarms in your operations review.
+    improvement_url: https://docs.aws.amazon.com/acm/latest/userguide/supported-events.html
+    additional_helpful:
+      - display_text: AWS Config managed rule acm-certificate-expiration-check
+        url: https://docs.aws.amazon.com/config/latest/developerguide/acm-certificate-expiration-check.html
+      - display_text: AWS Certificate Manager FAQs (public certificate validity periods)
+        url: https://aws.amazon.com/certificate-manager/faqs/
+    additional_improvement:
+      - display_text: How to manage certificate lifecycles using ACM event-driven workflows (AWS Security Blog)
+        url: https://aws.amazon.com/blogs/security/how-to-manage-certificate-lifecycles-using-acm-event-driven-workflows/
+  - id: exp_no_leaf_pinning
+    tier: core
+    title: No client or component pins a leaf certificate, and any pinning is to a certificate authority
+    concept: no-leaf-certificate-pinning
+    severity_basis: >-
+      wp-orr:certificate pinning example in The ORR tool (a host that pins certificates is scored Yes, High Risk)
+    good: >-
+      No mobile app, device, partner integration, SDK configuration or service pins the leaf certificate of any
+      endpoint, so a routine renewal or replacement cannot break clients. Where a use case requires pinning, it pins to
+      a certificate authority you control or to all the issuing root CAs (for example all Amazon Trust Services root
+      certificates for ACM public certificates), and the pin set can be updated without a client release. Partners
+      that pin are told before CA changes.
+    reader_note: >-
+      The ORR whitepaper page linked here also mentions AWS Systems Manager Incident Manager, which is closed to new
+      customers; it is not needed for this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/the-orr-tool.html
+    improvement: >-
+      Search client code, mobile and device builds, SDK configurations and partner integration documents for pinned
+      certificates or public-key hashes. Replace leaf pins with CA or root pins, or remove pinning, ship the change
+      before the next renewal, and add a check to code review and the pipeline that rejects new leaf pins.
+    improvement_url: https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting-pinning.html
+  - id: exp_auto_renew_deploy
+    tier: sec
+    title: >-
+      Renewal and deployment to every consumer are automated wherever the issuer supports it, and rotation has been
+      exercised
+    concept: automated-renewal-and-rotation
+    wa_bp: SEC09-BP01
+    good: >-
+      Certificates renew automatically (ACM managed renewal with DNS validation), secrets and keys rotate on a
+      schedule (Secrets Manager rotation), and new versions reach every consumer automatically,
+      including hosts, containers, partner trust stores and IdP settings. Each rotation was exercised in the last
+      12 months, including any certificate authority you run.
+    platform_notes: >-
+      Amazon EKS: rotate the cluster CA with EKS CA rotation, updating the worker nodes you manage and external
+      clients (kubeconfig, CI/CD) before activation. If you do not, EKS appends a successor CA about
+      2 years before expiry and activates it, so route the AWS Health notices to the owner. Identity: rotate IdP and
+      IAM Identity Center SAML signing certificates.
+    partition_notes: >-
+      EKS CA rotation covers commercial Regions, and AWS Capabilities by Region does not list it for AWS GovCloud
+      (US) as of 2026-10-06; verify per Region. There, record each cluster CA expiry and plan a replacement
+      cluster well before it.
+    helpful_url: https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html
+    improvement: >-
+      Move certificates to ACM managed renewal with DNS validation where you can, turn on Secrets Manager rotation for
+      secrets, and automate distribution to every consumer. For materials that cannot renew automatically, write a
+      renewal runbook with owners and lead times. Exercise each rotation in pre-production and then in production on a
+      schedule, and record that clients kept working.
+    improvement_url: https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html
+    additional_improvement:
+      - display_text: Rotate the EKS cluster certificate authority (Amazon EKS)
+        url: https://docs.aws.amazon.com/eks/latest/userguide/certificate-authority-rotation.html
+      - display_text: Rotate SAML 2.0 certificates (IAM Identity Center)
+        url: https://docs.aws.amazon.com/singlesignon/latest/userguide/managesamlcerts.html
+      - display_text: AWS Config managed rule access-keys-rotated
+        url: https://docs.aws.amazon.com/config/latest/developerguide/access-keys-rotated.html
+      - display_text: Amazon EKS supports CA rotation with automated lifecycle management (What's New, Aug 2026)
+        url: https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-eks-certificate-authority-ca-rotation-automated-lifecycle-management/

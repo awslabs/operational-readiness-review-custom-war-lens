@@ -1,0 +1,95 @@
+schema: orrlens/question/1
+id: event_customer_impact
+pillar: event_management
+order: 80
+title: Identify impacted customers and keep them informed
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Escalation
+lineage: []
+choice_prefix: ci_
+description:
+  question: >-
+    During an event, can you quickly tell which customers, tenants or downstream consumers are affected, and keep
+    them informed through a channel that still works?
+  out_of_scope_if: the workload has no users or downstream consumers to notify (rare).
+  evidence_to_collect: >-
+    saved queries or dashboards that list affected customers. The communication plan and templates. The status
+    channel and its dependencies. The last exercise or event that used them.
+helpful:
+  display_text: OPS10-BP05 Customer communication plan (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
+statements:
+  - id: ci_identify
+    tier: alt:A
+    title: Telemetry identifies affected users, tenants or downstream consumers within minutes, using queries prepared in advance
+    concept: impacted-customer-identification
+    severity_basis: "wa:OPS10-BP03 (High)"
+    wa_bp: OPS10-BP03
+    good: >-
+      Request logs and metrics carry a customer, tenant or consumer identifier. Saved queries (for example
+      CloudWatch Logs Insights queries that return every affected customer or tenant) list who saw errors or high
+      latency in a time window, per Region and AZ, within minutes, and CloudWatch Contributor Insights rules show
+      the top contributors and how many unique customers are affected. Results can be shared with the
+      communications team without exposing sensitive data.
+    helpful_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights.html
+    improvement: >-
+      Add a customer or tenant identifier to structured logs and key metrics, save queries that list affected
+      customers by error type and time window, test them in a game day, and document who may run and share the
+      results.
+    improvement_url: https://aws.amazon.com/blogs/mt/accelerate-troubleshooting-with-structured-logs-in-amazon-cloudwatch/
+    additional_helpful:
+      - display_text: OPS10-BP03 Prioritize operational events based on business impact (AWS Well-Architected)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_prioritize_events.html
+  - id: ci_comms_plan
+    tier: alt:A
+    title: A communication plan (channels, templates, approvers, cadence, required notices) exists and has been exercised
+    concept: customer-communication-plan
+    severity_basis: >-
+      deviation:OPS10-BP05 is rated Medium; the lens rates having neither impact identification nor an exercised
+      customer communication plan High because, without either, a workload cannot tell affected customers what to
+      do or meet contractual or regulatory notice deadlines during an event, and, as the November 2020 Post-Event
+      Summary shows, status updates are delayed when the usual channel depends on the impaired system and the
+      fallback is unfamiliar. Impact identification alone is backed by OPS10-BP03 (High).
+    wa_bp: OPS10-BP05
+    good: >-
+      A written plan says who decides to notify, who approves the wording, which channels reach which audiences, how
+      often to update during an event, and which contractual or regulatory notice deadlines apply, with pre-approved
+      templates. In the last 12 months it was used in a real event or an exercise, or each channel and approver
+      was checked, for example with a test notice. Rehearsing communications in an incident exercise is scored in
+      event_gameday (gd_tabletop).
+    reader_note: >-
+      Some services named on this page are closed to new customers or have an announced end of support (for
+      example AWS Systems Manager Incident Manager, closed to new customers, and Amazon Pinpoint, whose support
+      ends on 2026-10-30).
+      Any incident-management, paging or notification tool meets this practice, for example Amazon SNS, AWS End
+      User Messaging or a partner tool.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
+    improvement: >-
+      Write the plan with your communications, legal and customer-support owners, pre-approve templates for common
+      event types, list notice obligations and deadlines, and check each channel and approver at least once a
+      year, for example with a test notice or in your next exercise.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
+  - id: ci_status_independent
+    tier: sec
+    title: Customer status updates use a channel that does not depend on the affected workload or its Region
+    concept: independent-status-channel
+    wa_bp: OPS10-BP06
+    good: >-
+      The status page, the notification service and the tools used to publish updates are hosted independently of
+      the workload, its accounts, its identity provider and its primary Region, so you can publish while the workload
+      is down. The fallback publishing path is documented, familiar to the people who use it, and tested.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html
+    improvement: >-
+      Map the dependencies of your status and notification path, move it to infrastructure that does not share
+      accounts, identity or Region with the workload, or to a separate provider, keep a documented manual fallback,
+      and practice publishing through the fallback in a game day.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_dashboards.html
+pes_lesson:
+  statement: ci_status_independent
+  month: Nov 2020
+  url: https://aws.amazon.com/message/11201/
+  lesson: >-
+    status updates were delayed because the usual publishing tool depended on an impaired service and the backup
+    tool was less familiar, so keep the status path independent and practice the fallback.

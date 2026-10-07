@@ -1,0 +1,135 @@
+schema: orrlens/question/1
+id: evt_ddos_response
+pillar: evt_prepare
+order: 40
+title: DDoS response readiness for high-visibility endpoints
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Defense against customers
+lineage: []
+choice_prefix: dd_
+description:
+  question: >-
+    Are the event's internet-facing endpoints ready to absorb and respond to network and application-layer DDoS
+    attacks during a high-visibility event?
+  out_of_scope_if: the workload has no internet-facing endpoints. Select the first statement and keep its evidence.
+  evidence_to_collect: >-
+    the list of internet-facing endpoints and the web ACL in front of each. The application-layer DDoS mechanism, its
+    mode, sensitivity and alarms. The IaC diff showing the web ACL reconciled. The DDoS tier decision. The DDoS runbook
+    and the date and notes of its last rehearsal.
+helpful:
+  display_text: AWS Best Practices for DDoS Resiliency (AWS whitepaper)
+  url: https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html
+statements:
+  - id: dd_not_public
+    tier: scope
+    title: The workload has no internet-facing endpoints
+    concept: event-ddos-scope-not-public
+    wa_bp: SEC05-BP01
+    good: >-
+      No component of the workload accepts traffic from the internet: there are no public load balancers, API
+      endpoints, CDN distributions, public IP addresses or public DNS names, and users reach it only through private
+      networks. Evidence to collect: an inventory from your IaC or network design showing no internet-facing endpoints,
+      and the control that prevents new ones, for example an organization guardrail. If any endpoint used during the
+      event is internet-facing, do not select this.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html
+    improvement: >-
+      If any endpoint is internet-facing, answer the other statements instead. Keep the endpoint inventory current and
+      guard it with a preventive control, so this scope exit stays true.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_network_protection_create_layers.html
+  - id: dd_l7_enforcing
+    tier: core
+    title: Application-layer DDoS rules were tuned in count mode, are enforcing before the event, and match IaC
+    concept: event-l7-ddos-enforcing
+    severity_basis: >-
+      deviation:A high-visibility event is a predictable DDoS target, and an application-layer rule group left in
+      Count mode, or reverted by the next IaC deployment, detects a request flood without stopping it.
+    wa_bp: SEC05-BP03
+    good: >-
+      Each web ACL in front of event endpoints has a known Layer 7 DDoS mechanism (the Anti-DDoS managed rule group,
+      Shield Advanced automatic mitigation or rate-based rules). Before the freeze it was evaluated in Count mode and
+      set to Block, plus Challenge where clients support it, with a chosen sensitivity, and the live web ACL
+      matches IaC. This applies the core edge baseline to the event; its paging alarms are scored in the core lens
+      (ep_l7_detection_pages).
+    platform_notes: >-
+      Non-HTTP endpoints: network controls (security groups, network ACLs, Shield Standard, Shield Advanced on
+      Elastic IPs if subscribed) with packet or connection alarms meet this. HTTP APIs and Lambda function URLs take
+      no web ACL: put an ALB, a REST API or CloudFront with AWS WAF in front.
+    partition_notes: >-
+      Shield Advanced and CloudFront are not available in AWS GovCloud (US) as of 2026-10-06. Capabilities by Region
+      lists AWS WAF DDoS Protection (the rule group) there; confirm with ListAvailableManagedRuleGroups.
+    helpful_url: https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-anti-ddos.html
+    improvement: >-
+      Inventory the web ACLs in front of event endpoints and record which DDoS mechanism each uses. Evaluate the
+      Anti-DDoS rule group or rate-based rules in Count mode (its metrics and labels appear only during detected
+      events, so also check the challengeable-request labels and exempt URIs), set Block (and Challenge where
+      suitable) and the sensitivity before the freeze, confirm that the core paging alarms on DDoSAttackRequests and
+      rate-based rule metrics cover these web ACLs, and pull the web ACL into IaC. Add rate-based rules wherever the rule group is not offered. As announced (as of
+      2026-10-06), AWS auto-upgrades eligible Shield Advanced web ACLs from 2026-10-25 unless the owner opted out
+      through AWS Support, keeping Block or Count, setting sensitivity to Low and leaving Challenge off, so review
+      those settings. Migrate ineligible web ACLs through guided migration, until 2027-01-28. From 2027-01-29
+      automatic mitigation gets no performance updates, so later events use the rule group or rate-based rules.
+    improvement_url: https://aws.amazon.com/blogs/security/aws-shield-advanced-is-embracing-the-aws-waf-anti-ddos-managed-rule-group-what-changes-and-how-to-prepare/
+    additional_helpful:
+      - display_text: Advanced Anti-DDoS protection using the AWS WAF Anti-DDoS managed rule group
+        url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html
+    additional_improvement:
+      - display_text: IaC examples for the upgraded web ACL (aws-samples)
+        url: https://github.com/aws-samples/sample-ddos-shield-l7am-upgrade-to-waf-l7amr-helpers/tree/main/iac-webacl-examples
+      - display_text: Using rate-based rule statements in AWS WAF
+        url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html
+      - display_text: Monitoring AWS WAF with Amazon CloudWatch
+        url: https://docs.aws.amazon.com/waf/latest/developerguide/monitoring-cloudwatch.html
+  - id: dd_ddos_tier
+    tier: sec
+    title: Shield Advanced with SRT access and proactive engagement is configured, or a documented decision explains why not
+    concept: event-ddos-tier-decision
+    wa_bp: SEC05-BP03
+    good: >-
+      The team decided in writing, before purchase deadlines, whether the event needs AWS Shield Advanced (Shield
+      Response Team access, proactive engagement and DDoS cost protection) or relies on AWS Shield Standard, AWS WAF and
+      its own response. Shield Advanced needs a 1-year subscription and SRT access needs a qualifying support plan
+      (the Shield documentation names Business or Enterprise Support as of 2026-10-06, and Business Support takes no
+      new subscriptions outside AWS GovCloud (US), so confirm that your plan qualifies), so budget 3-6 months ahead. If
+      subscribed: resources are protected, the SRT has the access it needs, proactive engagement has current contacts
+      and Route 53 health checks, and the team knows proactive engagement does not trigger on Anti-DDoS rule group
+      events, which need their own alarms.
+    partition_notes: >-
+      Shield Advanced is not available in AWS GovCloud (US) as of 2026-10-06; record the alternative edge and DDoS
+      pattern and the AWS Support escalation path instead.
+    helpful_url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html
+    improvement: >-
+      Decide the DDoS tier with the event owner by weighing the event's visibility and the cost of downtime against
+      the subscription. If you subscribe, protect each resource, grant SRT access, set up proactive engagement with
+      health checks and current contacts, and alarm on Anti-DDoS rule group events. If you do not, record the decision
+      and the compensating controls.
+    improvement_url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-srt-proactive-engagement.html
+    additional_improvement:
+      - display_text: Managed DDoS event response with Shield Response Team (SRT) support
+        url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-srt-support.html
+  - id: dd_rehearsed
+    tier: sec
+    title: The DDoS runbook was rehearsed, including how to engage AWS and, if subscribed, how to request cost protection
+    concept: event-ddos-runbook-rehearsed
+    wa_bp: SEC10-BP07
+    good: >-
+      The event shift rehearsed the DDoS runbook that the core question 'Edge and DDoS baseline for internet-facing
+      endpoints' scores, for this event: spotting an attack from alarms and dashboards, tightening rate limits or
+      rule sensitivity, blocking sources, scaling or degrading, and engaging AWS Support (and the SRT if subscribed). If
+      subscribed, they know cost protection needs resources protected before the attack and a credit request within 15
+      days after the billing month. A tabletop rehearsal meets this. A live DDoS simulation must follow the AWS DDoS
+      Simulation Testing Policy: an approved AWS DDoS Test Partner and a Shield Advanced protected target, or an
+      approved exception requested at least 14 days ahead.
+    partition_notes: >-
+      Shield Advanced is not available in AWS GovCloud (US) as of 2026-10-06, so GovCloud (US)-only workloads cannot
+      subscribe to it and rehearse DDoS response as a tabletop.
+    helpful_url: https://aws.amazon.com/security/ddos-simulation-testing/
+    improvement: >-
+      Run a 60-minute DDoS tabletop with the event shift. Walk through detection, mitigation levers, AWS engagement and
+      customer communications for a network flood and an HTTP request flood, time each step, fix gaps in the runbook,
+      and confirm the cost protection prerequisites if you subscribe to Shield Advanced.
+    improvement_url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html
+    additional_helpful:
+      - display_text: Requesting a credit in AWS Shield Advanced after an attack
+        url: https://docs.aws.amazon.com/waf/latest/developerguide/ddos-request-service-credit.html

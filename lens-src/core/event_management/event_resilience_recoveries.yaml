@@ -1,0 +1,122 @@
+schema: orrlens/question/1
+id: event_resilience_recoveries
+pillar: event_management
+order: 90
+title: Survive the loss of one Availability Zone without scaling
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Blast radius containment
+lineage: [architecture_plane_redundency, architecture_failure_testing, event_resilience_recoveries]
+choice_prefix: az_
+description:
+  question: >-
+    If one Availability Zone becomes impaired at peak load, can the workload keep serving customers using only the
+    capacity already running in the other Availability Zones?
+  out_of_scope_if: >-
+    never as a whole question. If the critical path uses only Regional managed services, select the first statement
+    and keep the AZ layout as evidence.
+  evidence_to_collect: >-
+    per-AZ capacity compared with peak demand. The AZ layout of every tier, data store and network path. The report
+    of the last AZ-loss test at load.
+helpful:
+  display_text: Static stability using Availability Zones (Builders' Library)
+  url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
+statements:
+  - id: az_regional_managed
+    tier: scope
+    title: "Only Regional managed services on the critical path: no zonal NAT gateways, single-AZ subnets, instances or databases"
+    concept: az-loss-scope-regional-only
+    wa_bp: REL10-BP01
+    good: >-
+      Every component on the critical path is a Regional service whose AZ resilience AWS manages for you, for example
+      AWS Lambda, Amazon DynamoDB, Amazon S3, Amazon SQS or Amazon API Gateway. Lambda functions attached to a VPC
+      count only if their subnets span at least two AZs and nothing else on the path is zonal, such as zonal NAT
+      gateways, interface endpoints, instances, containers or databases you place in AZs. Evidence to collect: the AZ
+      layout of every network path and data store on the critical path. When this is selected, the other statements
+      do not change the score.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html
+    improvement: >-
+      Check your component list against the AWS Fault Isolation Boundaries whitepaper. If any customer-managed zonal
+      resource is on the critical path, clear this statement and answer the other statements.
+    improvement_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html
+  - id: az_multi_az
+    tier: core
+    title: Every customer-managed tier spans at least two AZs (three recommended), with no single-AZ or single-instance component
+    concept: multi-az-deployment
+    severity_basis: "wa:REL10-BP01 (High)"
+    wa_bp: REL10-BP01
+    good: >-
+      Compute, data stores, caches, load balancers, network appliances and every other zonal component run in at
+      least two AZs, with three recommended so that losing one still leaves two. Data is replicated synchronously or
+      within a known RPO, and nothing on the critical path exists in only one AZ or as a single instance.
+    platform_notes: >-
+      EC2: Auto Scaling groups spanning AZs. Containers: Amazon ECS services or Kubernetes topology spread constraints
+      across AZs. Data: Multi-AZ deployments for managed databases and caches. Network: no single-AZ gateway,
+      appliance or endpoint on the critical path.
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html
+    improvement: >-
+      Inventory the AZ placement of every tier, including data stores and network paths, remove single-AZ and
+      single-instance components or record a formal acceptance, and add a recurring check, for example AWS Config
+      managed rules for Multi-AZ settings, so new single-AZ resources are flagged.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html
+    additional_helpful:
+      - display_text: REL10-BP01 Deploy the workload to multiple locations (AWS Well-Architected)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_fault_isolation_multiaz_region_system.html
+  - id: az_static_capacity
+    tier: core
+    title: Capacity already running in the remaining AZs carries peak load with no scaling or new launches during the event
+    concept: az-static-capacity
+    severity_basis: >-
+      wp-orr:AZ static stability (Appendix B: withstand the loss of an AZ without making changes or deploying new
+      capacity; No is High Risk)
+    wa_bp: REL11-BP05
+    good: >-
+      Each AZ runs enough capacity that losing any one AZ leaves the rest able to serve peak load within latency
+      goals (for example, with three AZs each holds at least half of peak), and recovery does not depend on launching
+      instances, tasks or pods, which may be slow or impaired during the same event. Capacity Reservations can hold
+      capacity for critical instance types. The AWS ORR whitepaper's example questions treat not being statically
+      stable to the loss of an AZ as high risk.
+    platform_notes: >-
+      EC2: per-AZ Auto Scaling minimums and Capacity Reservations. Containers: Amazon ECS desired counts and
+      Kubernetes node groups sized so each AZ already runs its share of peak with headroom, because new task, pod
+      and AWS Fargate launches can also be impaired during the event. Serverless: AWS manages the AZ capacity of
+      AWS Lambda, so size only the zonal components on the path.
+    helpful_url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
+    improvement: >-
+      Calculate the capacity each AZ must hold to absorb the loss of one AZ at peak, provision it (with Capacity
+      Reservations for critical instance types if needed), set Auto Scaling minimums so scale-in cannot remove it,
+      and alarm when capacity in any AZ falls below the target.
+    improvement_url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html
+    additional_helpful:
+      - display_text: AWS ORR whitepaper, Appendix B Example ORR questions (AZ static stability)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+  - id: az_tested_at_load
+    tier: sec
+    title: Loss of one AZ was simulated at production-like load in the last 12 months, and recovery did not depend on adding capacity
+    concept: az-loss-tested-at-load
+    wa_bp: REL12-BP04
+    good: >-
+      In the last 12 months a fault-injection experiment removed one AZ while production-like load ran (for example
+      the AWS FIS AZ Availability: Power Interruption scenario), customer-facing metrics stayed within goals using
+      existing capacity, and the time to recover and the fixes were recorded. Repeat it after major changes.
+    partition_notes: >-
+      AWS FIS AZ scenarios are available in AWS GovCloud (US); the FIS experiment scheduling and experiment report
+      features are not (as of 2026-10-06; verify per Region).
+    helpful_url: https://docs.aws.amazon.com/fis/latest/userguide/az-availability-scenario.html
+    improvement: >-
+      Plan an AZ-loss experiment with stop conditions on customer-facing alarms. Start in pre-production at
+      production-like load, then move to production with a limited blast radius when you are confident. Record time
+      to detect and recover, and fix anything that needed new capacity. For critical workloads, repeat it at least
+      quarterly or run it in the deployment pipeline (a suggestion).
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html
+    additional_improvement:
+      - display_text: Testing zonal autoshift with AWS FIS
+        url: https://docs.aws.amazon.com/r53recovery/latest/dg/testing-zonal-autoshift-fis.html
+pes_lesson:
+  statement: az_static_capacity
+  month: Oct 2025
+  url: https://aws.amazon.com/message/101925/
+  lesson: >-
+    new EC2 instance launches failed for hours while existing instances remained healthy, so plan recovery around
+    capacity that is already running.

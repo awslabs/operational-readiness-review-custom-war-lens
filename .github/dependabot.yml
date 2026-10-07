@@ -1,0 +1,22 @@
+# Keeps the pinned GitHub Actions current (pull requests update the SHA and its version comment), and the hashed
+# Python requirements in tools/orrlens (pull requests update the version and its hashes).
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: ci
+  - package-ecosystem: pip
+    directory: /tools/orrlens
+    schedule:
+      interval: weekly
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: deps

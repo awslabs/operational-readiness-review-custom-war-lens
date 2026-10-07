@@ -1,0 +1,114 @@
+schema: orrlens/question/1
+id: architecture_load_testing
+pillar: architecture
+order: 110
+title: Load testing to peak margin and breaking point
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Defense against customers
+lineage: [architecture_load_testing]
+choice_prefix: lt_
+description:
+  question: >-
+    Has the workload been load tested at or above forecast peak with margin, do you know where and how it breaks,
+    and did alarms and scaling work during the test? Penetration testing is scored in the security launch gate
+    question. High-volume tests follow the Amazon EC2 Testing Policy. DDoS simulations follow the AWS DDoS
+    Simulation Testing Policy, whose standard terms (an approved AWS DDoS Test Partner and a Shield Advanced
+    protected target) GovCloud-only workloads cannot meet, as Shield Advanced is not available in AWS GovCloud (US)
+    as of 2026-10-05. Other tests need prior AWS approval.
+  evidence_to_collect: >-
+    the forecast peak and the documented margin. The latest load test report with its date, environment, traffic
+    model and results against latency and error goals. The breaking load, first bottleneck and limiting quotas.
+    The alarms, scaling events and runbook steps observed during the test.
+helpful:
+  display_text: REL07-BP04 Load test your workload (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_load_tested_adapt.html
+statements:
+  - id: lt_tested_at_peak
+    tier: core
+    title: A production-like environment was load tested at or above forecast peak with representative traffic since the last major change
+    concept: load-test-at-forecast-peak
+    severity_basis: "wa:REL01-BP01 (High)"
+    wa_bp: REL07-BP04
+    good: >-
+      Since the last major architecture or capacity change, a production-like environment (same IaC, instance or
+      task sizes, data volume, caches, quotas and dependency settings as production, or production itself in a
+      scheduled window) sustained at least forecast peak plus your documented margin, within latency and error goals.
+      The traffic model is representative: the real mix of APIs and transactions, read and write ratio, payload
+      sizes, a few very large and many small clients, and realistic ramp rates. The report is kept with the review.
+    platform_notes: >-
+      EC2 and containers: include scale-out from minimum capacity and the time to add capacity, not only steady
+      state. Serverless: test with the account and function concurrency, API and downstream quotas you will run
+      with, including bursts. Asynchronous paths: include queue and stream throughput and consumer lag.
+    helpful_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html
+    improvement: >-
+      Write down forecast peak and the margin you need (for example twice peak, or peak with one Availability Zone
+      lost). Build a traffic model from production logs or business forecasts, generate load from enough
+      distributed sources (for example the Distributed Load Testing on AWS solution or an open-source tool), stub or
+      coordinate third-party calls, and test in a production-like environment. Compare results with latency and
+      error goals, fix what fails, and repeat after every major change. Follow the Amazon EC2 Testing Policy for
+      high-volume tests.
+    improvement_url: https://docs.aws.amazon.com/solutions/latest/distributed-load-testing-on-aws/solution-overview.html
+    additional_helpful:
+      - display_text: AWS ORR whitepaper, Appendix B (example load test plan question)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+    additional_improvement:
+      - display_text: Amazon EC2 Testing Policy (network stress and load tests)
+        url: https://aws.amazon.com/ec2/testing/
+  - id: lt_breaking_point
+    tier: sec
+    title: Testing continued past your documented margin to the breaking point, and the first bottleneck and limiting quotas are recorded
+    concept: load-test-breaking-point
+    wa_bp: REL07-BP04
+    good: >-
+      Load was raised past the documented margin until latency or error goals were breached. The report records the
+      breaking load, the first bottleneck (for example a database, connection pool, partition key or dependency),
+      the quotas reached, and whether the workload shed load and recovered by itself or collapsed. Each bottleneck
+      was fixed or accepted, and the test was repeated; the AWS ORR whitepaper expects you to find the breaking point
+      several times. High-volume tests must follow the Amazon EC2 Testing Policy. DDoS simulations must follow the
+      AWS DDoS Simulation Testing Policy, whose standard terms need an approved AWS DDoS Test Partner and a target
+      protected by Shield Advanced. GovCloud-only workloads cannot meet the standard terms, and any other test
+      needs prior AWS approval through the policy's exception request (submitted at least 14 days ahead).
+    partition_notes: >-
+      AWS Shield Advanced is not available in AWS GovCloud (US) as of 2026-10-05; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+    improvement: >-
+      Extend the load test with a stepped ramp beyond your margin until goals are breached, and capture saturation
+      per component (CPU, memory, connections, queue depth, throttles and quota usage). Record the breaking load and
+      the first bottleneck, alarm on or raise the limiting quotas, fix or accept each bottleneck with an owner, and
+      rerun. Confirm that the workload degrades by shedding load rather than collapsing, and that it recovers when
+      load drops.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/test-types.html
+    additional_helpful:
+      - display_text: Amazon EC2 Testing Policy
+        url: https://aws.amazon.com/ec2/testing/
+      - display_text: AWS DDoS Simulation Testing Policy
+        url: https://aws.amazon.com/security/ddos-simulation-testing/
+    additional_improvement:
+      - display_text: Service Quotas and Amazon CloudWatch alarms
+        url: https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html
+  - id: lt_alarms_verified
+    tier: sec
+    title: Alarms, scaling and runbooks were observed working during the test
+    concept: load-test-alarms-scaling-verified
+    wa_bp: REL07-BP04
+    good: >-
+      During the load test the team watched the operational dashboards and confirmed that the expected alarms fired
+      at the right thresholds and reached the on-call engineer, that scaling added capacity in time and scaled back
+      in afterwards, and that throttling or load shedding engaged as designed. Runbook steps for high load were
+      followed during the test and corrected where they were wrong, and gaps are tracked to closure.
+    platform_notes: >-
+      EC2 and containers: check scale-out lead time, including instance or task start-up and health check grace
+      periods; consider warm pools for long boot times. Serverless: check concurrency, throttling and downstream
+      quota alarms.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_load_tested_adapt.html
+    improvement: >-
+      Make alarm, scaling and runbook checks exit criteria of every load test: list the alarms and scaling actions
+      expected at each load step, have the on-call engineer observe them live, record which fired, when, and how
+      long scaling took, and fix thresholds, scaling policies or runbooks that did not behave as expected before the
+      next test.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+    additional_improvement:
+      - display_text: Amazon EC2 Auto Scaling warm pools (applications with long boot times)
+        url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html

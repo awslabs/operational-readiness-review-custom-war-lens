@@ -1,0 +1,123 @@
+schema: orrlens/question/1
+id: event_mutating_access
+pillar: event_management
+order: 110
+title: "Production access: read-only by default, time-bound elevation"
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Operator safety
+lineage: [architecture_mutliaccount_credentials, event_mutating_access]
+choice_prefix: pa_
+description:
+  question: >-
+    How do you reduce the chance and the impact of human error and credential misuse when people and automation can
+    change production?
+  evidence_to_collect: >-
+    the roles or permission sets people use in production and their default permissions. The elevation workflow with
+    its approvals and session logs. Root user controls for every account. The last access review and the roles used
+    by pipelines, automation and AI agents.
+helpful:
+  display_text: SEC03-BP02 Grant least privilege access (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_least_privileges.html
+statements:
+  - id: pa_automation_default
+    tier: alt:A
+    title: Human roles are read-only in production by default, and only pipeline and automation roles hold standing write access
+    concept: prod-read-only-by-default
+    severity_basis: "wa:SEC03-BP02 (High)"
+    wa_bp: SEC03-BP02
+    good: >-
+      The roles people use in production every day grant read-only or view-only permissions, and routine operational
+      tasks run through reviewed automation (for example AWS Systems Manager Automation runbooks) rather than ad hoc
+      human changes. Mutating permissions belong to pipeline and automation roles. A person who must change
+      production uses the time-bound elevation path or the emergency path, never a standing administrator role.
+      Pipeline-only deployment of code, infrastructure and configuration is scored in releases_manual_changes.
+    platform_notes: >-
+      EC2: use AWS Systems Manager Session Manager with session logging instead of SSH keys or bastion hosts, and
+      restrict who can start sessions. Containers: give people read-only Kubernetes permissions, for example with
+      Amazon EKS access entries and access policies, and restrict Amazon ECS Exec. Serverless: read-only roles keep
+      people from editing functions, state machines or API configurations in the console.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_least_privileges.html
+    improvement: >-
+      List the roles and permission sets people use in production, replace standing write access with read-only or
+      view-only defaults (the AWS managed job-function policies ReadOnlyAccess, or ViewOnlyAccess where people should
+      not read data, are starting points), move routine changes into pipelines or reviewed automation, and alarm on
+      mutating API calls made by human roles outside the elevation path.
+    improvement_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html
+    additional_improvement:
+      - display_text: Manage AWS accounts with permission sets (IAM Identity Center)
+        url: https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html
+      - display_text: Grant IAM users access to Kubernetes with Amazon EKS access entries
+        url: https://docs.aws.amazon.com/eks/latest/userguide/access-entries.html
+      - display_text: Enabling and disabling session logging (AWS Systems Manager Session Manager)
+        url: https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-logging.html
+  - id: pa_jit_elevation
+    tier: alt:A
+    title: Human write access is time-bound, approved and session-logged, and people use no long-term access keys for daily work
+    concept: time-bound-human-elevation
+    severity_basis: "wa:SEC02-BP02 (High)"
+    wa_bp: SEC02-BP02
+    good: >-
+      When a person needs write access to production, they request it for a specific task and time, someone else
+      approves it, the access expires automatically, and the session and its API calls are logged and attributable to
+      that person (for example AWS CloudTrail plus session logs). People sign in through federation or IAM Identity
+      Center and use temporary credentials; nobody uses long-term IAM user access keys for daily work.
+    partition_notes: >-
+      IAM Identity Center is available in both AWS GovCloud (US) Regions (as of 2026-10-06); the administrative
+      console, SDK and CLI use FIPS endpoints there.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_identities_unique.html
+    improvement: >-
+      Choose a temporary elevated access mechanism, for example a validated partner solution that integrates with IAM
+      Identity Center or the open-source TEAM solution, define who may approve elevation and for how long, log every
+      elevated session, and replace IAM users and long-term access keys used by people with federated sign-in and
+      temporary credentials.
+    improvement_url: https://docs.aws.amazon.com/singlesignon/latest/userguide/temporary-elevated-access.html
+    additional_improvement:
+      - display_text: Temporary elevated access management (TEAM) for IAM Identity Center (aws-samples)
+        url: https://github.com/aws-samples/iam-identity-center-team
+      - display_text: Logging IAM and AWS STS API calls with AWS CloudTrail
+        url: https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html
+  - id: pa_root_secured
+    tier: sec
+    title: Root users are locked down (MFA, no access keys, alert on use), and member-account root credentials are removed where possible
+    concept: root-user-lockdown
+    wa_bp: SEC01-BP02
+    good: >-
+      Every account's root user has MFA, no access keys, recovery contacts that the organization controls, and an
+      alert on any root sign-in or API call. In AWS Organizations member accounts, root user credentials are removed
+      with centralized root access, and tasks that need root run as short-lived privileged sessions from the
+      management account or the delegated administrator for IAM.
+    partition_notes: >-
+      In AWS GovCloud (US), as of 2026-10-06, access to the root user is not provided by default and console sign-in
+      as root is not available, so there are no root credentials to manage centrally, but privileged tasks on member
+      accounts are available. Protect the root user of
+      the associated standard account, which can request GovCloud root access keys.
+    helpful_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html
+    improvement: >-
+      Enable MFA and delete access keys for every root user, alert on root activity (for example an Amazon
+      EventBridge rule on AWS CloudTrail events for the root user), enable centralized root access for member
+      accounts and remove their root credentials except where a documented emergency path still relies on them, and
+      document who may run privileged root tasks and how each is approved.
+    improvement_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html
+    additional_helpful:
+      - display_text: SEC01-BP02 Secure account root user and properties (AWS Well-Architected)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_aws_account.html
+      - display_text: AWS Identity and Access Management in AWS GovCloud (US)
+        url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-iam.html
+  - id: pa_access_reviewed
+    tier: sec
+    title: Privileged sessions are reviewed, access is re-certified, and automation and AI agents use least-privilege roles
+    concept: privileged-access-review
+    wa_bp: SEC03-BP04
+    good: >-
+      Elevated and emergency sessions are reviewed after use, standing access is re-certified on a schedule (for
+      example quarterly) by each account's owner, and unused roles and permissions are removed. Pipelines, automation
+      and AI agents that can change production run under their own least-privilege roles, never with a person's
+      credentials, and their actions are logged and attributable.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_continuous_reduction.html
+    improvement: >-
+      Schedule access reviews with account owners, review every elevated session, use IAM Access Analyzer unused
+      access findings and last-accessed information to remove permissions nobody uses, give each pipeline,
+      automation and AI agent its own scoped role, and keep the review results as evidence.
+    improvement_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-findings.html

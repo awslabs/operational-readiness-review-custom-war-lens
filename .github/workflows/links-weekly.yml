@@ -1,0 +1,87 @@
+# Weekly full link check. On failure, opens (or comments on) one tracking issue with the GitHub CLI.
+name: links-weekly
+
+on:
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: links-weekly
+  cancel-in-progress: false
+
+jobs:
+  links:
+    name: Full link check
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      summary: ${{ steps.run.outputs.summary }}
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: python3 -m pip install --disable-pip-version-check --require-hashes -r tools/orrlens/requirements-ci.txt
+
+      - name: Check every link
+        id: run
+        run: |
+          set +e
+          python3 -m tools.orrlens links --strict-redirects > links.txt 2>&1
+          rc=$?
+          set -e
+          cat links.txt
+          {
+            echo "summary<<ORRLENS_EOF"
+            grep -E '^(FAIL|note: (unverified|redirected))' links.txt | head -n 60 | cut -c1-300
+            echo "ORRLENS_EOF"
+          } >> "$GITHUB_OUTPUT"
+          exit "$rc"
+
+  report:
+    name: Open or update the broken-link issue
+    needs: links
+    if: failure() && needs.links.result == 'failure'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write # open or comment on the tracking issue
+    steps:
+      - name: Open or update the issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          SUMMARY: ${{ needs.links.outputs.summary }}
+        run: |
+          title="Weekly link check failed"
+          # The summary holds remote redirect targets: neutralize backticks, tildes and @ so it cannot close the
+          # fence, inject Markdown or mention anyone.
+          safe=$(printf '%s\n' "${SUMMARY}" | sed -e "s/\`/'/g" -e 's/~/-/g' -e 's/@/(at)/g')
+          {
+            echo "The weekly link check failed on $(date -u +%Y-%m-%d). Run: ${RUN_URL}"
+            echo
+            echo '~~~~text'
+            printf '%s\n' "${safe}"
+            echo '~~~~'
+            echo
+            echo "Fix the links in lens-src/, data/, docs/ or README.md, then re-run the workflow."
+          } > body.md
+          number=$(gh issue list --state open --search "in:title \"${title}\"" --json number,title \
+            --jq "map(select(.title == \"${title}\")) | .[0].number // empty")
+          if [ -n "${number}" ]; then
+            gh issue comment "${number}" --body-file body.md
+          else
+            gh issue create --title "${title}" --body-file body.md
+          fi

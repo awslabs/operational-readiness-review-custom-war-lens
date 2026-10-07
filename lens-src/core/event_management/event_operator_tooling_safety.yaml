@@ -1,0 +1,123 @@
+schema: orrlens/question/1
+id: event_operator_tooling_safety
+pillar: event_management
+order: 130
+title: Operator tools prevent a mistaken action from causing an outage
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Operator safety
+lineage: []
+choice_prefix: ot_
+description:
+  question: >-
+    If an operator enters a wrong input or targets the wrong resource with a runbook command, script or console
+    action, what stops that one action from taking the workload down or deleting critical data?
+  evidence_to_collect: >-
+    the list of operator tools, scripts and runbook commands that change production. Their input validation, rate
+    and scope limits and minimum-capacity checks. Deletion protection and stack policy settings on critical
+    resources. How high-impact commands are previewed or approved.
+helpful:
+  display_text: AWS ORR whitepaper Appendix A, guidance from an incident
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html
+statements:
+  - id: ot_blast_radius_limits
+    tier: alt:A
+    title: >-
+      Operator tools and runbook commands validate inputs, cap what one action can change, and refuse to go below
+      minimum capacity
+    concept: operator-tool-blast-radius-limits
+    severity_basis: >-
+      deviation:OPS07-BP03 (Use runbooks to perform procedures), the nearest Framework best practice, is rated
+      Medium; the lens rates it High because the February 2017 Post-Event Summary describes one incorrect input to
+      an operational command removing a larger set of servers than intended, with hours of impact.
+    wa_bp: OPS07-BP03
+    good: >-
+      Every tool, script or automated runbook that changes production checks its inputs against allowed values or
+      patterns, shows the resolved list of targets, limits how many resources or what percentage of capacity one run
+      can change, acts in small batches with pauses, and stops when error thresholds are crossed. Capacity-removing
+      actions refuse to take any tier below its documented minimum. Operators use these tools rather than ad hoc
+      commands for routine production tasks.
+    platform_notes: >-
+      EC2: Auto Scaling group minimums and scale-in protection. Containers: minimum healthy percent on Amazon ECS
+      services, pod disruption budgets on Kubernetes. Serverless: reserved concurrency and alias weights are changed
+      only through reviewed automation. Fleet actions: AWS Systems Manager Automation and Run Command concurrency and
+      error thresholds.
+    helpful_url: https://docs.aws.amazon.com/systems-manager/latest/userguide/running-automations-scale-controls.html
+    improvement: >-
+      Inventory the commands operators run in production and wrap the risky ones in automation runbooks with typed,
+      validated parameters (for example allowedValues or allowedPattern in Systems Manager documents), a target
+      preview, concurrency and error-threshold limits, and a minimum-capacity check that aborts the run. Retire
+      direct use of the underlying commands for those tasks, and add the safety checks to every similar tool.
+    improvement_url: https://docs.aws.amazon.com/systems-manager/latest/userguide/documents-syntax-data-elements-parameters.html
+    additional_improvement:
+      - display_text: Use instance scale-in protection to control instance termination (Amazon EC2 Auto Scaling)
+        url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-instance-protection.html
+  - id: ot_resource_protections
+    tier: alt:A
+    title: Critical resources have deletion protection, stack policies or equivalent safeguards
+    concept: critical-resource-deletion-protection
+    severity_basis: >-
+      deviation:deleting or replacing a critical stateful resource is often irreversible or slow to recover, and the
+      AWS ORR whitepaper's Appendix A asks how an operator is prevented from deleting a stack or critical resources.
+    good: >-
+      Every critical resource whose loss would cause an outage or data loss has a guard that a single mistaken
+      action cannot bypass: deletion protection on databases and tables, termination protection on stacks and
+      critical instances, CloudFormation stack policies and DeletionPolicy or UpdateReplacePolicy set to Retain or
+      Snapshot for stateful resources, and service control policies that deny deleting or modifying protected
+      resources except through an approved role. Turning a guard off is itself a reviewed, logged change.
+    platform_notes: >-
+      Data: Amazon RDS and Aurora deletion protection, Amazon DynamoDB deletion protection, and bucket policies or
+      service control policies that deny bucket deletion (S3 versioning and Object Lock are scored in
+      architecture_data_corruption). EC2: instance termination protection. Infrastructure as code: stack termination
+      protection, stack policies and retain policies, or the equivalent in your tool.
+    helpful_url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html
+    improvement: >-
+      List the resources whose deletion or replacement would cause an outage or data loss. Turn on deletion or
+      termination protection for each, set retain or snapshot policies on stateful resources in your templates, add
+      stack policies for critical resources, and add a service control policy that denies deletes on resources tagged
+      as protected except through a break-glass or pipeline role. Alarm when a protection setting is turned off.
+    improvement_url: https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-deletionpolicy.html
+    additional_improvement:
+      - display_text: Protect CloudFormation stacks from being deleted (termination protection)
+        url: https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html
+      - display_text: Deleting a DB instance, including deletion protection (Amazon RDS)
+        url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html
+      - display_text: Basic operations on DynamoDB tables, including deletion protection
+        url: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html
+      - display_text: Change instance termination protection (Amazon EC2)
+        url: https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_ChangingDisableAPITermination.html
+      - display_text: Service control policies (AWS Organizations)
+        url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
+  - id: ot_dry_run_two_person
+    tier: sec
+    title: High-impact commands support a dry run or require a second person to approve
+    concept: high-impact-command-preview-or-approval
+    wa_bp: OPS07-BP03
+    good: >-
+      Commands that can remove capacity, delete data, change routing or change access show exactly what they will do
+      before they do it (for example an automation step that lists the resolved targets and waits for confirmation,
+      or a tool flag that only prints the intended actions), and the highest-impact ones need a second person to
+      approve before they run. The approval works out of hours, is recorded with the change, and the emergency path
+      for urgent fixes is logged and reviewed afterward. Previews of infrastructure as code changes are scored in
+      releases_manual_changes.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html
+    improvement: >-
+      Classify operator commands by impact. For the high-impact ones, add a preview step that prints the intended
+      actions and targets, and an approval step by someone other than the operator, for example the aws:approve
+      action in a Systems Manager Automation runbook or a manual approval action in AWS CodePipeline. Review approval
+      records and emergency bypasses in your operations review. Reader note: the aws:approve page also describes an
+      input used only by AWS Systems Manager Change Manager templates; Change Manager is closed to new customers and
+      is not needed for this practice.
+    improvement_url: https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-action-approve.html
+    additional_improvement:
+      - display_text: Add a manual approval action to a stage (AWS CodePipeline)
+        url: https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html
+pes_lesson:
+  statement: ot_blast_radius_limits
+  month: Feb 2017
+  url: https://aws.amazon.com/message/41926/
+  lesson: >-
+    a single incorrect input to an operational command removed a larger set of servers than intended and caused
+    hours of impact, so make operator tools validate inputs, remove capacity in small steps and refuse to take any
+    tier below its minimum capacity.

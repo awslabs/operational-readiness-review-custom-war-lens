@@ -1,0 +1,127 @@
+schema: orrlens/question/1
+id: architecture_health_lifecycle
+pillar: architecture
+order: 90
+title: Health checks and safe capacity lifecycle
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Blast radius containment
+lineage: [architecture_health_checks, releases_deployment, releases_validation, releases_traffic_draining]
+choice_prefix: hc_
+description:
+  question: >-
+    Do health checks remove or replace unhealthy capacity automatically, without letting a shared dependency
+    failure or the checks themselves take healthy capacity out of service, and do new capacity and versions enter
+    and leave service safely?
+  out_of_scope_if: >-
+    all compute is platform-managed (for example AWS Lambda). Select the first statement and keep the evidence.
+  evidence_to_collect: >-
+    health check configuration per tier (what it tests, interval, thresholds and the action on failure). How the
+    checks behave when a shared dependency fails. Readiness, warm-up and draining settings. A recent deployment
+    or scale-in that shows no failed requests.
+helpful:
+  display_text: REL11-BP03 Automate healing on all layers (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_auto_healing_system.html
+statements:
+  - id: hc_platform_managed
+    tier: scope
+    title: >-
+      All compute is platform-managed (for example AWS Lambda), with no self-managed instances, tasks or
+      pods
+    concept: health-scope-platform-managed-compute
+    good: >-
+      Every compute component is a service whose health AWS manages, for example AWS Lambda, which runs functions
+      in multiple Availability Zones. There are no EC2 instances, Amazon ECS tasks (including tasks on AWS
+      Fargate), Kubernetes pods or other servers that you place behind a load balancer or scale yourself. Evidence
+      to collect: a compute inventory from your infrastructure as code or AWS Config that shows only
+      platform-managed compute. When this is selected, the other statements do not change the score.
+    helpful_url: https://docs.aws.amazon.com/lambda/latest/dg/security-resilience.html
+    improvement: >-
+      If any instance, task or pod is on the critical path, clear this statement and answer the other statements.
+      Platform-managed compute still needs alarms and safe deployments, which other questions score.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_auto_healing_system.html
+  - id: hc_check_and_replace
+    tier: core
+    title: >-
+      Health checks test the ability to serve, and failed instances, tasks or pods are replaced or removed
+      automatically
+    concept: health-check-auto-replace
+    severity_basis: "wa:REL11-BP03 (High)"
+    wa_bp: REL11-BP03
+    good: >-
+      Each tier has a health check that exercises the ability to serve requests, not only that the process is
+      running, and a failed check removes the unit from traffic and replaces it automatically, with no operator
+      action. Thresholds avoid flapping, and an alarm fires when unhealthy counts or replacements rise above
+      normal.
+    platform_notes: >-
+      EC2: Auto Scaling groups with Elastic Load Balancing health checks turned on, so instances that fail load
+      balancer checks are replaced. Containers: Amazon ECS container health checks and load balancer checks, or
+      Kubernetes liveness and readiness probes, with an ECS service or Kubernetes Deployment that restores the
+      desired count.
+    helpful_url: https://builder.aws.com/content/3Ev53O39izHCtWLzp4XU6t8PC1O/implementing-health-checks
+    improvement: >-
+      For each tier, define a health check that covers the ability to serve, connect it to automatic removal and
+      replacement (Auto Scaling group ELB health checks, an ECS service or a Kubernetes controller), tune
+      intervals and thresholds from observed behavior, and alarm on unhealthy host counts and replacement rate.
+      Test it by failing one unit and confirming it is replaced without customer impact.
+    improvement_url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-health-checks.html
+    additional_improvement:
+      - display_text: Health checks for Application Load Balancer target groups
+        url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
+      - display_text: Determine Amazon ECS task health using container health checks
+        url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/healthcheck.html
+      - display_text: Running highly-available applications (Amazon EKS best practices)
+        url: https://docs.aws.amazon.com/eks/latest/best-practices/application.html
+  - id: hc_dependency_safe
+    tier: sec
+    title: >-
+      Checks separate local from shared-dependency failure, so a dependency outage cannot remove all healthy
+      capacity
+    concept: dependency-safe-health-checks
+    wa_bp: REL11-BP01
+    good: >-
+      Health checks that drive replacement test only local health, and dependency failures are reported through
+      separate metrics and alarms. Where deep checks that include dependencies drive routing, the system fails
+      open when every unit fails at once instead of removing all capacity.
+    platform_notes: >-
+      EC2: an Application Load Balancer routes to all targets when every target in a target group is unhealthy
+      (fail open), but an Auto Scaling group that uses ELB health checks can still replace those instances, so
+      keep dependency calls out of checks that trigger replacement. Containers: keep dependency calls out of ECS
+      container health checks and Kubernetes liveness probes.
+    helpful_url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/target-group-health-checks.html
+    improvement: >-
+      Review each health check: remove calls to shared dependencies from checks that trigger replacement or
+      removal, report dependency health as separate metrics and alarms, confirm fail-open behavior in each load
+      balancer and service mesh, and verify in a test environment that blocking a shared dependency leaves
+      capacity in service.
+    improvement_url: https://builder.aws.com/content/3Ev53O39izHCtWLzp4XU6t8PC1O/implementing-health-checks
+  - id: hc_enter_leave_safely
+    tier: sec
+    title: >-
+      New capacity and versions pass readiness checks before taking traffic, and drain in-flight work before
+      stopping
+    concept: readiness-gate-and-drain
+    wa_bp: OPS06-BP03
+    good: >-
+      New instances, tasks, pods and versions get traffic only after a readiness check confirms they started
+      correctly and warmed up. Units leaving service during deployments, scale-in or replacement stop taking new
+      work and finish or hand off in-flight requests and jobs before they stop. The AWS ORR whitepaper's example
+      questions ask for on-host validation before a deployment re-registers with the load balancer.
+    platform_notes: >-
+      EC2: Auto Scaling lifecycle hooks, Application Load Balancer slow start and deregistration delay, and AWS
+      CodeDeploy ValidateService hooks. Containers: ECS health check grace period and container stop timeout with
+      termination-signal handling; Kubernetes readiness probes and preStop hooks.
+    helpful_url: https://docs.aws.amazon.com/elasticloadbalancing/latest/application/edit-target-group-attributes.html
+    improvement: >-
+      Add a readiness or validation step to every deployment and launch path, use warm-up or slow start where cold
+      units are slow, make processes stop intake and finish in-flight work on a termination signal, set draining
+      and stop timeouts longer than your longest normal request, and confirm with a deployment under load that no
+      requests fail.
+    improvement_url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/lifecycle-hooks.html
+    additional_helpful:
+      - display_text: ORR whitepaper Appendix B (on-host validation before re-registering)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+    additional_improvement:
+      - display_text: AWS CodeDeploy AppSpec hooks (ValidateService)
+        url: https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html

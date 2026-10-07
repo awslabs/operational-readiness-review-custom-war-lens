@@ -1,0 +1,137 @@
+schema: orrlens/question/1
+id: releases_staged_deployments
+pillar: release_quality
+order: 20
+title: Pre-production parity and automated test gates
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Deployment safety
+lineage: [releases_staged_deployments, releases_performance_impact, releases_custom_amis, automation_of_test_coverage]
+choice_prefix: pp_
+description:
+  question: >-
+    Before a change reaches production, does it pass automated tests in representative pre-production
+    environments, and does a failed test stop it from being promoted?
+  evidence_to_collect: >-
+    the pipeline definition showing pre-production stages and their test actions. The last test failure that
+    blocked promotion. How pre-production accounts, IaC and configuration differ from production. Build scan
+    types and severity thresholds. Performance test results for the last release.
+helpful:
+  display_text: REL08-BP02 Integrate functional testing (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_functional_testing.html
+statements:
+  - id: pp_tests_block
+    tier: core
+    title: Automated integration and end-to-end tests run in pre-production after each deployment and block promotion on failure
+    concept: preprod-blocking-tests
+    severity_basis: "wa:REL08-BP02 (High)"
+    wa_bp: REL08-BP02
+    good: >-
+      After every deployment to pre-production, the pipeline runs automated integration and end-to-end tests
+      against the deployed stack, covering each critical journey and the APIs it calls, and promotion stops when
+      any test fails. Overrides are audited. Infrastructure and configuration changes are tested like code.
+    platform_notes: >-
+      EC2: validation scripts in AWS CodeDeploy lifecycle hooks, or a test stage after deployment. Containers:
+      tests against the new Amazon ECS service revision before traffic shifts, for example with ECS deployment
+      lifecycle hooks. Serverless: tests against the new Lambda version, for example in a CodeDeploy
+      BeforeAllowTraffic hook. Any pipeline: an AWS CodeBuild test action in AWS CodePipeline, or your CI/CD
+      system's equivalent.
+    partition_notes: >-
+      Amazon ECS deployment lifecycle hooks, part of ECS built-in blue/green, linear and canary deployments, are
+      available in AWS GovCloud (US) as of 2026-10-06.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.1-test-deployments-in-pre-production-environments.html
+    improvement: >-
+      Add a pre-production stage to every pipeline (code, infrastructure and configuration) that deploys the change
+      and then runs automated integration and end-to-end tests for each critical journey. Make any failed test fail
+      the stage so promotion stops, notify the owning team, and treat flaky tests as defects to fix rather than
+      tests to disable. Review the coverage of critical journeys at each ORR.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_functional_testing.html
+    additional_improvement:
+      - display_text: AWS CodeDeploy AppSpec hooks (validation before and after traffic shifts)
+        url: https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html
+      - display_text: Test reports in AWS CodeBuild
+        url: https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html
+  - id: pp_parity
+    tier: sec
+    title: Pre-production uses the same IaC, pipeline, configuration shape and immutable artifact as production, in separate accounts
+    concept: preprod-parity-immutable-artifacts
+    wa_bp: OPS05-BP08
+    good: >-
+      Pre-production is built from the same infrastructure as code, pipeline definition and configuration
+      structure as production, differing only in documented parameters such as size, endpoints and secrets, and it
+      runs in AWS accounts separate from production. Each artifact (container image, function package, machine
+      image or bundle) is built once, stored immutably with a version or digest, and that exact artifact is
+      promoted through every stage; nothing is rebuilt or patched in place for production.
+    platform_notes: >-
+      EC2: bake machine images in an image pipeline (for example EC2 Image Builder) and replace instances rather
+      than patching them in place. Containers: deploy by image digest and turn on Amazon ECR tag immutability.
+      Serverless: promote the same published Lambda version or deployment package through each stage.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_multi_env.html
+    improvement: >-
+      Template every environment from the same IaC with per-environment parameters, move pre-production into its
+      own accounts, build each artifact once and promote it by digest or version, and add a pipeline check that
+      fails if the artifact about to reach production differs from the one tested in pre-production. Record any
+      intended difference between environments and why it is safe. Reader note: This page refers to AWS App Mesh,
+      which reached end of support on 2026-09-30; for canary deployments on Amazon ECS, use ECS built-in canary
+      deployments instead.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_immutable_infrastructure.html
+    additional_improvement:
+      - display_text: Preventing image tags from being overwritten in Amazon ECR
+        url: https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html
+  - id: pp_build_gates
+    tier: sec
+    title: Unit tests, static analysis, and dependency, secret and IaC scans fail the build above an agreed severity
+    concept: build-quality-security-gates
+    wa_bp: SEC11-BP02
+    good: >-
+      Every build runs unit tests, static analysis, dependency (software composition) analysis, secret detection
+      and IaC checks, and fails on any finding at or above the severity agreed with the security owner, for example
+      critical or high. Thresholds are written down; exceptions carry an expiry date.
+    platform_notes: >-
+      Any platform: IaC checks such as cfn-lint, AWS CloudFormation Guard or CloudFormation Hooks; vulnerability
+      scanning of container images in Amazon ECR and of Lambda functions with Amazon Inspector; and your static
+      analysis and secret scanning tools run in AWS CodeBuild or your CI system.
+    partition_notes: >-
+      Amazon Inspector Lambda code scanning and code repository scanning are not available in AWS GovCloud (US) as
+      of 2026-10-06; use Inspector image and package scanning plus your own static analysis there.
+    reader_note: >-
+      This page refers to Amazon CodeGuru Security, which was discontinued on 2025-11-20; any static analysis and
+      secret scanning tool meets this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_automate_testing_throughout_lifecycle.html
+    improvement: >-
+      Add the missing scan types to the build, run them in report-only mode first to baseline existing findings,
+      agree severity thresholds with the security owner, then make findings at or above the threshold fail the
+      build. Route findings to the owning team, record time-bound exceptions, and review the thresholds at each
+      ORR.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-security-testing.html
+    additional_improvement:
+      - display_text: AWS CloudFormation Guard (policy-as-code checks for IaC)
+        url: https://github.com/aws-cloudformation/cloudformation-guard
+      - display_text: Scanning Amazon ECR container images with Amazon Inspector
+        url: https://docs.aws.amazon.com/inspector/latest/user/scanning-ecr.html
+  - id: pp_perf_regression
+    tier: sec
+    title: Latency and throughput regressions are caught in pre-production for performance-sensitive paths (or there are none)
+    concept: preprod-performance-regression
+    wa_bp: REL12-BP03
+    good: >-
+      For each performance-sensitive path, a repeatable load or benchmark test runs in pre-production for every
+      release candidate, compares latency percentiles, throughput, errors and resource use with the last good
+      baseline, and blocks promotion when a regression exceeds the agreed threshold. If no path is
+      performance-sensitive, that decision and its reason are recorded.
+    platform_notes: >-
+      EC2 and containers: include CPU, memory and connection-pool use in the comparison. Serverless: compare
+      function duration, concurrency and cold-start latency at the same load.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html
+    improvement: >-
+      Pick the performance-sensitive paths, define a short, representative load profile, record a baseline from
+      the last good release, run the test automatically in a pre-production stage, and fail promotion when p99
+      latency, error rate or throughput regress beyond the agreed threshold. Run high-volume tests within the
+      Amazon EC2 Testing Policy.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html
+    additional_improvement:
+      - display_text: Distributed Load Testing on AWS (AWS Solution)
+        url: https://docs.aws.amazon.com/solutions/latest/distributed-load-testing-on-aws/solution-overview.html
+      - display_text: Amazon EC2 Testing Policy
+        url: https://aws.amazon.com/ec2/testing/

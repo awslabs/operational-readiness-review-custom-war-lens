@@ -1,0 +1,18 @@
+# Design decisions for 2.0.0
+
+Design decisions for the core lens 2.0.0 and ORR - Mission-Critical Event Readiness 1.0.0, recorded 2026-10-06.
+Sandbox gate results, which several decisions depend on, are in [gates.md](gates.md).
+The table lists the decisions that shape published content.
+
+| ID | Decision | Outcome |
+|---|---|---|
+| D-1 | Lens family | Core 2.0.0 plus ORR - Mission-Critical Event Readiness 1.0.0. A companion is admitted only after it passes the admission test (a named owner, public sources, and no overlap with an existing lens). The family stays small so that custom-lens slots stay free for your own lenses |
+| D-2 | Choice IDs and kept question IDs | All choice IDs are new, with a CI check for collisions with v1. Two v1 question IDs are retired and replaced because their applicability broadened, so that a carried "does not apply" flag cannot silently exclude a High question: `releases_onebox_deployments` becomes `releases_phased_rollout` (EC2 to every platform), and `architecture_health_checks` becomes `architecture_health_lifecycle` (load balancer and DNS checks to all compute, with capacity lifecycle). Gate G2 (2026-10-06) showed that "does not apply" flags and their reasons carry over on upgrade. The other 20 v1 question IDs are kept, because their applicability is unchanged even where their maximum risk or their wording changed. That includes `event_expiring_materials`, `event_gameday` and `event_transaction_tracing`: they move to a High maximum, but they apply to the same workloads as in v1.3.6, so they keep their IDs. `MIGRATION.md` step 2 requires re-confirming every carried flag and names these three first |
+| D-3 | `az_tested_at_load` and `tp_dynamic_limits` | Secondary in 2.0.0, because the matching best practices (REL12-BP04, REL05-BP07) are rated Medium. Promotion to core only on field evidence (see [scoring.md](scoring.md)) |
+| D-4 | Cap `architecture_failure_models` and `underlying_dependencies` at Medium | Yes |
+| D-5 | Make six questions High-capped | Yes: `releases_phased_rollout`, `event_transaction_tracing`, `event_expiring_materials` and `event_gameday` move from a Medium to a High maximum; `architecture_rpo_rto` and `releases_staged_deployments` already reached High and change only their titles |
+| D-6 | Manual-only rollback | Scores High, with an accepted-risk path for commercial software you cannot redeploy |
+| D-7 | New pillar "04 - Readiness Decision" | Yes. Confirmed by gate G8 (2026-10-06): a major version can add the pillar, so `readiness_signoff` stays in `readiness_decision` |
+| D-8 | Lens names | The core lens keeps its published name, "AWS Operational Readiness Review": gate G8 (2026-10-06) showed that `ImportLens` rejects a new name over a published lens ("Lens name must match published name"), and renaming by creating a new lens is the least preferred option. A companion lens is a new lens with its own name, as "ORR - Mission-Critical Event Readiness" is. Documentation may still call the family the Operational Readiness Review (ORR) lenses |
+| D-9 | Keep the Medium tier | Keep it, as a documented deviation from the whitepaper's High-only style |
+| D-10 | Retire the four typo'd question IDs | Retire them in 2.0.0 and never reuse them |

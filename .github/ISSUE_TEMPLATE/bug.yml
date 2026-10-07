@@ -1,0 +1,72 @@
+name: Bug
+description: The lens does not import, a question scores unexpectedly, the generator or a check fails, or the documentation is wrong.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please do not include AWS account IDs, workload IDs, ARNs that contain account IDs, WA Tool notes, customer
+        names or any sensitive or personal information. To report a security issue, use
+        https://aws.amazon.com/security/vulnerability-reporting/ instead of an issue.
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Importing or publishing a lens in the WA Tool
+        - Upgrading a lens or a workload
+        - Scoring of a question
+        - Generator or checks (tools/orrlens)
+        - Documentation
+        - Other
+    validations:
+      required: true
+  - type: dropdown
+    id: lens
+    attributes:
+      label: Lens
+      options:
+        - Operational Readiness Review (ORR) core
+        - ORR - Mission-Critical Event Readiness
+        - Not lens-specific
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Lens version or commit
+      placeholder: "2.0.0"
+    validations:
+      required: true
+  - type: input
+    id: region
+    attributes:
+      label: AWS Region and partition (if relevant)
+      placeholder: "us-east-1, or us-gov-west-1 (AWS GovCloud (US))"
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: For scoring issues, give the question ID and the choice IDs you selected.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include the error message, with any account IDs removed.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: modifications
+    attributes:
+      label: Modifications
+      description: Did you modify the lens JSON or the YAML sources? If so, how?

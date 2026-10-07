@@ -1,0 +1,91 @@
+schema: orrlens/question/1
+id: architecture_failure_models
+pillar: architecture
+order: 20
+title: "System model: diagrams, critical journeys and failure modes"
+max_risk: MEDIUM
+priority: P1
+core_path: false
+category: Defense against dependencies
+lineage: [architecture_architecture_diagram, architecture_api_matrix, architecture_failure_models]
+choice_prefix: sm_
+description:
+  question: >-
+    Does the team share a current model of how the workload works and how each component and dependency can
+    fail, with a detection signal and a mitigation for each significant failure mode?
+  evidence_to_collect: >-
+    current architecture and data-flow diagrams. The table of critical journeys and APIs with the components and
+    dependencies each one uses. The failure mode analysis and its last review date. The mapping from failure
+    modes to alarms, runbooks and design controls.
+helpful:
+  display_text: Resilience analysis framework (AWS Prescriptive Guidance)
+  url: https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-analysis-framework/introduction.html
+statements:
+  - id: sm_diagrams_journeys
+    tier: sec
+    title: Current architecture and data-flow diagrams map each critical user journey and API to the components and dependencies it uses
+    concept: system-diagrams-critical-journeys
+    good: >-
+      Diagrams stored with the code or in a shared, versioned location show components, AWS accounts, Regions and
+      Availability Zones, data stores, network paths, and every internal and external dependency. A table lists
+      each critical user journey and each customer-facing API, public or private, what it does, and the components
+      and dependencies it touches. Both were updated in or after the last major change.
+    platform_notes: >-
+      Serverless and event-driven workloads: include event sources, queues, streams, schedules and other
+      asynchronous paths, which diagrams often omit. Containers: include cluster add-ons, service discovery and the
+      image registry. EC2: include AMI sources, bootstrap dependencies and load balancer health checks.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+    improvement: >-
+      Draw the current architecture and data flows from your infrastructure as code and from observed traffic,
+      list the critical journeys and APIs with the dependencies each one uses, store both with the code, and
+      update them in the same change that alters the architecture.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-analysis-framework/introduction.html
+  - id: sm_fma_documented
+    tier: sec
+    title: A failure mode analysis of every component and dependency is documented and reviewed yearly or after major changes
+    concept: failure-mode-analysis-documented
+    good: >-
+      A failure mode analysis lists, for every component and dependency, its hard and soft failure modes (for
+      example unavailable, slow, erroring, throttling or returning bad data) with the service impact and the
+      customer impact of each. It covers loss of the largest blast-radius unit the workload uses, such as a cell,
+      an Availability Zone or a Region, and was reviewed in the last 12 months or after the last major change.
+    helpful_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-analysis-framework/introduction.html
+    improvement: >-
+      Run a structured analysis, for example with the resilience analysis framework or Failure Mode and Effects
+      Analysis (FMEA): walk each component and dependency through each failure category, record the impact and
+      the protections that already exist, rank the gaps, and schedule a review every 12 months and after major
+      changes.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/failure-mode-effects-analysis/introduction.html
+  - id: sm_fma_detection
+    tier: sec
+    title: Each significant failure mode maps to an alarm or other detection signal
+    concept: failure-mode-detection-mapped
+    wa_bp: REL11-BP01
+    good: >-
+      For each significant failure mode, the analysis names the alarm, canary or other signal that detects it
+      and how quickly. Failure modes that nothing detects are listed as gaps with an owner and a date, and each
+      mapping was checked against a past incident or an injected fault.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_monitoring_health.html
+    improvement: >-
+      Add a detection column to the failure mode analysis, map each failure mode to an existing alarm or canary,
+      create alarms for the gaps, and confirm each mapping by injecting the failure in a test environment or by
+      replaying a past incident.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+  - id: sm_fma_mitigation
+    tier: sec
+    title: "Each significant failure mode has a documented mitigation: a design control, automation or a runbook"
+    concept: failure-mode-mitigation-mapped
+    wa_bp: OPS07-BP03
+    good: >-
+      Each significant failure mode has a documented mitigation: a design control (for example redundancy, a
+      timeout or a degraded mode), an automated response, or a runbook with tested steps. Failure modes the team
+      chose not to mitigate are recorded with the reason and the accountable owner.
+    reader_note: >-
+      This page links an article that uses AWS CloudTrail Lake, which is closed to new customers; any runbook
+      format or tool meets this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html
+    improvement: >-
+      Add a mitigation column, link each failure mode to the control, automation or runbook that handles it, write
+      runbooks for the gaps, and put design changes for failure modes with high customer impact and no mitigation
+      on the backlog with an owner and a date.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/failure-mode-effects-analysis/introduction.html

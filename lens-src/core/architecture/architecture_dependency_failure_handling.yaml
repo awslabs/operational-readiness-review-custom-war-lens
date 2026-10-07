@@ -1,0 +1,129 @@
+schema: orrlens/question/1
+id: architecture_dependency_failure_handling
+pillar: architecture
+order: 50
+title: Core journeys keep working when dependencies fail
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Defense against dependencies
+lineage: [architecture_failure_testing, architecture_gradeful_recovery]
+choice_prefix: df_
+description:
+  question: >-
+    When a non-critical dependency is slow or unavailable, do core customer journeys keep working, and does the
+    workload recover safely when the dependency returns?
+  evidence_to_collect: >-
+    the soft dependencies of each critical journey and how each is called (synchronous, asynchronous or cached).
+    Logging and telemetry configuration, including the Amazon ECS log driver mode. The degraded behavior defined
+    per feature. Backlog drain and admission settings. The latest fault injection results.
+helpful:
+  display_text: REL05-BP01 Graceful degradation (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
+statements:
+  - id: df_soft_deps_nonblocking
+    tier: core
+    title: Non-critical dependencies (logs, metrics, tracing, analytics, feature flags) cannot block or fail the request path
+    concept: soft-dependencies-nonblocking
+    severity_basis: "wa:REL05-BP01 (High)"
+    wa_bp: REL05-BP01
+    good: >-
+      Calls to logging, metrics, tracing, analytics, feature-flag and similar services are asynchronous,
+      buffered with bounded memory, or served from a local cache, with short timeouts, so the request still
+      completes when any of them is slow or down. The team checked each one rather than assuming it.
+    platform_notes: >-
+      Containers: since 2025-06-25 the Amazon ECS default log driver mode is non-blocking; check task definitions
+      for mode set to blocking and the defaultLogDriverMode account setting, and with non-blocking mode size
+      max-buffer-size and alarm on log delivery gaps, because a full buffer drops logs. Serverless: do not block
+      a function on direct calls to CloudWatch Logs or Amazon Data Firehose. Feature flags: read them through a
+      local cache such as AWS AppConfig Agent so the last known values keep working.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
+    improvement: >-
+      List every non-critical call on the request path. Move each one off the path (asynchronous, buffered or
+      cached with a bounded size), give it a short timeout and a defined behavior on failure, and verify by
+      blocking each dependency in a test environment. For Amazon ECS, choose blocking or non-blocking log
+      delivery deliberately for each container.
+    improvement_url: https://docs.aws.amazon.com/AmazonECS/latest/developerguide/ecs-account-settings.html
+    additional_improvement:
+      - display_text: Amazon ECS LogConfiguration (mode and max-buffer-size)
+        url: https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_LogConfiguration.html
+      - display_text: What is AWS AppConfig Agent? (local caching of configuration and feature flags)
+        url: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-agent.html
+  - id: df_degrade_static
+    tier: core
+    title: Losing a soft dependency degrades only its feature through normal code paths, not rarely exercised fallback paths
+    concept: degrade-through-normal-code-paths
+    severity_basis: "wa:REL05-BP01 (High)"
+    wa_bp: REL05-BP01
+    good: >-
+      When a soft dependency fails, only the feature that needs it degrades (for example recommendations are
+      hidden, or cached data is shown with its age) and the rest of the journey proceeds. The degraded behavior
+      runs through code paths used every day, such as always reading from a cache that is refreshed
+      asynchronously, rather than a fallback that runs only during failures and is rarely exercised.
+    helpful_url: https://builder.aws.com/content/3EuS9Sakq7L3VLQIF3qzfMfke1Y/avoiding-fallback-in-distributed-systems
+    improvement: >-
+      For each soft dependency, agree the degraded behavior with the product owner. Implement it so the normal
+      path already tolerates the dependency being absent, for example by using pushed or cached data on every
+      request, remove rarely exercised fallback code where you can, and test each degraded mode.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html
+    additional_helpful:
+      - display_text: "AWS Fault Isolation Boundaries: Static stability"
+        url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html
+  - id: df_backlog_recovery
+    tier: sec
+    title: After an outage, backlogs drain under admission control or load shedding, so queued work and retries cannot cause collapse
+    concept: post-outage-backlog-recovery
+    wa_bp: REL05-BP04
+    large_scale: true
+    good: >-
+      After a dependency outage, queued work, client retries and reconnecting clients cannot overload the
+      recovering system. Consumers drain backlogs at a bounded rate, fresh or high-priority work is processed
+      first where old work has lost its value, stale work is dropped or dead-lettered, and admission control or
+      load shedding protects the service while caches refill.
+    platform_notes: >-
+      Serverless: cap Lambda concurrency for Amazon SQS event sources with maximum concurrency, and set a maximum
+      event age for asynchronous invocations. EC2 and containers: cap consumer concurrency and connection-pool
+      sizes so a backlog cannot exhaust a shared database.
+    helpful_url: https://builder.aws.com/content/3EuRcgkTP1MI0c7zM8W6HL3WIqA/avoiding-insurmountable-queue-backlogs
+    improvement: >-
+      Estimate the backlog that your longest expected dependency outage creates. Set consumer rate limits and
+      maximum message ages, decide which work to drop, prioritize or dead-letter, and rehearse recovery by
+      pausing a consumer or dependency under load and watching the drain.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_fail_fast.html
+    additional_improvement:
+      - display_text: Configuring scaling behavior for SQS event source mappings (maximum concurrency)
+        url: https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-scaling.html
+  - id: df_faults_injected
+    tier: sec
+    title: Dependency errors, throttling, latency and unavailability were injected (for example with AWS FIS) and the behavior verified
+    concept: dependency-fault-injection-verified
+    wa_bp: REL12-BP04
+    good: >-
+      Experiments injected errors, throttling, added latency and full unavailability for each critical and soft
+      dependency, in a production-like environment or in production with stop conditions, and showed that
+      timeouts, retries, degraded modes and alarms behaved as documented. Results and fixes are recorded, and the
+      experiments are repeated after major changes.
+    platform_notes: >-
+      AWS FIS has actions for EC2, Amazon ECS tasks, Amazon EKS pods, network disruption and Lambda (invocation
+      errors and added delay). For third-party dependencies, inject faults in a proxy or client wrapper.
+    partition_notes: >-
+      AWS FIS is available in AWS GovCloud (US) as of 2026-10-05, but the AWS FIS experiment schedule and
+      experiment report features are not available there, so schedule experiments from a pipeline or Amazon
+      EventBridge Scheduler; verify per Region that the actions you need are supported.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html
+    improvement: >-
+      Write a hypothesis for each dependency failure mode, run experiments with stop conditions tied to alarms,
+      start in a test environment, fix what breaks, and add the experiments to a regular schedule or a pipeline
+      stage.
+    improvement_url: https://docs.aws.amazon.com/fis/latest/userguide/fis-actions-reference.html
+    additional_improvement:
+      - display_text: Use the AWS FIS aws:lambda:function actions
+        url: https://docs.aws.amazon.com/fis/latest/userguide/use-lambda-actions.html
+pes_lesson:
+  statement: df_soft_deps_nonblocking
+  month: Jul 2024
+  url: https://aws.amazon.com/message/073024/
+  lesson: >-
+    Amazon ECS tasks whose awslogs driver used blocking mode were blocked and could not respond to health checks when logs could
+    not be sent, while tasks using non-blocking mode ran normally, so keep logging and other soft dependencies off
+    the request path.

@@ -1,0 +1,137 @@
+schema: orrlens/question/1
+id: releases_phased_rollout
+pillar: release_quality
+order: 30
+title: Phased production rollout with automated stage gates
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Deployment safety
+lineage: [releases_deployment, releases_onebox_deployments, releases_deployment_gating]
+choice_prefix: pd_
+description:
+  question: >-
+    Does every production change, including configuration and feature flags, reach a small slice of capacity or
+    traffic first and then expand in automated stages that stop when something goes wrong?
+  evidence_to_collect: >-
+    deployment settings for each change type (code, infrastructure, configuration, feature flags) showing the
+    first slice and later stages. The bake time and alarms watched in each stage. The order of Regions or cells,
+    if any. Deployment window and blocker settings. The last rollout that a stage gate stopped.
+helpful:
+  display_text: OPS06-BP03 Safe deployment strategies (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_deploy_mgmt_sys.html
+statements:
+  - id: pd_staged_expansion
+    tier: core
+    title: Each production change, including configuration and flags, first reaches a small slice, then expands in automated, gated stages
+    concept: phased-production-exposure
+    severity_basis: >-
+      deviation:OPS06-BP03 is rated Medium; the lens rates it High because a change released to all capacity at
+      once turns any defect into impact for every customer, and phased exposure is the primary control that limits
+      the blast radius of a change.
+    wa_bp: OPS06-BP03
+    good: >-
+      No production change goes to all capacity or users at once. Code, configuration and flag changes first reach
+      a small slice (one instance, task or cell, or a few percent of requests or targets), then expand in automated
+      stages, each only when the previous stage's health checks and alarms are clear. Any stage can stop the
+      rollout. Infrastructure changes that cannot be split are applied one account, Region or stack at a time where
+      there is more than one.
+    platform_notes: >-
+      EC2: AWS CodeDeploy deployment configurations that update a small batch first, or EC2 Auto Scaling instance
+      refresh with checkpoints. Containers: Amazon ECS canary or linear deployments, or a progressive delivery
+      controller on Amazon EKS. Serverless: Lambda alias traffic shifting with CodeDeploy canary or linear
+      configurations. Configuration and flags: AWS AppConfig deployment strategies. Infrastructure: one pipeline
+      stage per account or Region.
+    helpful_url: https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments
+    improvement: >-
+      For each change type, choose a native phased mechanism and configure a small first slice followed by
+      automated increments, each gated on health checks and alarms. Remove or restrict any path, such as console
+      edits or direct configuration pushes, that can apply a change everywhere at once. All-at-once deployment is a
+      launch-blocking gap unless the accountable owner formally accepts it, for example for commercial software
+      that supports only in-place upgrades.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.3-use-staggered-deployment-and-release-strategies.html
+    additional_improvement:
+      - display_text: Working with deployment configurations in AWS CodeDeploy
+        url: https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html
+      - display_text: Gradual deployments in Amazon ECS with linear and canary strategies
+        url: https://aws.amazon.com/blogs/containers/gradual-deployments-in-amazon-ecs-with-linear-and-canary-strategies/
+      - display_text: Implement Lambda canary deployments using a weighted alias
+        url: https://docs.aws.amazon.com/lambda/latest/dg/configuring-alias-routing.html
+      - display_text: AWS AppConfig deployment strategies
+        url: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
+      - display_text: Add checkpoints to an EC2 Auto Scaling instance refresh
+        url: https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-adding-checkpoints-instance-refresh.html
+  - id: pd_fault_boundary_waves
+    tier: sec
+    title: Multi-Region or cell-based workloads roll out one Region or cell at a time, and single-Region workloads use percentage stages
+    concept: fault-boundary-deployment-waves
+    wa_bp: REL10-BP03
+    good: >-
+      Multi-Region or cell-based workloads deploy to one Region or cell first and then to the rest in waves of
+      increasing size, so a bad change is much more likely to be caught in one Region or cell before it reaches the
+      rest. Single-Region
+      workloads use percentage stages within the Region, and may also stage by Availability Zone where the tooling
+      supports it. The order of Regions, cells or zones is fixed in the pipeline definition, not left to the
+      operator.
+    platform_notes: >-
+      EC2: AWS CodeDeploy zonal configuration deploys to one Availability Zone at a time, with a monitor duration
+      between zones. Any platform: one pipeline stage per Region or cell, in a fixed order, each waiting for the
+      previous stage to finish baking.
+    partition_notes: >-
+      AWS CodePipeline cross-Region actions are not available in AWS GovCloud (US) as of 2026-10-06; there, run a
+      pipeline in each GovCloud (US) Region and promote between them in a fixed order.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.6-utilize-cell-based-architectures-for-granular-deployment-and-release.html
+    improvement: >-
+      Order Regions or cells from lowest to highest risk, start with a single Region or cell, then promote in waves
+      of increasing size with bake time between waves. Encode the order in the pipeline rather than a runbook, and
+      make each wave wait until the previous one has finished baking with clear alarms.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reducing-scope-of-impact-with-cell-based-architecture/reducing-scope-of-impact-with-cell-based-architecture.html
+    additional_improvement:
+      - display_text: Fault-isolated, zonal deployments with AWS CodeDeploy (AWS DevOps Blog)
+        url: https://aws.amazon.com/blogs/devops/fault-isolated-zonal-deployments-with-aws-codedeploy/
+  - id: pd_bake_time
+    tier: sec
+    title: Each stage bakes under monitoring for longer than its rollback alarms take to evaluate, longest in early stages
+    concept: stage-bake-time
+    wa_bp: OPS06-BP03
+    good: >-
+      After each stage completes, the rollout waits for a defined bake time while automated monitoring watches
+      alarms and canaries, and it promotes only if they stay clear. Each stage's bake time exceeds the evaluation
+      time of the rollback alarms it watches (the alarm period multiplied by its evaluation periods, plus any delay
+      in the metric arriving), so an alarm can fire before the next stage starts. The first stages, where a change
+      first meets real traffic, bake longest, long enough to surface slow-burning problems and to include
+      representative traffic; later stages can bake for less, but never for less than that evaluation time.
+    platform_notes: >-
+      EC2: the CodeDeploy zonal monitor duration, with a longer first-zone duration. Containers: Amazon ECS bake
+      time in blue/green, linear and canary deployments. Serverless: the interval in CodeDeploy canary or linear
+      configurations for Lambda aliases. Configuration and flags: the AWS AppConfig bake time after a deployment
+      reaches all targets.
+    helpful_url: https://aws.amazon.com/blogs/devops/fault-isolated-zonal-deployments-with-aws-codedeploy/
+    improvement: >-
+      For every production stage, list the rollback alarms it watches and their evaluation time, then set a bake
+      time longer than the slowest of them, longest in the first stages. Watch customer-facing alarms and canaries
+      during each bake, and revisit bake times after any incident that a longer bake would have caught.
+    improvement_url: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
+  - id: pd_blockers
+    tier: sec
+    title: Automated blockers stop deployments outside approved windows, on blocked or peak dates, and during active alarms
+    concept: deployment-blockers-windows
+    wa_bp: OPS06-BP03
+    large_scale: true
+    good: >-
+      The pipeline itself refuses to start a production stage outside approved deployment windows (for example
+      when the on-call team is not staffed to respond), on dates the business has blocked, such as peak or event
+      days, and while relevant alarms are firing. A documented, audited override exists for urgent fixes.
+    platform_notes: >-
+      AWS CodePipeline: stage entry conditions with the DeploymentWindow rule (a cron expression) and the
+      CloudWatchAlarm rule. Other CI/CD systems: an equivalent check before each production stage against a change
+      calendar and the current alarm state.
+    helpful_url: https://docs.aws.amazon.com/codepipeline/latest/userguide/concepts-how-it-works-conditions.html
+    improvement: >-
+      Add a check before each production stage that blocks deployments outside the approved window, on blocked
+      dates and while customer-facing alarms are in ALARM, and document how an urgent fix overrides it with an
+      audit record. Give the blocked-date calendar an owner and keep it current.
+    improvement_url: https://docs.aws.amazon.com/codepipeline/latest/userguide/stage-conditions.html
+    additional_improvement:
+      - display_text: Enhance release control with AWS CodePipeline stage-level conditions (AWS DevOps Blog)
+        url: https://aws.amazon.com/blogs/devops/enhance-release-control-with-aws-codepipeline-stage-level-conditions/

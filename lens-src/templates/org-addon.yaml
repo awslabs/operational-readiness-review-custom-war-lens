@@ -1,0 +1,137 @@
+# Starter add-on lens for your organization's own ORR questions.
+#
+# Source for templates/org-addon-lens.json (generated; do not edit the JSON by hand). See docs/customizing.md.
+#
+# Keep the ORR lenses unmodified and put your own questions in a separate add-on lens like this one, attached to
+# the same workload. The questions below are examples: replace them with questions derived from your own incidents
+# and policies, and rename every id from x_example_ to x_<org>_ (for example x_acme_). The x_ prefix is reserved for
+# overlays and add-ons, so these ids never collide with ORR lens ids.
+#
+# Question mappings use the lens-src/SCHEMA.md question format, without the `schema` key. Rules are generated from
+# the statement tiers: never write riskRules by hand.
+schema: orrlens/addon/1
+name: ORR add-on - Example organization requirements
+description: >-
+  Example add-on lens for the Operational Readiness Review (ORR) custom lens for the AWS Well-Architected Tool. It
+  holds an organization's own readiness questions, so the ORR lenses can be upgraded without touching them. Replace
+  the example questions with your own before use. High risk means launch-blocking unless remediated or formally
+  accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS
+  certification, compliance attestation, audit or SLA, and it does not change the AWS shared responsibility model.
+  Provided as is under the MIT-0 license. Template source:
+  https://github.com/awslabs/operational-readiness-review-custom-war-lens
+# The WA Tool API does not make "None of these" exclusive (sandbox gate G1, docs/gates.md), so the generated rules
+# add && !none_no to the No risk and Medium rules. Keep this true.
+none_exclusive_guard: true
+pillar:
+  id: x_example_org
+  name: 01 - Organization requirements
+questions:
+  - id: x_example_launch_approvals
+    pillar: x_example_org
+    order: 10
+    title: Organization launch approvals are recorded before production traffic
+    max_risk: HIGH
+    priority: P0
+    core_path: false
+    category: Readiness governance
+    lineage: []
+    choice_prefix: x_example_la_
+    description:
+      question: >-
+        Has the workload received every approval your organization requires before it takes production traffic,
+        and is each approval recorded where it can be inspected?
+      out_of_scope_if: your organization requires no approvals before a production launch.
+      evidence_to_collect: >-
+        the list of approvals your policy requires for this workload's data classification. The approval records,
+        with dates and expiry dates. The reminder or ticket that tracks each renewal.
+    helpful:
+      display_text: OPS01-BP04 Evaluate compliance requirements
+      url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html
+    statements:
+      - id: x_example_la_none_required
+        tier: scope
+        title: Organization policy requires no approvals before a production launch of this kind of workload
+        concept: x-example-launch-approvals-scope
+        good: >-
+          A policy owner confirmed in writing that no launch approvals apply to this workload's data classification
+          and audience. Evidence to collect: the policy section, and the confirmation with its date.
+        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html
+        improvement: >-
+          Ask your policy owner to confirm in writing which launch approvals apply to this workload, and link the
+          answer from the question notes.
+        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html
+      - id: x_example_la_approvals_recorded
+        tier: core
+        title: Every approval the organization requires (for example security, privacy, accessibility) is granted and recorded
+        concept: x-example-launch-approvals-recorded
+        severity_basis: >-
+          deviation: organization policy forbids taking production traffic before these approvals are granted, so a
+          missing approval blocks launch regardless of technical readiness.
+        good: >-
+          The team holds the current list of approvals its policy requires for this workload, each approval is
+          granted by the named approving body, and each record (with its date and scope) is stored where an auditor
+          or the accountable owner can inspect it. Notes link to the records; they do not copy them.
+        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html
+        improvement: >-
+          List the approvals your policy requires for this workload's data classification and audience, request
+          each one with the evidence the approving body asks for, and record the approval IDs in your launch
+          decision record.
+        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html
+      - id: x_example_la_renewals_tracked
+        tier: sec
+        title: Approval expiry and renewal dates are tracked with an owner, and renewal starts before expiry
+        concept: x-example-launch-approvals-renewal
+        good: >-
+          Each approval with an expiry date has an owner and a reminder that fires early enough to complete the
+          renewal before the approval lapses, and the recurring ORR checks the dates.
+        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_activity_owners.html
+        improvement: >-
+          Add each approval's expiry date to your tracker with an owner and a reminder at least one renewal cycle
+          before expiry, and add the dates to the agenda of your recurring operations review.
+        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_activity_owners.html
+
+  - id: x_example_service_inventory
+    pillar: x_example_org
+    order: 20
+    title: Workload is registered in the organization's service inventory with owners and support tier
+    max_risk: MEDIUM
+    priority: P1
+    core_path: false
+    category: Escalation
+    lineage: []
+    choice_prefix: x_example_si_
+    description:
+      question: >-
+        Can people outside the team find who owns this workload, how to reach its on-call, and how critical it is?
+      evidence_to_collect: >-
+        the workload's entry in your service inventory or configuration management database. The resource tags
+        that link AWS resources to that entry. The date the entry was last reviewed.
+    helpful:
+      display_text: OPS02-BP01 Resources have identified owners
+      url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html
+    statements:
+      - id: x_example_si_registered
+        tier: sec
+        title: The workload's inventory entry names its owner, on-call contact and support tier, and was reviewed in the last 12 months
+        concept: x-example-service-inventory-entry
+        good: >-
+          The organization's service inventory (or configuration management database) has an entry for the
+          workload with the accountable owner, the on-call contact or escalation path, the support tier and its
+          dependencies, and the team reviews it at least yearly and after ownership changes.
+        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html
+        improvement: >-
+          Create or update the workload's inventory entry with owner, on-call contact, support tier and
+          dependencies, and add the review to your recurring ORR.
+        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html
+      - id: x_example_si_tags_enforced
+        tier: sec
+        title: Production resources carry the organization's required ownership tags, and missing tags are detected
+        concept: x-example-service-inventory-tags
+        good: >-
+          Every production resource carries the tags your tagging strategy requires (for example owner, workload and
+          environment), and a tag policy or a detective rule reports resources that are missing them.
+        helpful_url: https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/building-your-tagging-strategy.html
+        improvement: >-
+          Define the required ownership tags, apply them through infrastructure as code, and enforce or report them
+          with AWS Organizations tag policies or an equivalent detective control.
+        improvement_url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html

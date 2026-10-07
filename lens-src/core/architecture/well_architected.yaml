@@ -1,0 +1,92 @@
+schema: orrlens/question/1
+id: well_architected
+pillar: architecture
+order: 10
+title: Current Well-Architected review with high risks dispositioned
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Readiness governance
+lineage: [well_architected]
+choice_prefix: wa_
+description:
+  question: >-
+    Does the workload have a current AWS Well-Architected Framework review whose high-risk issues are all
+    remediated, owned or formally accepted, so that this ORR can focus on launch-blocking operational risk?
+  evidence_to_collect: >-
+    the Well-Architected review report with its date and the lenses applied. The milestone saved at the review.
+    The date of the last major architecture change. The open high-risk issues with owner role, target date or
+    risk-register reference.
+helpful:
+  display_text: The review process (AWS Well-Architected Framework)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html
+statements:
+  - id: wa_current
+    tier: core
+    title: A Well-Architected Framework review was completed in the last 12 months and after the last major architecture change
+    concept: wa-framework-review-current
+    severity_basis: >-
+      deviation:the Framework review process calls for a review before go-live and after significant architecture
+      changes; a review that predates the current design leaves its design risks unknown at launch, and no
+      Framework best practice carries a risk level for this step
+    good: >-
+      The workload has a Framework review covering all six pillars, recorded in the AWS Well-Architected Tool or an
+      equivalent documented review, dated within the last 12 months and after the last major architecture change.
+      It was answered by people who own the current design, a milestone was saved at the end so later reviews can
+      be compared with it, and the next review date is scheduled.
+    partition_notes: >-
+      The AWS Well-Architected Tool is available in AWS GovCloud (US) as of 2026-10-05, without Profiles or the
+      Jira connector. Account IDs associated with a workload, the workload name, milestone names and the review
+      owner may leave the AWS GovCloud (US) Regions in normal operation, so keep export-controlled and sensitive
+      data out of those fields.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html
+    improvement: >-
+      Run or refresh the Framework review in the AWS Well-Architected Tool with the people who own the design,
+      answer every question against the architecture as it is today, save a milestone, and schedule the next
+      review for 12 months later or the next major architecture change, whichever comes first. Attach the review
+      date and milestone name to the ORR evidence.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html
+    additional_improvement:
+      - display_text: Milestones in the AWS Well-Architected Tool
+        url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html
+  - id: wa_hri_dispositioned
+    tier: core
+    title: Every open high-risk issue from that review is remediated, owned with a target date, or formally accepted
+    concept: wa-high-risk-issues-dispositioned
+    severity_basis: >-
+      deviation:a high-risk issue with no owner, target date or written acceptance is an unmanaged risk at launch,
+      and this lens treats unmanaged High risks as launch-blocking
+    wa_bp: OPS01-BP06
+    good: >-
+      Each high-risk issue still open in the review has a recorded disposition: remediated, with the answer
+      updated; owned, with an owner role and a target date in the improvement plan or backlog; or formally
+      accepted in writing by the accountable owner, with a reason and an expiry date. No high-risk issue is left
+      undecided at launch. Acceptances live in your risk register and the review notes carry only a reference,
+      for example EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>, never names.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html
+    improvement: >-
+      Export the open high-risk issues from the improvement plan, give each one an owner role and a target date in
+      your backlog, fix those that are launch-blocking for this workload, and take any you will not fix to the
+      accountable owner for written acceptance with an expiry date. Review the list again at each milestone and
+      before the launch decision.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/tutorial.html
+    additional_helpful:
+      - display_text: OPS01-BP06 Evaluate tradeoffs while managing benefits and risks (AWS Well-Architected)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_eval_tradeoffs.html
+  - id: wa_lenses_applied
+    tier: sec
+    title: Applicable AWS lenses (for example Government, Serverless Applications, Generative AI) were applied, or none apply
+    concept: wa-applicable-lenses-applied
+    good: >-
+      The review applied every AWS lens that fits the workload's technology or industry, for example the
+      Government, Serverless Applications or Generative AI lens from the Lens Catalog, or recorded why none applies.
+      High-risk issues from those lenses are dispositioned the same way as Framework high-risk issues.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html
+    improvement: >-
+      Compare the Lens Catalog, and the AWS lenses distributed as custom lens files, with the workload's
+      technology and industry. Add the relevant lenses to the workload, answer them before the launch decision,
+      and disposition their high-risk issues.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html
+    additional_improvement:
+      - display_text: AWS lenses distributed as custom lens files (aws-samples on GitHub)
+        url: https://github.com/aws-samples/sample-well-architected-custom-lens

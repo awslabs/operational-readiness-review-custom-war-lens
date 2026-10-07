@@ -1,0 +1,133 @@
+{
+  "schemaVersion": "2021-11-01",
+  "name": "ORR add-on - Example organization requirements",
+  "description": "Example add-on lens for the Operational Readiness Review (ORR) custom lens for the AWS Well-Architected Tool. It holds an organization's own readiness questions, so the ORR lenses can be upgraded without touching them. Replace the example questions with your own before use. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA, and it does not change the AWS shared responsibility model. Provided as is under the MIT-0 license. Template source: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
+  "pillars": [
+    {
+      "id": "x_example_org",
+      "name": "01 - Organization requirements",
+      "questions": [
+        {
+          "id": "x_example_launch_approvals",
+          "title": "Organization launch approvals are recorded before production traffic",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Readiness governance. Has the workload received every approval your organization requires before it takes production traffic, and is each approval recorded where it can be inspected? Out of scope if: your organization requires no approvals before a production launch. Evidence to collect: the list of approvals your policy requires for this workload's data classification. The approval records, with dates and expiry dates. The reminder or ticket that tracks each renewal.",
+          "helpfulResource": {
+            "displayText": "OPS01-BP04 Evaluate compliance requirements",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html"
+          },
+          "choices": [
+            {
+              "id": "x_example_la_none_required",
+              "title": "Organization policy requires no approvals before a production launch of this kind of workload",
+              "helpfulResource": {
+                "displayText": "Good looks like: A policy owner confirmed in writing that no launch approvals apply to this workload's data classification and audience. Evidence to collect: the policy section, and the confirmation with its date.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html"
+              },
+              "improvementPlan": {
+                "displayText": "Ask your policy owner to confirm in writing which launch approvals apply to this workload, and link the answer from the question notes.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html"
+              }
+            },
+            {
+              "id": "x_example_la_approvals_recorded",
+              "title": "Every approval the organization requires (for example security, privacy, accessibility) is granted and recorded",
+              "helpfulResource": {
+                "displayText": "Good looks like: The team holds the current list of approvals its policy requires for this workload, each approval is granted by the named approving body, and each record (with its date and scope) is stored where an auditor or the accountable owner can inspect it. Notes link to the records; they do not copy them.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html"
+              },
+              "improvementPlan": {
+                "displayText": "List the approvals your policy requires for this workload's data classification and audience, request each one with the evidence the approving body asks for, and record the approval IDs in your launch decision record.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html"
+              }
+            },
+            {
+              "id": "x_example_la_renewals_tracked",
+              "title": "Approval expiry and renewal dates are tracked with an owner, and renewal starts before expiry",
+              "helpfulResource": {
+                "displayText": "Good looks like: Each approval with an expiry date has an owner and a reminder that fires early enough to complete the renewal before the approval lapses, and the recurring ORR checks the dates.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_activity_owners.html"
+              },
+              "improvementPlan": {
+                "displayText": "Add each approval's expiry date to your tracker with an owner and a reminder at least one renewal cycle before expiry, and add the dates to the agenda of your recurring operations review.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_activity_owners.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "(x_example_la_none_required || (x_example_la_approvals_recorded && x_example_la_renewals_tracked)) && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "x_example_la_approvals_recorded && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "x_example_service_inventory",
+          "title": "Workload is registered in the organization's service inventory with owners and support tier",
+          "description": "Maximum risk: Medium (not launch-blocking, remediate on a plan). Category: Escalation. Can people outside the team find who owns this workload, how to reach its on-call, and how critical it is? Evidence to collect: the workload's entry in your service inventory or configuration management database. The resource tags that link AWS resources to that entry. The date the entry was last reviewed.",
+          "helpfulResource": {
+            "displayText": "OPS02-BP01 Resources have identified owners",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html"
+          },
+          "choices": [
+            {
+              "id": "x_example_si_registered",
+              "title": "The workload's inventory entry names its owner, on-call contact and support tier, and was reviewed in the last 12 months",
+              "helpfulResource": {
+                "displayText": "Good looks like: The organization's service inventory (or configuration management database) has an entry for the workload with the accountable owner, the on-call contact or escalation path, the support tier and its dependencies, and the team reviews it at least yearly and after ownership changes.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html"
+              },
+              "improvementPlan": {
+                "displayText": "Create or update the workload's inventory entry with owner, on-call contact, support tier and dependencies, and add the review to your recurring ORR.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html"
+              }
+            },
+            {
+              "id": "x_example_si_tags_enforced",
+              "title": "Production resources carry the organization's required ownership tags, and missing tags are detected",
+              "helpfulResource": {
+                "displayText": "Good looks like: Every production resource carries the tags your tagging strategy requires (for example owner, workload and environment), and a tag policy or a detective rule reports resources that are missing them.",
+                "url": "https://docs.aws.amazon.com/whitepapers/latest/tagging-best-practices/building-your-tagging-strategy.html"
+              },
+              "improvementPlan": {
+                "displayText": "Define the required ownership tags, apply them through infrastructure as code, and enforce or report them with AWS Organizations tag policies or an equivalent detective control.",
+                "url": "https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_tag-policies.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores Medium risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "x_example_si_registered && x_example_si_tags_enforced && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "MEDIUM_RISK"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

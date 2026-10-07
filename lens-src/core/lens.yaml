@@ -1,0 +1,23 @@
+schema: orrlens/lens/1
+key: core
+name: AWS Operational Readiness Review
+version: 2.0.0
+file_stem: orr-core
+description: >-
+  Operational Readiness Review (ORR) custom lens {version} for the AWS Well-Architected Tool, informed by the
+  AWS Operational Readiness Reviews whitepaper and Well-Architected best practice OPS07-BP02. High risk means
+  launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix
+  on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA.
+  Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared
+  responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license.
+  Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens
+none_exclusive_guard: true
+pillars:
+  - id: architecture
+    name: 01 - Architecture
+  - id: release_quality
+    name: 02 - Release Quality
+  - id: event_management
+    name: 03 - Event Management
+  - id: readiness_decision
+    name: 04 - Readiness Decision

@@ -1,0 +1,97 @@
+name: Bar change
+description: Propose promoting, demoting, rewriting or removing a statement, or changing a question's maximum risk.
+title: "[Bar change]: "
+labels: ["bar-change"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A bar is what a workload must show to avoid a High or Medium risk. Bar changes follow the rules in
+        [CONTRIBUTING.md](https://github.com/awslabs/operational-readiness-review-custom-war-lens/blob/main/CONTRIBUTING.md#changing-a-bar).
+        In short: prevalence alone never demotes a core statement; field-based rules apply only after at least 5
+        workloads have been reviewed; statements with a public High basis are never demoted. Report results in
+        aggregate only. Do not include customer names, workload names, account IDs or notes.
+  - type: dropdown
+    id: lens
+    attributes:
+      label: Lens
+      options:
+        - Operational Readiness Review (ORR) core
+        - ORR - Mission-Critical Event Readiness
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Lens version
+      placeholder: "2.0.0"
+    validations:
+      required: true
+  - type: input
+    id: question-id
+    attributes:
+      label: Question ID
+    validations:
+      required: true
+  - type: input
+    id: statement-id
+    attributes:
+      label: Statement ID (if the change is about one statement)
+  - type: dropdown
+    id: change
+    attributes:
+      label: Proposed change
+      options:
+        - Rewrite a statement for clarity
+        - Promote a secondary statement to core
+        - Demote a core statement to secondary
+        - Change the question's maximum risk
+        - Move a statement to unscored improvement guidance (retires its ID)
+        - Add a statement
+        - Other (explain below)
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current bar and proposed bar
+      description: The current tier and wording, and what you propose instead.
+    validations:
+      required: true
+  - type: textarea
+    id: basis
+    attributes:
+      label: Public source and severity basis
+      description: |
+        The public source (https URL, title, date checked) and the severity_basis for the proposed bar:
+        wa:<BP-ID> (High), wp-orr:<example question>, or deviation:<written rationale>. For a demotion, state the
+        current severity_basis and why it has no public High basis.
+    validations:
+      required: true
+  - type: textarea
+    id: truth-table
+    attributes:
+      label: Truth-table difference
+      description: Output of `python3 -m tools.orrlens table <question_id>` before and after the change, or a summary of the states whose risk changes.
+      render: text
+    validations:
+      required: false
+  - type: textarea
+    id: field-evidence
+    attributes:
+      label: Field evidence (aggregate only)
+      description: |
+        For changes based on field use: the number of workloads reviewed (at least 5), how many reviewers rated the
+        gap launch-blocking or non-blocking, the share of reviewers who disagreed on the statement, and, for a
+        secondary statement, the share of workloads that are Medium on the question because of it.
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: The reason for this change is not only that many workloads fail the bar.
+          required: true
+        - label: The evidence is aggregated and contains no customer names, workload names, account IDs, notes or internal material.
+          required: true

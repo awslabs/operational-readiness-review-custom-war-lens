@@ -1,0 +1,144 @@
+schema: orrlens/question/1
+id: event_provider_escalation
+pillar: event_management
+order: 70
+title: Escalation to AWS and other providers, and provider-initiated change
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Escalation
+lineage: []
+choice_prefix: pe_
+description:
+  question: >-
+    Can you engage AWS and your other providers quickly during an event, even when their consoles or support APIs
+    are impaired, and do provider-initiated changes reach you early enough to test them before production?
+  evidence_to_collect: >-
+    the escalation runbook with its fallback contacts and the date it was last tested. The support arrangement and
+    target initial-response time for each production account compared with the workload RTO. The routing rules for
+    AWS Health events and third-party status feeds and the queue they reach. The last provider-initiated change and
+    where it was tested first.
+helpful:
+  display_text: OPS10-BP04 Define escalation paths (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
+statements:
+  - id: pe_escalation_runbook
+    tier: core
+    title: A tested runbook escalates to AWS and other providers, with fallbacks that do not depend on the Support Center console or API
+    concept: provider-escalation-runbook
+    severity_basis: >-
+      deviation:OPS10-BP04 is rated Medium; the lens rates an untested provider escalation path High because the
+      October 2025 Post-Event Summary reports that customers were unable to create, view and update support cases
+      through the AWS Support Console and API for almost three hours during a Regional event.
+    wa_bp: OPS10-BP04
+    good: >-
+      A runbook says when and how to open and escalate a case with AWS and each critical third-party provider:
+      severity, account, Region and resource details, who may escalate, and response commitments. Fallbacks do not
+      depend on the AWS Support Center console or API (for example account team contacts, if your support includes
+      them, or a contracted operations partner), and provider contacts and contract IDs are reachable during the
+      event. In the last 12 months contacts were confirmed and each fallback was used once (such as a low-severity
+      test case); exercise rehearsal is scored in event_gameday.
+    partition_notes: >-
+      AWS GovCloud (US), as of 2026-10-06: open cases in the GovCloud Support Center with GovCloud credentials,
+      choose severity carefully (it cannot be changed later), confirm partner fallbacks can manage GovCloud
+      cases, and keep export-controlled data out of cases.
+    reader_note: >-
+      This page names AWS Systems Manager Incident Manager, closed to new customers; any paging tool meets this
+      practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
+    improvement: >-
+      For AWS and each critical provider, document how to open and escalate a case, your severity definitions, the
+      details to include, approvers and contacts. Add at least one fallback that works when the AWS Support Center
+      console and API are impaired, store the runbook and contacts where responders can reach them during a Regional
+      or identity outage, link the runbook from your paging runbooks, and verify each fallback path once a year.
+    improvement_url: https://docs.aws.amazon.com/awssupport/latest/user/case-management.html
+    additional_improvement:
+      - display_text: AWS Support in AWS GovCloud (US)
+        url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-support.html
+  - id: pe_support_fit
+    tier: sec
+    title: Each production account has a support arrangement whose target initial-response time fits the workload's RTO
+    concept: support-response-fits-rto
+    wa_bp: OPS10-BP04
+    good: >-
+      For each production account, including accounts that host shared networking, identity and logging, you know
+      which support arrangement covers it, its target initial-response time for your most severe case type, and how
+      that compares with the workload's recovery time objective (RTO). Where the target is too slow for the RTO, the
+      gap is closed or accepted in writing. The arrangement may be an AWS Support plan, a reseller or partner support
+      agreement, or both; the lens compares response targets, not plan names.
+    partition_notes: >-
+      As of 2026-10-06 the AWS Support Plans page states that Developer, Business and Enterprise On-Ramp Support
+      remain available in AWS GovCloud (US), so plans for GovCloud accounts can differ from those for commercial
+      accounts; check the plan and response targets for each GovCloud account.
+    helpful_url: https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html
+    improvement: >-
+      List every production account and the support arrangement that covers it, record the target initial-response
+      time for production-down cases, compare it with the RTO of the workloads in that account, and close or formally
+      accept each gap. Re-check after account moves, plan or contract changes and RTO changes.
+    improvement_url: https://aws.amazon.com/premiumsupport/plans/
+  - id: pe_events_routed
+    tier: sec
+    title: AWS Health events, including planned lifecycle notices, and third-party status feeds reach an owned on-call queue
+    concept: provider-events-routed
+    good: >-
+      AWS Health events for every production account (per account, or aggregated with the AWS Health organizational
+      view) and the status feeds of critical third-party providers create tickets or pages in a queue that a named
+      team watches, with severity mapped by event type. Planned lifecycle events, for example an engine or Kubernetes
+      version reaching end of support or a certificate authority change, become tracked work with an owner and a due
+      date before the provider's deadline. Routing was tested end to end.
+    partition_notes: >-
+      In AWS GovCloud (US), as of 2026-10-06: the EventBridge channel does not send public events from the Service
+      Health view (use the AWS Health API or the RSS feed), the AWS Health API has a single endpoint in
+      us-gov-west-1, each GovCloud Region is the backup Region for the other, and global events such as IAM events
+      need a rule in AWS GovCloud (US-West).
+    helpful_url: https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html
+    improvement: >-
+      Create Amazon EventBridge rules for AWS Health events in every production account and Region you use, or
+      aggregate events with the AWS Health organizational view and a delegated administrator, and route them to your
+      ticketing or paging tool. Subscribe to the status feeds of critical third-party providers, turn planned
+      lifecycle events into owned work items, and test the routing end to end.
+    improvement_url: https://docs.aws.amazon.com/health/latest/ug/aggregate-events.html
+    additional_helpful:
+      - display_text: Planned lifecycle events for AWS Health
+        url: https://docs.aws.amazon.com/health/latest/ug/aws-health-planned-lifecycle-events.html
+      - display_text: New - Manage planned lifecycle events on AWS Health (AWS News Blog)
+        url: https://aws.amazon.com/blogs/aws/new-manage-planned-lifecycle-events-on-aws-health/
+    additional_improvement:
+      - display_text: AWS Health in AWS GovCloud (US)
+        url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-health.html
+  - id: pe_changes_staged
+    tier: sec
+    title: Provider-initiated changes (engine, runtime, Kubernetes, certificate authority) are tested in pre-production before production
+    concept: provider-change-staging
+    wa_bp: OPS05-BP05
+    good: >-
+      When a provider announces or schedules a change, such as a database engine version reaching end of support, a
+      runtime deprecation, a Kubernetes version upgrade or a certificate authority rotation, you apply it to
+      pre-production first, run your normal tests and a bake period, and then apply it to production ahead of the
+      provider's deadline, so a forced upgrade never reaches production untested. Where the provider applies the
+      change for you, you use the maintenance windows or version controls it offers.
+    platform_notes: >-
+      EC2: operating system and agent updates through your image pipeline. Containers: Amazon EKS Kubernetes version
+      and add-on upgrades. Serverless: AWS Lambda runtime deprecations and runtime version update controls. Data:
+      Amazon RDS engine versions and certificate authority rotation.
+    helpful_url: https://docs.aws.amazon.com/health/latest/ug/aws-health-planned-lifecycle-events.html
+    improvement: >-
+      Inventory the provider-managed versions you depend on (engines, runtimes, Kubernetes and platform versions,
+      certificate authorities) with their end-of-support dates, link each to the matching AWS Health or provider
+      notice, and schedule every change through pre-production with your normal tests and bake time before
+      production. Pin or control versions where the service allows, and track each deadline as owned work.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_patch_mgmt.html
+    additional_improvement:
+      - display_text: Understand the Kubernetes version lifecycle on Amazon EKS
+        url: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html
+      - display_text: Understanding how AWS Lambda manages runtime version updates
+        url: https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html
+      - display_text: Rotating your SSL/TLS certificate (Amazon RDS)
+        url: https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL-certificate-rotation.html
+pes_lesson:
+  statement: pe_escalation_runbook
+  month: Oct 2025
+  url: https://aws.amazon.com/message/101925/
+  lesson: >-
+    customers were unable to create, view and update support cases through the AWS Support Console and API for
+    almost three hours, so keep an escalation fallback that does not depend on them.

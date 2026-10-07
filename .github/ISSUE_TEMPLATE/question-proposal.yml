@@ -1,0 +1,116 @@
+name: Question proposal
+description: Propose a new question or statement for an ORR lens.
+title: "[Question proposal]: "
+labels: ["question-proposal"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for proposing content. Every bar in these lenses stands on a public source, so this form asks for
+        the source and for the incident or guidance that motivates the question. Read the content rules in
+        [CONTRIBUTING.md](https://github.com/awslabs/operational-readiness-review-custom-war-lens/blob/main/CONTRIBUTING.md#content-rules)
+        first. Do not include customer names, account IDs, internal material or sensitive incident details.
+  - type: dropdown
+    id: lens
+    attributes:
+      label: Lens
+      options:
+        - Operational Readiness Review (ORR) core
+        - ORR - Mission-Critical Event Readiness
+        - A new companion lens (explain below)
+    validations:
+      required: true
+  - type: input
+    id: pillar
+    attributes:
+      label: Pillar
+      description: For example architecture, release_quality, event_management, readiness_decision, evt_prepare.
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: Proposed question title
+      description: At most 128 characters, no severity tags such as (H).
+    validations:
+      required: true
+  - type: textarea
+    id: failure-mode
+    attributes:
+      label: Launch-blocking failure mode
+      description: What goes wrong in production when this practice is missing? Which customers are affected, and how?
+    validations:
+      required: true
+  - type: textarea
+    id: motivation
+    attributes:
+      label: Motivating incident or guidance
+      description: |
+        The public incident or guidance that motivates the question, for example an AWS Post-Event Summary
+        (published under aws.amazon.com/message/), a Well-Architected best practice, or an example question in the ORR
+        whitepaper. Describe the design lesson, not a specific customer.
+    validations:
+      required: true
+  - type: textarea
+    id: sources
+    attributes:
+      label: Public sources
+      description: |
+        One https URL per line, with its title and the date you checked it. Allowed hosts: docs.aws.amazon.com,
+        aws.amazon.com, builder.aws.com, github.com/aws*, opentelemetry.io, owasp.org, genai.owasp.org. Third-party
+        standards are linked, never copied.
+    validations:
+      required: true
+  - type: textarea
+    id: statements
+    attributes:
+      label: Proposed statements and tiers
+      description: |
+        At most four statements, each one observable practice, each with a tier: scope (scope exit), core (needed
+        to avoid High), alt:A (one of a group of alternatives), sec (needed only for No risk).
+      placeholder: |
+        - [core] ...
+        - [alt:A] ...
+        - [alt:A] ...
+        - [sec] ...
+    validations:
+      required: true
+  - type: input
+    id: max-risk
+    attributes:
+      label: Proposed maximum risk
+      description: High (launch-blocking) or Medium (fix on a plan).
+    validations:
+      required: true
+  - type: textarea
+    id: severity-basis
+    attributes:
+      label: Severity basis for each core or alt statement
+      description: "wa:<BP-ID> (High), wp-orr:<example question>, or deviation:<written rationale>."
+    validations:
+      required: true
+  - type: textarea
+    id: overlap
+    attributes:
+      label: Overlap with existing questions
+      description: Which existing questions are closest, and why can this not be a statement in one of them? (See docs/questions.md.)
+    validations:
+      required: true
+  - type: textarea
+    id: partitions
+    attributes:
+      label: Platform and partition notes
+      description: Does the practice differ for EC2, containers or serverless? Does any named service differ in AWS GovCloud (US)?
+    validations:
+      required: false
+  - type: checkboxes
+    id: confirmations
+    attributes:
+      label: Confirmations
+      options:
+        - label: Every source is public, and the proposal contains no customer names, internal material, account IDs or sensitive information.
+          required: true
+        - label: I have not copied text from third-party standards; I link them and paraphrase category names only.
+          required: true
+        - label: No service I recommend is closed to new customers, in maintenance, discontinued, or near end of support.
+          required: true

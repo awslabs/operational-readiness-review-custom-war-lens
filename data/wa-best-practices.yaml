@@ -1,0 +1,866 @@
+# Well-Architected Framework best practices that ORR lens text may cite.
+# Each entry records the live page title and the level of risk exactly as the page states it
+# ("Level of risk exposed if this best practice is not established"), checked on the date shown.
+# url is the pillar-guide form; alt_urls lists the Framework form, which serves the same page.
+# Both forms returned HTTP 200 with no redirect on 2026-10-06.
+# A severity_basis of "wa:<BP-ID> (High)" is valid only for entries whose level_of_risk is High.
+# Regenerate from the live pages at each release and at each quarterly review.
+
+schema: orrlens/wa-best-practices/1
+framework_version: 2024-11-06
+framework_version_source: https://docs.aws.amazon.com/wellarchitected/latest/framework/document-revisions.html
+framework_version_note: Latest entry on the Framework Document revisions page (Major update, November 6, 2024), checked 2026-10-06.
+checked: 2026-10-06
+practices:
+  OPS01-BP04:
+    title: Evaluate compliance requirements
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_priorities_compliance_reqs.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS01-BP06:
+    title: Evaluate tradeoffs while managing benefits and risks
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_priorities_eval_tradeoffs.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_eval_tradeoffs.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS02-BP01:
+    title: Resources have identified owners
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ops_model_def_resource_owners.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS03-BP01:
+    title: Provide executive sponsorship
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_org_culture_executive_sponsor.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_org_culture_executive_sponsor.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS03-BP07:
+    title: Resource teams appropriately
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_org_culture_team_res_appro.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_org_culture_team_res_appro.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS04-BP01:
+    title: Identify key performance indicators
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_identify_kpis.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_identify_kpis.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS04-BP02:
+    title: Implement application telemetry
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_application_telemetry.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_application_telemetry.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS04-BP03:
+    title: Implement user experience telemetry
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_customer_telemetry.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_customer_telemetry.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS04-BP04:
+    title: Implement dependency telemetry
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_dependency_telemetry.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_dependency_telemetry.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS04-BP05:
+    title: Implement distributed tracing
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_dist_trace.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_dist_trace.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS05-BP02:
+    title: Test and validate changes
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_test_val_chg.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_test_val_chg.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS05-BP03:
+    title: Use configuration management systems
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_conf_mgmt_sys.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_conf_mgmt_sys.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS05-BP04:
+    title: Use build and deployment management systems
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_build_mgmt_sys.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_build_mgmt_sys.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS05-BP05:
+    title: Perform patch management
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_patch_mgmt.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_patch_mgmt.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS05-BP08:
+    title: Use multiple environments
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_multi_env.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_multi_env.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS05-BP09:
+    title: Make frequent, small, reversible changes
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_freq_sm_rev_chg.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_freq_sm_rev_chg.html]
+    level_of_risk: Low
+    checked: 2026-10-06
+  OPS05-BP10:
+    title: Fully automate integration and deployment
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_auto_integ_deploy.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_auto_integ_deploy.html]
+    level_of_risk: Low
+    checked: 2026-10-06
+  OPS06-BP01:
+    title: Plan for unsuccessful changes
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_plan_for_unsucessful_changes.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_plan_for_unsucessful_changes.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS06-BP02:
+    title: Test deployments
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_test_val_chg.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_test_val_chg.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS06-BP03:
+    title: Employ safe deployment strategies
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_deploy_mgmt_sys.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_deploy_mgmt_sys.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS06-BP04:
+    title: Automate testing and rollback
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_auto_testing_and_rollback.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_auto_testing_and_rollback.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS07-BP01:
+    title: Ensure personnel capability
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_personnel_capability.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_personnel_capability.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS07-BP02:
+    title: Ensure a consistent review of operational readiness
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS07-BP03:
+    title: Use runbooks to perform procedures
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_runbooks.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS07-BP04:
+    title: Use playbooks to investigate issues
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_playbooks.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_playbooks.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS07-BP05:
+    title: Make informed decisions to deploy systems and changes
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_informed_deploy_decisions.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html]
+    level_of_risk: Low
+    checked: 2026-10-06
+  OPS07-BP06:
+    title: Create support plans for production workloads
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_enable_support_plans.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_enable_support_plans.html]
+    level_of_risk: Low
+    checked: 2026-10-06
+  OPS08-BP01:
+    title: Analyze workload metrics
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_analyze_workload_metrics.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_analyze_workload_metrics.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS08-BP02:
+    title: Analyze workload logs
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_analyze_workload_logs.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_analyze_workload_logs.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS08-BP03:
+    title: Analyze workload traces
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_analyze_workload_traces.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_analyze_workload_traces.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS08-BP04:
+    title: Create actionable alerts
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_create_alerts.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_create_alerts.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS08-BP05:
+    title: Create dashboards
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_create_dashboards.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_create_dashboards.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS09-BP01:
+    title: Measure operations goals and KPIs with metrics
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_operations_health_measure_ops_goals_kpis.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_operations_health_measure_ops_goals_kpis.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS09-BP03:
+    title: Review operations metrics and prioritize improvement
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_operations_health_review_ops_metrics_prioritize_improvement.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_operations_health_review_ops_metrics_prioritize_improvement.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS10-BP01:
+    title: Use a process for event, incident, and problem management
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_event_incident_problem_process.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_event_incident_problem_process.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS10-BP02:
+    title: Have a process per alert
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_process_per_alert.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_process_per_alert.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS10-BP03:
+    title: Prioritize operational events based on business impact
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_prioritize_events.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_prioritize_events.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS10-BP04:
+    title: Define escalation paths
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS10-BP05:
+    title: Define a customer communication plan for service-impacting events
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS10-BP06:
+    title: Communicate status through dashboards
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_dashboards.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_dashboards.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS10-BP07:
+    title: Automate responses to events
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_auto_event_response.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_auto_event_response.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  OPS11-BP01:
+    title: Have a process for continuous improvement
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_process_cont_imp.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_process_cont_imp.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS11-BP02:
+    title: Perform post-incident analysis
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS11-BP03:
+    title: Implement feedback loops
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_feedback_loops.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_feedback_loops.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  OPS11-BP08:
+    title: Document and share lessons learned
+    url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_share_lessons_learned.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_share_lessons_learned.html]
+    level_of_risk: Low
+    checked: 2026-10-06
+  REL01-BP01:
+    title: Aware of service quotas and constraints
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_quotas_and_constraints.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL01-BP02:
+    title: Manage service quotas across accounts and regions
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_limits_considered.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_limits_considered.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL01-BP03:
+    title: Accommodate fixed service quotas and constraints through architecture
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_fixed_limits.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_fixed_limits.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL01-BP04:
+    title: Monitor and manage quotas
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_monitor_manage_limits.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_monitor_manage_limits.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL01-BP05:
+    title: Automate quota management
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_automated_monitor_limits.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_automated_monitor_limits.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL01-BP06:
+    title: Ensure that a sufficient gap exists between the current quotas and the maximum usage to accommodate failover
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_suff_buffer_limits.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_suff_buffer_limits.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL02-BP01:
+    title: Use highly available network connectivity for your workload public endpoints
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_users.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_network_topology_ha_conn_users.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL02-BP02:
+    title: Provision redundant connectivity between private networks in the cloud and on-premises environments
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_private_networks.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_network_topology_ha_conn_private_networks.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL04-BP01:
+    title: Identify the kind of distributed systems you depend on
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_identify.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_prevent_interaction_failure_identify.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL04-BP02:
+    title: Implement loosely coupled dependencies
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_loosely_coupled_system.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_prevent_interaction_failure_loosely_coupled_system.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL04-BP03:
+    title: Do constant work
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_constant_work.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_prevent_interaction_failure_constant_work.html]
+    level_of_risk: Low
+    checked: 2026-10-06
+  REL04-BP04:
+    title: Make mutating operations idempotent
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_prevent_interaction_failure_idempotent.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL05-BP01:
+    title: Implement graceful degradation to transform applicable hard dependencies into soft dependencies
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL05-BP02:
+    title: Throttle requests
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_throttle_requests.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_throttle_requests.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL05-BP03:
+    title: Control and limit retry calls
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_limit_retries.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_limit_retries.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL05-BP04:
+    title: Fail fast and limit queues
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_fail_fast.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_fail_fast.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL05-BP05:
+    title: Set client timeouts
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_client_timeouts.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_client_timeouts.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL05-BP06:
+    title: Make systems stateless where possible
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_stateless.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_stateless.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL05-BP07:
+    title: Implement emergency levers
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL06-BP01:
+    title: Monitor all components for the workload (Generation)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_monitor_resources.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_monitor_aws_resources_monitor_resources.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL06-BP02:
+    title: Define and calculate metrics (Aggregation)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_aggregation.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_monitor_aws_resources_notification_aggregation.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL06-BP03:
+    title: Send notifications (Real-time processing and alarming)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_monitor.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_monitor_aws_resources_notification_monitor.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL06-BP04:
+    title: Automate responses (Real-time processing and alarming)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_automate_response_monitor.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_monitor_aws_resources_automate_response_monitor.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL06-BP05:
+    title: Analyze logs
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_storage_analytics.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_monitor_aws_resources_storage_analytics.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL06-BP06:
+    title: Regularly review monitoring scope and metrics
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_review_monitoring.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_monitor_aws_resources_review_monitoring.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL06-BP07:
+    title: Monitor end-to-end tracing of requests through your system
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_end_to_end.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_monitor_aws_resources_end_to_end.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL07-BP01:
+    title: Use automation when obtaining or scaling resources
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_autoscale_adapt.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_adapt_to_changes_autoscale_adapt.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL07-BP02:
+    title: Obtain resources upon detection of impairment to a workload
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_reactive_adapt_auto.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_adapt_to_changes_reactive_adapt_auto.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL07-BP03:
+    title: Obtain resources upon detection that more resources are needed for a workload
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_proactive_adapt_auto.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_adapt_to_changes_proactive_adapt_auto.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL07-BP04:
+    title: Load test your workload
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_adapt_to_changes_load_tested_adapt.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_adapt_to_changes_load_tested_adapt.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL08-BP01:
+    title: Use runbooks for standard activities such as deployment
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_planned_changemgmt.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_planned_changemgmt.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL08-BP02:
+    title: Integrate functional testing as part of your deployment
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_functional_testing.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_functional_testing.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL08-BP03:
+    title: Integrate resiliency testing as part of your deployment
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_resiliency_testing.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_resiliency_testing.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL08-BP04:
+    title: Deploy using immutable infrastructure
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_immutable_infrastructure.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_immutable_infrastructure.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL08-BP05:
+    title: Deploy changes with automation
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_automated_changemgmt.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_automated_changemgmt.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL09-BP01:
+    title: Identify and back up all data that needs to be backed up, or reproduce the data from sources
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_identified_backups_data.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_backing_up_data_identified_backups_data.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL09-BP02:
+    title: Secure and encrypt backups
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_secured_backups_data.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_backing_up_data_secured_backups_data.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL09-BP03:
+    title: Perform data backup automatically
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_automated_backups_data.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_backing_up_data_automated_backups_data.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL09-BP04:
+    title: Perform periodic recovery of the data to verify backup integrity and processes
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_backing_up_data_periodic_recovery_testing_data.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_backing_up_data_periodic_recovery_testing_data.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL10-BP01:
+    title: Deploy the workload to multiple locations
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_multiaz_region_system.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_fault_isolation_multiaz_region_system.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL10-BP02:
+    title: Automate recovery for components constrained to a single location
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_single_az_system.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_fault_isolation_single_az_system.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL10-BP03:
+    title: Use bulkhead architectures to limit scope of impact
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_use_bulkhead.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_fault_isolation_use_bulkhead.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL11-BP01:
+    title: Monitor all components of the workload to detect failures
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_monitoring_health.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_monitoring_health.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL11-BP02:
+    title: Fail over to healthy resources
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_failover2good.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_failover2good.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL11-BP03:
+    title: Automate healing on all layers
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_auto_healing_system.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_auto_healing_system.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL11-BP04:
+    title: Rely on the data plane and not the control plane during recovery
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_avoid_control_plane.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_avoid_control_plane.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL11-BP05:
+    title: Use static stability to prevent bimodal behavior
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_static_stability.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL11-BP06:
+    title: Send notifications when events impact availability
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_notifications_sent_system.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_notifications_sent_system.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL11-BP07:
+    title: Architect your product to meet availability targets and uptime service level agreements (SLAs)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_service_level_agreements.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_service_level_agreements.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL12-BP01:
+    title: Use playbooks to investigate failures
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_playbook_resiliency.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_playbook_resiliency.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL12-BP02:
+    title: Perform post-incident analysis
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_rca_resiliency.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_rca_resiliency.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL12-BP03:
+    title: Test scalability and performance requirements
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_test_non_functional.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL12-BP04:
+    title: Test resiliency using chaos engineering
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_failure_injection_resiliency.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL12-BP05:
+    title: Conduct game days regularly
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  REL13-BP01:
+    title: Define recovery objectives for downtime and data loss
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_objective_defined_recovery.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_for_recovery_objective_defined_recovery.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL13-BP02:
+    title: Use defined recovery strategies to meet the recovery objectives
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_disaster_recovery.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_for_recovery_disaster_recovery.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL13-BP03:
+    title: Test disaster recovery implementation to validate the implementation
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_dr_tested.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_for_recovery_dr_tested.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL13-BP04:
+    title: Manage configuration drift at the DR site or Region
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_config_drift.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_for_recovery_config_drift.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  REL13-BP05:
+    title: Automate recovery
+    url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_auto_recovery.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_planning_for_recovery_auto_recovery.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC01-BP01:
+    title: Separate workloads using accounts
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_securely_operate_multi_accounts.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_multi_accounts.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC01-BP02:
+    title: Secure account root user and properties
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_securely_operate_aws_account.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_aws_account.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC01-BP07:
+    title: Identify threats and prioritize mitigations using a threat model
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_securely_operate_threat_model.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_threat_model.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC02-BP02:
+    title: Use temporary credentials
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_identities_unique.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_identities_unique.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC02-BP03:
+    title: Store and use secrets securely
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_identities_secrets.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_identities_secrets.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC02-BP05:
+    title: Audit and rotate credentials periodically
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_identities_audit.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_identities_audit.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC03-BP01:
+    title: Define access requirements
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_define.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_define.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC03-BP02:
+    title: Grant least privilege access
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_least_privileges.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_least_privileges.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC03-BP03:
+    title: Establish emergency access process
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC03-BP04:
+    title: Reduce permissions continuously
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_continuous_reduction.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_continuous_reduction.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC03-BP05:
+    title: Define permission guardrails for your organization
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_define_guardrails.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_define_guardrails.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC03-BP07:
+    title: Analyze public and cross-account access
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_analyze_cross_account.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_analyze_cross_account.html]
+    level_of_risk: Low
+    checked: 2026-10-06
+  SEC04-BP01:
+    title: Configure service and application logging
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_detect_investigate_events_app_service_logging.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_app_service_logging.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC04-BP02:
+    title: Capture logs, findings, and metrics in standardized locations
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_detect_investigate_events_logs.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_logs.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC04-BP03:
+    title: Correlate and enrich security alerts
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_detect_investigate_events_security_alerts.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_security_alerts.html]
+    level_of_risk: Low
+    checked: 2026-10-06
+  SEC04-BP04:
+    title: Initiate remediation for non-compliant resources
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_detect_investigate_events_noncompliant_resources.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_noncompliant_resources.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC05-BP01:
+    title: Create network layers
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_network_protection_create_layers.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_network_protection_create_layers.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC05-BP02:
+    title: Control traffic flow within your network layers
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_network_protection_layered.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_network_protection_layered.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC05-BP03:
+    title: Implement inspection-based protection
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_network_protection_inspection.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_network_protection_inspection.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC09-BP01:
+    title: Implement secure key and certificate management
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_protect_data_transit_key_cert_mgmt.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_protect_data_transit_key_cert_mgmt.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC10-BP01:
+    title: Identify key personnel and external resources
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_identify_personnel.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_identify_personnel.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC10-BP02:
+    title: Develop incident management plans
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_develop_management_plans.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_develop_management_plans.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC10-BP03:
+    title: Prepare forensic capabilities
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_prepare_forensic.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_prepare_forensic.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC10-BP04:
+    title: Develop and test security incident response playbooks
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_playbooks.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_playbooks.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC10-BP05:
+    title: Pre-provision access
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_pre_provision_access.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_pre_provision_access.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC10-BP06:
+    title: Pre-deploy tools
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_pre_deploy_tools.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_pre_deploy_tools.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC10-BP07:
+    title: Run simulations
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_run_game_days.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC10-BP08:
+    title: Establish a framework for learning from incidents
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_establish_incident_framework.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_establish_incident_framework.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC11-BP02:
+    title: Automate testing throughout the development and release lifecycle
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_automate_testing_throughout_lifecycle.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_automate_testing_throughout_lifecycle.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC11-BP03:
+    title: Perform regular penetration testing
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_perform_regular_penetration_testing.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_perform_regular_penetration_testing.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC11-BP04:
+    title: Conduct code reviews
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_manual_code_reviews.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_manual_code_reviews.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC11-BP05:
+    title: Centralize services for packages and dependencies
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_centralize_services_for_packages_and_dependencies.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_centralize_services_for_packages_and_dependencies.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  SEC11-BP06:
+    title: Deploy software programmatically
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_deploy_software_programmatically.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_deploy_software_programmatically.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  SEC11-BP07:
+    title: Regularly assess security properties of the pipelines
+    url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_regularly_assess_security_properties_of_pipelines.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_regularly_assess_security_properties_of_pipelines.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  COST01-BP06:
+    title: Monitor cost proactively
+    url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_cloud_financial_management_proactive_process.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_cloud_financial_management_proactive_process.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  COST02-BP05:
+    title: Implement cost controls
+    url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_govern_usage_controls.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_govern_usage_controls.html]
+    level_of_risk: Medium
+    checked: 2026-10-06
+  COST09-BP01:
+    title: Perform an analysis on the workload demand
+    url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_cost_analysis.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_cost_analysis.html]
+    level_of_risk: High
+    checked: 2026-10-06
+  COST09-BP03:
+    title: Supply resources dynamically
+    url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_dynamic.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html]
+    level_of_risk: Low
+    checked: 2026-10-06

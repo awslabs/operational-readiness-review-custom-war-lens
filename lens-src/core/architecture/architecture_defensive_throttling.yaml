@@ -1,0 +1,121 @@
+schema: orrlens/question/1
+id: architecture_defensive_throttling
+pillar: architecture
+order: 70
+title: Overload protection and tenant fairness
+max_risk: HIGH
+priority: P0
+core_path: true
+category: Defense against customers
+lineage: [architecture_defensive_throttling, event_queue_backlog]
+choice_prefix: tp_
+description:
+  question: >-
+    How do you stop one client, tenant or traffic source from overloading the workload and degrading it for
+    everyone else?
+  out_of_scope_if: >-
+    the workload accepts no requests or events from users or other systems (rare). Mark the question as not
+    applicable with that reason, and keep an inventory of entry points showing none.
+  evidence_to_collect: >-
+    limit configuration per API, tenant or source. The last limit change and how long it took. Throttling and
+    load-shedding metrics. The most recent surge test report.
+helpful:
+  display_text: REL05-BP02 Throttle requests (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_throttle_requests.html
+statements:
+  - id: tp_per_source_limits
+    tier: core
+    title: Per-client, tenant, API key or source limits are enforced (or there is one trusted, bounded caller)
+    concept: per-source-rate-limits
+    severity_basis: "wa:REL05-BP02 (High)"
+    wa_bp: REL05-BP02
+    good: >-
+      Every entry point enforces a limit per caller identity (API key, tenant, account, or source IP for anonymous
+      traffic), sized from measured capacity so no caller exceeds its share, and throttled callers get a fast,
+      retryable response such as HTTP 429.
+    platform_notes: >-
+      EC2 and containers: AWS WAF rate-based rules at the edge, plus limits in the service or a sidecar. Amazon API
+      Gateway: stage and method throttling, and usage plans with API keys (best-effort) for per-client fairness. AWS
+      WAF rate-based rules on REST API stages, or on CloudFront in front of HTTP APIs, cannot be bypassed by callers
+      but are approximate and can take minutes to engage, so keep precise per-tenant quotas in the service.
+      Serverless: Lambda reserved concurrency.
+    partition_notes: >-
+      CloudFront is not available in AWS GovCloud (US) as of 2026-10-05; use AWS WAF on REST API stages or Application
+      Load Balancers.
+    reader_note: >-
+      REL05-BP02 lists the discontinued Virtual Waiting Room on AWS solution; this practice does not need it.
+    helpful_url: https://builder.aws.com/content/3Eupj3d2bo4fEvlzYbICMZNhQ3B/fairness-in-multi-tenant-systems
+    improvement: >-
+      Inventory every entry point and caller type. Set per-caller quotas and rate limits from load test results,
+      enforce them as close to the edge as possible, return a retryable throttling error, and alarm when a caller
+      is throttled persistently. Document how a caller requests a higher limit.
+    improvement_url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html
+    additional_improvement:
+      - display_text: Amazon API Gateway usage plans (best-effort limits for per-client fairness)
+        url: https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html
+  - id: tp_shed_early
+    tier: core
+    title: >-
+      Excess load is rejected or shed before expensive work, and queues are bounded so stale work is dropped or
+      dead-lettered
+    concept: early-load-shedding-bounded-queues
+    severity_basis: "wa:REL05-BP04 (High)"
+    wa_bp: REL05-BP04
+    good: >-
+      When demand exceeds capacity, the workload rejects excess work cheaply, before expensive steps such as heavy
+      authentication or database work where possible, keeps serving admitted requests within latency goals, and
+      never builds unbounded backlogs. Every queue has a maximum depth or age, and work older than its useful life
+      is dropped or sent to a dead-letter queue.
+    platform_notes: >-
+      EC2 and containers: concurrency limits in the server and connection limits at the load balancer.
+      Serverless: reserved concurrency, and Amazon SQS dead-letter queues with a maximum receive count.
+      Asynchronous paths: alarm on the age of the oldest message.
+    helpful_url: https://builder.aws.com/content/3Eun1EEyX6p2e3VYNyRLSJzLuMV/using-load-shedding-to-avoid-overload
+    improvement: >-
+      Measure the concurrency at which latency degrades and set admission limits below it. Prioritize health
+      checks and critical calls, return fast errors for rejected work, bound every queue by size or age with a
+      dead-letter destination, and confirm the behavior with a load test that exceeds capacity.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_fail_fast.html
+  - id: tp_dynamic_limits
+    tier: sec
+    title: Limits can be changed, or a single source blocked, within minutes and without a code deployment
+    concept: dynamic-limits-without-deploy
+    wa_bp: REL05-BP07
+    good: >-
+      An operator can raise or lower a limit, or block one abusive caller, within minutes through validated,
+      versioned configuration that is rolled out safely, without building or deploying code. The steps are in the
+      runbook and work during an incident.
+    platform_notes: >-
+      Typical levers: block a caller with AWS WAF IP sets or rate-based rules; change limits through dynamic
+      configuration such as AWS AppConfig; tune per-client fairness with API Gateway usage plans (best-effort, not
+      hard limits).
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html
+    improvement: >-
+      Move limits into dynamic configuration with validation and a safe deployment strategy that rolls back on
+      alarms, add runbook steps to change a limit and to block a caller, rehearse both in a game day, and record
+      how long they take.
+    improvement_url: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html
+  - id: tp_surge_tested
+    tier: sec
+    title: A sudden surge from one client or tenant was tested, and the limits protected everyone else
+    concept: single-tenant-surge-test
+    wa_bp: REL07-BP04
+    good: >-
+      A load test drove one client or tenant far above its limit while representative traffic continued for
+      everyone else, and showed that only the noisy caller was throttled, other callers stayed within latency and
+      error goals, and the expected alarms fired. The AWS ORR whitepaper's example questions include planning for
+      a surge from a single customer.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html
+    improvement: >-
+      Add a single-tenant surge scenario to the load test plan: ramp one caller to several times its limit,
+      record per-caller latency and errors, verify throttling metrics and alarms, and fix any shared bottleneck the
+      test exposes, such as connection pools, databases or downstream quotas. Run high-volume tests within the
+      Amazon EC2 Testing Policy.
+    improvement_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html
+pes_lesson:
+  statement: tp_shed_early
+  month: Dec 2021
+  url: https://aws.amazon.com/message/12721/
+  lesson: >-
+    clients that did not back off adequately drove congestion that also impaired monitoring, so shed excess work
+    early and bound queues and retries.

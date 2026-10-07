@@ -1,0 +1,120 @@
+schema: orrlens/question/1
+id: event_gameday
+pillar: event_management
+order: 150
+title: 'Incident exercises: game days, tabletops and recovery drills'
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Escalation
+lineage: [architecture_failure_testing, event_gameday]
+choice_prefix: gd_
+description:
+  question: >-
+    Have the people who would respond to a real event proven, through exercises, that your alarms, runbooks,
+    tools, access and escalation paths work together under realistic conditions?
+  evidence_to_collect: >-
+    the exercise calendar and the reports of the last fault-injection game day and the last tabletop exercise
+    (scenario, date, participants, time to detect and mitigate, findings). The tracker that holds the findings.
+    Restore, failover, break-glass, AZ-shift, runbook, customer-communication and provider-escalation drills are
+    scored in their own questions.
+helpful:
+  display_text: REL12-BP05 Conduct game days regularly (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html
+statements:
+  - id: gd_fault_injection
+    tier: alt:A
+    title: >-
+      On-call engineers mitigated injected failures (such as AZ impairment or dependency loss) with real alarms in
+      the last 12 months
+    concept: fault-injection-game-day
+    severity_basis: >-
+      deviation:REL12-BP05 and REL12-BP04 are rated Medium; the lens rates exercises High because an unrehearsed
+      response plan slows every recovery, and only an exercise shows that alarms, runbooks and access work together.
+    wa_bp: REL12-BP04
+    good: >-
+      In the last 12 months, faults were injected into a production or production-like environment under realistic
+      load (for example AZ impairment, dependency errors or latency, instance or task loss), the workload's own
+      alarms paged the on-call engineers, and they diagnosed and mitigated using the documented runbooks and their
+      normal access, ideally without being told the scenario in advance. Stop conditions on customer-facing alarms bounded
+      the blast radius, and time to detect and to mitigate were recorded.
+    platform_notes: >-
+      EC2: instance stop or terminate, network disruption and AZ scenarios in AWS FIS. Containers: Amazon ECS task
+      and Amazon EKS pod actions. Serverless: AWS FIS Lambda invocation error and latency actions, or fault flags in
+      your own code.
+    partition_notes: >-
+      AWS FIS is available in AWS GovCloud (US) as of 2026-10-06, without the experiment schedule and experiment
+      report features; verify scenario and action availability per Region.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html
+    improvement: >-
+      Pick two or three failure modes from your failure model, such as loss of one AZ and loss of a critical
+      dependency, and build each as an experiment with stop conditions on customer-facing alarms, for example from
+      the AWS FIS scenario library. Run it first in pre-production at production-like load, then in production with a
+      limited blast radius, with the on-call engineer responding as if it were real. Record time to detect and to
+      mitigate, and file every gap as a finding.
+    improvement_url: https://docs.aws.amazon.com/fis/latest/userguide/scenario-library.html
+    additional_improvement:
+      - display_text: 'AWS FIS scenario: AZ Availability: Power Interruption'
+        url: https://docs.aws.amazon.com/fis/latest/userguide/az-availability-scenario.html
+      - display_text: Use the AWS FIS aws:lambda:function actions
+        url: https://docs.aws.amazon.com/fis/latest/userguide/use-lambda-actions.html
+  - id: gd_tabletop
+    tier: alt:A
+    title: >-
+      A tabletop or live exercise rehearsed incident command, stakeholder communications and escalation to AWS and
+      vendors
+    concept: incident-command-tabletop
+    severity_basis: >-
+      deviation:REL12-BP05 and SEC10-BP07 are rated Medium; the lens rates exercises High because incident command,
+      communications and provider escalation that were never rehearsed slow every recovery.
+    wa_bp: REL12-BP05
+    good: >-
+      In the last 12 months, a facilitated tabletop or live exercise walked through a realistic event of the
+      workload's own (for example a Regional impairment, a bad deployment or a data corruption) and rehearsed who
+      leads the incident, how responders are assembled, how status reaches stakeholders and customers, when and how
+      to open a case with AWS Support and other providers, and who makes business decisions such as failing over or
+      accepting degraded service. Gaps and decisions were written up in an after-action report. The same exercise can
+      serve as evidence for the communication plan (event_customer_impact) and provider escalation
+      (event_provider_escalation); this statement scores incident command and decision making.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html
+    improvement: >-
+      Schedule a tabletop exercise with a facilitator, a written scenario and objectives agreed by leadership. Include
+      the incident lead, on-call engineers, communications and support owners and a business decision maker, and
+      walk through detection, escalation, provider engagement, customer communication and recovery decisions.
+      Capture an after-action report and repeat at least once a year (a suggestion) with a different scenario.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html
+  - id: gd_people_engaged
+    tier: sec
+    title: Exercises engaged the current on-call, escalation contacts and decision makers, not only runbook authors
+    concept: exercise-participant-coverage
+    wa_bp: REL12-BP05
+    good: >-
+      Participants in the last exercises included engineers from the current on-call rotation who did not write the
+      runbooks, the people on the escalation path (incident leads, management, security, dependency owners and any
+      operations partner), and the business owner who would make customer-impacting decisions. Contact details and
+      access were checked live during the exercise, and new on-call engineers take part in an exercise before or soon
+      after joining the rotation.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html
+    improvement: >-
+      For each exercise, build the participant list from the current on-call schedule and escalation documents
+      rather than from the team that wrote the runbooks, invite the business decision maker and dependency owners,
+      and confirm each person's contact details and access during the exercise. Track who has taken part, and add
+      new on-call engineers to the next exercise.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_develop_management_plans.html
+  - id: gd_findings_closed
+    tier: sec
+    title: Exercise findings are tracked to closure, and runbooks, alarms and this checklist are updated
+    concept: exercise-findings-closed
+    wa_bp: OPS11-BP03
+    good: >-
+      Every gap found in an exercise (a missing or late alarm, a wrong runbook step, missing access, an unreachable
+      contact, a slow decision) is recorded as an action with an owner and a due date in the same tracker as other
+      operational work, reviewed in a recurring operations review until closed, and reflected in the runbooks,
+      alarms, escalation documents and the answers in this lens. The next exercise checks that the fixes worked.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_feedback_loops.html
+    improvement: >-
+      After each exercise, write the findings as actions with owners and due dates in your work tracker (for example
+      AWS Systems Manager OpsCenter or your ticketing system), review open actions in your operations review, update
+      runbooks, alarms and this lens's answers as actions close, and include a check of past findings in the next
+      exercise.
+    improvement_url: https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html

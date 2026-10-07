@@ -1,0 +1,141 @@
+schema: orrlens/question/1
+id: event_saturation_alarms
+pillar: event_management
+order: 40
+title: Saturation, dependency health, backlog and usage alarms
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Event detection
+lineage: [event_host_fs_alarms, event_database_alarms, event_jvm_metrics, event_delayed_consistency, event_queue_backlog, event_budget_alerts]
+choice_prefix: sat_
+description:
+  question: >-
+    Do alarms warn you about resource exhaustion, dependency degradation, growing backlogs and runaway usage
+    before they turn into customer-facing errors?
+  evidence_to_collect: >-
+    alarm definitions for compute, runtime, data store and dependency metrics. How new resources get alarms.
+    Queue and stream age alarms. Usage-rate alarms. Cost anomaly monitors and their subscribers.
+helpful:
+  display_text: REL06-BP03 Send notifications (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_monitor.html
+statements:
+  - id: sat_compute
+    tier: core
+    title: >-
+      Compute or function saturation (CPU, memory, disk, handles, pools, concurrency, throttles) is alarmed and
+      covers new resources
+    concept: compute-saturation-alarms
+    severity_basis: "wa:REL06-BP01 (High)"
+    wa_bp: REL06-BP01
+    good: >-
+      Alarms watch the resources that run out first for each compute type, with thresholds that leave time to
+      act: CPU, memory, disk space and inodes, file descriptors, thread and connection pools, runtime signals
+      such as garbage collection, and concurrency and throttling for managed compute. Alarms are created by IaC
+      or tag-driven automation, so new instances, clusters and functions are covered without manual steps.
+    platform_notes: >-
+      EC2: the CloudWatch agent collects memory, disk and process metrics that EC2 does not publish by default,
+      and JVM workloads can publish JMX metrics. Containers: CloudWatch Container Insights for task, pod and node
+      CPU and memory. Serverless: Lambda Throttles, ConcurrentExecutions and Duration against the timeout, and
+      Lambda Insights for memory.
+    reader_note: >-
+      This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30);
+      CloudWatch alarms and CloudWatch anomaly detection meet this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_monitor_resources.html
+    improvement: >-
+      List the saturation signals for each compute type in the workload, add alarms with headroom thresholds
+      through IaC or automation that runs when resources are created, and check coverage at each ORR by comparing
+      alarmed resources with the resource inventory.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html
+    additional_improvement:
+      - display_text: CloudWatch Container Insights
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html
+      - display_text: CloudWatch Lambda Insights
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights.html
+      - display_text: "CloudWatch agent: Collect Java Management Extensions (JMX) metrics"
+        url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-JMX-metrics.html
+  - id: sat_datastore_deps
+    tier: core
+    title: >-
+      Data stores and critical dependencies are alarmed on errors, throttling, latency and capacity headroom,
+      measured from your side
+    concept: dependency-health-alarms
+    severity_basis: "wa:OPS04-BP04 (High)"
+    wa_bp: OPS04-BP04
+    good: >-
+      Each data store and critical dependency, including AWS services, internal services and third-party APIs,
+      has alarms on the errors, throttles, latency and timeouts your code sees when it calls it, measured with
+      client-side metrics, plus provider metrics for capacity headroom such as connections, storage, read and
+      write capacity or replica lag. The operational dashboard has a view of critical dependencies, so responders
+      can tell quickly whether a problem is in the workload or in a dependency.
+    platform_notes: >-
+      Managed databases: alarm on connections, storage, CPU and replica lag (for example Amazon RDS and Amazon
+      Aurora metrics). Amazon DynamoDB: alarm on throttled requests and system errors. Third parties: emit your
+      own call metrics from each client, because the provider's metrics are not visible to you.
+    reader_note: >-
+      This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30);
+      CloudWatch alarms on your own dependency metrics meet this practice.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_dependency_telemetry.html
+    improvement: >-
+      Instrument each dependency client to emit latency, error, throttle and timeout metrics per dependency and
+      operation (for example with the CloudWatch embedded metric format), add alarms on those metrics and on
+      provider capacity metrics, and add a critical-dependencies view to the operational dashboard.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format.html
+    additional_helpful:
+      - display_text: Instrumenting distributed systems for operational visibility (Amazon Builders' Library)
+        url: https://builder.aws.com/content/3EuxPBdIiiUhB5IK47p3O3fxhy7/instrumenting-distributed-systems-for-operational-visibility
+  - id: sat_async_age
+    tier: sec
+    title: >-
+      Queues and streams alarm on oldest-item age, dead-letter arrivals and completion or replication lag (or
+      none are used)
+    concept: backlog-age-alarms
+    wa_bp: REL05-BP04
+    good: >-
+      Every queue, stream and asynchronous workflow has alarms on the age of the oldest unprocessed item compared
+      with its completion SLO, on any message arriving in a dead-letter queue, and on end-to-end completion or
+      replication lag, rather than on queue depth alone. Select this also if the workload uses no queues,
+      streams or asynchronous replication.
+    platform_notes: >-
+      Amazon SQS: ApproximateAgeOfOldestMessage, and ApproximateNumberOfMessagesVisible on the dead-letter queue.
+      Kinesis Data Streams: GetRecords.IteratorAgeMilliseconds. Lambda: IteratorAge for stream event sources and
+      AsyncEventAge for asynchronous invocations. Replicated data: the data store's replica or replication lag
+      metric.
+    helpful_url: https://builder.aws.com/content/3EuRcgkTP1MI0c7zM8W6HL3WIqA/avoiding-insurmountable-queue-backlogs
+    improvement: >-
+      For each queue and stream, set an age threshold from its completion SLO, alarm on oldest-item age and on
+      dead-letter arrivals, and alarm on replication lag for replicated data. Document in the runbook how to
+      drain or redrive a backlog safely.
+    improvement_url: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-available-cloudwatch-metrics.html
+    additional_improvement:
+      - display_text: Monitor Amazon Kinesis Data Streams with Amazon CloudWatch
+        url: https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html
+      - display_text: Types of metrics for Lambda functions
+        url: https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html
+  - id: sat_usage_cost
+    tier: sec
+    title: Usage-rate alarms reach the owning team within minutes, and cost anomaly alerts within a day
+    concept: usage-cost-anomaly-alerts
+    wa_bp: COST01-BP06
+    good: >-
+      Alarms on usage rates (requests, invocations, records processed, egress) catch runaway loops, retry storms
+      and abuse within minutes. AWS Cost Anomaly Detection monitors, with alert subscriptions for the owning team,
+      add a slower spend signal: it runs about three times a day on processed billing data and can take up to 24
+      hours to detect an anomaly. Quota headroom alarms are scored in architecture_demand_estimates
+      (dem_quota_headroom).
+    partition_notes: >-
+      Billing and usage reports for AWS GovCloud (US) accounts are viewed from the associated standard account in
+      the commercial partition (AWS GovCloud (US) User Guide, checked 2026-10-06), so set up cost monitoring
+      there and confirm it covers the GovCloud usage. CloudWatch alarms are available in AWS GovCloud (US) as of
+      2026-10-06; verify per Region.
+    helpful_url: https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html
+    improvement: >-
+      Add alarms on usage-rate metrics for each entry point and consumer, create Cost Anomaly Detection monitors
+      for the workload's accounts or cost allocation tags, subscribe the owning team, and test that alerts reach
+      that team.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
+    additional_improvement:
+      - display_text: COST01-BP06 Monitor cost proactively (AWS Well-Architected)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_cloud_financial_management_proactive_process.html
+      - display_text: AWS GovCloud (US) billing and payment
+        url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/usage-and-payment.html

@@ -1,0 +1,84 @@
+schema: orrlens/question/1
+id: evt_rehearsal
+pillar: evt_prepare
+order: 50
+title: Event rehearsal
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Escalation
+lineage: []
+choice_prefix: rh_
+description:
+  question: >-
+    Has the team rehearsed the failure scenarios most likely to hurt this event, close enough to the event that the
+    people, runbooks and contacts are current?
+  evidence_to_collect: >-
+    the rehearsal plan and scenarios. The dates, attendees and notes of the tabletop and the game day. Detection and
+    mitigation times. Findings with owners and their closure or acceptance.
+helpful:
+  display_text: REL12-BP05 Conduct game days regularly (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html
+statements:
+  - id: rh_tabletop
+    tier: alt:A
+    title: An event-scenario tabletop (DDoS, AZ impairment, dependency outage, surge beyond forecast) ran within 60 days
+    concept: event-scenario-tabletop
+    severity_basis: >-
+      deviation:REL12-BP05 is rated Medium; the lens rates an unrehearsed event plan High because a fixed event window
+      leaves no time to discover in production that runbooks, access or escalation paths do not work.
+    wa_bp: REL12-BP05
+    good: >-
+      Within 60 days of the event, the event owner, the event shift, dependency owners and communications staff walked
+      through the event's likely scenarios, at least a DDoS attack (for internet-facing workloads), an Availability
+      Zone impairment, a critical dependency outage and demand beyond forecast, using the real dashboards, runbooks,
+      escalation tree and status templates. Each scenario records the decisions made, how long they took and the gaps
+      found. This applies the core question 'Incident exercises: game days, tabletops and recovery drills' to this
+      event's people and scenarios.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html
+    improvement: >-
+      Schedule a tabletop 4-8 weeks before the event. Write a scenario for each major risk with injects (for example,
+      the payment provider times out 10 minutes into the peak), have the event shift respond from the real runbooks and
+      dashboards, time the key decisions, and log every gap as a tracked finding.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html
+  - id: rh_gameday
+    tier: alt:A
+    title: A game day under event-like load ran within 60 days
+    concept: event-load-game-day
+    severity_basis: >-
+      deviation:REL12-BP05 is rated Medium; the lens rates an unrehearsed event plan High because a fixed event window
+      leaves no time to discover in production that runbooks, access or escalation paths do not work.
+    wa_bp: REL12-BP05
+    good: >-
+      Within 60 days of the event, faults were injected while load matched the event's shape, for example during the
+      load re-test: an Availability Zone impairment, a dependency returning errors or latency, a throttled quota, or a
+      failed deployment. The staff for the event window detected and mitigated them with the real alarms and runbooks,
+      and the time to detect and to mitigate was recorded.
+    platform_notes: >-
+      AWS FIS provides scenarios such as AZ Availability: Power Interruption and actions for EC2, containers and
+      Lambda; check that the actions your platform needs exist, or use your own fault tooling.
+    partition_notes: >-
+      AWS FIS is available in AWS GovCloud (US) as of 2026-10-06, but its experiment scheduling and experiment reports
+      are not.
+    helpful_url: https://docs.aws.amazon.com/fis/latest/userguide/scenario-library.html
+    improvement: >-
+      Combine the game day with the load re-test or a second run. Agree stop conditions and a safe environment, inject
+      the event's top faults at event-like load with AWS FIS or your own tooling, let the event shift respond without
+      coaching, measure detection and mitigation times, and record the findings.
+    improvement_url: https://docs.aws.amazon.com/fis/latest/userguide/az-availability-scenario.html
+  - id: rh_findings_closed
+    tier: sec
+    title: Rehearsal findings were closed or formally accepted before the event
+    concept: event-rehearsal-findings-closed
+    wa_bp: REL12-BP05
+    good: >-
+      Every finding from the tabletop and the game day has an owner and a due date before the freeze, and is fixed and
+      re-checked, or formally accepted by the event owner with the acceptance recorded in your risk register. Runbooks,
+      alarms, the escalation tree and status templates were updated from the findings, and the core review was updated
+      where a finding showed a core gap.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html
+    improvement: >-
+      Track every rehearsal finding in the same tracker as your other operational work (for example AWS Systems Manager
+      OpsCenter or your own tool), set due dates before the freeze, review open findings at each go/no-go checkpoint,
+      and re-test the fixes for high-impact findings.
+    improvement_url: https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html
