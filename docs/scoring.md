@@ -2,7 +2,7 @@
 
 This page explains how answers become risk levels in the ORR lens family, what each level means, which properties
 the build proves for every question, how the bars are calibrated, and how they may change. It applies to the core
-lens (2.0.0) and to ORR - Mission-Critical Event Readiness (1.0.0).
+lens (2.0.0), to ORR - Mission-Critical Event Readiness (1.0.0) and to ORR - Generative AI and Agents (1.0.0).
 
 ## Summary
 
@@ -128,7 +128,8 @@ path. Three core questions are capped at Medium:
 | `architecture_cold_start` | Restart-from-zero hardening; its practices are secondary |
 
 In the event lens, `evt_post_event` is Medium-capped as well: post-event learning and scale-down matter, but they
-are not launch-blocking.
+are not launch-blocking. In the generative AI lens, `gai_observability` is Medium-capped: proven telemetry coverage
+and per-request attribution matter, but they are not launch-blocking on their own.
 
 Some secondary statements describe practices that mainly pay off for very large or multi-tenant workloads, and are
 tagged `large_scale: true` in the source (`rp_no_shared_fate`, `can_independent`, `ev_per_az_detection`,
@@ -177,6 +178,10 @@ best practice, with the reason: irreversibility, or a design lesson from a publi
 | `evt_war_room` | `wr_staffing` A staffed shift plan or war room covers the window, including dependency owners, with shifts and handoffs that limit fatigue | A fixed event window concentrates risk into hours that cannot be re-run, so an unstaffed shift or a missing dependency owner turns a recoverable fault into a failed event. |
 | `evt_war_room` | `wr_escalation_tree` An escalation tree per component, including AWS, partners and vendors, was verified within two weeks of the event | OPS10-BP04 is rated Medium; the lens rates an unverified event escalation tree High because contacts go stale between events and the event window leaves no time to find the right person. |
 | `evt_degraded_modes` | `dm_kill_switches` Non-essential features can be shed within minutes without a deployment | REL05-BP07 is rated Medium; during a fixed-date peak, demand above forecast has to be absorbed within minutes and a code deployment during the window adds risk, so shedding features by configuration is one of the two acceptable floors. |
+| `gai_inventory_routing` | `mi_lifecycle_tracked` Every model in use, including fallback and recovery models, has an owner and a tracked lifecycle state and end-of-life date | after a model reaches end of life, requests to it fail in all Regions and migration is not automatic, and some models now have a 45-day Legacy period, so an untracked model deadline is a fixed-date outage. GENREL04-BP02 (model catalog) is rated Low. |
+| `gai_dependency_fallback` | `fb_stop_reasons` Truncated, filtered or malformed model output, and mid-stream errors, are handled as failures, never as complete answers | model APIs report truncation, content filtering, malformed output and context overflow as stop reasons on a successful call, and streams can fail after they start, so unchecked code passes incomplete answers to users and downstream systems as if complete. GENREL03-BP01 (use logic to manage prompt flows and gracefully recover from failure) is rated Medium. |
+| `gai_safeguards` | `sg_enforced_outside_code` Safeguards are enforced outside app code on every call path, including fallback and streaming (or risk assessment requires none) | a guardrail applied only by application code is skipped by any new, fallback or direct call path, and AWS documents enforcing guardrails through IAM conditions, organization policies and gateways. GENSEC02-BP01 scores having guardrails, not enforcing them, and AGENTSEC04-BP01 scores layered guardrail design for agents, not enforcement outside code. |
+| `gai_runaway_cost` | `sp_spend_stop` An automated stop or degrade, driven by near-real-time token metrics, halts model use at an approved ceiling, and was tested | AWS Budgets data updates up to three times a day and Cost Anomaly Detection can take up to 24 hours, so billing-based controls cannot stop runaway token spend in time. For agent workloads, the Agentic AI Lens rates per-agent cutoffs and agent cost anomaly detection High (AGENTCOST07-BP01 and AGENTCOST07-BP02). This statement scores what those practices do not: one tested ceiling across all model use, including non-agent and third-party calls, where the Framework practices REL05-BP07 and COST02-BP05 are rated Medium. An untested stop is assumed not to work. |
 <!-- END GENERATED DEVIATIONS -->
 
 ## Where this lens rates lower than the whitepaper

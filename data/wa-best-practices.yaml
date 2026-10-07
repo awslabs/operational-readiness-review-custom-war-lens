@@ -4,6 +4,10 @@
 # url is the pillar-guide form; alt_urls lists the Framework form, which serves the same page.
 # Both forms returned HTTP 200 with no redirect on 2026-10-06.
 # A severity_basis of "wa:<BP-ID> (High)" is valid only for entries whose level_of_risk is High.
+# Entries with a lens field are best practices of the AWS Well-Architected Generative AI, Agentic AI and
+# Responsible AI lenses (lens: generative-ai | agentic-ai | responsible-ai; see config.WA_BP_SOURCES). Entries
+# without one are Framework practices. Each AI lens entry records the live page title, URL and level of risk,
+# checked on 2026-10-07; the lens version is the publication date on the lens's Document revisions page.
 # Regenerate from the live pages at each release and at each quarterly review.
 
 schema: orrlens/wa-best-practices/1
@@ -11,6 +15,22 @@ framework_version: 2024-11-06
 framework_version_source: https://docs.aws.amazon.com/wellarchitected/latest/framework/document-revisions.html
 framework_version_note: Latest entry on the Framework Document revisions page (Major update, November 6, 2024), checked 2026-10-06.
 checked: 2026-10-06
+lenses:
+  generative-ai:
+    name: Generative AI Lens
+    version: 2025-11-19
+    source: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/document-revisions.html
+    note: New lens version, November 19, 2025 (initial publication April 15, 2025), checked 2026-10-07.
+  agentic-ai:
+    name: Agentic AI Lens
+    version: 2026-06-10
+    source: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/document-revisions.html
+    note: Initial release, June 10, 2026, checked 2026-10-07.
+  responsible-ai:
+    name: Responsible AI Lens
+    version: 2025-11-19
+    source: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/document-revisions.html
+    note: Initial release, November 19, 2025, checked 2026-10-07.
 practices:
   OPS01-BP04:
     title: Evaluate compliance requirements
@@ -852,6 +872,12 @@ practices:
     alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_govern_usage_controls.html]
     level_of_risk: Medium
     checked: 2026-10-06
+  COST03-BP02:
+    title: Add organization information to cost and usage
+    url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_monitor_usage_org_information.html
+    alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_monitor_usage_org_information.html]
+    level_of_risk: Medium
+    checked: 2026-10-07
   COST09-BP01:
     title: Perform an analysis on the workload demand
     url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_cost_analysis.html
@@ -864,3 +890,330 @@ practices:
     alt_urls: [https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html]
     level_of_risk: Low
     checked: 2026-10-06
+  # Generative AI Lens (checked 2026-10-07)
+  GENCOST02-BP01:
+    title: Balance cost and performance when selecting inference paradigms
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gencost02-bp01.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENCOST03-BP02:
+    title: Control model response length
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gencost03-bp02.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENCOST05-BP01:
+    title: Create stopping conditions to control long-running workflows
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gencost05-bp01.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENOPS01-BP01:
+    title: Periodically evaluate functional performance
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops01-bp01.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENOPS02-BP01:
+    title: Monitor all application layers
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops02-bp01.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENOPS02-BP02:
+    title: Monitor foundation model metrics
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops02-bp02.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENOPS02-BP03:
+    title: Implement solutions to mitigate the risk of system overload
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops02-bp03.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENOPS03-BP01:
+    title: Implement prompt template management
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops03-bp01.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENOPS03-BP02:
+    title: Enable tracing for agents and RAG workflows
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops03-bp02.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENPERF02-BP01:
+    title: Load test model endpoints
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genperf02-bp01.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENPERF04-BP01:
+    title: Test vector embeddings for latency and relevant performance
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genperf04-bp01.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENREL01-BP01:
+    title: Scale and balance foundation model throughput as a function of utilization
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genrel01-bp01.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENREL03-BP01:
+    title: Use logic to manage prompt flows and gracefully recover from failure
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genrel03-bp01.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENREL03-BP02:
+    title: Implement timeout mechanisms on agentic workflows
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genrel03-bp02.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENREL04-BP01:
+    title: Implement a prompt catalog
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genrel04-bp01.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENREL04-BP02:
+    title: Implement a model catalog
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genrel04-bp02.html
+    lens: generative-ai
+    level_of_risk: Low
+    checked: 2026-10-07
+  GENREL05-BP01:
+    title: Load-balance inference requests across all regions of availability
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genrel05-bp01.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENREL05-BP02:
+    title: Replicate embedding data across all regions of availability
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genrel05-bp02.html
+    lens: generative-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  GENSEC02-BP01:
+    title: Implement guardrails to mitigate harmful or incorrect model responses
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensec02-bp01.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENSEC03-BP01:
+    title: Implement control plane and data access monitoring to generative AI services and foundation models
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensec03-bp01.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENSEC04-BP02:
+    title: Sanitize and validate user inputs to foundation models
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensec04-bp02.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  GENSEC05-BP01:
+    title: Implement least privilege access and permissions boundaries for agentic workflows
+    url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/gensec05-bp01.html
+    lens: generative-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  # Agentic AI Lens (checked 2026-10-07)
+  AGENTCOST05-BP01:
+    title: Establish agent-level reasoning cost tracking and attribution
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentcost05-bp01.html
+    lens: agentic-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  AGENTCOST05-BP03:
+    title: Design tenant-aware cost allocation for agent as a service (AaaS) pricing models
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentcost05-bp03.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTCOST07-BP01:
+    title: Implement automated cost controls with intelligent cutoffs
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentcost07-bp01.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTCOST07-BP02:
+    title: Establish proactive anomaly detection for agent cost patterns
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentcost07-bp02.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTOPS02-BP03:
+    title: Implement agent behavior versioning and rollback capabilities
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops02-bp03.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTOPS03-BP02:
+    title: Implement CI/CD pipelines tailored to agentic system deployment (AgentOps)
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops03-bp02.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTOPS04-BP01:
+    title: Implement tool registry and catalog management
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops04-bp01.html
+    lens: agentic-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  AGENTOPS04-BP03:
+    title: Develop fallback behavior and error handling for tool invocations
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops04-bp03.html
+    lens: agentic-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  AGENTOPS05-BP01:
+    title: Establish end-to-end tracing and telemetry for agent operations
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops05-bp01.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTOPS05-BP02:
+    title: Monitor agent behavior patterns and detect anomalies
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops05-bp02.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTOPS06-BP02:
+    title: Evaluate and track ongoing agent performance
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops06-bp02.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTOPS07-BP01:
+    title: Implement automated response and recovery mechanisms
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops07-bp01.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTOPS07-BP04:
+    title: Implement break-glass operational runbooks
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops07-bp04.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTPERF07-BP02:
+    title: Implement tenant-aware performance isolation and throttling
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentperf07-bp02.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTREL02-BP05:
+    title: Establish tiered human oversight and approval workflows
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentrel02-bp05.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTREL04-BP03:
+    title: Implement fallback mechanisms and graceful degradation for collaborative workflows
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentrel04-bp03.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTREL06-BP05:
+    title: Implement dynamic capability toggling
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentrel06-bp05.html
+    lens: agentic-ai
+    level_of_risk: Medium
+    checked: 2026-10-07
+  AGENTSEC02-BP01:
+    title: Implement tool authorization
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec02-bp01.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTSEC02-BP02:
+    title: Validate tool inputs and outputs
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec02-bp02.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTSEC03-BP03:
+    title: Implement least privilege with dynamic boundaries
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec03-bp03.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTSEC04-BP01:
+    title: Implement guardrails and alignment controls
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec04-bp01.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTSEC04-BP02:
+    title: Human-in-the-loop for critical decisions
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec04-bp02.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTSEC07-BP04:
+    title: Behavioral anomaly detection and agent containment
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec07-bp04.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTSEC08-BP01:
+    title: Multi-layer input validation and prompt injection defense
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec08-bp01.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTSEC08-BP02:
+    title: Output filtering for sensitive information
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec08-bp02.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  AGENTSUS01-BP01:
+    title: Design specialized agents with explicit resource boundaries
+    url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsus01-bp01.html
+    lens: agentic-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  # Responsible AI Lens (checked 2026-10-07)
+  RAIER01-BP03:
+    title: For each system update, re-run the evaluation and update the system registry
+    url: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raier01-bp03.html
+    lens: responsible-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  RAIMON01-BP02:
+    title: Set operational performance baselines and apply methods for drift detection
+    url: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raimon01-bp02.html
+    lens: responsible-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  RAIRC03-BP01:
+    title: Measure safety harms and harmful outputs
+    url: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/rairc03-bp01.html
+    lens: responsible-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  RAISP01-BP01:
+    title: Detail your core AI system design in a system registry
+    url: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp01-bp01.html
+    lens: responsible-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  RAISP03-BP02:
+    title: Add security filters
+    url: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp03-bp02.html
+    lens: responsible-ai
+    level_of_risk: High
+    checked: 2026-10-07
+  RAISP03-BP03:
+    title: Implement output filtering to catch unsafe content before it reaches users
+    url: https://docs.aws.amazon.com/wellarchitected/latest/responsible-ai-lens/raisp03-bp03.html
+    lens: responsible-ai
+    level_of_risk: High
+    checked: 2026-10-07

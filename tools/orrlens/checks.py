@@ -24,7 +24,7 @@ from .textscan import (ServiceMatcher, bare_hosts, decode_text, extract_urls, go
                        language_problems, placeholder_problems, rendered_strings, strip_statement_reader_notes,
                        url_allowed)
 
-BP_IN_TEXT = re.compile(r"^((?:OPS|SEC|REL|PERF|COST|SUS)\d{2}-BP\d{2})\b")
+BP_IN_TEXT = re.compile(r"^(" + C.WA_BP_ID + r")\b")   # Framework and AI lens best-practice ids
 AS_OF = re.compile(r"\b(?:as of|checked) (20\d\d-\d\d-\d\d)\b", re.I)
 # A partition note for a statement that names a service missing from AWS GovCloud (US) must offer what to do there.
 # A heuristic: a note that only says "not available" has none of these words.
@@ -105,13 +105,48 @@ def _where_statement(lens_key, q, s):
 # source, schema, limits, rules
 # ---------------------------------------------------------------------------
 
+def lens_family_problems(lenses) -> list:
+    """Family-level rules: at most MAX_FAMILY_LENSES lenses; unique names and file stems; every lens and every
+    pillar in its lens.yaml has at least one question (the renderer drops an empty pillar silently)."""
+    fails = []
+    if len(lenses) > C.MAX_FAMILY_LENSES:
+        fails.append(f"{len(lenses)} lenses under lens-src/ ({', '.join(lz.key for lz in lenses)}); the family is "
+                     f"capped at {C.MAX_FAMILY_LENSES}")
+    for what in ("name", "file_stem"):
+        seen: dict = {}
+        for lens in lenses:
+            v = " ".join(str(lens.meta.get(what) or "").split())
+            if v and v in seen:
+                fails.append(f"{lens.key}/lens.yaml: {what} {v!r} is also used by {seen[v]}")
+            seen.setdefault(v, lens.key)
+    for lens in lenses:
+        if not lens.questions:
+            fails.append(f"{lens.key}: lens.yaml has no question files yet")
+            continue
+        used = {q.get("pillar") for q in lens.questions}
+        for p in lens.meta.get("pillars") or []:
+            if isinstance(p, dict) and p.get("id") and p["id"] not in used:
+                fails.append(f"{lens.key}/lens.yaml: pillar {p['id']} has no questions")
+    return fails
+
+
 def check_source(ctx):
     fails, notes = [], []
     for lens in ctx.all_lenses():
         fails += lens.errors
         notes.append(f"{lens.key}: {len(lens.questions)} question files, {len(lens.valid_questions)} valid")
+    # Family rules always cover every lens under lens-src/, even when --lens filters the context, so a filtered
+    # run cannot report PASS on a family that breaks the cap or reuses a name or file stem.
+    loaded = {lz.key: lz for lz in ctx.lenses}
+    family = [loaded.get(k) or load_lens(ctx.root, k) for k in discover_lens_keys(ctx.root)]
+    fails += lens_family_problems(family)
+    if len(family) != len(ctx.lenses):
+        notes.append(f"family rules checked all {len(family)} lenses; the other checks cover only the --lens filter")
     if ctx.addon is None:
-        notes.append(f"{C.ADDON_SOURCE} does not exist yet; the add-on template is skipped")
+        if (ctx.root / C.ADDON_SOURCE).exists():
+            notes.append(f"{C.ADDON_SOURCE} is skipped by the --lens filter")
+        else:
+            notes.append(f"{C.ADDON_SOURCE} does not exist yet; the add-on template is skipped")
     return fails, notes
 
 
@@ -650,13 +685,13 @@ def sha256(text: str) -> str:
 
 def check_reproducibility(ctx):
     fails, notes = [], []
-    blocked = [lens.key for lens in ctx.all_lenses() if lens.errors]
+    blocked = [lens.key for lens in ctx.all_lenses() if lens.errors or not lens.valid_questions]
     expected = expected_outputs(ctx)
     for rel, content in expected.items():
         lens_key = "addon" if rel == C.ADDON_OUTPUT else next(
             (lz.key for lz in ctx.lenses if rel.startswith(f"dist/{lz.meta.get('file_stem')}-")), None)
         if lens_key in blocked:
-            fails.append(f"{rel}: cannot be built while {lens_key} has source errors")
+            fails.append(f"{rel}: cannot be built while {lens_key} has source errors or no valid questions")
             continue
         path = ctx.root / rel
         if not path.exists():
@@ -685,7 +720,20 @@ def check_reproducibility(ctx):
         if sums.exists() and sums.read_text(encoding="utf-8") != sha256sums(
                 {Path(r).name: c for r, c in expected.items() if r.startswith("dist/")}):
             fails.append("dist/SHA256SUMS differs from the current build; run `python3 -m tools.orrlens manifest`")
-    # Copies of the current release in wafr-operational-readiness-lens/ must equal dist/
+    # Copies of the current release in wafr-operational-readiness-lens/ must equal dist/. A missing copy is a note:
+    # the copies are made at release time, after the lens is final (maintainer release checklist).
+    for f in release_copy_problems(ctx, expected):
+        (notes if f.endswith("(copy it at release)") else fails).append(f)
+    return fails, notes
+
+
+def release_copy_problems(ctx, expected=None) -> list:
+    """Problems with the copies of each lens's current release in wafr-operational-readiness-lens/.
+
+    A copy that differs from dist/ is a failure. A missing versioned copy ends with "(copy it at release)".
+    """
+    expected = expected if expected is not None else expected_outputs(ctx)
+    out = []
     v1dir = ctx.root / C.V1_DIR
     for lens in ctx.lenses:
         stem, ver = lens.meta.get("file_stem"), lens.version
@@ -694,8 +742,10 @@ def check_reproducibility(ctx):
             for name in (f"{stem}-{ver}{suffix}", f"{stem}{suffix}"):
                 p = v1dir / name
                 if p.exists() and want is not None and p.read_text(encoding="utf-8") != want:
-                    fails.append(f"{C.V1_DIR}/{name} differs from dist/{stem}-{ver}{suffix}")
-    return fails, notes
+                    out.append(f"{C.V1_DIR}/{name} differs from dist/{stem}-{ver}{suffix}")
+            if v1dir.is_dir() and not (v1dir / f"{stem}-{ver}{suffix}").exists():
+                out.append(f"{C.V1_DIR}/{stem}-{ver}{suffix} does not exist yet (copy it at release)")
+    return out
 
 
 def _strip_commit(m):

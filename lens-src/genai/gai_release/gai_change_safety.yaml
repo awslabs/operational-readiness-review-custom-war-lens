@@ -1,0 +1,93 @@
+schema: orrlens/question/1
+id: gai_change_safety
+pillar: gai_release
+order: 10
+title: Pinned versions and quality-checked rollout for model, prompt and guardrail changes
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Deployment safety
+lineage: []
+choice_prefix: mc_
+description:
+  question: >-
+    Does production reference only immutable versions of models, prompts, guardrails and agents, and does each
+    rollout compare answer quality between the old and new versions?
+  evidence_to_collect: >-
+    the model IDs or inference profiles, prompt versions, guardrail versions and agent endpoint versions that
+    production configuration references. The token quota recomputation for the last model change (see the capacity
+    question). The rollout
+    record for the last prompt or guardrail change, with the quality signal that was compared.
+helpful:
+  display_text: OPS06-BP01 Plan for unsuccessful changes (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_plan_for_unsucessful_changes.html
+statements:
+  - id: mc_pinned_versions
+    tier: core
+    title: Production pins immutable versions of model or profile, prompt, guardrail and agent endpoint, never drafts or moving aliases
+    concept: genai-pinned-artifact-versions
+    severity_basis: "wa:OPS06-BP01 (High)"
+    wa_bp: OPS06-BP01
+    good: >-
+      Production configuration names explicit model IDs or inference profiles, numbered prompt and guardrail
+      versions, and a named agent endpoint pinned to a version, so behavior changes only through a release that can
+      be rolled back. This extends the core statement that configuration changes are deployed only by pipelines.
+    platform_notes: >-
+      Amazon Bedrock: a DRAFT guardrail rejects calls while it is being updated. A numbered version freezes its
+      configuration, but AWS updates the safeguard models automatically (as of 2026-10-07), so re-run guardrail
+      tests on a schedule. AgentCore: DEFAULT moves to each new version, named endpoints stay pinned. Amazon
+      SageMaker AI and self-hosted: pin model package versions, and images and weights by digest. Third-party APIs:
+      dated model identifiers.
+    partition_notes: >-
+      As of 2026-10-07, AWS GovCloud (US) publishes SageMaker AI Deep Learning Container images mostly with mutable
+      tags, so pin them by digest there. AgentCore is available in AWS GovCloud (US-West) only.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-deploy.html
+    improvement: >-
+      Search production configuration and infrastructure as code for DRAFT guardrails, unversioned prompts, floating
+      model aliases, latest image tags and DEFAULT agent endpoints. Replace each with a pinned version, and add a
+      pipeline check that rejects them in production stages. Record the pinned versions with each release so a
+      rollback restores the exact previous set.
+    improvement_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agent-runtime-versioning.html
+    additional_helpful:
+      - display_text: Best practices with Amazon Bedrock Guardrails, including numbered versions in production (AWS Machine Learning Blog)
+        url: https://aws.amazon.com/blogs/machine-learning/build-safe-generative-ai-applications-like-a-pro-best-practices-with-amazon-bedrock-guardrails/
+      - display_text: How Amazon Bedrock Guardrails works (safeguard model updates)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html
+      - display_text: Amazon Bedrock Guardrails enforcements (numeric guardrail versions)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-enforcements.html
+    additional_improvement:
+      - display_text: Create a version of a prompt in Amazon Bedrock Prompt Management
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-version-create.html
+  - id: mc_quality_in_rollout
+    tier: sec
+    title: Rollouts of model, prompt and guardrail changes compare a quality signal between versions (or every call path is an agent path)
+    concept: genai-quality-signal-in-rollout
+    wa_bp: OPS06-BP02
+    good: >-
+      Each rollout stage compares guardrail interventions, non-normal stop reasons, sampled evaluation scores or
+      negative feedback between the old and new versions, and a regression stops the rollout, because quality
+      regressions return success and do not trip error or latency alarms. This adds a signal to the core rollback
+      alarm and phased rollout statements. Agent behavior versions are left to the Agentic AI Lens, so a workload
+      whose model calls all run in agents meets this by recording that.
+    platform_notes: >-
+      Amazon Bedrock: guardrail intervention metrics carry a GuardrailVersion dimension, and Converse returns a
+      stop reason to count per version. SageMaker AI: shadow tests copy production requests to a shadow variant
+      (not on serverless, asynchronous or multi-model endpoints, and others).
+    partition_notes: >-
+      As of 2026-10-07, AWS Capabilities by Region lists SageMaker AI shadow tests in AWS GovCloud (US-East) and
+      not in AWS GovCloud (US-West). There, compare sampled metrics per version in each stage.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-guardrails-cw-metrics.html
+    improvement: >-
+      Emit quality metrics tagged with the model, prompt and guardrail version that served each request (guardrail
+      interventions, stop reasons, sampled evaluation scores and user feedback). Add them to the stage gates of the
+      rollout next to the error and latency alarms, with a threshold relative to the previous version, so a
+      regression stops promotion and triggers rollback.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_test_val_chg.html
+    additional_helpful:
+      - display_text: Converse API reference (stopReason values)
+        url: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+      - display_text: Agentic AI Lens, agent behavior versioning and rollback (AGENTOPS02-BP03)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops02-bp03.html
+    additional_improvement:
+      - display_text: Shadow tests (SageMaker AI developer guide)
+        url: https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html

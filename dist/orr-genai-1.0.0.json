@@ -1,0 +1,1031 @@
+{
+  "schemaVersion": "2021-11-01",
+  "name": "ORR - Generative AI and Agents",
+  "description": "ORR - Generative AI and Agents custom lens 1.0.0 for the AWS Well-Architected Tool. Attach it alongside a current Operational Readiness Review (ORR) core review for any workload that calls a generative AI model or runs an AI agent. It scores launch-readiness failure modes that the AWS Well-Architected Generative AI, Agentic AI and Responsible AI lenses do not, so apply those as well. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
+  "pillars": [
+    {
+      "id": "gai_models",
+      "name": "01 - Models, capacity and dependencies",
+      "questions": [
+        {
+          "id": "gai_inventory_routing",
+          "title": "Model lifecycle and where inference runs",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against dependencies. Do you know every model, inference profile and model endpoint the workload calls, when each reaches end of life, and in which Regions or providers each request is processed? Evidence to collect: the list of models, inference profiles and external model endpoints in use, including fallback and recovery models, with owner, lifecycle state and end-of-life date. The approved inference destinations per call path and the policy that enforces them. The list of prompts, guardrails, knowledge bases and tools production calls, with versions.",
+          "helpfulResource": {
+            "displayText": "Amazon Bedrock model lifecycle",
+            "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html"
+          },
+          "choices": [
+            {
+              "id": "mi_lifecycle_tracked",
+              "title": "Every model in use, including fallback and recovery models, has an owner and a tracked lifecycle state and end-of-life date",
+              "helpfulResource": {
+                "displayText": "Good looks like: Each model ID or inference profile in production, fallback and recovery paths, including embedding, reranking and evaluator models, has an owning team, its lifecycle state read from the API or console, and its end-of-life date, or its \"EOL no sooner than\" date and Legacy period, from the model card. Where a model card defers to the provider's lifecycle terms, the provider's dates are tracked. The core statement on AWS Health lifecycle notices owns notice routing. Platform notes: Amazon Bedrock: the modelLifecycle field, model cards and the LegacyModelInvocations metric. AgentCore: record the model each agent runtime version calls. SageMaker AI and self-hosted: container and model package versions. Third-party APIs: provider deprecation dates. Partition notes: As of 2026-10-07, Legacy and end-of-life dates are listed per Region, including both AWS GovCloud (US) Regions. Confirm that LegacyModelInvocations is published in your GovCloud account before you alarm on it, or poll modelLifecycle.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html"
+              },
+              "improvementPlan": {
+                "displayText": "List every model call path, read modelLifecycle from GetFoundationModel or ListFoundationModels on a schedule, record end-of-life dates, assign an owner per model, and alarm to that owner when LegacyModelInvocations is above zero. As of 2026-10-07, Amazon Bedrock models launched on or after 2026-09-07 follow the current lifecycle policy (a 6-month or 45-day Legacy period, shown on the model card), and older models follow the Legacy lifecycle page (at least 6 months in Legacy state).",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Amazon Bedrock model lifecycle (Legacy), for models launched before 2026-09-07",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle-legacy.html"
+                    },
+                    {
+                      "displayText": "Amazon Bedrock runtime metrics, including LegacyModelInvocations",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Understanding Amazon Bedrock model lifecycle (AWS ML Blog), for models launched before 2026-09-07",
+                      "url": "https://aws.amazon.com/blogs/machine-learning/understanding-amazon-bedrock-model-lifecycle/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mi_successor_ready",
+              "title": "Every Legacy model, or model whose end of life falls inside the service life, has an evaluated successor and a migration date",
+              "helpfulResource": {
+                "displayText": "Good looks like: Before launch, no model in the path is in Legacy state without a named successor that has passed the release evaluation and a migration scheduled ahead of the end-of-life date. Quota increases are not granted for models in Legacy state (as of 2026-10-07), and for models under the Legacy lifecycle policy, pricing can rise during public extended access. The migration runs through the core release controls. Platform notes: Amazon Bedrock: new Provisioned Throughput cannot be created, and new fine-tuning jobs cannot start, for models in Legacy state. Amazon SageMaker AI and self-hosted models: plan successors for container, framework and model versions reaching end of support. Partition notes: Lifecycle dates can differ in AWS GovCloud (US), so check each model's row for us-gov-west-1 and us-gov-east-1 (as of 2026-10-07).",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle-legacy.html"
+              },
+              "improvementPlan": {
+                "displayText": "For each Legacy or end-of-life-dated model, pick an Active successor, run the release evaluation on it, recompute token quota needs for it, request the successor's quota increases ahead of cutover (increases are not granted once a model is Legacy), and schedule the cutover with a date before end of life.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Quotas for the bedrock-runtime endpoint (quota increases and Legacy models)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-runtime.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mi_routing_approved",
+              "title": "Each call path's inference destinations are approved against residency rules (or the data owner recorded that none apply)",
+              "helpfulResource": {
+                "displayText": "Good looks like: For every call path the team records whether inference runs in-Region, in a geography, globally or at an external provider, and the data owner approved where prompts and outputs may be processed and stored, or recorded that no residency or contractual rule applies. Tool targets that send data elsewhere count too. Platform notes: Amazon Bedrock: the model ID or inference profile sets routing, and global profiles can use any supported commercial Region. With geographic profiles, prompts and outputs are stored in the destination Region to the extent Amazon Bedrock stores data for abuse detection. AgentCore: external Gateway targets and Browser or Code Interpreter internet access can send data out of the Region. Partition notes: As of 2026-10-07, global profiles use only commercial Regions, a US-GOV profile routes between the two AWS GovCloud (US) Regions for some models, and AgentCore, in AWS GovCloud (US-West) only, can also send data outside GovCloud through external identity providers.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
+              },
+              "improvementPlan": {
+                "displayText": "Map each call path to in-Region, geographic or global routing, list the destination Regions (for third-party APIs, the provider's processing locations), get written approval from the data owner, and record the inference Region in audit logs (the CloudTrail field additionalEventData.inferenceRegion). This extends the residency constraints in the core disaster recovery strategy statement to where each inference request runs.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Geographic cross-Region inference (data processing and storage)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html"
+                    },
+                    {
+                      "displayText": "Global cross-Region inference",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html"
+                    },
+                    {
+                      "displayText": "Amazon Bedrock AgentCore in AWS GovCloud (US) (traffic to customer-specified endpoints)",
+                      "url": "https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mi_routing_enforced",
+              "title": "A test request from each production account proved organization policies allow every Region each routing option can use",
+              "helpfulResource": {
+                "displayText": "Good looks like: Region-deny service control policies were tested with a request through each cross-Region routing option from each production account, so your own SCPs do not deny routed requests, and where residency forbids global routing an SCP or IAM policy denies it. In-Region-only use meets this statement when Region-deny policies allow it. This extends the core statement on verifying that every service and feature relied on is available and authorized in each target partition. Platform notes: Amazon Bedrock: cross-Region inference can route to Regions not enabled in the account. A Region-deny SCP can exempt routed requests with the bedrock:InferenceProfileArn condition key, and global routing is denied with aws:RequestedRegion set to unspecified. Partition notes: In AWS GovCloud (US), test the US-GOV geographic profile across both GovCloud Regions for each model that supports it (as of 2026-10-07).",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html"
+              },
+              "improvementPlan": {
+                "displayText": "From each production account, with production SCPs attached, send a test request through each routing option the workload uses, add the documented inference-profile exception or the global-routing deny, and keep the test in pre-production so policy changes cannot break routing unnoticed. AgentCore: confirm network configuration and egress rules allow only the approved Gateway and tool targets. Third-party APIs: confirm egress allows the provider endpoints.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Supported Regions and models for inference profiles (source and destination Regions)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "mi_lifecycle_tracked && mi_successor_ready && mi_routing_approved && mi_routing_enforced && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "mi_lifecycle_tracked && mi_routing_approved && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "gai_capacity_quotas",
+          "title": "Token quotas and inference capacity sized from real request shape",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Are token and request quotas for every model, inference profile, endpoint and Region sized from how the workload's requests actually consume quota, and protected from your own batch and test traffic? Evidence to collect: per model and call path, measured input and output tokens and the max_tokens setting. The quota calculation for peak plus failover and the granted quota values. Which traffic uses which capacity option or account.",
+          "helpfulResource": {
+            "displayText": "REL01-BP01 Aware of service quotas (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_quotas_and_constraints.html"
+          },
+          "choices": [
+            {
+              "id": "tk_token_sizing",
+              "title": "Token quota needs are computed from input plus max_tokens reserved at admission and the output burndown, not billed tokens",
+              "helpfulResource": {
+                "displayText": "Good looks like: The team measured input, cache-write and output tokens per request type and computed per-minute and per-day quota needs from input plus max_tokens reserved at admission and the output burndown, not from billed tokens. An unset max_tokens defaults to the model's maximum output and is reserved in full. The numbers are recomputed for every model or version change. This feeds the core quota headroom statement, which owns headroom and alarms. Platform notes: Amazon Bedrock: bedrock-runtime and bedrock-mantle quotas are separate, and cross-Region and global profiles have their own quotas in the source Region. EstimatedTPMQuotaUsage is approximate, and metrics filtered by ModelId omit requests that fail before the model is determined, so size from unfiltered metrics too. Agents, including on AgentCore: size from model calls per agent turn at peak. Partition notes: Service Quotas is available in both AWS GovCloud (US) Regions as of 2026-10-07. Check Amazon Bedrock quota values per model there.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html"
+              },
+              "improvementPlan": {
+                "displayText": "From load-test and production metrics, compute per-minute quota use as input plus max_tokens at admission and the documented burndown at settlement, add failover load, and compare with granted quotas per model, profile, endpoint and Region. Request increases with lead time (increases are prioritized for accounts already consuming their quota), and add the recomputation to the model-change checklist. On bedrock-mantle, size the separate input and output token quotas. Amazon SageMaker AI and self-hosted: size instances from measured tokens per second. Third-party APIs: use the provider's limits.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Optimize your applications for scale and reliability on Amazon Bedrock (unset max_tokens)",
+                      "url": "https://aws.amazon.com/blogs/machine-learning/optimize-your-applications-for-scale-and-reliability-on-amazon-bedrock/"
+                    },
+                    {
+                      "displayText": "Quotas for the bedrock-runtime endpoint",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-runtime.html"
+                    },
+                    {
+                      "displayText": "Amazon Bedrock runtime metrics (EstimatedTPMQuotaUsage and the ModelId dimension)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Quotas for Amazon Bedrock",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "tk_traffic_isolated",
+              "title": "Delay-tolerant callers in production accounts, such as batch jobs and evaluation sampling, cannot use up latency-critical quota",
+              "helpfulResource": {
+                "displayText": "Good looks like: Inside production accounts, delay-tolerant callers such as batch jobs and online evaluation sampling use batch inference with its own quotas, move to a separate production account, or are capped below a reserved share, because the on-demand quota for a model is shared across the Priority, Standard and Flex tiers. Non-production traffic, including evaluation and load tests run there, is already separated by the core statement 'Production runs in dedicated accounts isolated from non-production, with organization guardrails on logging and Regions'. Platform notes: Amazon SageMaker AI and self-hosted models: run offline work on separate endpoints. Third-party APIs: use separate keys or projects with their own limits where the provider offers them. Partition notes: As of 2026-10-07, Amazon Bedrock batch inference runs in-Region in AWS GovCloud (US-West) for some models, and from AWS GovCloud (US-East) only through the US-GOV cross-Region profile. Tier support is listed per model and Region.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html"
+              },
+              "improvementPlan": {
+                "displayText": "Inventory every caller of each model in each production account, move bulk jobs to batch inference where the model supports it or to a separate account, and cap the remaining callers below a share that leaves latency-critical traffic its headroom.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-supported.html"
+              }
+            },
+            {
+              "id": "tk_capacity_option",
+              "title": "Overflow from reserved or provisioned capacity was tested, and requests served by unintended capacity alarm (or none is used)",
+              "helpfulResource": {
+                "displayText": "Good looks like: For each latency-critical journey that uses reserved, priority or provisioned capacity, the team recorded why, knows what happens on overflow, tested it at load, and alarms on requests served by an unintended capacity option. Journeys that use only on-demand capacity meet this statement by recorded decision. Platform notes: Amazon Bedrock: Standard, Priority, the Reserved tier or Provisioned Throughput. Reserved overflows to Standard, and the ResolvedServiceTier metric dimension shows the tier that served each request. Inference profiles do not support Provisioned Throughput, which cannot be created for Legacy models. Partition notes: As of 2026-10-07, Amazon Bedrock lists Provisioned Throughput in AWS GovCloud (US-West) only, for custom models with no commitment. The Reserved tier is offered in AWS GovCloud (US-West) for some models through the US-GOV cross-Region profile, for example Claude Sonnet 4.5, and not for others. Check tier support on each model card.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html"
+              },
+              "improvementPlan": {
+                "displayText": "Decide the capacity option per journey and record why. If you use the Reserved tier, request it as the service tiers page describes. Test overflow at load, and alarm when requests are served by a tier or capacity option other than the intended one. Amazon SageMaker AI: test what happens when traffic exceeds the instances in service before auto scaling adds more, and alarm on invocation errors and on reaching the maximum instance count. Third-party APIs: check the provider's reserved-capacity overflow behavior.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Supported Regions and models for Provisioned Throughput",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-supported.html"
+                    },
+                    {
+                      "displayText": "Amazon Bedrock Reserved tier for Claude Sonnet 4.5 in AWS GovCloud (US-West) (What's New, Jan 2026)",
+                      "url": "https://aws.amazon.com/about-aws/whats-new/2026/01/amazon-bedrock-reserved-tier-for-claude-sonnet-in-govcloud/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "tk_token_sizing && tk_traffic_isolated && tk_capacity_option && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "tk_token_sizing && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "gai_dependency_fallback",
+          "title": "Incomplete model output and fallback model readiness",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against dependencies. Does the workload detect incomplete or failed model output, and would a fallback model or Region work, with the same quality and safeguards, the moment the primary fails? Evidence to collect: the code paths that handle each stop reason and stream error. For each fallback model or Region, its access, quota, guardrail configuration and latest evaluation result, and when it last served traffic. Or the failover design record that no fallback is used.",
+          "helpfulResource": {
+            "displayText": "REL05-BP01 Graceful degradation (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html"
+          },
+          "choices": [
+            {
+              "id": "fb_stop_reasons",
+              "title": "Truncated, filtered or malformed model output, and mid-stream errors, are handled as failures, never as complete answers",
+              "helpfulResource": {
+                "displayText": "Good looks like: Every caller checks the stop reason and handles each non-normal value explicitly (retry, shorter request, fallback, or a clear message), validates structured output before use, and on a stream error discards or clearly marks partial output. Platform notes: Amazon Bedrock: Converse returns stopReason values such as max_tokens, guardrail_intervened, content_filtered, malformed_model_output, malformed_tool_use and model_context_window_exceeded, and a ConverseStream response can end with an exception event, such as modelStreamErrorException, mid-response. InvokeModel bodies carry provider-specific stop fields. Amazon Bedrock AgentCore and agent frameworks: check that the framework surfaces stop reasons to your code. Amazon SageMaker AI and self-hosted models: check the serving stack's finish reason. Third-party APIs: map the provider's finish reasons. Partition notes: The Amazon Bedrock Converse and ConverseStream operations are available in both AWS GovCloud (US) Regions as of 2026-10-07.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html"
+              },
+              "improvementPlan": {
+                "displayText": "Add a handler for each stop reason and stream error, unit-test each one with recorded responses, and publish the count of non-normal stop reasons per model and prompt version as a metric that rollouts compare.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "ConverseStreamOutput (stream exception events)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ConverseStreamOutput.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "fb_fallback_parity",
+              "title": "Each fallback model or Region has access, quota and the same safeguards, and passed the primary's evaluation (or none is used)",
+              "helpfulResource": {
+                "displayText": "Good looks like: Every fallback model, inference profile or Region in the failover design has model access enabled in each production account, granted quota for failover load, an identical guardrail configuration in each Region, prompts tuned for it, and a passing result on the same evaluation set and safety tests as the primary. A failover design that records no fallback model meets this statement, and the core degraded-mode statements then score what happens. Platform notes: Amazon Bedrock: guardrail cross-Region profiles need IAM permissions in every destination Region. Amazon SageMaker AI: a fallback endpoint needs its own capacity. Third-party APIs: a second provider needs its own contract, limits and safety review. Partition notes: As of 2026-10-07, in AWS GovCloud (US), third-party models need model access in the linked standard account and the GovCloud account, Amazon models only in the GovCloud account, and Amazon Bedrock model evaluation jobs run in both GovCloud Regions.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html"
+              },
+              "improvementPlan": {
+                "displayText": "List every fallback, check model access and quota per account and Region, attach an identical guardrail configuration (the same version in the same Region, the same infrastructure as code definition in each fallback Region, or a guardrail cross-Region profile), run the release evaluation and safety tests on each fallback, and record the results with the release. In AWS GovCloud (US), keep export-controlled data out of evaluation job metadata.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Model support by AWS Region in Amazon Bedrock",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/models-region-compatibility.html"
+                    },
+                    {
+                      "displayText": "Amazon Bedrock model lifecycle (loss of access to Legacy models)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Permissions for using cross-Region inference with Amazon Bedrock Guardrails",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrail-profiles-permissions.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "fb_fallback_warm",
+              "title": "Fallback models and Regions carry regular synthetic or live traffic, so lost access or quota is found early (or none is used)",
+              "helpfulResource": {
+                "displayText": "Good looks like: A small share of traffic or a scheduled synthetic request exercises every fallback path at least weekly and alarms on failure, because model access, entitlement and quota on idle fallback accounts and Regions can be lost without any change on your side. For example, existing customers can lose access to a Legacy model after 15 days of inactivity. If the failover design records that no fallback model, profile or Region is used, this statement is met by that record. Platform notes: This can share the mechanism used for the core synthetic canaries. Amazon Bedrock: send the request per fallback model, inference profile and Region, from each production account. Partition notes: In AWS GovCloud (US), exercise fallbacks from each GovCloud account, because model access there is enabled separately from the linked standard account (as of 2026-10-07).",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html"
+              },
+              "improvementPlan": {
+                "displayText": "Add a scheduled request for each fallback path with an alarm on failure, or route a small percentage of real traffic to each fallback, and page the model owner when one fails.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "fb_stop_reasons && fb_fallback_parity && fb_fallback_warm && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "fb_stop_reasons && fb_fallback_parity && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gai_release",
+      "name": "02 - Change safety and evaluation",
+      "questions": [
+        {
+          "id": "gai_change_safety",
+          "title": "Pinned versions and quality-checked rollout for model, prompt and guardrail changes",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Deployment safety. Does production reference only immutable versions of models, prompts, guardrails and agents, and does each rollout compare answer quality between the old and new versions? Evidence to collect: the model IDs or inference profiles, prompt versions, guardrail versions and agent endpoint versions that production configuration references. The token quota recomputation for the last model change (see the capacity question). The rollout record for the last prompt or guardrail change, with the quality signal that was compared.",
+          "helpfulResource": {
+            "displayText": "OPS06-BP01 Plan for unsuccessful changes (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_plan_for_unsucessful_changes.html"
+          },
+          "choices": [
+            {
+              "id": "mc_pinned_versions",
+              "title": "Production pins immutable versions of model or profile, prompt, guardrail and agent endpoint, never drafts or moving aliases",
+              "helpfulResource": {
+                "displayText": "Good looks like: Production configuration names explicit model IDs or inference profiles, numbered prompt and guardrail versions, and a named agent endpoint pinned to a version, so behavior changes only through a release that can be rolled back. This extends the core statement that configuration changes are deployed only by pipelines. Platform notes: Amazon Bedrock: a DRAFT guardrail rejects calls while it is being updated. A numbered version freezes its configuration, but AWS updates the safeguard models automatically (as of 2026-10-07), so re-run guardrail tests on a schedule. AgentCore: DEFAULT moves to each new version, named endpoints stay pinned. Amazon SageMaker AI and self-hosted: pin model package versions, and images and weights by digest. Third-party APIs: dated model identifiers. Partition notes: As of 2026-10-07, AWS GovCloud (US) publishes SageMaker AI Deep Learning Container images mostly with mutable tags, so pin them by digest there. AgentCore is available in AWS GovCloud (US-West) only.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-deploy.html"
+              },
+              "improvementPlan": {
+                "displayText": "Search production configuration and infrastructure as code for DRAFT guardrails, unversioned prompts, floating model aliases, latest image tags and DEFAULT agent endpoints. Replace each with a pinned version, and add a pipeline check that rejects them in production stages. Record the pinned versions with each release so a rollback restores the exact previous set.",
+                "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agent-runtime-versioning.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Best practices with Amazon Bedrock Guardrails, including numbered versions in production (AWS Machine Learning Blog)",
+                      "url": "https://aws.amazon.com/blogs/machine-learning/build-safe-generative-ai-applications-like-a-pro-best-practices-with-amazon-bedrock-guardrails/"
+                    },
+                    {
+                      "displayText": "How Amazon Bedrock Guardrails works (safeguard model updates)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-how.html"
+                    },
+                    {
+                      "displayText": "Amazon Bedrock Guardrails enforcements (numeric guardrail versions)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-enforcements.html"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Create a version of a prompt in Amazon Bedrock Prompt Management",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/prompt-management-version-create.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "mc_quality_in_rollout",
+              "title": "Rollouts of model, prompt and guardrail changes compare a quality signal between versions (or every call path is an agent path)",
+              "helpfulResource": {
+                "displayText": "Good looks like: Each rollout stage compares guardrail interventions, non-normal stop reasons, sampled evaluation scores or negative feedback between the old and new versions, and a regression stops the rollout, because quality regressions return success and do not trip error or latency alarms. This adds a signal to the core rollback alarm and phased rollout statements. Agent behavior versions are left to the Agentic AI Lens, so a workload whose model calls all run in agents meets this by recording that. Platform notes: Amazon Bedrock: guardrail intervention metrics carry a GuardrailVersion dimension, and Converse returns a stop reason to count per version. SageMaker AI: shadow tests copy production requests to a shadow variant (not on serverless, asynchronous or multi-model endpoints, and others). Partition notes: As of 2026-10-07, AWS Capabilities by Region lists SageMaker AI shadow tests in AWS GovCloud (US-East) and not in AWS GovCloud (US-West). There, compare sampled metrics per version in each stage.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-guardrails-cw-metrics.html"
+              },
+              "improvementPlan": {
+                "displayText": "Emit quality metrics tagged with the model, prompt and guardrail version that served each request (guardrail interventions, stop reasons, sampled evaluation scores and user feedback). Add them to the stage gates of the rollout next to the error and latency alarms, with a threshold relative to the previous version, so a regression stops promotion and triggers rollback.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_test_val_chg.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Converse API reference (stopReason values)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html"
+                    },
+                    {
+                      "displayText": "Agentic AI Lens, agent behavior versioning and rollback (AGENTOPS02-BP03)",
+                      "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentops02-bp03.html"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Shadow tests (SageMaker AI developer guide)",
+                      "url": "https://docs.aws.amazon.com/sagemaker/latest/dg/shadow-tests.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "mc_pinned_versions && mc_quality_in_rollout && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "mc_pinned_versions && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "gai_quality_evaluation",
+          "title": "Quality gate on every change path, and retrieval freshness",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Deployment safety. Does an automated quality gate block a regressed model, prompt, retrieval or guardrail change on every path that can make one, and would you notice failed or stale knowledge base ingestion? Evidence to collect: the gate configuration and threshold, the change paths that trigger it, and the record of a run where it blocked or caught a candidate. Knowledge base sync logs or job status and the freshness target.",
+          "helpfulResource": {
+            "displayText": "REL08-BP02 Integrate functional testing (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_functional_testing.html"
+          },
+          "choices": [
+            {
+              "id": "qe_gate_blocks",
+              "title": "The quality gate also covers prompt, guardrail and knowledge base changes, not only deploys, and caught a planted regression",
+              "helpfulResource": {
+                "displayText": "Good looks like: The evaluation gate, designed as the AI lenses describe, also runs on configuration-only changes (prompt, guardrail or model reference) and retrieval index changes, and evaluates the exact production configuration. Configuration-only changes cannot be promoted until it passes. Retrieval changes go through a staging index promoted by a gated change, or are evaluated right after each sync with an alarm and a documented restore. A planted regression was blocked on each blocking path and caught on the post-sync path. This extends the core test-gate statement to non-code changes. Platform notes: Amazon Bedrock Evaluations automated jobs. AgentCore Evaluations on demand in CI/CD. Amazon SageMaker AI and third-party APIs: a pipeline evaluation step against the pinned endpoint or model. Partition notes: As of 2026-10-07, Amazon Bedrock Evaluations is in both AWS GovCloud (US) Regions, and AgentCore Evaluations in AWS GovCloud (US-West) without its CloudFormation resources, so use the API there.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html"
+              },
+              "improvementPlan": {
+                "displayText": "List every path that can change a prompt, guardrail, model reference or retrieval index, including console edits, prompt management and scheduled ingestion, and trigger the evaluation from each. For prompt, guardrail and model reference changes, make it a blocking step before promotion. A knowledge base sync writes to the index that production queries, so for retrieval changes either ingest into a staging knowledge base and promote it with a gated change of the knowledge base ID in configuration, or evaluate right after each sync, alarm on a regression and keep a documented way to restore the previous content (for example, re-sync from a versioned copy of the source data). Test each path with a known-bad candidate. Reader note: do not depend on Bedrock human-based evaluation jobs, whose work teams use SageMaker AI Ground Truth (in maintenance as of 2026-10-07).",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-automatic.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Amazon Bedrock AgentCore Evaluations is generally available (What's New, Mar 2026)",
+                      "url": "https://aws.amazon.com/about-aws/whats-new/2026/03/agentcore-evaluations-generally-available/"
+                    },
+                    {
+                      "displayText": "Generative AI Lens, periodic evaluation of functional performance (GENOPS01-BP01)",
+                      "url": "https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops01-bp01.html"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Evaluate RAG sources with Amazon Bedrock evaluations",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html"
+                    },
+                    {
+                      "displayText": "On-demand evaluation in Amazon Bedrock AgentCore",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-demand-evaluations.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "qe_retrieval_fresh",
+              "title": "Knowledge base ingestion failures, partial ingestion and staleness beyond a written target are alarmed (or no retrieval is used)",
+              "helpfulResource": {
+                "displayText": "Good looks like: Failed ingestion jobs and documents that failed or were only partly indexed raise an alarm. The age of the newest indexed content, or the time since the last successful sync, is compared with a freshness target agreed with the business owner, and breaching it alarms, so answers are not silently served from stale or incomplete content. Workloads with no retrieval meet this by recorded design. Platform notes: Amazon Bedrock Knowledge Bases: deliver ingestion application logs to CloudWatch Logs, which record each job status (including FAILED), a count of failed resources and per-document status such as PARTIALLY_INDEXED. Knowledge bases with a structured data store do not support log delivery (as of 2026-10-07), so poll their sync job status through the API and alarm on failures and sync age. Self-hosted vector stores: alarm on pipeline failures and index age. Partition notes: Amazon Bedrock Knowledge Bases is available in both AWS GovCloud (US) Regions as of 2026-10-07.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-bases-logging.html"
+              },
+              "improvementPlan": {
+                "displayText": "Enable ingestion logging for each knowledge base, create metric filters for failed jobs, failed resources and partly indexed documents, and alarm on them. Publish the time since the last successful sync as a metric and alarm when it exceeds the written freshness target.",
+                "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/MonitoringLogData.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Sync your data with your Amazon Bedrock knowledge base",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/kb-data-source-sync-ingest.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "qe_gate_blocks && qe_retrieval_fresh && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "qe_gate_blocks && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gai_operate",
+      "name": "03 - Operations and safeguards",
+      "questions": [
+        {
+          "id": "gai_observability",
+          "title": "Proven telemetry coverage and per-request attribution",
+          "description": "Maximum risk: Medium (not launch-blocking, remediate on a plan). Category: Event detection. Would your existing monitoring see every inference endpoint, alarm when its logs stop arriving, and show responders which capacity option, Region and versions served each request? Evidence to collect: the inference endpoints in use and the test call found in the logs and audit trail for each. The log delivery alarms. A sample request log with its version, capacity and Region fields.",
+          "helpfulResource": {
+            "displayText": "OPS08-BP04 Create actionable alerts (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_create_alerts.html"
+          },
+          "choices": [
+            {
+              "id": "obs_all_paths",
+              "title": "A test call through each inference endpoint in use appeared in invocation logs and audit events, and log delivery failures alarm",
+              "helpfulResource": {
+                "displayText": "Good looks like: For every inference endpoint in use, in every account and Region, including fallback paths, a test call was found in the request logs and the audit trail (CloudTrail data events where inference is a data event), and log delivery failures alarm. What to log and how to protect it are owned by the Generative AI Lens and the core statement on centralized, tamper-resistant audit and workload logs. Platform notes: Amazon Bedrock: model invocation logging covers bedrock-runtime but not bedrock-mantle, whose inference calls are CloudTrail data events (as of 2026-10-07). Alarm on the ModelInvocationLogs delivery failure metrics. AgentCore service spans need CloudWatch Transaction Search. Amazon SageMaker AI, self-hosted and third-party APIs: log requests in your application or gateway. Partition notes: As of 2026-10-07, the AWS GovCloud (US) User Guide lists CloudWatch Transaction Search as not available there, so instead emit spans and request logs from your agent code and find the test call in them.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+              },
+              "improvementPlan": {
+                "displayText": "List every inference endpoint, account and Region the workload uses, including fallback paths. Send a tagged test call through each and find it in the invocation or request logs and in CloudTrail. Turn on what is missing (model invocation logging, CloudTrail data events for bedrock-mantle, request logs in the application or serving layer, which SageMaker AI and self-hosted models need), and alarm on log delivery failures and on a sudden drop in log volume. Logging is configured per Region, so repeat the test call in each Region, and whenever an endpoint, model or Region is added.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/logging-cloudtrail-mantle.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Amazon Bedrock runtime metrics, including invocation log delivery metrics",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html"
+                    },
+                    {
+                      "displayText": "Enabling AgentCore observability (CloudWatch Transaction Search)",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-configure.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "obs_version_attribution",
+              "title": "Request logs record the serving capacity option and Region, plus model, prompt and guardrail versions (or spans carry them)",
+              "helpfulResource": {
+                "displayText": "Good looks like: Every request log, or the trace it links to, carries the capacity option or service tier that served the request and the Region that processed it, so responders can see silent overflow to another tier or cross-Region routing. Where no agent framework records them, it also carries the model or inference profile, prompt and guardrail versions. This adds generative AI fields to the core structured logging statement. Platform notes: Amazon Bedrock: the served service tier is in the API response and CloudTrail events and is a CloudWatch dimension (ResolvedServiceTier). For cross-Region inference, CloudTrail records the processing Region in additionalEventData.inferenceRegion (as of 2026-10-07). Agent frameworks that follow the OpenTelemetry generative AI semantic conventions record model attributes in their spans. Amazon SageMaker AI: endpoint, variant or inference component name. Third-party APIs: the model version string the provider returns.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html"
+              },
+              "improvementPlan": {
+                "displayText": "Add the served tier or capacity option, the processing Region, the model or inference profile ID, and the prompt and guardrail versions to the structured log schema at the point where the response is received. Check a sample of production logs for the fields, and add them to the incident dashboard so responders can filter by them.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_application_telemetry.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Cross-Region inference in Amazon Bedrock (processing Region in CloudTrail)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html"
+                    },
+                    {
+                      "displayText": "Enabling AgentCore observability (frameworks with OpenTelemetry GenAI semantic conventions)",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-configure.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores Medium risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "obs_all_paths && obs_version_attribution && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "MEDIUM_RISK"
+            }
+          ]
+        },
+        {
+          "id": "gai_safeguards",
+          "title": "Safeguards that every call path enforces and that fail safely",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Security readiness. Can any call path, including fallback, streaming, batch and direct calls, reach a model without your safeguards, and what happens when a safeguard check fails? Evidence to collect: the owner-approved risk assessment that sets which safeguards are required. The IAM, organization or gateway policy that requires them. The list of call paths with how each applies them and its streaming mode. The code path and test result for safeguard errors and throttling.",
+          "helpfulResource": {
+            "displayText": "Enforce guardrails in model inference (Amazon Bedrock)",
+            "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-permissions-id.html"
+          },
+          "choices": [
+            {
+              "id": "sg_enforced_outside_code",
+              "title": "Safeguards are enforced outside app code on every call path, including fallback and streaming (or risk assessment requires none)",
+              "helpfulResource": {
+                "displayText": "Good looks like: Account or organization guardrail enforcement, an IAM deny on calls without the required guardrail version, or a gateway on every path applies the safeguards the risk assessment requires, and the same enforcement, not app code, covers fallbacks. Callers cannot narrow them: system prompts and messages are guarded comprehensively, or the entry point strips guard-content tags. Logs show no unguarded calls. Layered agent guardrail design (AGENTSEC04-BP01) and fallback guardrail parity (fallback question) are scored elsewhere. Platform notes: Amazon Bedrock: enforcement and the bedrock:GuardrailIdentifier IAM condition key cover InvokeModel, InvokeModelWithResponseStream, Converse and ConverseStream. With the IAM key, input tags can skip input evaluation (responses are always evaluated). Partition notes: As of 2026-10-07, an AWS GovCloud (US) organization cannot use the Amazon Bedrock policies that organization-level enforcement needs. Use account-level enforcement (both Regions) or the IAM deny.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-permissions-id.html"
+              },
+              "improvementPlan": {
+                "displayText": "Add account or organization guardrail enforcement or an IAM deny, applied to fallback paths too. Do not give a role that carries the IAM condition key extra permissions for APIs such as RetrieveAndGenerate that make model calls on its behalf. Set comprehensive guarding for system prompts and messages, or strip guard-content tags at the entry point. Use synchronous streaming where blocking or masking is needed (asynchronous streaming cannot mask sensitive data), and leave Automated Reasoning policies out of enforced guardrails. On bedrock-mantle, the OpenAI-compatible Chat Completions and Responses APIs, other providers and self-hosted models, apply the safeguards in your own gateway (for example with ApplyGuardrail), because enforcement and the IAM key cover only the four runtime APIs listed (as of 2026-10-07). For batch inference jobs, run ApplyGuardrail on outputs before release, or deny batch actions to roles that do not need them. Alert on invocation logs without the required guardrail.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-enforcements.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Configure streaming response behavior for guardrails (Amazon Bedrock)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-streaming.html"
+                    },
+                    {
+                      "displayText": "Detect the absence of guardrails in Amazon Bedrock inference calls (AWS Compute Blog)",
+                      "url": "https://aws.amazon.com/blogs/compute/implementing-a-serverless-architecture-to-detect-absence-of-guardrails-in-amazon-bedrock-inference-api-calls/"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Using responsible AI principles with Amazon Bedrock Batch Inference (AWS Machine Learning Blog)",
+                      "url": "https://aws.amazon.com/blogs/machine-learning/using-responsible-ai-principles-with-amazon-bedrock-batch-inference/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "sg_fail_closed",
+              "title": "If a safeguard check errors, throttles or times out, the response is withheld or replaced, as tested (or none is required)",
+              "helpfulResource": {
+                "displayText": "Good looks like: With the timeouts the core statement requires, a safety-check error, throttle or timeout returns a safe response (a refusal, a fixed message or a hand-off to a person), not the unchecked output, unless the business owner approved an exception for low-risk outputs. Injected throttling and errors in pre-production showed this. An owner-approved risk assessment that requires no runtime safeguard meets this statement. This extends the core dependency fault injection statement to safeguards. Platform notes: Amazon Bedrock Guardrails: for ApplyGuardrail calls, alarm on AWS/Bedrock/Guardrails InvocationThrottles and InvocationServerErrors. For inline or enforced guardrails, alarm on the model call's errors and throttles. AgentCore harness Lambda hooks fail closed by default (failureMode deny). Self-hosted and third-party safety checks need the same behavior. Partition notes: Check the guardrail quota values in Service Quotas in each AWS GovCloud (US) Region you use (as of 2026-10-07).",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-guardrails-cw-metrics.html"
+              },
+              "improvementPlan": {
+                "displayText": "Wrap every safeguard call with a timeout and an explicit failure branch that returns a safe response, and record that decision in logs and metrics. In pre-production, inject safeguard throttling, errors and timeouts, for example by stubbing the safeguard client, and confirm the safe response and the alarm. Enforced guardrails count toward the calling account's guardrail quotas in Service Quotas, so size guardrail quotas from peak text units with the model quotas and request increases where needed. Long inputs may need chunking to stay within the ApplyGuardrail text unit rate.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Guardrails enforcements, including quota consumption (Amazon Bedrock)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-enforcements.html"
+                    },
+                    {
+                      "displayText": "Use ApplyGuardrail with long-context inputs and streaming outputs (AWS Machine Learning Blog)",
+                      "url": "https://aws.amazon.com/blogs/machine-learning/use-the-applyguardrail-api-with-long-context-inputs-and-streaming-outputs-in-amazon-bedrock/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "sg_enforced_outside_code && sg_fail_closed && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "gai_runaway_cost",
+          "title": "Token budgets per caller and a spend stop faster than billing data",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Can one caller, bug or agent loop run up model spend faster than you can see it in billing, and is there a tested way to find and stop it? Evidence to collect: the token or cost budget per caller type and where it is enforced. The spend-stop trigger, threshold and the record of its last test. How on-call identifies the caller behind a spike.",
+          "helpfulResource": {
+            "displayText": "REL05-BP02 Throttle requests (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_throttle_requests.html"
+          },
+          "choices": [
+            {
+              "id": "sp_token_budgets",
+              "title": "Token or cost budgets per user, tenant or key are enforced before each call (or one trusted caller is capped by the spend stop)",
+              "helpfulResource": {
+                "displayText": "Good looks like: Every caller type, including anonymous, trial and internal callers, has a token or cost budget per period, checked at the entry point before each model call, not only a request-rate limit. One trusted internal caller meets this by recording that this question's spend stop caps it. Per-task and per-day agent budgets are scored by the Agentic AI Lens (AGENTCOST07-BP01). This statement scores budgets per caller identity and extends the core per-source limits statement, which owns request limits, to the token unit. Platform notes: AgentCore Gateway token rate limits are per minute, cover only known inference paths, fail open by default and can be briefly exceeded (as of 2026-10-07), so daily or monthly budgets need your own meter. Amazon API Gateway usage plans are best-effort and do not count tokens. Partition notes: As of 2026-10-07, AWS Capabilities by Region lists AgentCore Gateway rate limits in AWS GovCloud (US-West). Test them in your GovCloud account before relying on them.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html"
+              },
+              "improvementPlan": {
+                "displayText": "Agree a budget per caller type and period with the business owner. Meter tokens per caller from the usage fields in each response, check the remaining budget at the entry point before every model call (in your own gateway for self-hosted and third-party models), and return a clear over-budget response. Test with one caller generating a surge while others keep working. Cost per request varies by orders of magnitude with tokens, and on Amazon Bedrock output tokens of some models count against quotas at a higher burndown rate, so size budgets in tokens, not requests.",
+                "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rate-limits.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "AgentCore Gateway rate limit best practices (token limits and supported paths)",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rate-limits-best-practices.html"
+                    },
+                    {
+                      "displayText": "OWASP GenAI LLM Top 10 2026 (genai.owasp.org)",
+                      "url": "https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "sp_spend_stop",
+              "title": "An automated stop or degrade, driven by near-real-time token metrics, halts model use at an approved ceiling, and was tested",
+              "helpfulResource": {
+                "displayText": "Good looks like: One ceiling approved by the business owner covers all model use, including non-agent and third-party calls. An alarm on token metrics, or your own meter, triggers automation, independent of the code that might run away, that disables the feature, switches to a cheaper mode or applies a deny policy, and the stop was exercised. Per-agent cutoffs, graduated throttling and agent cost anomaly detection are scored by the Agentic AI Lens (AGENTCOST07-BP01 and BP02). The core usage-rate alarm statement owns alerting. Platform notes: Amazon Bedrock: alarms on AWS/Bedrock do not see bedrock-mantle traffic, which publishes token metrics to AWS/BedrockMantle (as of 2026-10-07). Levers: an AWS AppConfig feature flag, a deny policy, or scaling SageMaker AI endpoints down. Partition notes: As of 2026-10-07, AWS GovCloud (US) billing data is viewed from the associated standard account, and AWS Budgets actions cannot act on GovCloud resources, so build the stop and its backstop in-partition.",
+                "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html"
+              },
+              "improvementPlan": {
+                "displayText": "Set the ceiling with the business owner. Alarm on token metrics in both namespaces (InputTokenCount and OutputTokenCount in AWS/Bedrock, TotalInputTokens and TotalOutputTokens in AWS/BedrockMantle), or on your own per-caller meter, and wire the alarm to automation that flips a feature flag, switches to a cheaper mode or applies a deny policy. Exercise the stop in pre-production and record how long it took. Outside AWS GovCloud (US), keep an AWS Budgets action as a backstop. For third-party APIs, combine provider spend limits with your own meter.",
+                "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-controls.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Amazon Bedrock runtime metrics in CloudWatch (token counts)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html"
+                    },
+                    {
+                      "displayText": "Detection delay of Cost Anomaly Detection",
+                      "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html"
+                    },
+                    {
+                      "displayText": "Monitor bedrock-mantle inference using CloudWatch metrics (AWS/BedrockMantle)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-mantle-metrics.html"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "AWS AppConfig feature flags",
+                      "url": "https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile-feature-flags.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "sp_spike_source",
+              "title": "In a token or spend spike, near-real-time metrics or logs name the responsible application, tenant or key within minutes",
+              "helpfulResource": {
+                "displayText": "Good looks like: Per-caller token metrics from response usage fields, the Project dimension of AWS/BedrockMantle metrics, or invocation logs that record the caller identity and per-request metadata, let on-call name the application, tenant or key behind a spike within minutes, so the spend stop or the core per-source lever can target it. Cost allocation and tagging for billing are owned by the Framework cost pillar and the Agentic AI Lens. Platform notes: Amazon Bedrock: invocation logs record the caller's IAM principal and, for InvokeModel and Converse, request metadata. For Responses or Chat Completions, use IAM principal attribution or Projects on bedrock-mantle (Workspaces for Anthropic Messages) (as of 2026-10-07). Partition notes: As of 2026-10-07, application inference profiles are listed in both AWS GovCloud (US) Regions, and GovCloud billing data is in the associated standard account, so find spikes from in-partition metrics and logs.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+              },
+              "improvementPlan": {
+                "displayText": "Emit per-caller token metrics or add request metadata to invocation logs, build a top-callers query or dashboard, and rehearse finding the source of a synthetic spike within minutes. AgentCore harness: read token usage from the invocation-stream metadata events. Third-party APIs: meter the response usage fields.",
+                "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Application inference profiles for cost attribution (Amazon Bedrock)",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-application-inference-profiles.html"
+                    },
+                    {
+                      "displayText": "Cost management for Amazon Bedrock",
+                      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/cost-management.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "sp_token_budgets && sp_spend_stop && sp_spike_source && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "sp_token_budgets && sp_spend_stop && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "gai_agent_bounds",
+          "title": "Agent actions pass one enforced control point and can be stopped fast",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Blast radius containment. If an agent misbehaves, are its actions blocked by controls it cannot bypass, and can an operator stop it and its running sessions within minutes? Out of scope if: no agent or model output can call a tool or trigger an action with side effects. Select the first statement and keep the tool list and permissions as evidence. Evidence to collect: the tool list with read or write classification. The enforcement point, its mode, the backend resource policies and who can change them. The stop procedure and the record of its last exercise with time to stop. The runaway-loop test result.",
+          "helpfulResource": {
+            "displayText": "SEC03-BP02 Grant least privilege access (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_least_privileges.html"
+          },
+          "choices": [
+            {
+              "id": "ab_no_actions",
+              "title": "No agent or model output can call a tool or trigger an action that changes state, sends data out or runs code",
+              "helpfulResource": {
+                "displayText": "Good looks like: Model output is only shown to people who decide what to do. Evidence to collect: the tool list, and the execution role and gateway target permissions showing no write, send or execute capability.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec02-bp01.html"
+              },
+              "improvementPlan": {
+                "displayText": "If any tool or action has side effects, this scope exit does not apply: answer the other statements.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html"
+              }
+            },
+            {
+              "id": "ab_single_enforcement",
+              "title": "No agent can reach a tool backend except through the enforcing authorization point, and changes to its mode or attachment alarm",
+              "helpfulResource": {
+                "displayText": "Good looks like: Tool backends, and any agent runtime behind a gateway, accept calls only from the enforcing gateway or authorization service. Only a small named group can change its mode or policy attachment, and those changes alarm. Least privilege is scored by the core access review statement, and tool authorization policy and LOG_ONLY validation by the Agentic AI Lens (AGENTSEC02-BP01). This statement scores that the enforcement point cannot be bypassed or silently weakened. Platform notes: AgentCore: a gateway whose policy engine is attached in LOG_ONLY mode lets every tool call succeed, and UpdateGateway can switch the mode or remove the engine (as of 2026-10-07). Partition notes: As of 2026-10-07, the AWS GovCloud (US) User Guide lists AgentCore in AWS GovCloud (US-West) without guardrails in policies, temporal policies or the Policy and PolicyEngine CloudFormation resources (use the API). Reader note: Never shadow a policy by switching the whole gateway to LOG_ONLY: that stops all enforcement.",
+                "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-enforcement-modes.html"
+              },
+              "improvementPlan": {
+                "displayText": "Restrict each tool backend, and any runtime target, with a resource or IAM policy that admits only the gateway's role (AgentCore Runtime targets can be restricted so that only the gateway can invoke them). Use the gateway service role (IAM SigV4) for outbound auth where possible. With caller credentials, OAuth or token passthrough, restrict backends to credentials or audiences that only the gateway can obtain. Check the policyEngineConfiguration mode of every gateway. No separate condition key protects the mode beyond bedrock-agentcore:UpdateGateway, so limit UpdateGateway and policy engine changes to a named group, and alarm on those calls through CloudTrail. Review the tool list and backend policies at each release. With other frameworks, put tool calls behind one service that authorizes them and deny direct access to the backends.",
+                "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-enforcement-modes.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Test a policy in LOG_ONLY mode (AgentCore Policy)",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-test-a-policy.html"
+                    },
+                    {
+                      "displayText": "AgentCore Runtime gateway targets (enforcing traffic through the gateway)",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-target-http-runtime.html"
+                    },
+                    {
+                      "displayText": "Security Hub CSPM controls for Amazon Bedrock AgentCore",
+                      "url": "https://docs.aws.amazon.com/securityhub/latest/userguide/bedrockagentcore-controls.html"
+                    },
+                    {
+                      "displayText": "OWASP Top 10 for Agentic Applications for 2026 (genai.owasp.org)",
+                      "url": "https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ab_stop_exercised",
+              "title": "An operator-initiated stop of all agent actions, which also ends in-flight sessions, was exercised and its time to stop recorded",
+              "helpfulResource": {
+                "displayText": "Good looks like: Operators can, within the minutes the runbook states, block new tool calls for all agents with a deny-all policy or flag and end in-flight sessions, on a path that does not depend on the agent runtime, and did so in pre-production or a game day with the time recorded. Per-agent containment, credential revocation and recurring containment tests are scored by the Agentic AI Lens (AGENTSEC07-BP04). It is separate from the event lens's feature switches and the core single-source lever. Platform notes: AgentCore (as of 2026-10-07): a forbid-all policy at the gateway, a harness before_invocation Lambda hook that returns deny (a before_tool_call deny only skips one tool call and the loop continues), StopRuntimeSession for each active session ID, and an IAM deny on the execution roles. Lambda hook failureMode defaults to deny. Partition notes: As of 2026-10-07, AWS Capabilities by Region lists the harness control-plane APIs and StopRuntimeSession in AWS GovCloud (US-West). Exercise each lever there.",
+                "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-stop-session.html"
+              },
+              "improvementPlan": {
+                "displayText": "Write the stop runbook: who decides, the deny-all lever for all agents, and how in-flight sessions are ended. Keep a current record of active session IDs (for example from invocation logs) so StopRuntimeSession can be called for each one. Implement each lever on a path that does not depend on the agent runtime, rehearse it in pre-production or a game day, and record the time from the decision to the last tool call. On AgentCore, StopRuntimeSession shares the runtime data plane quota, and a gateway rate limit of 0 takes up to 30 seconds and rate limits fail open by default, so do not rely on a rate limit alone (as of 2026-10-07).",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Harness lifecycle hooks (AgentCore)",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-lifecycle-hooks.html"
+                    },
+                    {
+                      "displayText": "Add rate limits to a gateway (AgentCore)",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rate-limits.html"
+                    },
+                    {
+                      "displayText": "AgentCore service quotas",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/bedrock-agentcore-limits.html"
+                    },
+                    {
+                      "displayText": "Agentic AI Lens - Behavioral anomaly detection and agent containment (AGENTSEC07-BP04)",
+                      "url": "https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec07-bp04.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "ab_limits_proven",
+              "title": "A runaway-loop test ended the session at its limits with a defined result and an alert, and callers cannot override the limits",
+              "helpfulResource": {
+                "displayText": "Good looks like: Per-call overrides of the limits from untrusted callers are removed, and a pre-production test with a tool that always fails, or with contradictory instructions, ended the session at its limits with a defined result and an alert. The limits themselves are scored by the Generative AI and Agentic AI lenses. Platform notes: AgentCore harness defaults as of 2026-10-07: maxIterations 75, timeoutSeconds 3600 and no maxTokens budget, and each can be overridden on a single invocation. The model field also accepts additionalParams that are passed to the provider unchanged, and skills can point the harness at arbitrary S3 or Git sources, so strip or allowlist these overrides when callers are not fully trusted. Lifecycle hooks cannot be overridden per invocation. Partition notes: As of 2026-10-07, AWS Capabilities by Region lists the AgentCore harness control-plane APIs in AWS GovCloud (US-West), and the AWS GovCloud (US) newsletter, issue 07, announces Managed Harness there.",
+                "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-operations.html"
+              },
+              "improvementPlan": {
+                "displayText": "Strip or allowlist per-call overrides (model, limits, skills, additional parameters) at the entry point, add the runaway-loop test to pre-production, and alert on sessions that end at a limit.",
+                "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-security.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "AgentCore Runtime lifecycle settings (idle timeout and maximum lifetime)",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-lifecycle-settings.html"
+                    },
+                    {
+                      "displayText": "Security best practices for AgentCore Runtime",
+                      "url": "https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-security-best-practices.html"
+                    },
+                    {
+                      "displayText": "AWS GovCloud (US) newsletter, issue 07 (AgentCore Memory, Policy and Managed Harness in US-West)",
+                      "url": "https://aws.amazon.com/govcloud-us/newsletter/newsletter-issue-07/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "(ab_no_actions || (ab_single_enforcement && ab_stop_exercised && ab_limits_proven)) && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "ab_single_enforcement && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

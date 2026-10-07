@@ -1,0 +1,23 @@
+schema: orrlens/lens/1
+key: genai
+name: ORR - Generative AI and Agents
+version: 1.0.0
+file_stem: orr-genai
+description: >-
+  ORR - Generative AI and Agents custom lens {version} for the AWS Well-Architected Tool. Attach it alongside a
+  current Operational Readiness Review (ORR) core review for any workload that calls a generative AI model or
+  runs an AI agent. It scores launch-readiness failure modes that the AWS Well-Architected Generative AI,
+  Agentic AI and Responsible AI lenses do not, so apply those as well. High risk means launch-blocking unless
+  remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is
+  guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean
+  AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets
+  are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates:
+  https://github.com/awslabs/operational-readiness-review-custom-war-lens
+none_exclusive_guard: true
+pillars:
+  - id: gai_models
+    name: 01 - Models, capacity and dependencies
+  - id: gai_release
+    name: 02 - Change safety and evaluation
+  - id: gai_operate
+    name: 03 - Operations and safeguards

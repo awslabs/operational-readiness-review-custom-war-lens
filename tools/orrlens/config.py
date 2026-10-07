@@ -71,10 +71,56 @@ ALLOWED_GITHUB_ORGS = frozenset({
 RESERVED_PREFIX = "x_"
 
 # ---------------------------------------------------------------------------
+# Well-Architected best-practice ids
+# ---------------------------------------------------------------------------
+
+# Sources of the best-practice ids that `wa_bp` and `severity_basis: "wa:<BP-ID> (High)"` may name, keyed by the
+# `lens` field of data/wa-best-practices.yaml (an entry without `lens` is a Framework practice). `pattern` is the
+# id format and `url_dirs` the documentation folders an entry's url may use. Formats were read from each lens's
+# live table of contents on 2026-10-07: the Generative AI Lens uses GEN<pillar>, the Agentic AI Lens
+# AGENT<pillar> and the Responsible AI Lens RAI<focus area> (UC, BR, DP, ER, GT, MON, RC, SP).
+WA_FRAMEWORK = "framework"
+WA_BP_SOURCES = {
+    "framework": {
+        "name": "AWS Well-Architected Framework",
+        "pattern": r"(?:OPS|SEC|REL|PERF|COST|SUS)\d{2}-BP\d{2}",
+        "url_dirs": ("framework", "operational-excellence-pillar", "security-pillar", "reliability-pillar",
+                     "performance-efficiency-pillar", "cost-optimization-pillar", "sustainability-pillar"),
+    },
+    "generative-ai": {
+        "name": "Generative AI Lens",
+        "pattern": r"GEN(?:OPS|SEC|REL|PERF|COST|SUS)\d{2}-BP\d{2}",
+        "url_dirs": ("generative-ai-lens",),
+    },
+    "agentic-ai": {
+        "name": "Agentic AI Lens",
+        "pattern": r"AGENT(?:OPS|SEC|REL|PERF|COST|SUS)\d{2}-BP\d{2}",
+        "url_dirs": ("agentic-ai-lens",),
+    },
+    "responsible-ai": {
+        "name": "Responsible AI Lens",
+        "pattern": r"RAI(?:UC|BR|DP|ER|GT|MON|RC|SP)\d{2}-BP\d{2}",
+        "url_dirs": ("responsible-ai-lens",),
+    },
+}
+# Any best-practice id of any source above (no anchors; callers add them).
+WA_BP_ID = "(?:" + "|".join(v["pattern"] for v in WA_BP_SOURCES.values()) + ")"
+
+
+def wa_bp_source(bp_id: str):
+    """The WA_BP_SOURCES key whose id format bp_id matches exactly, or None."""
+    for key, v in WA_BP_SOURCES.items():
+        if re.fullmatch(v["pattern"], bp_id or ""):
+            return key
+    return None
+
+
+# ---------------------------------------------------------------------------
 # Repository layout
 # ---------------------------------------------------------------------------
 
-LENS_ORDER = ["core", "event"]        # lens-src/<key>/lens.yaml; other keys sort after these
+LENS_ORDER = ["core", "event", "genai"]   # lens-src/<key>/lens.yaml; other keys sort after these
+MAX_FAMILY_LENSES = 4                     # family policy: the core lens plus at most three companion modules
 V1_DIR = "wafr-operational-readiness-lens"
 V1_GLOB = "orr-v1.3.*-PUBLISHED.json"
 V1_CURRENT = "1.3.6"                            # the last published v1 version

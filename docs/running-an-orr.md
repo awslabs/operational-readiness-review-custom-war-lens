@@ -20,6 +20,7 @@ Related guides: [facilitator-guide.md](facilitator-guide.md) (for the person who
 |---|---|---|
 | Operational Readiness Review (ORR), the core lens | 36 questions in four pillars: 01 - Architecture, 02 - Release Quality, 03 - Event Management and 04 - Readiness Decision | Every production workload, before launch and on a recurring schedule |
 | ORR - Mission-Critical Event Readiness | 8 questions in three pillars: 01 - Prepare, 02 - Operate, 03 - After the event | A scheduled peak, for example an election, an enrollment or tax deadline, a product launch, ticket sales, a broadcast, or a migration or cutover. Attach it alongside a current core review |
+| ORR - Generative AI and Agents | 9 questions in three pillars: 01 - Models, capacity and dependencies, 02 - Change safety and evaluation, 03 - Operations and safeguards | Workloads that call foundation models or run AI agents. Attach it alongside the core review, and apply the AWS Generative AI, Agentic AI and Responsible AI lenses as well (see [Generative AI and agent workloads](#generative-ai-and-agent-workloads)) |
 
 Each lens you import uses one of the 15 custom-lens slots per account per Region, and a workload can have up to
 20 lenses attached ([AWS Well-Architected Tool endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/wellarchitected.html)).
@@ -31,6 +32,7 @@ Each lens you import uses one of the 15 custom-lens slots per account per Region
 | Pre-launch ORR (the primary use) | Core | A self-assessment at design-complete; a mid-cycle check-in on the release and testing questions; then a facilitated review 2-4 weeks before launch. Answer `readiness_signoff` last | Core path only (triage and check-ins): about 90-120 minutes. Full core (required for a launch go or no-go): about 3 hours, in two 90-minute sessions. Plus 2-4 hours of evidence gathering by the team beforehand | Milestone `ORR-<yyyy-mm>-launch`, improvement plan, one-page readout, go or no-go record |
 | Recurring ORR | Core | At least yearly, and after a major architecture change or a significant incident | About 2 hours: review answers that changed since the last milestone, then confirm the rest | Milestone `ORR-<yyyy-mm>-recurring`, trend against the last milestone |
 | Event readiness | Core plus Event | See [Event timeline](#event-timeline) below | About 60 minutes for the event lens, on top of a current core review | Milestones before and after the event |
+| Generative AI and agents | Core plus GenAI | With the pre-launch ORR: self-assess it at design-complete with the core, and answer it in the facilitated review 2-4 weeks before launch, before `readiness_signoff`. Again at each recurring ORR | About 45 minutes for the generative AI lens, on top of the core review | The same milestone as the core review, for example `ORR-<yyyy-mm>-launch` |
 
 ### The three phases of a pre-launch ORR
 
@@ -94,7 +96,8 @@ reports or pipeline configuration. A contract clause alone is not evidence that 
 ## Before the review
 
 1. Import the lens (see the README quick start) and attach it to the workload. Attach the event lens too if a
-   scheduled peak is coming.
+   scheduled peak is coming, and the generative AI lens if the workload calls a foundation model or runs an AI
+   agent.
 2. Name the accountable owner, the facilitator and the session dates.
 3. Give the workload team 2-4 hours to gather evidence. Each question's description ends with an
    `Evidence to collect:` line; use it as the checklist. Link to evidence from the notes; do not paste it.
@@ -105,7 +108,8 @@ reports or pipeline configuration. A contract clause alone is not evidence that 
 
 - Run the full core for a launch decision, in two sessions of about 90 minutes. A suggested split: session 1
   covers 01 - Architecture; session 2 covers 02 - Release Quality, 03 - Event Management and 04 - Readiness
-  Decision.
+  Decision. If the generative AI lens is attached, answer it in about 45 more minutes before `readiness_signoff`,
+  so that its open High risks are part of the decision.
 - Select a statement only when it is true today and the evidence supports it. Selecting "None of these" means none
   of the statements is true, and the question scores its maximum risk.
 - A scope exit (for example "The workload has no internet-facing endpoints") scores No risk outright, so the
@@ -213,6 +217,32 @@ A time-boxed statement whose window has not opened yet stays unselected, and its
 The event lens is a self-assessment that comes before, or feeds, an AWS Countdown engagement; it does not replace
 one.
 
+## Generative AI and agent workloads
+
+For a workload that calls a foundation model (managed, self-hosted or from a third-party provider) or runs an AI
+agent, attach ORR - Generative AI and Agents alongside the core lens and run it as part of the pre-launch ORR.
+
+- **When.** Answer it in the design-complete self-assessment and again in the facilitated review 2-4 weeks before
+  launch, before `readiness_signoff`, and in each recurring ORR. It takes about 45 minutes on top of the core
+  review. A milestone records the state of the whole workload, every attached lens included, so the core
+  milestone (for example `ORR-2026-12-launch`) also records the generative AI answers.
+- **Who.** The team that owns the model calls, prompts, guardrails, knowledge bases and agent tools answers. The
+  security representative joins for `gai_safeguards` and `gai_agent_bounds`.
+- **What it covers.** Nine questions: model lifecycle and where inference runs (`gai_inventory_routing`), token
+  quotas and capacity (`gai_capacity_quotas`), incomplete output and fallback models (`gai_dependency_fallback`),
+  pinned versions for model, prompt and guardrail changes (`gai_change_safety`), the quality gate on every change
+  path (`gai_quality_evaluation`), telemetry coverage and attribution (`gai_observability`, capped at Medium),
+  safeguard enforcement and failure behavior (`gai_safeguards`), runaway token spend (`gai_runaway_cost`) and agent
+  action bounds (`gai_agent_bounds`).
+- **What it does not cover.** It complements the AWS
+  [Generative AI lens](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html) in the Lens
+  Catalog and the Agentic AI and Responsible AI lenses in
+  [aws-samples/sample-well-architected-custom-lens](https://github.com/aws-samples/sample-well-architected-custom-lens),
+  so apply those as well. It scores only launch-readiness and operational failure modes those lenses do not score,
+  and it does not score again what the core lens owns, such as timeouts and retries, phased rollout, alarms,
+  on-call, expiring materials and production access. Where a statement builds on a core practice, its helpful text
+  names that core statement.
+
 ## How this lens relates to the Well-Architected Framework review and AWS offerings
 
 - **Well-Architected Framework review (WAFR).** The Framework lens covers breadth across six pillars. The ORR
@@ -242,7 +272,7 @@ Attach the AWS lenses that fit the workload; the statement `wa_lenses_applied` c
 |---|---|---|
 | WA Tool [Lens Catalog](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html), no import needed | Government, Generative AI, Serverless Applications, SaaS, DevOps, Financial Services Industry | None |
 | Imported as custom lenses from [aws-samples/sample-well-architected-custom-lens](https://github.com/aws-samples/sample-well-architected-custom-lens) | Agentic AI, Responsible AI, Digital Sovereignty | 1 of the 15 per account per Region, each |
-| This repository | ORR core, ORR - Mission-Critical Event Readiness | 1 each |
+| This repository | ORR core, ORR - Mission-Critical Event Readiness, ORR - Generative AI and Agents | 1 each |
 
 If your organization needs its own questions, put them in a separate add-on lens; see
 [customizing.md](customizing.md).

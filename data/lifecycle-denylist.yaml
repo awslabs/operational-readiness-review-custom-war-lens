@@ -1,6 +1,7 @@
 # Services and features that ORR lens text must never recommend (see CONTRIBUTING.md, "Content rules").
 # A curated subset of the AWS General Reference "Services in Maintenance" and "Services in Sunset" pages, read
-# live on 2026-10-06, plus each service's own availability-change or end-of-support page: it carries the items a
+# live on 2026-10-06 (re-read on 2026-10-07 for the generative AI entries), plus each service's own
+# availability-change or end-of-support page: it carries the items a
 # readiness review might otherwise recommend, not every item on those pages. Check both pages before naming a
 # service in lens text. Refresh at each release and quarterly review.
 #
@@ -11,12 +12,13 @@
 #   They are deliberately specific so they do not match allowed services or ordinary words, for example
 #   "X-Ray SDK" but not "AWS X-Ray", "ARC readiness check" but not "operational readiness", and
 #   "Amazon Pinpoint" but not the verb "pinpoint". Text marked as a reader note is exempt.
-# status: maintenance | closed to new customers | end of support | discontinued
-#   ("maintenance" on the Services in Maintenance page means closed to new customers and no new features).
+# status: maintenance | closed to new customers | end of support | discontinued | preview
+#   ("maintenance" on the Services in Maintenance page means closed to new customers and no new features;
+#   "preview" marks a feature whose documentation says it is in preview: lens bars never depend on previews).
 # effective: the date the status took or takes effect, from the source page. Where the source page gives no
 #   date, the announcement date from the Services in Maintenance page is used and the notes say so.
 schema: orrlens/lifecycle-denylist/1
-as_of: 2026-10-06
+as_of: 2026-10-07
 source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
 sources:
 - https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
@@ -103,13 +105,13 @@ entries:
       lists "AWS CloudTrail - Lake" with an announcement date of March 31, 2026; that is the announcement, not the
       closing date. AWS CloudTrail trails, CloudTrail Insights and aggregated events are unaffected.
   - name: Amazon Bedrock Agents Classic
-    patterns: ['bedrock agents?\b(?! ?core)', 'agents for amazon bedrock', 'bedrock agents classic']
+    patterns: ['bedrock agents?\b(?! ?core)', 'agents for amazon bedrock', 'bedrock agents classic', 'amazon\.userinput', '\binline agents?\b', 'invokeinlineagent']
     url_patterns: ['docs\.aws\.amazon\.com/bedrock/latest/userguide/agents(?:[-.]|$)']
     status: closed to new customers
     effective: 2026-07-30
     alternative: Amazon Bedrock AgentCore
     source: https://docs.aws.amazon.com/bedrock/latest/userguide/agents-classic-maintenance-mode.html
-    notes: The pattern does not match "Amazon Bedrock AgentCore".
+    notes: The pattern does not match "Amazon Bedrock AgentCore". Inline agents (InvokeInlineAgent) and the built-in AMAZON.UserInput tool are Agents Classic features (maintenance-mode page, checked 2026-10-07); the AgentCore harness "inline function tools" are not matched.
   - name: AWS Management Console myApplications
     patterns: ['myapplications']
     url_patterns: ['docs\.aws\.amazon\.com/awsconsolehelpdocs/latest/gsg/aws-myApplications']
@@ -287,13 +289,13 @@ entries:
     alternative: AWS Transform
     source: https://docs.aws.amazon.com/application-discovery/latest/userguide/application-discovery-service-availability-change.html
   - name: Amazon SageMaker Model Monitor
-    patterns: ['model monitor']
+    patterns: ['model monitor', 'sagemaker (?:ai )?(?:endpoint )?data capture', 'datacaptureconfig']
     url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/model-monitor']
     status: closed to new customers
     effective: 2026-06-30
     alternative: Evaluation and monitoring you run in the pipeline and in production, for example with Amazon CloudWatch
     source: https://docs.aws.amazon.com/sagemaker/latest/dg/model-monitor-availability-change.html
-    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page.
+    notes: The availability-change page gives no date; effective is the announcement date on the Services in Maintenance page. Endpoint data capture (DataCaptureConfig) is documented under Model Monitor with the same notice (checked 2026-10-07), so it is matched too; log requests in the application instead.
   - name: Amazon SageMaker Clarify
     patterns: ['sagemaker clarify', 'sagemaker ai clarify']
     url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/clarify']
@@ -318,3 +320,99 @@ entries:
     alternative: Amazon Inspector code scanning, or static analysis and dependency scanning tools in the build pipeline
     source: https://docs.aws.amazon.com/cli/latest/reference/codeguru-security/
     notes: After 2025-11-20 the console, service resources and documentation are no longer accessible.
+  - name: Amazon SageMaker Ground Truth
+    patterns: ['sagemaker (?:ai )?ground truth', 'ground truth work ?teams?', 'ground truth labeling jobs?']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/sms(?:[-.]|$)']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: Automated evaluation jobs (for example Amazon Bedrock Evaluations or AgentCore Evaluations) and human review in your own workflow tooling
+    source: https://docs.aws.amazon.com/sagemaker/latest/dg/sms.html
+    notes: Listed on the Services in Maintenance page (announced June 30, 2026, checked 2026-10-07); the Ground Truth page says it is no longer open to new customers and gives no date, so effective is the announcement date. Amazon Bedrock human-based model evaluation jobs use Ground Truth work teams. The generic phrase "ground truth" (reference answers) is not matched.
+  - name: Amazon SageMaker A2I (Augmented AI)
+    patterns: ['augmented ai', '\ba2i\b']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/a2i-']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: Human review steps in your own workflow tooling, for example AWS Step Functions with a task token
+    source: https://docs.aws.amazon.com/sagemaker/latest/dg/a2i-use-augmented-ai-a2i-human-review-loops.html
+    notes: Listed on the Services in Maintenance page (announced June 30, 2026, checked 2026-10-07); the A2I page says it is no longer open to new customers and gives no date.
+  - name: Amazon SageMaker Debugger
+    patterns: ['sagemaker (?:ai )?debugger']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/(?:train-)?debugger', 'docs\.aws\.amazon\.com/sagemaker/latest/dg/model-debugger']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: Training metrics and logs in Amazon CloudWatch
+    source: https://docs.aws.amazon.com/sagemaker/latest/dg/train-debugger.html
+    notes: Listed on the Services in Maintenance page (announced June 30, 2026, checked 2026-10-07); its linked availability-change page redirected to the guide home on 2026-10-07, so the Debugger page notice is the source.
+  - name: Amazon Mechanical Turk workforce for SageMaker AI
+    patterns: ['mechanical turk', '\bmturk\b']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/sms-workforce-management-public']
+    status: discontinued
+    effective: 2026-09-30
+    alternative: A private or vendor workforce
+    source: https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-management-public.html
+    notes: Listed on the Services in Sunset page as "Amazon SageMaker AI - Mechanical Turk" with end of support September 30, 2026; the workforce page says Amazon Mechanical Turk permanently closes on September 30, 2026 (checked 2026-10-07).
+  - name: Amazon Rekognition batch image content moderation
+    patterns: ['batch image content moderation']
+    url_patterns: ['docs\.aws\.amazon\.com/rekognition/latest/dg/rekognition-batch-image-content-moderation']
+    status: closed to new customers
+    effective: 2026-03-31
+    alternative: Amazon Bedrock Guardrails image content filters, or synchronous moderation calls you make per request
+    source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+    notes: Listed on the Services in Maintenance page (announced March 31, 2026, checked 2026-10-07); its availability-change page redirected to the guide home on 2026-10-07, so effective is the announcement date.
+  - name: Amazon Bedrock latency-optimized inference (preview)
+    patterns: ['latency[- ]optimi[sz]ed inference']
+    url_patterns: ['docs\.aws\.amazon\.com/bedrock/latest/userguide/latency-optimized-inference']
+    status: preview
+    effective: 2026-10-07
+    alternative: Measured latency per model, Region and service tier, with the Priority tier where latency matters
+    source: https://docs.aws.amazon.com/bedrock/latest/userguide/latency-optimized-inference.html
+    notes: The page says the feature is in preview release and subject to change (checked 2026-10-07); effective is the check date.
+  - name: Amazon Bedrock AgentCore insights (preview)
+    patterns: ['agentcore insights', 'agentcore optimization insights']
+    url_patterns: ['docs\.aws\.amazon\.com/bedrock-agentcore/latest/devguide/insights']
+    status: preview
+    effective: 2026-10-07
+    alternative: AgentCore Evaluations and your own trace analysis
+    source: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/insights.html
+    notes: The page says AgentCore insights (failure analysis, user intent and execution summary) is in public preview (checked 2026-10-07); effective is the check date.
+  - name: Amazon SageMaker AI GeoSpatial
+    patterns: ['sagemaker (?:ai )?geospatial']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/geospatial']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: Geospatial processing in your own SageMaker AI training or processing jobs
+    source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+    notes: Listed on the Services in Maintenance page (announced June 30, 2026, checked 2026-10-07).
+  - name: Amazon SageMaker AI Role Manager
+    patterns: ['sagemaker (?:ai )?role manager']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/role-manager']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: IAM roles and policies managed as code
+    source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+    notes: Listed on the Services in Maintenance page (announced June 30, 2026, checked 2026-10-07).
+  - name: Amazon SageMaker AI Studio Lab
+    patterns: ['studio lab']
+    url_patterns: ['docs\.aws\.amazon\.com/sagemaker/latest/dg/studio-lab']
+    status: closed to new customers
+    effective: 2026-06-30
+    alternative: Amazon SageMaker AI Studio or another development environment
+    source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+    notes: Listed on the Services in Maintenance page (announced June 30, 2026, checked 2026-10-07).
+  - name: Amazon Rekognition Streaming Events
+    patterns: ['rekognition streaming events', 'streaming video events']
+    url_patterns: ['docs\.aws\.amazon\.com/rekognition/latest/dg/streaming-video-events']
+    status: closed to new customers
+    effective: 2026-03-31
+    alternative: Per-frame detection calls you make from your own stream processing
+    source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+    notes: Listed on the Services in Maintenance page together with batch image content moderation (announced March 31, 2026, checked 2026-10-07).
+  - name: Amazon S3 Object Lambda
+    patterns: ['s3 object lambda', 'object lambda access points?']
+    url_patterns: ['docs\.aws\.amazon\.com/AmazonS3/latest/userguide/transforming-objects', 'docs\.aws\.amazon\.com/AmazonS3/latest/userguide/olap-']
+    status: closed to new customers
+    effective: 2025-11-07
+    alternative: Transform objects in your own application or behind Amazon CloudFront
+    source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
+    notes: Listed on the Services in Maintenance page (November 7, 2025, checked 2026-10-07).

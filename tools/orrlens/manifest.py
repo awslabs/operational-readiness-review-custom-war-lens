@@ -1,8 +1,9 @@
 """dist/manifest.json, dist/SHA256SUMS and the release staging directory build/release/.
 
 dist/ holds the versioned lens files (orr-core-2.0.0.json, orr-core-2.0.0.min.json, ...), manifest.json and
-SHA256SUMS. The version-free copies that GitHub's releases/latest/download/<file> aliases need (orr-core.json,
-orr-core.min.json, orr-event.json, orr-event.min.json) are written only to build/release/, never to dist/.
+SHA256SUMS. The version-free copies that GitHub's releases/latest/download/<file> aliases need, one pair per lens
+under lens-src/ (orr-core.json, orr-core.min.json, orr-event.json, orr-event.min.json, orr-genai.json,
+orr-genai.min.json), are written only to build/release/, never to dist/.
 """
 
 from __future__ import annotations

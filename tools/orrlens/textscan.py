@@ -345,12 +345,17 @@ class ServiceMatcher:
         self._name_words = sorted(((_words(n), k) for n, k in self.names.items()), key=lambda x: -len(x[0]))
         # Full "AWS ..."/"Amazon ..." names and CamelCase aliases match case-insensitively ("amazon cloudfront",
         # "cloudfront"); acronyms (ARC, IAM) and plain-word aliases (Budgets) stay case-sensitive, so ordinary words
-        # ("an arc", "pod disruption budgets") do not match.
+        # ("an arc", "pod disruption budgets") do not match. A lower-case alias also matches with its first letter
+        # capitalized, as at the start of a sentence or table cell ("Organization-level guardrail enforcement"), so a
+        # shorter alias inside it ("guardrail enforcement") is not matched instead.
         self._name_res = []
         for n, k in sorted(self.names.items(), key=lambda x: -len(x[0])):
             camel = " " not in n and any(c.isupper() for c in n[1:]) and any(c.islower() for c in n)
             flags = re.I if (n.startswith(("AWS ", "Amazon ")) or camel) else 0
-            self._name_res.append((re.compile(r"(?<![A-Za-z0-9_-])" + re.escape(n) + r"(?![A-Za-z0-9_])", flags), k))
+            body = re.escape(n)
+            if not flags and n[:1].isalpha() and n[:1].islower():
+                body = "[" + n[0] + n[0].upper() + "]" + re.escape(n[1:])
+            self._name_res.append((re.compile(r"(?<![A-Za-z0-9_-])" + body + r"(?![A-Za-z0-9_])", flags), k))
 
     def candidates(self, text: str) -> list:
         """Every capitalized run after AWS or Amazon, for example 'Amazon API Gateway' or 'AWS WAF'."""

@@ -1,0 +1,123 @@
+schema: orrlens/question/1
+id: gai_capacity_quotas
+pillar: gai_models
+order: 20
+title: Token quotas and inference capacity sized from real request shape
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Defense against customers
+lineage: []
+choice_prefix: tk_
+description:
+  question: >-
+    Are token and request quotas for every model, inference profile, endpoint and Region sized from how the
+    workload's requests actually consume quota, and protected from your own batch and test traffic?
+  evidence_to_collect: >-
+    per model and call path, measured input and output tokens and the max_tokens setting. The quota calculation
+    for peak plus failover and the granted quota values. Which traffic uses which capacity option or account.
+helpful:
+  display_text: REL01-BP01 Aware of service quotas (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_quotas_and_constraints.html
+statements:
+  - id: tk_token_sizing
+    tier: core
+    title: >-
+      Token quota needs are computed from input plus max_tokens reserved at admission and the output burndown, not
+      billed tokens
+    concept: genai-token-quota-sizing
+    severity_basis: "wa:REL01-BP01 (High)"
+    wa_bp: REL01-BP01
+    good: >-
+      The team measured input, cache-write and output tokens per request type and computed per-minute and per-day
+      quota needs from input plus max_tokens reserved at admission and the output burndown, not from billed tokens.
+      An unset max_tokens defaults to the model's maximum output and is reserved in full. The numbers are
+      recomputed for every model or version change. This feeds the core quota headroom statement, which owns
+      headroom and alarms.
+    platform_notes: >-
+      Amazon Bedrock: bedrock-runtime and bedrock-mantle quotas are separate, and cross-Region and global profiles
+      have their own quotas in the source Region. EstimatedTPMQuotaUsage is approximate, and metrics filtered by
+      ModelId omit requests that fail before the model is determined, so size from unfiltered metrics too. Agents,
+      including on AgentCore: size from model calls per agent turn at peak.
+    partition_notes: >-
+      Service Quotas is available in both AWS GovCloud (US) Regions as of 2026-10-07. Check Amazon Bedrock quota
+      values per model there.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html
+    improvement: >-
+      From load-test and production metrics, compute per-minute quota use as input plus max_tokens at admission and
+      the documented burndown at settlement, add failover load, and compare with granted quotas per model, profile,
+      endpoint and Region. Request increases with lead time (increases are prioritized for accounts already
+      consuming their quota), and add the recomputation to the model-change checklist. On bedrock-mantle, size the
+      separate input and output token quotas. Amazon SageMaker AI and self-hosted: size instances from measured
+      tokens per second. Third-party APIs: use the provider's limits.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html
+    additional_helpful:
+      - display_text: Optimize your applications for scale and reliability on Amazon Bedrock (unset max_tokens)
+        url: https://aws.amazon.com/blogs/machine-learning/optimize-your-applications-for-scale-and-reliability-on-amazon-bedrock/
+      - display_text: Quotas for the bedrock-runtime endpoint
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-runtime.html
+      - display_text: Amazon Bedrock runtime metrics (EstimatedTPMQuotaUsage and the ModelId dimension)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+    additional_improvement:
+      - display_text: Quotas for Amazon Bedrock
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/quotas.html
+  - id: tk_traffic_isolated
+    tier: sec
+    title: >-
+      Delay-tolerant callers in production accounts, such as batch jobs and evaluation sampling, cannot use up
+      latency-critical quota
+    concept: genai-quota-traffic-isolation
+    wa_bp: REL01-BP02
+    good: >-
+      Inside production accounts, delay-tolerant callers such as batch jobs and online evaluation sampling use batch
+      inference with its own quotas, move to a separate production account, or are capped below a reserved share,
+      because the on-demand quota for a model is shared across the Priority, Standard and Flex tiers. Non-production
+      traffic, including evaluation and load tests run there, is already separated by the core
+      statement 'Production runs in dedicated accounts isolated from non-production, with organization guardrails
+      on logging and Regions'.
+    platform_notes: >-
+      Amazon SageMaker AI and self-hosted models: run offline work on separate endpoints. Third-party APIs: use
+      separate keys or projects with their own limits where the provider offers them.
+    partition_notes: >-
+      As of 2026-10-07, Amazon Bedrock batch inference runs in-Region in AWS GovCloud (US-West) for some models,
+      and from AWS GovCloud (US-East) only through the US-GOV cross-Region profile. Tier support is listed per model
+      and Region.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html
+    improvement: >-
+      Inventory every caller of each model in each production account, move bulk jobs to batch inference where the
+      model supports it or to a separate account, and cap the remaining callers below a share that leaves
+      latency-critical traffic its headroom.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/batch-inference-supported.html
+  - id: tk_capacity_option
+    tier: sec
+    title: >-
+      Overflow from reserved or provisioned capacity was tested, and requests served by unintended capacity alarm
+      (or none is used)
+    concept: genai-capacity-option-monitored
+    wa_bp: REL01-BP01
+    good: >-
+      For each latency-critical journey that uses reserved, priority or provisioned capacity, the team recorded why,
+      knows what happens on overflow, tested it at load, and alarms on requests served by an unintended capacity
+      option. Journeys that use only on-demand capacity meet this statement by recorded decision.
+    platform_notes: >-
+      Amazon Bedrock: Standard, Priority, the Reserved tier or Provisioned Throughput. Reserved overflows to
+      Standard, and the ResolvedServiceTier metric dimension shows the tier that served each request. Inference
+      profiles do not support Provisioned Throughput, which cannot be created for Legacy models.
+    partition_notes: >-
+      As of 2026-10-07, Amazon Bedrock lists Provisioned Throughput in AWS GovCloud (US-West) only, for custom models
+      with no commitment. The Reserved tier is offered in AWS GovCloud (US-West) for some models through the US-GOV
+      cross-Region profile, for example Claude Sonnet 4.5, and not for others. Check tier support on each model
+      card.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html
+    improvement: >-
+      Decide the capacity option per journey and record why. If you use the Reserved tier, request it as the
+      service tiers page describes. Test overflow at load, and alarm when requests are served by a tier or capacity
+      option other than the intended one. Amazon SageMaker AI: test what happens when traffic exceeds the instances
+      in service before auto scaling adds more, and alarm on invocation errors and on reaching the maximum instance
+      count. Third-party APIs: check the provider's reserved-capacity overflow behavior.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html
+    additional_helpful:
+      - display_text: Supported Regions and models for Provisioned Throughput
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-supported.html
+      - display_text: Amazon Bedrock Reserved tier for Claude Sonnet 4.5 in AWS GovCloud (US-West) (What's New, Jan 2026)
+        url: https://aws.amazon.com/about-aws/whats-new/2026/01/amazon-bedrock-reserved-tier-for-claude-sonnet-in-govcloud/

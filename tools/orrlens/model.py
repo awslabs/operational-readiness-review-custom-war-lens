@@ -13,9 +13,11 @@ from . import config as C
 from .textscan import url_allowed
 
 ID_RE = re.compile(r"^[a-z0-9_]{3,64}$")
-BP_RE = re.compile(r"^(OPS|SEC|REL|PERF|COST|SUS)\d{2}-BP\d{2}$")
+# Framework ids (REL05-BP02) and the AWS Generative AI, Agentic AI and Responsible AI lens ids (GENOPS01-BP01,
+# AGENTSEC02-BP01, RAISP01-BP01); see config.WA_BP_SOURCES.
+BP_RE = re.compile(r"^" + C.WA_BP_ID + r"$")
 TIER_RE = re.compile(r"^(scope|core|sec|alt:[A-Z])$")
-BASIS_RE = re.compile(r"^(wa:(OPS|SEC|REL|PERF|COST|SUS)\d{2}-BP\d{2} \(High\)|wp-orr:.{20,}|deviation:.{20,})$")
+BASIS_RE = re.compile(r"^(wa:" + C.WA_BP_ID + r" \(High\)|wp-orr:.{20,}|deviation:.{20,})$")
 MONTH_RE = re.compile(r"^(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4}$")
 
 QUESTION_KEYS = {
@@ -94,6 +96,8 @@ def load_lens(root: Path, key: str) -> Lens:
         meta = {"name": key, "version": "0.0.0", "pillars": [], "file_stem": key, "description": ""}
     lens = Lens(key=key, path=base, meta=meta, errors=e)
     validate_lens_meta(meta, f"{key}/lens.yaml", e)
+    if meta.get("key") != key:
+        _err(e, f"{key}/lens.yaml", f"key must equal the folder name {key!r} (got {meta.get('key')!r})")
     pillar_ids = [p.get("id") for p in meta.get("pillars") or [] if isinstance(p, dict)]
 
     for f in sorted(base.glob("*/*.yaml")):
@@ -263,7 +267,8 @@ def validate_question(q, where, pillar_ids, folder, e, check_filename=True, allo
             _err(e, sw, "concept must be kebab-case")
         if tier in ("core",) or tier.startswith("alt:"):
             if not BASIS_RE.match(_text(s.get("severity_basis", ""))):
-                _err(e, sw, "core/alt statements need severity_basis wa:<BP> (High) | wp-orr:<...> | deviation:<rationale>")
+                _err(e, sw, "core/alt statements need severity_basis wa:<BP> (High) | wp-orr:<...> | deviation:<rationale> "
+                            "(a BP is a Framework id such as REL05-BP02 or an AI lens id such as GENOPS01-BP01)")
         if s.get("wa_bp") and not BP_RE.match(str(s["wa_bp"])):
             _err(e, sw, f"bad wa_bp {s['wa_bp']!r}")
         if s.get("large_scale") and tier != "sec":

@@ -1,0 +1,118 @@
+schema: orrlens/question/1
+id: gai_dependency_fallback
+pillar: gai_models
+order: 30
+title: Incomplete model output and fallback model readiness
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Defense against dependencies
+lineage: []
+choice_prefix: fb_
+description:
+  question: >-
+    Does the workload detect incomplete or failed model output, and would a fallback model or Region work, with the
+    same quality and safeguards, the moment the primary fails?
+  evidence_to_collect: >-
+    the code paths that handle each stop reason and stream error. For each fallback model or Region, its access,
+    quota, guardrail configuration and latest evaluation result, and when it last served traffic. Or the failover
+    design record that no fallback is used.
+helpful:
+  display_text: REL05-BP01 Graceful degradation (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
+statements:
+  - id: fb_stop_reasons
+    tier: core
+    title: >-
+      Truncated, filtered or malformed model output, and mid-stream errors, are handled as failures, never as
+      complete answers
+    concept: genai-incomplete-output-handled
+    severity_basis: >-
+      deviation:model APIs report truncation, content filtering, malformed output and context overflow as stop
+      reasons on a successful call, and streams can fail after they start, so unchecked code passes incomplete
+      answers to users and downstream systems as if complete. GENREL03-BP01 (use logic to manage prompt flows and
+      gracefully recover from failure) is rated Medium.
+    wa_bp: REL05-BP01
+    good: >-
+      Every caller checks the stop reason and handles each non-normal value explicitly (retry, shorter request,
+      fallback, or a clear message), validates structured output before use, and on a stream error discards or
+      clearly marks partial output.
+    platform_notes: >-
+      Amazon Bedrock: Converse returns stopReason values such as max_tokens, guardrail_intervened, content_filtered,
+      malformed_model_output, malformed_tool_use and model_context_window_exceeded, and a ConverseStream response
+      can end with an exception event, such as modelStreamErrorException, mid-response. InvokeModel
+      bodies carry provider-specific stop fields. Amazon Bedrock AgentCore and agent frameworks: check that the
+      framework surfaces stop reasons to your code. Amazon SageMaker AI and self-hosted models: check the serving
+      stack's finish reason. Third-party APIs: map the provider's finish reasons.
+    partition_notes: >-
+      The Amazon Bedrock Converse and ConverseStream operations are available in both AWS GovCloud (US) Regions as
+      of 2026-10-07.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+    improvement: >-
+      Add a handler for each stop reason and stream error, unit-test each one with recorded responses, and publish
+      the count of non-normal stop reasons per model and prompt version as a metric that rollouts compare.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_Converse.html
+    additional_helpful:
+      - display_text: ConverseStreamOutput (stream exception events)
+        url: https://docs.aws.amazon.com/bedrock/latest/APIReference/API_runtime_ConverseStreamOutput.html
+  - id: fb_fallback_parity
+    tier: core
+    title: >-
+      Each fallback model or Region has access, quota and the same safeguards, and passed the primary's evaluation
+      (or none is used)
+    concept: genai-fallback-model-parity
+    severity_basis: "wa:REL05-BP01 (High)"
+    wa_bp: REL05-BP01
+    good: >-
+      Every fallback model, inference profile or Region in the failover design has model access enabled in each
+      production account, granted quota for failover load, an identical guardrail configuration in each Region,
+      prompts tuned for it, and a passing result on the same evaluation set and safety tests as the primary. A
+      failover design that records no fallback model meets this statement, and the core degraded-mode statements
+      then score what happens.
+    platform_notes: >-
+      Amazon Bedrock: guardrail cross-Region profiles need IAM permissions in every destination Region. Amazon SageMaker AI: a fallback endpoint needs its own capacity. Third-party APIs: a
+      second provider needs its own contract, limits and safety review.
+    partition_notes: >-
+      As of 2026-10-07, in AWS GovCloud (US), third-party models need model access in the linked standard account
+      and the GovCloud account, Amazon models only in the GovCloud account, and Amazon Bedrock model evaluation jobs
+      run in both GovCloud Regions.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html
+    improvement: >-
+      List every fallback, check model access and quota per account and Region, attach an identical guardrail
+      configuration (the same version in the same Region, the same infrastructure as code definition in each
+      fallback Region, or a guardrail cross-Region profile), run the release evaluation and safety tests on each
+      fallback, and record the results with the release. In AWS GovCloud (US), keep export-controlled data out of
+      evaluation job metadata.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html
+    additional_helpful:
+      - display_text: Model support by AWS Region in Amazon Bedrock
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/models-region-compatibility.html
+      - display_text: Amazon Bedrock model lifecycle (loss of access to Legacy models)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+    additional_improvement:
+      - display_text: Permissions for using cross-Region inference with Amazon Bedrock Guardrails
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrail-profiles-permissions.html
+  - id: fb_fallback_warm
+    tier: sec
+    title: >-
+      Fallback models and Regions carry regular synthetic or live traffic, so lost access or quota is found early
+      (or none is used)
+    concept: genai-fallback-kept-warm
+    wa_bp: REL05-BP01
+    good: >-
+      A small share of traffic or a scheduled synthetic request exercises every fallback path at least weekly and
+      alarms on failure, because model access, entitlement and quota on idle fallback accounts and Regions can be
+      lost without any change on your side. For example, existing customers can lose access to a Legacy model after
+      15 days of inactivity. If the failover design records that no fallback model, profile or Region is used, this
+      statement is met by that record.
+    platform_notes: >-
+      This can share the mechanism used for the core synthetic canaries. Amazon Bedrock: send the request per
+      fallback model, inference profile and Region, from each production account.
+    partition_notes: >-
+      In AWS GovCloud (US), exercise fallbacks from each GovCloud account, because model access there is enabled
+      separately from the linked standard account (as of 2026-10-07).
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+    improvement: >-
+      Add a scheduled request for each fallback path with an alarm on failure, or route a small percentage of real
+      traffic to each fallback, and page the model owner when one fails.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html

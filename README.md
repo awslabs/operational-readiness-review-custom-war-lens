@@ -34,6 +34,7 @@ Contents:
 |---|---|---|---|---|
 | **AWS Operational Readiness Review** (the core ORR lens; it keeps its published name) | 2.0.0 | 36 questions and 134 scored statements in 4 pillars: 01 - Architecture, 02 - Release Quality, 03 - Event Management, 04 - Readiness Decision. A 15-question core path for triage and recurring check-ins | Every production workload, before launch and at least yearly | `orr-core.json` |
 | **ORR - Mission-Critical Event Readiness** | 1.0.0 | 8 questions and 26 scored statements in 3 pillars: 01 - Prepare, 02 - Operate, 03 - After the event | Before a planned peak, alongside a current core review | `orr-event.json` |
+| **ORR - Generative AI and Agents** | 1.0.0 | 9 questions and 25 scored statements in 3 pillars: 01 - Models, capacity and dependencies, 02 - Change safety and evaluation, 03 - Operations and safeguards | Workloads that call foundation models or run AI agents, alongside the core review | `orr-genai.json` |
 
 Each lens keeps its own version number. The family deliberately stays small, because the WA Tool allows 15 custom
 lenses per account per Region and that quota cannot be raised
@@ -60,6 +61,23 @@ It is the self-assessment that comes before, or feeds, an
 | 2 weeks before | Freeze changes or arm deployment blockers. Re-verify the escalation tree, edge rules and privileged access |
 | Within 2 weeks after | Post-event review, scale-down, and a milestone |
 
+The generative AI companion is for workloads that call a foundation model (managed, self-hosted or from a
+third-party provider) or run an AI agent. It complements the AWS Well-Architected
+[Generative AI lens](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html) and the Agentic
+AI and Responsible AI lenses from
+[aws-samples/sample-well-architected-custom-lens](https://github.com/aws-samples/sample-well-architected-custom-lens):
+apply those as well, because this companion scores only launch-readiness and operational failure modes they do
+not score. Examples are model end-of-life dates and inference routing, token quota arithmetic, incomplete model
+output reported as success, fallback model parity, mutable prompt and guardrail versions, safeguards that fail
+open, runaway token spend, and agent actions that bypass the enforcing control point. It does not score again what
+the core lens already owns, such as timeouts and retries, phased rollout, alarms or on-call; where a statement
+builds on a core practice, its helpful text says so. Its module owner is Leo Zhadanovsky (GitHub
+`leozhad`), the repository maintainer named in [`CODEOWNERS`](CODEOWNERS).
+
+A generative AI companion question in a workload review, with its helpful resources:
+
+![A question in the ORR - Generative AI and Agents review, 03 - Operations and safeguards question 3, Token budgets per caller and a spend stop faster than billing data, showing three best-practice choices, a None of these option, and the Helpful resources panel with the good-looks-like text, platform and partition notes and links for the first choice.](_img/WAT-GenAIQuestion.png)
+
 ---
 
 ## Quick start
@@ -77,6 +95,8 @@ Stable links that always return the newest release:
   (minified: `orr-core.min.json`)
 - Event companion: https://github.com/awslabs/operational-readiness-review-custom-war-lens/releases/latest/download/orr-event.json
   (minified: `orr-event.min.json`)
+- Generative AI companion: https://github.com/awslabs/operational-readiness-review-custom-war-lens/releases/latest/download/orr-genai.json
+  (minified: `orr-genai.min.json`)
 
 Versioned names, such as `orr-core-2.0.0.json`, stay pinned to their release. Each release's files are also copied
 into [`wafr-operational-readiness-lens/`](wafr-operational-readiness-lens/README.md), where the v1.3.2 to v1.3.6 files
@@ -84,7 +104,7 @@ remain unchanged.
 
 If you cannot use the release page, the same files are in
 [`wafr-operational-readiness-lens/`](wafr-operational-readiness-lens/README.md) (`orr-core-2.0.0.json`,
-`orr-event-1.0.0.json`) with their checksums in [`dist/SHA256SUMS`](dist/SHA256SUMS).
+`orr-event-1.0.0.json`, `orr-genai-1.0.0.json`) with their checksums in [`dist/SHA256SUMS`](dist/SHA256SUMS).
 
 Verify a download before you import it:
 
@@ -137,18 +157,19 @@ Use these steps only for a lens you have never imported into this account and Re
    workload** ([Defining a workload](https://docs.aws.amazon.com/wellarchitected/latest/userguide/define-workload.html)).
    For a workload that already exists, open it and apply the lens to it. A workload can have up to 20 lenses.
 
-   ![Define workload wizard, Apply lenses step, with both ORR custom lenses selected under Custom lenses.](_img/WAT-Selectable.png)
+   ![Define workload wizard, Apply lenses step, with all three ORR custom lenses selected under Custom lenses (3/3): ORR - Generative AI and Agents, ORR - Mission-Critical Event Readiness and AWS Operational Readiness Review.](_img/WAT-Selectable.png)
 
 6. When you finish a review, choose **Save milestone** on the workload and name it, for example
    `ORR-2026-10-launch`
    ([Milestones](https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html)).
 
 Details: [Creating a custom lens](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-create.html).
-For 1.0.0 the event companion is a first install, because it is a new lens, so repeat the steps above with
-`orr-event.json`. Later event versions are uploaded with **Edit** on your existing event lens, like any upgrade
-(never **Create custom lens**). With both lenses installed, the **Custom lenses** list looks like this:
+For 1.0.0 each companion is a first install, because it is a new lens, so repeat the steps above with
+`orr-event.json` for the event companion and `orr-genai.json` for the generative AI companion. Later companion
+versions are uploaded with **Edit** on your existing companion lens, like any upgrade (never **Create custom
+lens**). With all three lenses installed and published, the **Custom lenses** list looks like this:
 
-![Custom lenses list with AWS Operational Readiness Review version 2.0.0 and ORR - Mission-Critical Event Readiness version 1.0.0, both PUBLISHED.](_img/WAT-CustomLenses.png)
+![Custom lenses list with ORR - Generative AI and Agents version 1.0.0, ORR - Mission-Critical Event Readiness version 1.0.0 and AWS Operational Readiness Review version 2.0.0, all PUBLISHED.](_img/WAT-CustomLenses.png)
 
 ### Upgrade an existing ORR lens
 
@@ -244,6 +265,7 @@ organization.
 | Pre-launch ORR | Core | Self-assessment at design-complete; a mid-cycle check-in on the release and testing questions; a facilitated review 2-4 weeks before launch. Answer `readiness_signoff` last | Core path: about 90-120 minutes (triage and check-ins only). Full core: about 3 hours in two 90-minute sessions, plus 2-4 hours of evidence gathering beforehand | Milestone `ORR-<yyyy-mm>-launch`, improvement plan, one-page readout, go or no-go record |
 | Recurring ORR | Core | At least yearly, and after a major architecture change or a significant incident | About 2 hours: review what changed since the last milestone, then confirm the rest | Milestone `ORR-<yyyy-mm>-recurring` and the trend against the last milestone |
 | Event readiness | Core plus event companion | See the timing table in [The lens family](#the-lens-family) | About 60 minutes for the event lens, on top of a current core review | Milestones before and after the event |
+| Generative AI and agents | Core plus generative AI companion | With the pre-launch ORR, for workloads that call foundation models or run AI agents, and again at each recurring ORR | About 45 minutes for the generative AI lens, on top of the core review | The same milestone as the core review, for example `ORR-<yyyy-mm>-launch` |
 
 ### Roles
 
@@ -255,7 +277,8 @@ organization.
   who challenges the team on its answers during the review.
 - **Workload team leads:** answer the questions and bring the evidence.
 - **On-call representative.**
-- **Security representative:** for `releases_security_readiness`.
+- **Security representative:** for `releases_security_readiness`, and for `gai_safeguards` and `gai_agent_bounds`
+  when the generative AI companion is attached.
 
 ### Who answers
 
@@ -397,6 +420,11 @@ for current status, and verify per Region.
 - **Partition notes.** Statements that name a service with different availability in AWS GovCloud (US) carry a
   dated partition note and, where a core practice depends on such a service, a method-based alternative. See
   [`docs/govcloud.md`](docs/govcloud.md).
+- **Generative AI and agents (checked 2026-10-07).** Amazon Bedrock is in both AWS GovCloud (US) Regions, with model
+  availability that differs by Region. Amazon Bedrock AgentCore is in AWS GovCloud (US-West) only. Global
+  cross-Region inference routes only to commercial Regions, so for routing within the partition use in-Region
+  inference or the US-GOV geographic profile where a model offers it. The generative AI companion's partition notes
+  and [`docs/govcloud.md`](docs/govcloud.md#generative-ai-and-agents) give the details.
 - **Data that may leave the GovCloud (US) Regions.** AWS lists the AWS account IDs associated with a workload, the
   workload name, milestone names and the review owner. Keep export-controlled, sensitive and personal information
   out of those fields as well as out of notes.
@@ -431,6 +459,10 @@ for current status, and verify per Region.
   [Lens Catalog](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html) (no import needed)
   or from [aws-samples/sample-well-architected-custom-lens](https://github.com/aws-samples/sample-well-architected-custom-lens)
   (each import uses one custom-lens slot).
+- **AWS Generative AI, Agentic AI and Responsible AI lenses.** ORR - Generative AI and Agents complements these
+  lenses and does not replace them. They cover how to design, secure, evaluate and govern generative AI and agent
+  workloads; the companion scores only the launch-readiness and operational failure modes they do not score, and
+  none of its statements restates one of their best practices.
 - **Your own questions.** Keep this lens unmodified and put your organization's questions in a separate add-on lens
   attached to the same workload, so upgrades never touch your content
   ([`docs/customizing.md`](docs/customizing.md), starter file
@@ -495,7 +527,7 @@ does not mean AWS has reviewed your workload, and it does not change the AWS sha
 targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates:
 https://github.com/awslabs/operational-readiness-review-custom-war-lens
 
-The same terms apply to ORR - Mission-Critical Event Readiness 1.0.0.
+The same terms apply to ORR - Mission-Critical Event Readiness 1.0.0 and ORR - Generative AI and Agents 1.0.0.
 
 ## License
 

@@ -114,6 +114,18 @@ class ServiceNames(unittest.TestCase):
         self.assertEqual(self.m.services_named("ARC zonal shift"), {"Amazon Application Recovery Controller (ARC)"})
         self.assertEqual(self.m.services_named("SEARCH and MARCH"), set())
 
+    def test_lower_case_alias_matches_capitalized_at_sentence_start(self):
+        m = ServiceMatcher({
+            "Guardrails account-level enforcement": {"aliases": ["guardrail enforcement"]},
+            "Guardrails organization-level enforcement": {"aliases": ["organization-level guardrail enforcement"]},
+        }, [])
+        spans = m.name_spans("Organization-level guardrail enforcement is not offered.")
+        self.assertEqual([k for _s, _e, k in spans], ["Guardrails organization-level enforcement"])
+        spans = m.name_spans("Guardrail enforcement covers four APIs.")
+        self.assertEqual([k for _s, _e, k in spans], ["Guardrails account-level enforcement"])
+        # Only the first letter may change case
+        self.assertEqual(m.name_spans("GUARDRAIL ENFORCEMENT"), [])
+
 
 if __name__ == "__main__":
     unittest.main()

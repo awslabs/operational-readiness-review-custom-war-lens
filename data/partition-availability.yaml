@@ -1217,8 +1217,366 @@ entries:
   kind: service
   aws: available
   aws-us-gov: available
+  as_of: 2026-10-07
   source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
-  notes: ''
+  notes: AWS GovCloud (US-West) only (GovCloud AgentCore page, checked 2026-10-07; AWS Capabilities by Region lists the
+    product as not available in us-gov-east-1). In GovCloud, guardrails in policies and temporal policies are not
+    available, and the Evaluator, OnlineEvaluationConfig, Policy, PolicyEngine, OAuth2CredentialProvider and
+    ApiKeyCredentialProvider CloudFormation resources are not available. Gateway targets, Identity providers, Browser
+    sessions and Code Interpreter internet access can send data outside GovCloud. Capabilities also lists some control
+    plane APIs (CreateGateway, CreateGatewayRateLimit, CreatePolicyEngine) in us-gov-east-1; this file follows the
+    GovCloud page.
+- name: Amazon Bedrock AgentCore Runtime
+  aliases:
+  - AgentCore Runtime
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  notes: US-West only in GovCloud. StopRuntimeSession is listed in us-gov-west-1 by AWS Capabilities by Region
+    (2026-10-07).
+- name: Amazon Bedrock AgentCore Gateway
+  aliases:
+  - AgentCore Gateway
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  notes: US-West only in GovCloud. Targets that connect to external services send tool payloads to those endpoints,
+    which can be outside GovCloud.
+- name: Amazon Bedrock AgentCore Gateway rate limits
+  aliases:
+  - AgentCore Gateway rate limits
+  - gateway rate limits
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists CreateGatewayRateLimit in us-gov-west-1 (2026-10-07) and the GovCloud
+    AgentCore page lists no difference for it. Token limits are per minute and apply only to inference targets on
+    the documented inference paths.
+- name: Amazon Bedrock AgentCore Policy
+  aliases:
+  - AgentCore Policy
+  - AgentCore policy engine
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  notes: US-West only in GovCloud, without the Policy and PolicyEngine CloudFormation resources, temporal policies
+    or guardrails in policies; configure it through the API there.
+- name: Amazon Bedrock AgentCore Evaluations
+  aliases:
+  - AgentCore Evaluations
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  notes: US-West only in GovCloud, without the Evaluator and OnlineEvaluationConfig CloudFormation resources;
+    configure it through the API there. Generally available since March 2026 (What's New).
+- name: Amazon Bedrock AgentCore harness
+  aliases:
+  - AgentCore harness
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists CreateHarness in us-gov-west-1 and not in us-gov-east-1 (2026-10-07).
+- name: Amazon Bedrock AgentCore Identity
+  aliases:
+  - AgentCore Identity
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  notes: US-West only in GovCloud, without the OAuth2CredentialProvider and ApiKeyCredentialProvider CloudFormation
+    resources. External identity providers receive token requests outside GovCloud.
+- name: Amazon Bedrock AgentCore Code Interpreter
+  aliases:
+  - AgentCore Code Interpreter
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  notes: US-West only in GovCloud. With internet access enabled, code in the sandbox can reach endpoints outside
+    GovCloud. Security Hub control BedrockAgentCore.7 checks the network mode.
+- name: Amazon Bedrock AgentCore Browser
+  aliases:
+  - AgentCore Browser
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  notes: US-West only in GovCloud. Browser sessions make requests to whatever URLs the agent visits, which can be
+    outside GovCloud.
+- name: Amazon Bedrock Knowledge Bases
+  aliases:
+  - Bedrock Knowledge Bases
+  - Knowledge Bases for Amazon Bedrock
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists Amazon Bedrock Knowledge Bases (RAG) in us-gov-west-1 and us-gov-east-1
+    (2026-10-07).
+- name: Amazon Bedrock Evaluations
+  aliases:
+  - Bedrock Evaluations
+  - Amazon Bedrock model evaluation
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: Listed in both GovCloud Regions by AWS Capabilities by Region (2026-10-07). Evaluation job metadata must
+    not contain export-controlled data (GovCloud Bedrock page). Human-based evaluation jobs use SageMaker AI Ground
+    Truth work teams, which are closed to new customers (data/lifecycle-denylist.yaml).
+- name: Amazon Bedrock Prompt Management
+  aliases:
+  - Bedrock Prompt Management
+  - Prompt Management
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists the Bedrock Agent CreatePrompt API in both GovCloud Regions (2026-10-07).
+- name: Amazon Bedrock cross-Region inference
+  aliases:
+  - Bedrock cross-Region inference
+  - geographic cross-Region inference
+  - cross-Region inference
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://aws.amazon.com/blogs/machine-learning/run-nvidia-nemotron-and-openai-gpt-oss-models-on-amazon-bedrock-in-aws-govcloud-us/
+  notes: Geographic profiles. In GovCloud, a GovCloud cross-Region inference profile routes between us-gov-west-1
+    and us-gov-east-1 for some models (AWS ML blog, 2026-07-01); check each model card.
+- name: Amazon Bedrock global cross-Region inference
+  aliases:
+  - global cross-Region inference
+  - Bedrock global cross-Region inference
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html
+  notes: Global profiles route to supported commercial Regions only (inference profiles and global cross-Region
+    inference pages, 2026-10-07), so GovCloud workloads use in-Region or GovCloud geographic routing.
+- name: Amazon Bedrock application inference profiles
+  aliases:
+  - application inference profiles
+  - application inference profile
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html
+  notes: Can be created in us-gov-east-1 and us-gov-west-1 (supported Regions list, 2026-10-07). They work with
+    InvokeModel and Converse only.
+- name: Amazon Bedrock Provisioned Throughput
+  aliases:
+  - Bedrock Provisioned Throughput
+  - Provisioned Throughput
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-supported.html
+  notes: In GovCloud, supported in AWS GovCloud (US-West) only for custom models with a no-commitment purchase
+    (2026-10-07). Inference profiles do not support it, and it cannot be created for Legacy models.
+- name: Amazon Bedrock batch inference
+  aliases:
+  - Bedrock batch inference
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists CreateModelInvocationJob in both GovCloud Regions (2026-10-07); model
+    support differs, so check each model.
+- name: Amazon Bedrock service tiers
+  aliases:
+  - Bedrock service tiers
+  - Priority tier
+  - Flex tier
+  - Standard tier
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://aws.amazon.com/blogs/machine-learning/run-nvidia-nemotron-and-openai-gpt-oss-models-on-amazon-bedrock-in-aws-govcloud-us/
+  notes: Standard, Priority and Flex are supported for some models in GovCloud (AWS ML blog, 2026-07-01). The
+    service tiers page points to each model card for tier support and does not mention GovCloud (2026-10-07).
+- name: Amazon Bedrock Reserved tier
+  aliases:
+  - Bedrock Reserved tier
+  - Reserved tier
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://aws.amazon.com/about-aws/whats-new/2026/01/amazon-bedrock-reserved-tier-for-claude-sonnet-in-govcloud/
+  notes: Some models only, in AWS GovCloud (US-West) through the GOV-CRIS (US-GOV) cross-Region profile, for
+    example Claude Sonnet 4.5 (What's New, 2026-01-21). Not offered for the NVIDIA Nemotron and OpenAI gpt-oss
+    models in GovCloud (AWS ML blog, 2026-07-01, model-specific). Reserved overflows to Standard; the
+    ResolvedServiceTier metric dimension shows the tier that served a request.
+- name: Amazon Bedrock model invocation logging
+  aliases:
+  - model invocation logging
+  - Bedrock invocation logging
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists PutModelInvocationLoggingConfiguration in both GovCloud Regions
+    (2026-10-07). It captures bedrock-runtime calls only, not bedrock-mantle calls (model invocation logging page,
+    2026-10-07).
+- name: Amazon Bedrock bedrock-mantle endpoint
+  aliases:
+  - bedrock-mantle
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://aws.amazon.com/blogs/machine-learning/run-nvidia-nemotron-and-openai-gpt-oss-models-on-amazon-bedrock-in-aws-govcloud-us/
+  notes: The OpenAI-compatible endpoint. Available in us-gov-west-1 for some models (AWS ML blog, 2026-07-01).
+    Quotas, invocation logging and CloudTrail event source differ from bedrock-runtime.
+- name: Amazon Bedrock Guardrails account-level enforcement
+  aliases:
+  - account-level guardrail enforcement
+  - guardrail enforcement
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists PutEnforcedGuardrailConfiguration in both GovCloud Regions (2026-10-07).
+- name: Amazon Bedrock Guardrails organization-level enforcement
+  aliases:
+  - organization-level guardrail enforcement
+  - Amazon Bedrock policies
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-organizations.html
+  notes: Organization-level enforcement uses Amazon Bedrock policies in AWS Organizations, and a GovCloud
+    organization can use only SCPs, RCPs, tag policies and declarative policies for EC2 and S3 (GovCloud
+    Organizations page, 2026-10-07). Use account-level enforcement there.
+- name: Amazon Bedrock Guardrails Automated Reasoning checks
+  aliases:
+  - Automated Reasoning checks
+  - Automated Reasoning
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region returns Not Found for CreateAutomatedReasoningPolicy in both GovCloud Regions
+    (2026-10-07).
+- name: Amazon SageMaker AI
+  aliases:
+  - SageMaker AI
+  - Amazon SageMaker
+  - SageMaker
+  kind: service
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-sagemaker.html
+  notes: Only the features listed on the GovCloud SageMaker AI page are available there (2026-10-07), including
+    Hosting, Training, Pipelines and JumpStart (open-weight models only, through the SageMaker AI Python SDK). Deep
+    Learning Container images are published with mutable tags only in GovCloud, so pin by image digest.
+- name: Amazon SageMaker AI shadow tests
+  aliases:
+  - SageMaker AI shadow tests
+  - shadow tests
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists CreateInferenceExperiment in us-gov-east-1 and not in us-gov-west-1
+    (2026-10-07). Not supported for serverless, asynchronous, Marketplace-container, multiple-container, multi-model
+    or Inf1 endpoints.
+- name: Amazon SageMaker AI inference components
+  aliases:
+  - SageMaker AI inference components
+  - inference components
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists SageMaker AI inference components and endpoint variant Auto Scaling in
+    both GovCloud Regions (2026-10-07).
+- name: Amazon SageMaker JumpStart
+  aliases:
+  - SageMaker JumpStart
+  - JumpStart
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-sagemaker.html
+  notes: In GovCloud, JumpStart supports only open-weight models and only through the SageMaker AI Python SDK
+    (2026-10-07).
+- name: AWS Deep Learning Containers
+  aliases:
+  - Deep Learning Containers
+  - SageMaker AI Deep Learning Container
+  - SageMaker AI Deep Learning Containers
+  kind: feature
+  aws: available
+  aws-us-gov: available
+  as_of: 2026-10-07
+  source: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-sagemaker.html
+  notes: In GovCloud the images are in private Amazon ECR registries and only mutable tags are published, apart from
+    a few exceptions (2026-10-07), so pin images by digest.
+- name: Amazon CloudWatch generative AI observability
+  aliases:
+  - CloudWatch generative AI observability
+  - CloudWatch GenAI observability
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  as_of: 2026-10-07
+  source: https://builder.aws.com/build/capabilities
+  notes: AWS Capabilities by Region lists Amazon CloudWatch GenAI Observability as not available in either GovCloud
+    Region (2026-10-07). Do not make a bar depend on it.
+- name: Amazon CloudWatch Omni
+  aliases:
+  - CloudWatch Omni
+  kind: feature
+  aws: available
+  aws-us-gov: not available
+  as_of: 2026-10-07
+  source: https://aws.amazon.com/about-aws/whats-new/2026/09/amazon-cloudwatch-omni-ai/
+  notes: Generally available in US East (N. Virginia), US West (Oregon) and Europe (Ireland) only (What's New,
+    September 2026, checked 2026-10-07).
+- name: Strands Agents
+  aliases:
+  - Strands Agents SDK
+  kind: open-source
+  aws: n/a
+  aws-us-gov: n/a
+  as_of: 2026-10-07
+  source: https://aws.amazon.com/blogs/opensource/introducing-strands-agents-an-open-source-ai-agents-sdk/
+  notes: Open-source agent SDK that runs with the workload; availability follows the model endpoints it calls. Its
+    limits are checked between turns and cancel() is cooperative.
 - name: AWS Wickr
   aliases:
   - Wickr

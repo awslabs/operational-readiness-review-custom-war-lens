@@ -1,8 +1,8 @@
 # Migrating from v1.3.x to Operational Readiness Review (ORR) core lens 2.0.0
 
 This guide moves an existing ORR custom lens, and the workloads that use it, from v1.3.x (usually v1.3.6) to core
-lens 2.0.0. The ORR - Mission-Critical Event Readiness companion is a new lens: install it with the first-install
-steps in the [README](README.md#first-install).
+lens 2.0.0. The ORR - Mission-Critical Event Readiness and ORR - Generative AI and Agents companions are new
+lenses: install them with the first-install steps in the [README](README.md#first-install).
 
 What to expect:
 

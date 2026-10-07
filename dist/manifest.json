@@ -39,6 +39,24 @@
       "latest_alias": "orr-event.json",
       "latest_min_alias": "orr-event.min.json",
       "source_commit": null
+    },
+    {
+      "key": "genai",
+      "name": "ORR - Generative AI and Agents",
+      "version": "1.0.0",
+      "schemaVersion": "2021-11-01",
+      "pillars": 3,
+      "questions": 9,
+      "statements": 25,
+      "file": "orr-genai-1.0.0.json",
+      "sha256": "4542b7600d7d39dd7a42ea77329688acb6c90753817d333026ae3072f322abf7",
+      "bytes": 88688,
+      "min_file": "orr-genai-1.0.0.min.json",
+      "min_sha256": "5ac2d8cc426ff5146258c4aa87b127dd76e2a7ef02b1d790921b75d6e99faf57",
+      "min_bytes": 71281,
+      "latest_alias": "orr-genai.json",
+      "latest_min_alias": "orr-genai.min.json",
+      "source_commit": null
     }
   ]
 }

@@ -97,6 +97,12 @@ def load_wa_bps(root: Path):
         return df
     items, df.meta, df.extra = _items(raw, ("best_practices", "practices", "bps", "entries"))
     fv = _first(df.meta, "framework_version", "version")
+    # Optional top-level `lenses:` mapping: <lens key> -> {name, version, source}, for the AI lens sources.
+    lens_meta = df.extra.get("lenses") if isinstance(df.extra.get("lenses"), dict) else {}
+    for lk in lens_meta:
+        if lk not in C.WA_BP_SOURCES or lk == C.WA_FRAMEWORK:
+            df.problems.append(f"{C.DATA_WA_BPS}: lenses: unknown lens {lk!r} (known: "
+                               f"{', '.join(k for k in C.WA_BP_SOURCES if k != C.WA_FRAMEWORK)})")
     for it in items:
         if not isinstance(it, dict):
             df.problems.append(f"{C.DATA_WA_BPS}: entry is not a mapping: {it!r}")
@@ -107,12 +113,34 @@ def load_wa_bps(root: Path):
             "title": _s(_first(it, "title", "name")),
             "url": _s(_first(it, "url", "link")),
             "level_of_risk": _s(_first(it, "level_of_risk", "risk", "level", "risk_level")).capitalize(),
-            "framework_version": _s(_first(it, "framework_version", default=fv)),
+            "lens": _s(_first(it, "lens", default=C.WA_FRAMEWORK)),
             "alt_urls": [_s(u) for u in (_first(it, "alt_urls", default=[]) or []) if _s(u)],
         }
+        is_fw = e["lens"] == C.WA_FRAMEWORK
+        lm = lens_meta.get(e["lens"]) if isinstance(lens_meta.get(e["lens"]), dict) else {}
+        # framework_version applies to Framework practices only; an AI lens practice records its lens's version
+        e["framework_version"] = _s(_first(it, "framework_version", default=fv)) if is_fw else ""
+        e["lens_version"] = "" if is_fw else _s(_first(it, "lens_version", default=_first(lm, "version")))
+        e["source_name"] = C.WA_BP_SOURCES.get(e["lens"], {}).get("name", e["lens"])
         if not bp:
             df.problems.append(f"{C.DATA_WA_BPS}: entry without id: {it!r}")
             continue
+        if e["lens"] not in C.WA_BP_SOURCES:
+            df.problems.append(f"{C.DATA_WA_BPS}: {bp}: unknown lens {e['lens']!r} (known: "
+                               f"{', '.join(C.WA_BP_SOURCES)})")
+        else:
+            src = C.WA_BP_SOURCES[e["lens"]]
+            if C.wa_bp_source(bp) != e["lens"]:
+                df.problems.append(f"{C.DATA_WA_BPS}: {bp} does not have the {src['name']} id format"
+                                   + ("" if is_fw else f" (set lens: {C.wa_bp_source(bp)})"
+                                      if C.wa_bp_source(bp) else ""))
+            for u in [e["url"]] + e["alt_urls"]:
+                if u and not any(u.startswith(f"https://docs.aws.amazon.com/wellarchitected/latest/{d}/")
+                                 for d in src["url_dirs"]):
+                    df.problems.append(f"{C.DATA_WA_BPS}: {bp}: {u} is not a {src['name']} page "
+                                       f"(docs.aws.amazon.com/wellarchitected/latest/{'|'.join(src['url_dirs'])}/)")
+            if not is_fw and not e["lens_version"]:
+                df.problems.append(f"{C.DATA_WA_BPS}: {bp}: no lens_version (set lenses.{e['lens']}.version)")
         for k in ("title", "url", "level_of_risk"):
             if not e[k]:
                 df.problems.append(f"{C.DATA_WA_BPS}: {bp} has no {k}")

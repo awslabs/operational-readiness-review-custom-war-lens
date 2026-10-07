@@ -1,0 +1,82 @@
+schema: orrlens/question/1
+id: gai_observability
+pillar: gai_operate
+order: 10
+title: Proven telemetry coverage and per-request attribution
+max_risk: MEDIUM
+priority: P1
+core_path: false
+category: Event detection
+lineage: []
+choice_prefix: obs_
+description:
+  question: >-
+    Would your existing monitoring see every inference endpoint, alarm when its logs stop arriving, and show
+    responders which capacity option, Region and versions served each request?
+  evidence_to_collect: >-
+    the inference endpoints in use and the test call found in the logs and audit trail for each. The log delivery
+    alarms. A sample request log with its version, capacity and Region fields.
+helpful:
+  display_text: OPS08-BP04 Create actionable alerts (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_create_alerts.html
+statements:
+  - id: obs_all_paths
+    tier: sec
+    title: A test call through each inference endpoint in use appeared in invocation logs and audit events, and log delivery failures alarm
+    concept: genai-telemetry-covers-all-endpoints
+    wa_bp: SEC04-BP01
+    good: >-
+      For every inference endpoint in use, in every account and Region, including fallback paths, a test call was
+      found in the request logs and the audit trail (CloudTrail data events where inference is a data event), and
+      log delivery failures alarm. What to log and how to protect it are owned by the Generative AI Lens and the
+      core statement on centralized, tamper-resistant audit and workload logs.
+    platform_notes: >-
+      Amazon Bedrock: model invocation logging covers bedrock-runtime but not bedrock-mantle, whose inference calls
+      are CloudTrail data events (as of 2026-10-07). Alarm on the ModelInvocationLogs delivery failure metrics.
+      AgentCore service spans need CloudWatch Transaction Search. Amazon SageMaker AI, self-hosted and third-party
+      APIs: log requests in your application or gateway.
+    partition_notes: >-
+      As of 2026-10-07, the AWS GovCloud (US) User Guide lists CloudWatch Transaction Search as not available there,
+      so instead emit spans and request logs from your agent code and find the test call in them.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
+    improvement: >-
+      List every inference endpoint, account and Region the workload uses, including fallback paths. Send a tagged
+      test call through each and find it in the invocation or request logs and in CloudTrail. Turn on what is
+      missing (model invocation logging, CloudTrail data events for bedrock-mantle, request logs in the application
+      or serving layer, which SageMaker AI and self-hosted models need), and alarm on log delivery failures and on a
+      sudden drop in log volume. Logging is configured per Region, so repeat the test call in each Region, and
+      whenever an endpoint, model or Region is added.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/logging-cloudtrail-mantle.html
+    additional_helpful:
+      - display_text: Amazon Bedrock runtime metrics, including invocation log delivery metrics
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+      - display_text: Enabling AgentCore observability (CloudWatch Transaction Search)
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-configure.html
+  - id: obs_version_attribution
+    tier: sec
+    title: Request logs record the serving capacity option and Region, plus model, prompt and guardrail versions (or spans carry them)
+    concept: genai-request-version-attribution
+    wa_bp: OPS04-BP02
+    good: >-
+      Every request log, or the trace it links to, carries the capacity option or service tier that served the
+      request and the Region that processed it, so responders can see silent overflow to another tier or
+      cross-Region routing. Where no agent framework records them, it also carries the model or inference profile,
+      prompt and guardrail versions. This adds generative AI fields to the core structured logging statement.
+    platform_notes: >-
+      Amazon Bedrock: the served service tier is in the API response and CloudTrail events and is a CloudWatch
+      dimension (ResolvedServiceTier). For cross-Region inference, CloudTrail records the processing Region in
+      additionalEventData.inferenceRegion (as of 2026-10-07). Agent frameworks that follow the OpenTelemetry
+      generative AI semantic conventions record model attributes in their spans. Amazon SageMaker AI: endpoint,
+      variant or inference component name. Third-party APIs: the model version string the provider returns.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/service-tiers-inference.html
+    improvement: >-
+      Add the served tier or capacity option, the processing Region, the model or inference profile ID, and the
+      prompt and guardrail versions to the structured log schema at the point where the response is received. Check
+      a sample of production logs for the fields, and add them to the incident dashboard so responders can filter by
+      them.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_application_telemetry.html
+    additional_helpful:
+      - display_text: Cross-Region inference in Amazon Bedrock (processing Region in CloudTrail)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+      - display_text: Enabling AgentCore observability (frameworks with OpenTelemetry GenAI semantic conventions)
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/observability-configure.html

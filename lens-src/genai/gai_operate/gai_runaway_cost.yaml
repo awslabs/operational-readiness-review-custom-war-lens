@@ -1,0 +1,127 @@
+schema: orrlens/question/1
+id: gai_runaway_cost
+pillar: gai_operate
+order: 30
+title: Token budgets per caller and a spend stop faster than billing data
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Defense against customers
+lineage: []
+choice_prefix: sp_
+description:
+  question: >-
+    Can one caller, bug or agent loop run up model spend faster than you can see it in billing, and is there a
+    tested way to find and stop it?
+  evidence_to_collect: >-
+    the token or cost budget per caller type and where it is enforced. The spend-stop trigger, threshold and the
+    record of its last test. How on-call identifies the caller behind a spike.
+helpful:
+  display_text: REL05-BP02 Throttle requests (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_throttle_requests.html
+statements:
+  - id: sp_token_budgets
+    tier: core
+    title: Token or cost budgets per user, tenant or key are enforced before each call (or one trusted caller is capped by the spend stop)
+    concept: genai-per-caller-token-budgets
+    severity_basis: "wa:REL05-BP02 (High)"
+    wa_bp: REL05-BP02
+    good: >-
+      Every caller type, including anonymous, trial and internal callers, has a token or cost budget per period,
+      checked at the entry point before each model call, not only a request-rate limit. One trusted internal caller
+      meets this by recording that this question's spend stop caps it. Per-task and per-day agent budgets are scored
+      by the Agentic AI Lens (AGENTCOST07-BP01). This statement scores budgets per caller identity and extends the
+      core per-source limits statement, which owns request limits, to the token unit.
+    platform_notes: >-
+      AgentCore Gateway token rate limits are per minute, cover only known inference paths, fail open by default and
+      can be briefly exceeded (as of 2026-10-07), so daily or monthly budgets need your own meter. Amazon API Gateway
+      usage plans are best-effort and do not count tokens.
+    partition_notes: >-
+      As of 2026-10-07, AWS Capabilities by Region lists AgentCore Gateway rate limits in AWS GovCloud (US-West).
+      Test them in your GovCloud account before relying on them.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-token-burndown.html
+    improvement: >-
+      Agree a budget per caller type and period with the business owner. Meter tokens per caller from the usage
+      fields in each response, check the remaining budget at the entry point before every model call (in your own
+      gateway for self-hosted and third-party models), and return a clear over-budget response. Test with one caller
+      generating a surge while others keep working. Cost per request varies by orders of magnitude with tokens, and on
+      Amazon Bedrock output tokens of some models count against quotas at a higher burndown rate, so size budgets in
+      tokens, not requests.
+    improvement_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rate-limits.html
+    additional_helpful:
+      - display_text: AgentCore Gateway rate limit best practices (token limits and supported paths)
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rate-limits-best-practices.html
+      - display_text: OWASP GenAI LLM Top 10 2026 (genai.owasp.org)
+        url: https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/
+  - id: sp_spend_stop
+    tier: core
+    title: An automated stop or degrade, driven by near-real-time token metrics, halts model use at an approved ceiling, and was tested
+    concept: genai-spend-stop-tested
+    severity_basis: >-
+      deviation:AWS Budgets data updates up to three times a day and Cost Anomaly Detection can take up to 24 hours,
+      so billing-based controls cannot stop runaway token spend in time. For agent workloads, the Agentic AI Lens
+      rates per-agent cutoffs and agent cost anomaly detection High (AGENTCOST07-BP01 and AGENTCOST07-BP02). This
+      statement scores what those practices do not: one tested ceiling across all model use, including non-agent
+      and third-party calls, where the Framework practices REL05-BP07 and COST02-BP05 are rated Medium. An untested
+      stop is assumed not to work.
+    wa_bp: COST02-BP05
+    good: >-
+      One ceiling approved by the business owner covers all model use, including non-agent and third-party calls.
+      An alarm on token metrics, or your own meter, triggers automation, independent of the code that might run
+      away, that disables the feature, switches to a cheaper mode or applies a deny policy, and the stop was
+      exercised. Per-agent cutoffs, graduated throttling and agent cost anomaly detection are scored
+      by the Agentic AI Lens (AGENTCOST07-BP01 and BP02). The core usage-rate alarm statement owns alerting.
+    platform_notes: >-
+      Amazon Bedrock: alarms on AWS/Bedrock do not see bedrock-mantle traffic, which publishes token metrics to
+      AWS/BedrockMantle (as of 2026-10-07). Levers: an AWS AppConfig feature flag, a deny policy, or scaling
+      SageMaker AI endpoints down.
+    partition_notes: >-
+      As of 2026-10-07, AWS GovCloud (US) billing data is viewed from the associated standard account, and AWS
+      Budgets actions cannot act on GovCloud resources, so build the stop and its backstop in-partition.
+    helpful_url: https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html
+    improvement: >-
+      Set the ceiling with the business owner. Alarm on token metrics in both namespaces (InputTokenCount and
+      OutputTokenCount in AWS/Bedrock, TotalInputTokens and TotalOutputTokens in AWS/BedrockMantle), or on your own
+      per-caller meter, and wire the alarm to automation that flips a feature flag, switches to a cheaper mode or
+      applies a deny policy. Exercise the stop in pre-production and record how long it took. Outside AWS GovCloud
+      (US), keep an AWS Budgets action as a backstop. For third-party APIs, combine provider spend limits with your own meter.
+    improvement_url: https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-controls.html
+    additional_helpful:
+      - display_text: Amazon Bedrock runtime metrics in CloudWatch (token counts)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+      - display_text: Detection delay of Cost Anomaly Detection
+        url: https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html
+      - display_text: Monitor bedrock-mantle inference using CloudWatch metrics (AWS/BedrockMantle)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-mantle-metrics.html
+    additional_improvement:
+      - display_text: AWS AppConfig feature flags
+        url: https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile-feature-flags.html
+  - id: sp_spike_source
+    tier: sec
+    title: In a token or spend spike, near-real-time metrics or logs name the responsible application, tenant or key within minutes
+    concept: genai-spend-spike-source-identified
+    wa_bp: COST01-BP06
+    good: >-
+      Per-caller token metrics from response usage fields, the Project dimension of AWS/BedrockMantle metrics, or
+      invocation logs that record the caller identity and per-request metadata, let on-call name the application,
+      tenant or key behind a spike within minutes, so the
+      spend stop or the core per-source lever can target it. Cost allocation and tagging for billing are owned by the
+      Framework cost pillar and the Agentic AI Lens.
+    platform_notes: >-
+      Amazon Bedrock: invocation logs record the caller's IAM principal and, for InvokeModel and Converse, request
+      metadata. For Responses or Chat Completions, use IAM principal attribution or Projects on bedrock-mantle
+      (Workspaces for Anthropic Messages) (as of 2026-10-07).
+    partition_notes: >-
+      As of 2026-10-07, application inference profiles are listed in both AWS GovCloud (US) Regions, and GovCloud
+      billing data is in the associated standard account, so find spikes from in-partition metrics and logs.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
+    improvement: >-
+      Emit per-caller token metrics or add request metadata to invocation logs, build a top-callers query or
+      dashboard, and rehearse finding the source of a synthetic spike within minutes. AgentCore harness: read token
+      usage from the invocation-stream metadata events. Third-party APIs: meter the response usage fields.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-invocation-logging.html
+    additional_helpful:
+      - display_text: Application inference profiles for cost attribution (Amazon Bedrock)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/cost-mgmt-application-inference-profiles.html
+      - display_text: Cost management for Amazon Bedrock
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/cost-management.html

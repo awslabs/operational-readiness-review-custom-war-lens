@@ -13,6 +13,45 @@ Releases from 2.0.0 onward are dated tags that attach every lens file, `manifest
 files are never edited; fixes ship as a new version. Entries for v1.3.2 to v1.3.6 were reconstructed from the
 repository history.
 
+## [2026-10-07] ORR - Generative AI and Agents 1.0.0
+
+ORR - Generative AI and Agents 1.0.0, a new companion lens for workloads that call foundation models or run AI
+agents. Install it with **Create custom lens** and attach it alongside the core review, as part of the pre-launch
+ORR.
+
+### Added
+
+- **9 questions and 25 scored statements in 3 pillars:**
+  - 01 - Models, capacity and dependencies: `gai_inventory_routing` (model lifecycle and where inference
+    runs), `gai_capacity_quotas` (token quotas and inference capacity sized from real request shape) and
+    `gai_dependency_fallback` (incomplete model output and fallback model readiness).
+  - 02 - Change safety and evaluation: `gai_change_safety` (pinned versions and quality-checked rollout for model,
+    prompt and guardrail changes) and `gai_quality_evaluation` (a quality gate on every change path, and retrieval
+    freshness).
+  - 03 - Operations and safeguards: `gai_observability` (proven telemetry coverage and per-request attribution,
+    capped at Medium), `gai_safeguards` (safeguards that every call path enforces and that fail safely),
+    `gai_runaway_cost` (token budgets per caller and a spend stop faster than billing data) and `gai_agent_bounds`
+    (agent actions pass one enforced control point and can be stopped fast).
+- **Complements the AWS Generative AI, Agentic AI and Responsible AI lenses.** Apply those lenses as well. This
+  companion scores only launch-readiness and operational failure modes they do not score, such as provider-set
+  model end-of-life dates, token reservation arithmetic, incomplete output returned as success, safeguards that
+  fail open and agent tool calls that bypass the enforcing control point. Each statement was checked against the
+  closest best practice in those lenses, and statements that would restate one were left out.
+- **Builds on the core lens instead of scoring it again.** Practices the core lens owns, such as timeouts and
+  retries, phased rollout, alarms, on-call, expiring materials and production access, are not scored again. Where
+  a statement extends a core practice, its helpful text names the core statement.
+- The same tier-generated scoring and CI-proven properties as the core lens, dated AWS GovCloud (US) partition
+  notes, and a public source for every bar.
+- Version-free release copies `orr-genai.json` and `orr-genai.min.json`.
+- Documentation: the lens family table, quick start, usage model, running guide (`running-an-orr.md`), scoring
+  deviations (`scoring.md`), FAQ, customizing guide, GovCloud (US) notes and design decision D-1 now include the
+  generative AI companion.
+
+### Unchanged
+
+- The core lens stays at 2.0.0 and ORR - Mission-Critical Event Readiness stays at 1.0.0. Their content, IDs,
+  rules and release files are unchanged, so workloads that use them need no upgrade.
+
 ## [2026-10-06] core 2.0.0 and ORR - Mission-Critical Event Readiness 1.0.0
 
 ### Core lens 2.0.0

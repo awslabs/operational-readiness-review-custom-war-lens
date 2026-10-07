@@ -1,0 +1,143 @@
+schema: orrlens/question/1
+id: gai_agent_bounds
+pillar: gai_operate
+order: 40
+title: Agent actions pass one enforced control point and can be stopped fast
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Blast radius containment
+lineage: []
+choice_prefix: ab_
+description:
+  question: >-
+    If an agent misbehaves, are its actions blocked by controls it cannot bypass, and can an operator stop it and
+    its running sessions within minutes?
+  out_of_scope_if: >-
+    no agent or model output can call a tool or trigger an action with side effects. Select the first statement and
+    keep the tool list and permissions as evidence.
+  evidence_to_collect: >-
+    the tool list with read or write classification. The enforcement point, its mode, the backend resource policies
+    and who can change them. The stop procedure and the record of its last exercise with time to stop. The
+    runaway-loop test result.
+helpful:
+  display_text: SEC03-BP02 Grant least privilege access (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_least_privileges.html
+statements:
+  - id: ab_no_actions
+    tier: scope
+    title: No agent or model output can call a tool or trigger an action that changes state, sends data out or runs code
+    concept: genai-agent-scope-no-actions
+    good: >-
+      Model output is only shown to people who decide what to do. Evidence to collect: the tool list, and the
+      execution role and gateway target permissions showing no write, send or execute capability.
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec02-bp01.html
+    improvement: >-
+      If any tool or action has side effects, this scope exit does not apply: answer the other statements.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentic-ai-lens.html
+  - id: ab_single_enforcement
+    tier: core
+    title: No agent can reach a tool backend except through the enforcing authorization point, and changes to its mode or attachment alarm
+    concept: genai-agent-tool-enforcement-point
+    severity_basis: "wa:SEC03-BP02 (High)"
+    wa_bp: SEC03-BP02
+    good: >-
+      Tool backends, and any agent runtime behind a gateway, accept calls only from the enforcing gateway
+      or authorization service. Only a small named group can change its mode or policy attachment, and
+      those changes alarm. Least privilege is scored by the core access review statement, and tool authorization
+      policy and LOG_ONLY validation by the Agentic AI Lens (AGENTSEC02-BP01). This statement scores that the
+      enforcement point cannot be bypassed or silently weakened.
+    platform_notes: >-
+      AgentCore: a gateway whose policy engine is attached in LOG_ONLY mode lets every tool call succeed, and
+      UpdateGateway can switch the mode or remove the engine (as of 2026-10-07).
+    partition_notes: >-
+      As of 2026-10-07, the AWS GovCloud (US) User Guide lists AgentCore in AWS GovCloud (US-West) without guardrails
+      in policies, temporal policies or the Policy and PolicyEngine CloudFormation resources (use the API).
+    reader_note: >-
+      Never shadow a policy by switching the whole gateway to LOG_ONLY: that stops all enforcement.
+    helpful_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-enforcement-modes.html
+    improvement: >-
+      Restrict each tool backend, and any runtime target, with a resource or IAM policy that admits only the
+      gateway's role (AgentCore Runtime targets can be restricted so that only the gateway can invoke them). Use the
+      gateway service role (IAM SigV4) for outbound auth where possible. With caller credentials, OAuth or token
+      passthrough, restrict backends to credentials or audiences that only the gateway can obtain. Check the
+      policyEngineConfiguration mode of every gateway. No separate condition key protects the mode beyond
+      bedrock-agentcore:UpdateGateway, so limit UpdateGateway and policy engine changes to a named group, and alarm
+      on those calls through CloudTrail. Review the tool list and backend policies at each release. With other
+      frameworks, put tool calls behind one service that authorizes them and deny direct access to the backends.
+    improvement_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-enforcement-modes.html
+    additional_helpful:
+      - display_text: Test a policy in LOG_ONLY mode (AgentCore Policy)
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/policy-test-a-policy.html
+      - display_text: AgentCore Runtime gateway targets (enforcing traffic through the gateway)
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-target-http-runtime.html
+      - display_text: Security Hub CSPM controls for Amazon Bedrock AgentCore
+        url: https://docs.aws.amazon.com/securityhub/latest/userguide/bedrockagentcore-controls.html
+      - display_text: OWASP Top 10 for Agentic Applications for 2026 (genai.owasp.org)
+        url: https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/
+  - id: ab_stop_exercised
+    tier: sec
+    title: An operator-initiated stop of all agent actions, which also ends in-flight sessions, was exercised and its time to stop recorded
+    concept: genai-agent-stop-exercised
+    wa_bp: REL05-BP07
+    good: >-
+      Operators can, within the minutes the runbook states, block new tool calls for all agents with a
+      deny-all policy or flag and end in-flight sessions, on a path that does not depend on the agent runtime, and
+      did so in pre-production or a game day with the time recorded. Per-agent containment, credential revocation
+      and recurring containment tests are scored by the Agentic AI Lens (AGENTSEC07-BP04). It is separate from the
+      event lens's feature switches and the core single-source lever.
+    platform_notes: >-
+      AgentCore (as of 2026-10-07): a forbid-all policy at the gateway, a harness before_invocation Lambda hook
+      that returns deny (a before_tool_call deny only skips one tool call and the loop continues),
+      StopRuntimeSession for each active session ID, and an IAM deny on the execution roles. Lambda hook
+      failureMode defaults to deny.
+    partition_notes: >-
+      As of 2026-10-07, AWS Capabilities by Region lists the harness control-plane APIs and StopRuntimeSession in
+      AWS GovCloud (US-West). Exercise each lever there.
+    helpful_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-stop-session.html
+    improvement: >-
+      Write the stop runbook: who decides, the deny-all lever for all agents, and how in-flight sessions are ended.
+      Keep a current record of active session IDs (for example from invocation logs) so StopRuntimeSession can be
+      called for each one. Implement each lever on a path that does not depend on the agent runtime, rehearse it in
+      pre-production or a game day, and record the time from the decision to the last tool call. On AgentCore,
+      StopRuntimeSession shares the runtime data plane quota, and a gateway rate limit of 0 takes up to 30 seconds
+      and rate limits fail open by default, so do not rely on a rate limit alone (as of 2026-10-07).
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html
+    additional_helpful:
+      - display_text: Harness lifecycle hooks (AgentCore)
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-lifecycle-hooks.html
+      - display_text: Add rate limits to a gateway (AgentCore)
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/gateway-rate-limits.html
+      - display_text: AgentCore service quotas
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/bedrock-agentcore-limits.html
+      - display_text: Agentic AI Lens - Behavioral anomaly detection and agent containment (AGENTSEC07-BP04)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/agentic-ai-lens/agentsec07-bp04.html
+  - id: ab_limits_proven
+    tier: sec
+    title: A runaway-loop test ended the session at its limits with a defined result and an alert, and callers cannot override the limits
+    concept: genai-agent-limits-proven
+    good: >-
+      Per-call overrides of the limits from untrusted callers are removed, and a pre-production test with a tool that always fails, or with contradictory
+      instructions, ended the session at its limits with a defined result and an alert. The limits themselves are
+      scored by the Generative AI and Agentic AI lenses.
+    platform_notes: >-
+      AgentCore harness defaults as of 2026-10-07: maxIterations 75, timeoutSeconds 3600 and no maxTokens budget,
+      and each can be overridden on a single invocation. The model field also accepts additionalParams that are
+      passed to the provider unchanged, and skills can point the harness at arbitrary S3 or Git sources, so strip
+      or allowlist these overrides when callers are not fully trusted. Lifecycle hooks cannot be overridden per
+      invocation.
+    partition_notes: >-
+      As of 2026-10-07, AWS Capabilities by Region lists the AgentCore harness control-plane APIs in AWS GovCloud
+      (US-West), and the AWS GovCloud (US) newsletter, issue 07, announces Managed Harness there.
+    helpful_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-operations.html
+    improvement: >-
+      Strip or allowlist per-call overrides (model, limits, skills, additional parameters) at the entry point, add the runaway-loop test
+      to pre-production, and alert on sessions that end at a limit.
+    improvement_url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-security.html
+    additional_helpful:
+      - display_text: AgentCore Runtime lifecycle settings (idle timeout and maximum lifetime)
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-lifecycle-settings.html
+      - display_text: Security best practices for AgentCore Runtime
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-security-best-practices.html
+      - display_text: AWS GovCloud (US) newsletter, issue 07 (AgentCore Memory, Policy and Managed Harness in US-West)
+        url: https://aws.amazon.com/govcloud-us/newsletter/newsletter-issue-07/

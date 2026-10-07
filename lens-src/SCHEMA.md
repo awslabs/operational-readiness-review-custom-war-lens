@@ -10,6 +10,8 @@ lens-src/
   core/<pillar_id>/<question_id>.yaml  one file per question
   event/lens.yaml
   event/<pillar_id>/<question_id>.yaml
+  genai/lens.yaml
+  genai/<pillar_id>/<question_id>.yaml
   templates/org-addon.yaml             starter add-on lens (generated to templates/org-addon-lens.json)
 ```
 
@@ -17,7 +19,7 @@ lens-src/
 
 ```yaml
 schema: orrlens/lens/1
-key: core                  # core | event (folder name)
+key: core                  # core | event | genai (must equal the folder name)
 name: AWS Operational Readiness Review   # <= 128 characters; must equal the published lens name (gate G8)
 version: 2.0.0             # SemVer; WA version name uses the same string (alphanumerics and periods only)
 file_stem: orr-core        # dist/<file_stem>-<version>.json, plus version-free copies at release
@@ -57,6 +59,7 @@ statements:                             # 1-4 statements, in display order
     concept: per-source-rate-limits     # kebab-case; one owning statement per concept across all lenses
     severity_basis: "wa:REL05-BP02 (High)"   # required for core and alt tiers (see below)
     wa_bp: REL05-BP02                   # optional; a Well-Architected best-practice id in data/wa-best-practices.yaml
+                                        # (Framework, or Generative AI, Agentic AI or Responsible AI lens)
     large_scale: false                  # optional; sec only: practice sized for very large or multi-tenant workloads
     good: >-                            # rendered as "Good looks like: ..."
       Every entry point enforces a limit per caller identity ...
@@ -114,7 +117,10 @@ Constraints:
 ### `severity_basis`
 
 Required on `core` and `alt:` statements. One of:
-- `wa:<BP-ID> (High)`: a Well-Architected best practice whose level of risk is High;
+- `wa:<BP-ID> (High)`: a Well-Architected best practice whose level of risk is High. The id is a Framework id
+  (`REL05-BP02`) or an AWS Well-Architected lens id: Generative AI Lens `GEN<pillar>NN-BPNN` (`GENOPS01-BP01`),
+  Agentic AI Lens `AGENT<pillar>NN-BPNN` (`AGENTSEC02-BP01`) or Responsible AI Lens `RAI<area>NN-BPNN`
+  (`RAISP01-BP01`). It must be recorded in `data/wa-best-practices.yaml` (lens BPs with a `lens` field);
 - `wp-orr:<example>`: an example question that the AWS ORR whitepaper scores High risk;
 - `deviation:<written rationale>`: the lens rates the practice higher than the Framework; the rationale is
   published in `docs/scoring.md`.

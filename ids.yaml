@@ -7,6 +7,7 @@ schema: orrlens/ids/1
 lenses:
   core: {current_version: "2.0.0"}
   event: {current_version: "1.0.0"}
+  genai: {current_version: "1.0.0"}
 v1_versions: ["1.3.2", "1.3.3", "1.3.4", "1.3.5", "1.3.6"]
 reserved:
   prefixes:
@@ -17,6 +18,9 @@ pillars:
   evt_after: {lens: event, status: active, introduced: "1.0.0"}
   evt_operate: {lens: event, status: active, introduced: "1.0.0"}
   evt_prepare: {lens: event, status: active, introduced: "1.0.0"}
+  gai_models: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_operate: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_release: {lens: genai, status: active, introduced: "1.0.0"}
   readiness_decision: {lens: core, status: active, introduced: "2.0.0"}
   release_quality: {lens: core, status: active, introduced: "1.3.2"}
 questions:
@@ -78,6 +82,15 @@ questions:
   evt_post_event: {lens: event, status: active, introduced: "1.0.0"}
   evt_rehearsal: {lens: event, status: active, introduced: "1.0.0"}
   evt_war_room: {lens: event, status: active, introduced: "1.0.0"}
+  gai_agent_bounds: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_capacity_quotas: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_change_safety: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_dependency_fallback: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_inventory_routing: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_observability: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_quality_evaluation: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_runaway_cost: {lens: genai, status: active, introduced: "1.0.0"}
+  gai_safeguards: {lens: genai, status: active, introduced: "1.0.0"}
   readiness_signoff: {lens: core, status: active, introduced: "2.0.0"}
   releases_canaries: {lens: core, status: retired, introduced: "1.3.2", retired: "2.0.0"}
   releases_canary_errors: {lens: core, status: retired, introduced: "1.3.2", retired: "2.0.0"}
@@ -403,6 +416,40 @@ choices:
   "evt_war_room/wr_escalation_tree": {lens: event, status: active, introduced: "1.0.0"}
   "evt_war_room/wr_shared_channel": {lens: event, status: active, introduced: "1.0.0"}
   "evt_war_room/wr_staffing": {lens: event, status: active, introduced: "1.0.0"}
+  "gai_agent_bounds/ab_limits_proven": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_agent_bounds/ab_no_actions": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_agent_bounds/ab_single_enforcement": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_agent_bounds/ab_stop_exercised": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_agent_bounds/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_capacity_quotas/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_capacity_quotas/tk_capacity_option": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_capacity_quotas/tk_token_sizing": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_capacity_quotas/tk_traffic_isolated": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_change_safety/mc_pinned_versions": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_change_safety/mc_quality_in_rollout": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_change_safety/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_dependency_fallback/fb_fallback_parity": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_dependency_fallback/fb_fallback_warm": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_dependency_fallback/fb_stop_reasons": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_dependency_fallback/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_inventory_routing/mi_lifecycle_tracked": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_inventory_routing/mi_routing_approved": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_inventory_routing/mi_routing_enforced": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_inventory_routing/mi_successor_ready": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_inventory_routing/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_observability/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_observability/obs_all_paths": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_observability/obs_version_attribution": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_quality_evaluation/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_quality_evaluation/qe_gate_blocks": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_quality_evaluation/qe_retrieval_fresh": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_runaway_cost/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_runaway_cost/sp_spend_stop": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_runaway_cost/sp_spike_source": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_runaway_cost/sp_token_budgets": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_safeguards/none_no": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_safeguards/sg_enforced_outside_code": {lens: genai, status: active, introduced: "1.0.0"}
+  "gai_safeguards/sg_fail_closed": {lens: genai, status: active, introduced: "1.0.0"}
   "readiness_signoff/none_no": {lens: core, status: active, introduced: "2.0.0"}
   "readiness_signoff/rd_criteria_owner": {lens: core, status: active, introduced: "2.0.0"}
   "readiness_signoff/rd_highs_dispositioned": {lens: core, status: active, introduced: "2.0.0"}

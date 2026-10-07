@@ -5,7 +5,7 @@ Run from the repository root, either way:
   PYTHONPATH=tools python3 -m orrlens <command> ...
 
 Commands:
-  build [--lens core|event|all] [--candidate rcN]   render dist/ (or a sandbox candidate into build/)
+  build [--lens core|event|genai|all] [--candidate rcN]   render dist/ (or a sandbox candidate into build/)
   check [--offline] [--lens ...] [--only a,b] [--skip a,b] [--verbose]
   links [--changed-only <git-ref>] [--strict-redirects] [--report <path>]
   docs                                              regenerate the generated docs and blocks
@@ -54,6 +54,10 @@ def cmd_build(args) -> int:
         if lens.errors:
             print(f"not built: {lens.key} has {len(lens.errors)} source error(s):", file=sys.stderr)
             _print_errors(lens)
+            rc = 1
+            continue
+        if not lens.valid_questions:
+            print(f"not built: {lens.key} has no questions yet", file=sys.stderr)
             rc = 1
             continue
         version = lens.version + (args.candidate or "")
@@ -181,9 +185,9 @@ def cmd_table(args) -> int:
 
 def cmd_manifest(args) -> int:
     ctx = CK.make_context(ROOT)
-    bad = [lens.key for lens in ctx.lenses if lens.errors]
+    bad = [lens.key for lens in ctx.lenses if lens.errors or not lens.valid_questions]
     if bad:
-        print(f"refusing to write a manifest: source errors in {', '.join(bad)}", file=sys.stderr)
+        print(f"refusing to write a manifest: source errors or no questions in {', '.join(bad)}", file=sys.stderr)
         return 1
     fails, _ = CK.check_reproducibility(ctx)
     fails = [f for f in fails if "manifest" not in f and "SHA256SUMS" not in f]
@@ -194,6 +198,8 @@ def cmd_manifest(args) -> int:
         return 1
     for n in MAN.write(ctx, Path(args.release_dir).resolve() if args.release_dir else None):
         print(n)
+    for f in CK.release_copy_problems(ctx):
+        print(f"warning: {f}")
     return 0
 
 
@@ -233,10 +239,10 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="orrlens", description=__doc__.split("\n\n")[0])
     sub = ap.add_subparsers(dest="cmd", required=True)
     b = sub.add_parser("build", help="render the lenses into dist/ (or a candidate into build/)")
-    b.add_argument("--lens", default="all")
+    b.add_argument("--lens", default="all", help="a lens key (core, event, genai) or all")
     b.add_argument("--candidate", help="build a sandbox candidate such as rc0 into build/ (never published)")
     c = sub.add_parser("check", help="run every check")
-    c.add_argument("--lens", default="all")
+    c.add_argument("--lens", default="all", help="a lens key (core, event, genai) or all")
     c.add_argument("--offline", action="store_true", help="skip network checks (links)")
     c.add_argument("--only", help="comma-separated check names")
     c.add_argument("--skip", help="comma-separated check names")

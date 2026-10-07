@@ -1,0 +1,103 @@
+schema: orrlens/question/1
+id: gai_safeguards
+pillar: gai_operate
+order: 20
+title: Safeguards that every call path enforces and that fail safely
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Security readiness
+lineage: []
+choice_prefix: sg_
+description:
+  question: >-
+    Can any call path, including fallback, streaming, batch and direct calls, reach a model without your
+    safeguards, and what happens when a safeguard check fails?
+  evidence_to_collect: >-
+    the owner-approved risk assessment that sets which safeguards are required. The IAM, organization or gateway
+    policy that requires them. The list of call paths with how each applies them and its streaming mode. The code
+    path and test result for safeguard errors and throttling.
+helpful:
+  display_text: Enforce guardrails in model inference (Amazon Bedrock)
+  url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-permissions-id.html
+statements:
+  - id: sg_enforced_outside_code
+    tier: core
+    title: Safeguards are enforced outside app code on every call path, including fallback and streaming (or risk assessment requires none)
+    concept: genai-safeguards-enforced-outside-code
+    severity_basis: >-
+      deviation:a guardrail applied only by application code is skipped by any new, fallback or direct call path,
+      and AWS documents enforcing guardrails through IAM conditions, organization policies and gateways.
+      GENSEC02-BP01 scores having guardrails, not enforcing them, and AGENTSEC04-BP01 scores layered guardrail design
+      for agents, not enforcement outside code.
+    wa_bp: SEC03-BP05
+    good: >-
+      Account or organization guardrail enforcement, an IAM deny on calls without the required guardrail version, or
+      a gateway on every path applies the safeguards the risk assessment requires, and the same enforcement, not
+      app code, covers fallbacks. Callers cannot narrow them: system prompts and messages are guarded
+      comprehensively, or the entry point strips guard-content tags. Logs show no unguarded calls. Layered agent
+      guardrail design (AGENTSEC04-BP01) and fallback guardrail parity (fallback question) are scored
+      elsewhere.
+    platform_notes: >-
+      Amazon Bedrock: enforcement and the bedrock:GuardrailIdentifier IAM condition key cover InvokeModel,
+      InvokeModelWithResponseStream, Converse and ConverseStream. With the IAM key, input tags can skip input
+      evaluation (responses are always evaluated).
+    partition_notes: >-
+      As of 2026-10-07, an AWS GovCloud (US) organization cannot use the Amazon Bedrock policies that
+      organization-level enforcement needs. Use account-level enforcement (both Regions) or the IAM deny.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-permissions-id.html
+    improvement: >-
+      Add account or organization guardrail enforcement or an IAM deny, applied to fallback paths too. Do not give a
+      role that carries the IAM condition key extra permissions for APIs such as RetrieveAndGenerate that make model
+      calls on its behalf. Set comprehensive guarding for system prompts and messages, or strip guard-content tags
+      at the entry point. Use synchronous streaming where blocking or masking is needed (asynchronous streaming
+      cannot mask sensitive data), and leave Automated Reasoning policies out of enforced guardrails. On
+      bedrock-mantle, the
+      OpenAI-compatible Chat Completions and Responses APIs, other providers and self-hosted models, apply the
+      safeguards in your own gateway (for example with ApplyGuardrail), because enforcement and the IAM key cover
+      only the four runtime APIs listed (as of 2026-10-07). For batch inference jobs, run ApplyGuardrail on outputs
+      before release, or deny batch actions to roles that do not need them. Alert on invocation logs without the
+      required guardrail.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-enforcements.html
+    additional_helpful:
+      - display_text: Configure streaming response behavior for guardrails (Amazon Bedrock)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-streaming.html
+      - display_text: Detect the absence of guardrails in Amazon Bedrock inference calls (AWS Compute Blog)
+        url: https://aws.amazon.com/blogs/compute/implementing-a-serverless-architecture-to-detect-absence-of-guardrails-in-amazon-bedrock-inference-api-calls/
+    additional_improvement:
+      - display_text: Using responsible AI principles with Amazon Bedrock Batch Inference (AWS Machine Learning Blog)
+        url: https://aws.amazon.com/blogs/machine-learning/using-responsible-ai-principles-with-amazon-bedrock-batch-inference/
+  - id: sg_fail_closed
+    tier: core
+    title: If a safeguard check errors, throttles or times out, the response is withheld or replaced, as tested (or none is required)
+    concept: genai-safeguards-fail-closed
+    severity_basis: "wa:REL05-BP01 (High)"
+    wa_bp: REL05-BP01
+    good: >-
+      With the timeouts the core statement requires, a safety-check error, throttle or timeout returns a safe
+      response (a refusal, a fixed message or a hand-off to a person), not the unchecked output, unless the business
+      owner approved an exception for low-risk outputs. Injected throttling and errors in pre-production showed
+      this. An owner-approved risk assessment that requires no runtime safeguard meets this statement. This extends
+      the core dependency fault injection statement to safeguards.
+    platform_notes: >-
+      Amazon Bedrock Guardrails: for ApplyGuardrail calls, alarm on AWS/Bedrock/Guardrails InvocationThrottles and
+      InvocationServerErrors. For inline or enforced guardrails, alarm on the model call's errors and throttles.
+      AgentCore harness Lambda hooks fail closed by default (failureMode deny).
+      Self-hosted and third-party safety checks need the same behavior.
+    partition_notes: >-
+      Check the guardrail quota values in Service Quotas in each AWS GovCloud (US) Region you use (as of
+      2026-10-07).
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-guardrails-cw-metrics.html
+    improvement: >-
+      Wrap every safeguard call with a timeout and an explicit failure branch that returns a safe response, and
+      record that decision in logs and metrics. In pre-production, inject safeguard throttling, errors and timeouts,
+      for example by stubbing the safeguard client, and confirm the safe response and the alarm. Enforced guardrails
+      count toward the calling account's guardrail quotas in Service Quotas, so size guardrail quotas from peak text
+      units with the model quotas and request increases where needed. Long inputs may need chunking to stay within the
+      ApplyGuardrail text unit rate.
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
+    additional_helpful:
+      - display_text: Guardrails enforcements, including quota consumption (Amazon Bedrock)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails-enforcements.html
+      - display_text: Use ApplyGuardrail with long-context inputs and streaming outputs (AWS Machine Learning Blog)
+        url: https://aws.amazon.com/blogs/machine-learning/use-the-applyguardrail-api-with-long-context-inputs-and-streaming-outputs-in-amazon-bedrock/

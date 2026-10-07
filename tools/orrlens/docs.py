@@ -146,16 +146,21 @@ def questions_md(lenses, rendered: dict) -> str:
 # ---------------------------------------------------------------------------
 
 def ownership_csv(lenses) -> str:
+    """One row per statement. orr_lens (the lens key: core, event, genai) is the last column, so readers of the
+    original four columns are unaffected."""
     rows = []
     for lens in lenses:
         for q in lens.valid_questions:
             absorbed = ";".join(q.get("lineage") or [])
             for s in q["statements"]:
-                rows.append([s["concept"], q["id"], s["id"], absorbed])
-    return _csv(rows, ["concept", "owner_question", "statement", "v1_ids_absorbed"])
+                rows.append([s["concept"], q["id"], s["id"], absorbed, lens.key])
+    return _csv(rows, ["concept", "owner_question", "statement", "v1_ids_absorbed", "orr_lens"])
 
 
 def wa_bp_csv(lenses, wa_bps) -> str:
+    """One row per statement with a wa_bp. framework_version is set for Framework practices only; bp_source names
+    the Framework or the AI lens that publishes the practice and bp_source_version its version (the Framework
+    version, or the lens publication date). New columns are appended after the original five."""
     entries = wa_bps.entries if wa_bps is not None else {}
     default_fv = (wa_bps.meta.get("framework_version") if wa_bps is not None else "") or ""
     rows = []
@@ -166,9 +171,14 @@ def wa_bp_csv(lenses, wa_bps) -> str:
                 if not bp:
                     continue
                 e = entries.get(bp, {})
-                rows.append([s["id"], bp, e.get("title", ""), e.get("url", ""),
-                             e.get("framework_version") or default_fv])
-    return _csv(rows, ["statement_id", "wa_bp", "bp_title", "bp_url", "framework_version"])
+                src = e.get("lens") or C.wa_bp_source(bp) or C.WA_FRAMEWORK
+                fw = src == C.WA_FRAMEWORK
+                fv = (e.get("framework_version") or default_fv) if fw else ""
+                rows.append([s["id"], bp, e.get("title", ""), e.get("url", ""), fv,
+                             C.WA_BP_SOURCES.get(src, {}).get("name", src),
+                             fv if fw else e.get("lens_version", ""), lens.key])
+    return _csv(rows, ["statement_id", "wa_bp", "bp_title", "bp_url", "framework_version", "bp_source",
+                       "bp_source_version", "orr_lens"])
 
 
 def _sentence(text: str) -> str:

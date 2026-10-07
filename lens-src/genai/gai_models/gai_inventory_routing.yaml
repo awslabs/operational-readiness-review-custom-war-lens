@@ -1,0 +1,158 @@
+schema: orrlens/question/1
+id: gai_inventory_routing
+pillar: gai_models
+order: 10
+title: Model lifecycle and where inference runs
+max_risk: HIGH
+priority: P0
+core_path: false
+category: Defense against dependencies
+lineage: []
+choice_prefix: mi_
+description:
+  question: >-
+    Do you know every model, inference profile and model endpoint the workload calls, when each reaches end of
+    life, and in which Regions or providers each request is processed?
+  evidence_to_collect: >-
+    the list of models, inference profiles and external model endpoints in use, including fallback and recovery
+    models, with owner, lifecycle state and end-of-life date. The approved inference destinations per call path and
+    the policy that enforces them. The list of prompts, guardrails, knowledge bases and tools production calls, with
+    versions.
+helpful:
+  display_text: Amazon Bedrock model lifecycle
+  url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+statements:
+  - id: mi_lifecycle_tracked
+    tier: core
+    title: >-
+      Every model in use, including fallback and recovery models, has an owner and a tracked lifecycle state and
+      end-of-life date
+    concept: genai-model-lifecycle-tracked
+    severity_basis: >-
+      deviation:after a model reaches end of life, requests to it fail in all Regions and migration is not
+      automatic, and some models now have a 45-day Legacy period, so an untracked model deadline is a fixed-date
+      outage. GENREL04-BP02 (model catalog) is rated Low.
+    wa_bp: OPS02-BP01
+    good: >-
+      Each model ID or inference profile in production, fallback and recovery paths, including embedding, reranking
+      and evaluator models, has an owning team, its lifecycle state read from the API or console, and its
+      end-of-life date, or its "EOL no sooner than" date and Legacy period, from the model card. Where a model card
+      defers to the provider's lifecycle terms, the provider's dates are tracked. The core statement on
+      AWS Health lifecycle notices owns notice routing.
+    platform_notes: >-
+      Amazon Bedrock: the modelLifecycle field, model cards and the LegacyModelInvocations metric. AgentCore: record
+      the model each agent runtime version calls. SageMaker AI and self-hosted: container and model package
+      versions. Third-party APIs: provider deprecation dates.
+    partition_notes: >-
+      As of 2026-10-07, Legacy and end-of-life dates are listed per Region, including both AWS GovCloud (US)
+      Regions. Confirm that LegacyModelInvocations is published in your GovCloud account before you alarm on it, or poll modelLifecycle.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+    improvement: >-
+      List every model call path, read modelLifecycle from GetFoundationModel or ListFoundationModels on a
+      schedule, record end-of-life dates, assign an owner per model, and alarm to that owner when
+      LegacyModelInvocations is above zero. As of 2026-10-07, Amazon Bedrock models launched on or after 2026-09-07
+      follow the current lifecycle policy (a 6-month or 45-day Legacy period, shown on the model card), and older
+      models follow the Legacy lifecycle page (at least 6 months in Legacy state).
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+    additional_helpful:
+      - display_text: Amazon Bedrock model lifecycle (Legacy), for models launched before 2026-09-07
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle-legacy.html
+      - display_text: Amazon Bedrock runtime metrics, including LegacyModelInvocations
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/monitoring-runtime-metrics.html
+    additional_improvement:
+      - display_text: Understanding Amazon Bedrock model lifecycle (AWS ML Blog), for models launched before 2026-09-07
+        url: https://aws.amazon.com/blogs/machine-learning/understanding-amazon-bedrock-model-lifecycle/
+  - id: mi_successor_ready
+    tier: sec
+    title: >-
+      Every Legacy model, or model whose end of life falls inside the service life, has an evaluated successor and
+      a migration date
+    concept: genai-model-successor-ready
+    wa_bp: OPS06-BP01
+    good: >-
+      Before launch, no model in the path is in Legacy state without a named successor that has passed the release
+      evaluation and a migration scheduled ahead of the end-of-life date. Quota increases are not granted for models
+      in Legacy state (as of 2026-10-07), and for models under the Legacy lifecycle policy, pricing can rise during
+      public extended access. The migration runs through the core release controls.
+    platform_notes: >-
+      Amazon Bedrock: new Provisioned Throughput cannot be created, and new fine-tuning jobs cannot start, for
+      models in Legacy state. Amazon SageMaker AI and self-hosted models: plan successors for container, framework
+      and model versions reaching end of support.
+    partition_notes: >-
+      Lifecycle dates can differ in AWS GovCloud (US), so check each model's row for us-gov-west-1 and
+      us-gov-east-1 (as of 2026-10-07).
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle-legacy.html
+    improvement: >-
+      For each Legacy or end-of-life-dated model, pick an Active successor, run the release evaluation on it,
+      recompute token quota needs for it, request the successor's quota increases ahead of cutover (increases are
+      not granted once a model is Legacy), and schedule the cutover with a date before end of life.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/model-lifecycle.html
+    additional_helpful:
+      - display_text: Quotas for the bedrock-runtime endpoint (quota increases and Legacy models)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/quotas-runtime.html
+  - id: mi_routing_approved
+    tier: core
+    title: >-
+      Each call path's inference destinations are approved against residency rules (or the data owner recorded
+      that none apply)
+    concept: genai-inference-destination-approved
+    severity_basis: "wa:OPS01-BP04 (High)"
+    wa_bp: OPS01-BP04
+    good: >-
+      For every call path the team records whether inference runs in-Region, in a geography, globally or at an
+      external provider, and the data owner approved where prompts and outputs may be processed and stored, or
+      recorded that no residency or contractual rule applies. Tool targets that send data elsewhere count too.
+    platform_notes: >-
+      Amazon Bedrock: the model ID or inference profile sets routing, and global profiles can use any supported
+      commercial Region. With geographic profiles, prompts and outputs are stored in the destination Region to the
+      extent Amazon Bedrock stores data for abuse detection. AgentCore: external Gateway targets and Browser or
+      Code Interpreter internet access can send data out of the Region.
+    partition_notes: >-
+      As of 2026-10-07, global profiles use only commercial Regions, a US-GOV profile routes between the two AWS
+      GovCloud (US) Regions for some models, and AgentCore, in AWS GovCloud (US-West) only, can also send data
+      outside GovCloud through external identity providers.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+    improvement: >-
+      Map each call path to in-Region, geographic or global routing, list the destination Regions (for third-party
+      APIs, the provider's processing locations), get written approval from the data owner, and record the
+      inference Region in audit logs (the CloudTrail field additionalEventData.inferenceRegion). This extends the
+      residency constraints in the core disaster recovery strategy statement to where each inference request runs.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/cross-region-inference.html
+    additional_helpful:
+      - display_text: Geographic cross-Region inference (data processing and storage)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html
+      - display_text: Global cross-Region inference
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html
+      - display_text: Amazon Bedrock AgentCore in AWS GovCloud (US) (traffic to customer-specified endpoints)
+        url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html
+  - id: mi_routing_enforced
+    tier: sec
+    title: >-
+      A test request from each production account proved organization policies allow every Region each routing
+      option can use
+    concept: genai-inference-routing-policy-tested
+    wa_bp: SEC03-BP05
+    good: >-
+      Region-deny service control policies were tested with a request through each cross-Region routing option from
+      each production account, so your own SCPs do not deny routed requests, and where residency forbids global
+      routing an SCP or IAM policy denies it. In-Region-only use meets this statement when Region-deny policies
+      allow it. This extends the core statement on verifying that every service and feature relied on is available
+      and authorized in each target partition.
+    platform_notes: >-
+      Amazon Bedrock: cross-Region inference can route to Regions not enabled in the account. A Region-deny SCP can
+      exempt routed requests with the bedrock:InferenceProfileArn condition key, and global routing is denied with
+      aws:RequestedRegion set to unspecified.
+    partition_notes: >-
+      In AWS GovCloud (US), test the US-GOV geographic profile across both GovCloud Regions for each model that
+      supports it (as of 2026-10-07).
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/geographic-cross-region-inference.html
+    improvement: >-
+      From each production account, with production SCPs attached, send a test request through each routing option
+      the workload uses, add the documented inference-profile exception or the global-routing deny, and keep the
+      test in pre-production so policy changes cannot break routing unnoticed. AgentCore: confirm network
+      configuration and egress rules allow only the approved Gateway and tool targets. Third-party APIs: confirm
+      egress allows the provider endpoints.
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html
+    additional_helpful:
+      - display_text: Supported Regions and models for inference profiles (source and destination Regions)
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html

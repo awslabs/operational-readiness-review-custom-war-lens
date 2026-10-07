@@ -76,6 +76,38 @@ checked 2026-10-06:
 - The EventBridge channel does not send public events from the Service Health view; use the AWS Health API or the
   Service Health RSS feed for those.
 
+## Generative AI and agents
+
+Notes for ORR - Generative AI and Agents 1.0.0, checked 2026-10-07 against the AWS GovCloud (US) User Guide pages
+for [Amazon Bedrock](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock.html),
+[Amazon Bedrock AgentCore](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-bedrock-agentcore.html)
+and [Amazon SageMaker AI](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-sagemaker.html), and
+the Amazon Bedrock User Guide. The lens statements carry the same facts as dated partition notes.
+
+| Item | Checked | Notes |
+|---|---|---|
+| Amazon Bedrock Regions and models | 2026-10-07 | Amazon Bedrock runs in AWS GovCloud (US-West) and AWS GovCloud (US-East). Model availability differs by Region ([Regional availability by models](https://docs.aws.amazon.com/bedrock/latest/userguide/models-region-compatibility.html)), and model lifecycle dates can differ by Region, so read each model's row for `us-gov-west-1` and `us-gov-east-1` (`gai_inventory_routing`) |
+| Model access | 2026-10-07 | Third-party models need model access enabled in the linked standard AWS account and in the GovCloud (US) account; models provided by Amazon Bedrock need it only in the GovCloud (US) account ([Request access to models](https://docs.aws.amazon.com/bedrock/latest/userguide/model-access.html)). Confirm access for every fallback model in every Region it serves (`gai_dependency_fallback`) |
+| Cross-Region inference | 2026-10-07 | Global cross-Region inference routes requests to supported commercial Regions, so it does not keep processing inside the partition ([Global cross-Region inference](https://docs.aws.amazon.com/bedrock/latest/userguide/global-cross-region-inference.html)). For some models, the US-GOV geographic profile routes between `us-gov-east-1` and `us-gov-west-1`: each model card lists its source and destination Regions ([Supported Regions and models for inference profiles](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-support.html)), and GetInferenceProfile called from each GovCloud source Region confirms the destinations. Test each routing option you use with production service control policies attached (`gai_inventory_routing`) |
+| Bedrock Provisioned Throughput | 2026-10-07 | Supported in AWS GovCloud (US-West) only for custom models with a no-commitment purchase ([Supported Region and models for Provisioned Throughput](https://docs.aws.amazon.com/bedrock/latest/userguide/prov-thru-supported.html)). Size on-demand quotas from the token arithmetic in `gai_capacity_quotas`, use the Reserved tier where the model card lists it (for example Claude Sonnet 4.5 in AWS GovCloud (US-West) through the US-GOV profile, [What's New, 2026-01-21](https://aws.amazon.com/about-aws/whats-new/2026/01/amazon-bedrock-reserved-tier-for-claude-sonnet-in-govcloud/)), or use self-hosted capacity |
+| Amazon Bedrock AgentCore | 2026-10-07 | Runs in AWS GovCloud (US-West) only. The GovCloud page lists these differences: the Bedrock Guardrails policy and the Temporal policy are not offered, and the CloudFormation resources for `Policy`, `PolicyEngine`, `Evaluator`, `OnlineEvaluationConfig`, `OAuth2CredentialProvider` and `ApiKeyCredentialProvider` are missing. Create those resources with the API or AWS CLI and keep their configuration in version control (`gai_change_safety`, `gai_agent_bounds`) |
+| AgentCore traffic that can leave the partition | 2026-10-07 | Gateway targets that call external services, external identity providers, the Browser tool and Code Interpreter sessions with internet access can send data to endpoints outside the GovCloud (US) Regions. Count each one as an inference or tool destination that the data owner approves (`gai_inventory_routing`) |
+| SageMaker AI Deep Learning Container images | 2026-10-07 | The GovCloud (US) Regions publish mostly mutable image tags (immutable tags only for a few exceptions), so pin images by digest (`gai_change_safety`). SageMaker JumpStart in GovCloud (US) offers open-weight models only, through the SageMaker AI Python SDK |
+| Organization-level guardrail enforcement | 2026-10-07 | Organization-level guardrail enforcement is not available in AWS GovCloud (US). It uses Amazon Bedrock policies in AWS Organizations, and a GovCloud (US) organization can use only service control policies, resource control policies, tag policies and declarative policies for EC2 and S3 ([AWS Organizations in AWS GovCloud (US)](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-organizations.html)). Turn on account-level guardrail enforcement in each account, which AWS Capabilities by Region lists in both GovCloud (US) Regions, or use an IAM deny on calls without the required guardrail (`gai_safeguards`) |
+| Amazon CloudWatch generative AI observability | 2026-10-07 | Amazon CloudWatch generative AI observability is not available in AWS GovCloud (US) ([AWS Capabilities by Region](https://builder.aws.com/build/capabilities) lists it in neither GovCloud (US) Region). Use Bedrock invocation logs, CloudWatch metrics and OpenTelemetry traces sent to AWS X-Ray (`gai_observability`) |
+| Export-controlled metadata | 2026-10-07 | Bedrock model evaluation job metadata, AgentCore resource metadata and SageMaker AI resource metadata must not contain export-controlled data. Keep it out of names, descriptions, tags and evaluation configuration (`gai_quality_evaluation`) |
+| Token spend data | 2026-10-07 | Billing data for a GovCloud (US) account is in the associated standard account (see the AWS Budgets row above). Drive the spend stop and spike attribution from near-real-time token metrics in the GovCloud (US) account, not from billing data (`gai_runaway_cost`) |
+
+### Generative AI items to check in your own account
+
+Public documentation did not settle these as of 2026-10-07. The lens does not make a bar depend on any of them;
+check them in your GovCloud (US) account before your evidence relies on them:
+
+| Item | How to check | If it is missing |
+|---|---|---|
+| Amazon Bedrock runtime metrics that the lens names as examples, such as `LegacyModelInvocations` and `EstimatedTPMQuotaUsage` | Look for them in the `AWS/Bedrock` namespace in your GovCloud (US) account after a test call | Poll the model lifecycle state from the API on a schedule, and compute quota use from invocation logs (`gai_inventory_routing`, `gai_capacity_quotas`) |
+| AgentCore spans in CloudWatch | AgentCore spans rely on CloudWatch Transaction Search. The GovCloud CloudWatch page lists Transaction Search as not available (see the Amazon CloudWatch Transaction Search row at the top of this page), while AWS Capabilities by Region lists it in AWS GovCloud (US-West), so test it in your account | Send OpenTelemetry traces to AWS X-Ray and correlate them with logs (`gai_observability`) |
+
 ## Method-based alternatives
 
 Where a statement names a service that is not available in AWS GovCloud (US), the statement's helpful text offers

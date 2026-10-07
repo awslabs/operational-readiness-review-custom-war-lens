@@ -1,0 +1,90 @@
+schema: orrlens/question/1
+id: gai_quality_evaluation
+pillar: gai_release
+order: 20
+title: Quality gate on every change path, and retrieval freshness
+max_risk: HIGH
+priority: P1
+core_path: false
+category: Deployment safety
+lineage: []
+choice_prefix: qe_
+description:
+  question: >-
+    Does an automated quality gate block a regressed model, prompt, retrieval or guardrail change on every path
+    that can make one, and would you notice failed or stale knowledge base ingestion?
+  evidence_to_collect: >-
+    the gate configuration and threshold, the change paths that trigger it, and the record of a run where it
+    blocked or caught a candidate. Knowledge base sync logs or job status and the freshness target.
+helpful:
+  display_text: REL08-BP02 Integrate functional testing (AWS Well-Architected)
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_functional_testing.html
+statements:
+  - id: qe_gate_blocks
+    tier: core
+    title: The quality gate also covers prompt, guardrail and knowledge base changes, not only deploys, and caught a planted regression
+    concept: genai-evaluation-gate-blocks
+    severity_basis: "wa:REL08-BP02 (High)"
+    wa_bp: REL08-BP02
+    good: >-
+      The evaluation gate, designed as the AI lenses describe, also runs on configuration-only changes (prompt,
+      guardrail or model reference) and retrieval index changes, and evaluates the exact production configuration.
+      Configuration-only changes cannot be promoted until it passes. Retrieval changes go through a staging index
+      promoted by a gated change, or are evaluated right after each sync with an alarm and a documented restore. A
+      planted regression was blocked on each blocking path and caught on the post-sync path. This extends the core
+      test-gate statement to non-code changes.
+    platform_notes: >-
+      Amazon Bedrock Evaluations automated jobs. AgentCore Evaluations on demand in CI/CD. Amazon
+      SageMaker AI and third-party APIs: a pipeline evaluation step against the pinned endpoint or model.
+    partition_notes: >-
+      As of 2026-10-07, Amazon Bedrock Evaluations is in both AWS GovCloud (US) Regions, and AgentCore Evaluations
+      in AWS GovCloud (US-West) without its CloudFormation resources, so use the API there.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation.html
+    improvement: >-
+      List every path that can change a prompt, guardrail, model reference or retrieval index, including console
+      edits, prompt management and scheduled ingestion, and trigger the evaluation from each. For prompt, guardrail
+      and model reference changes, make it a blocking step before promotion. A knowledge base sync writes to the
+      index that production queries, so for retrieval changes either ingest into a staging knowledge base and
+      promote it with a gated change of the knowledge base ID in configuration, or evaluate right after each sync,
+      alarm on a regression and keep a documented way to restore the previous content (for example, re-sync from a
+      versioned copy of the source data). Test each path with a known-bad candidate. Reader note: do not depend on
+      Bedrock human-based evaluation jobs, whose work teams use SageMaker AI Ground Truth (in maintenance as of
+      2026-10-07).
+    improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-automatic.html
+    additional_helpful:
+      - display_text: Amazon Bedrock AgentCore Evaluations is generally available (What's New, Mar 2026)
+        url: https://aws.amazon.com/about-aws/whats-new/2026/03/agentcore-evaluations-generally-available/
+      - display_text: Generative AI Lens, periodic evaluation of functional performance (GENOPS01-BP01)
+        url: https://docs.aws.amazon.com/wellarchitected/latest/generative-ai-lens/genops01-bp01.html
+    additional_improvement:
+      - display_text: Evaluate RAG sources with Amazon Bedrock evaluations
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-kb.html
+      - display_text: On-demand evaluation in Amazon Bedrock AgentCore
+        url: https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/on-demand-evaluations.html
+  - id: qe_retrieval_fresh
+    tier: sec
+    title: Knowledge base ingestion failures, partial ingestion and staleness beyond a written target are alarmed (or no retrieval is used)
+    concept: genai-retrieval-freshness-alarmed
+    wa_bp: REL06-BP01
+    good: >-
+      Failed ingestion jobs and documents that failed or were only partly indexed raise an alarm. The age of the
+      newest indexed content, or the time since the last successful sync, is compared with a freshness target
+      agreed with the business owner, and breaching it alarms, so answers are not silently served from stale or
+      incomplete content. Workloads with no retrieval meet this by recorded design.
+    platform_notes: >-
+      Amazon Bedrock Knowledge Bases: deliver ingestion application logs to CloudWatch Logs, which record each job
+      status (including FAILED), a count of failed resources and per-document status such as PARTIALLY_INDEXED.
+      Knowledge bases with a structured data store do not support log delivery (as of 2026-10-07), so poll their
+      sync job status through the API and alarm on failures and sync age.
+      Self-hosted vector stores: alarm on pipeline failures and index age.
+    partition_notes: >-
+      Amazon Bedrock Knowledge Bases is available in both AWS GovCloud (US) Regions as of 2026-10-07.
+    helpful_url: https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-bases-logging.html
+    improvement: >-
+      Enable ingestion logging for each knowledge base, create metric filters for failed jobs, failed resources
+      and partly indexed documents, and alarm on them. Publish the time since the last successful sync as a metric
+      and alarm when it exceeds the written freshness target.
+    improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/MonitoringLogData.html
+    additional_improvement:
+      - display_text: Sync your data with your Amazon Bedrock knowledge base
+        url: https://docs.aws.amazon.com/bedrock/latest/userguide/kb-data-source-sync-ingest.html

@@ -10,7 +10,8 @@ informed by the AWS
 [Operational Readiness Reviews whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html)
 and Well-Architected best practice
 [OPS07-BP02](https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html).
-The family has a 36-question core lens and an 8-question ORR - Mission-Critical Event Readiness companion.
+The family has a 36-question core lens and two companions: the 8-question ORR - Mission-Critical Event Readiness
+lens and the 9-question ORR - Generative AI and Agents lens.
 
 ### Is this an AWS certification or an AWS review of my workload?
 
@@ -40,11 +41,21 @@ Automated Framework checks complement an ORR; they do not replace the human evid
 
 ### Is there a module for generative AI workloads?
 
-No companion lens in this repository covers generative AI workloads. For generative AI and agent workloads, also
-apply the AWS Generative AI lens from the
-[Lens Catalog](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html) and the Agentic AI
+Yes. ORR - Generative AI and Agents 1.0.0 (`orr-genai.json`) is for workloads that call foundation models or run
+AI agents. Attach it alongside the core lens as part of the pre-launch ORR. It has 9 questions on model lifecycle
+and inference routing, token quotas and capacity, incomplete output and fallback models, pinned versions for model,
+prompt and guardrail changes, quality gates, telemetry coverage, safeguard enforcement, runaway token spend and
+agent action bounds. See [running-an-orr.md](running-an-orr.md#generative-ai-and-agent-workloads).
+
+### Does it replace the AWS Generative AI, Agentic AI or Responsible AI lenses?
+
+No. It complements them, so apply them as well: the AWS Generative AI lens from the
+[Lens Catalog](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html), and the Agentic AI
 and Responsible AI lenses from
 [aws-samples/sample-well-architected-custom-lens](https://github.com/aws-samples/sample-well-architected-custom-lens).
+Those lenses cover how to design, secure, evaluate and govern the workload. The ORR companion scores only
+launch-readiness and operational failure modes they do not score, and it does not score again what the core ORR
+lens already owns, such as timeouts and retries, phased rollout, alarms and on-call.
 
 ## Running a review
 
@@ -52,8 +63,8 @@ and Responsible AI lenses from
 
 The maintainers' planning estimates: the 15-question core path takes about 90-120 minutes; the full core takes
 about 3 hours, in two 90-minute sessions, plus 2-4 hours of evidence gathering by the team beforehand. A recurring
-review takes about 2 hours, and the event lens about 60 minutes on top of a current core review. Field use measures
-these. See [running-an-orr.md](running-an-orr.md).
+review takes about 2 hours, the event lens about 60 minutes on top of a current core review, and the generative AI
+lens about 45 minutes on top of the core review. Field use measures these. See [running-an-orr.md](running-an-orr.md).
 
 ### Can I run only the core path?
 

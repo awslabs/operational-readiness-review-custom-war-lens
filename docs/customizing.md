@@ -22,8 +22,10 @@ Why:
 Costs to plan for:
 
 - Each add-on lens uses one of the 15 custom-lens slots per account per Region, and that quota cannot be raised.
-- A workload can have up to 20 lenses attached. The ORR core, the event lens and one add-on fit comfortably
+- A workload can have up to 20 lenses attached. The ORR core, the event and generative AI companions and one
+  add-on fit comfortably
   ([AWS Well-Architected Tool endpoints and quotas](https://docs.aws.amazon.com/general/latest/gr/wellarchitected.html)).
+  Importing all three ORR lenses uses 3 of the 15 custom-lens slots per account per Region.
 
 Prefer one add-on lens per organization over one per team, so slots stay free for the lenses in the
 [Lens Catalog](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html) and the other
@@ -84,8 +86,9 @@ The same rules the ORR lenses follow keep an add-on lens useful:
 - **Alternatives become alt groups**, never statements joined with AND.
 - **Evidence for scope exits.** A scope exit scores No risk outright, so its helpful text lists the evidence to
   collect.
-- **Do not duplicate the ORR lenses.** If an ORR question already scores a practice, do not score it again; one
-  owning statement per practice keeps risk counts honest. If you think an ORR bar is wrong, open an issue on this
+- **Do not duplicate the ORR lenses.** If an ORR question, in the core lens or in a companion, already scores a
+  practice, do not score it again; one owning statement per practice keeps risk counts honest. For generative AI
+  workloads, also check the AWS Generative AI, Agentic AI and Responsible AI lenses before you add a question. If you think an ORR bar is wrong, open an issue on this
   repository instead.
 - **Keep sensitive content out.** Questions, helpful text and notes appear in reports and sync to Jira when it is
   enabled. Do not put private hostnames, credentials or incident details in the lens; link to your own documents
