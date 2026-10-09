@@ -13,6 +13,40 @@ Releases from 2.0.0 onward are dated tags that attach every lens file, `manifest
 files are never edited; fixes ship as a new version. Entries for v1.3.2 to v1.3.6 were reconstructed from the
 repository history.
 
+## [2026-10-09] core 2.0.1, ORR - Mission-Critical Event Readiness 1.0.1 and ORR - Generative AI and Agents 1.0.1
+
+Text-only patch releases of all three lenses. No pillar, question or choice ID and no risk rule changed, so
+answers, notes and risk counts stay as they are.
+
+- If your core lens is on 2.0.0, or a companion on 1.0.0, upload the new file to it with **Edit** and publish it
+  as a **Minor version** ([Patch releases](README.md#patch-releases)).
+- If your core lens is still on v1.3.x, publish 2.0.1 as a **Major version** and follow
+  [`MIGRATION.md`](MIGRATION.md).
+- If you have not installed a lens yet (the core lens or a companion), install it with **Create custom lens**
+  ([First install](README.md#first-install)).
+
+### Changed
+
+- **The category "Defense against customers" is now labeled "Defense against overload"** in the descriptions of
+  nine questions: `architecture_defensive_throttling`, `architecture_demand_estimates`,
+  `architecture_edge_protection` and `architecture_load_testing` (core); `evt_capacity_quotas`, `evt_ddos_response`
+  and `evt_peak_retest` (event); and `gai_capacity_quotas` and `gai_runaway_cost` (genai). The AWS Operational
+  Readiness Reviews whitepaper lists this category as "Defense against customers" and describes the Architecture
+  area as including how you protect your workload from its customers (for example, preventing overload). The new
+  label names that risk.
+- **Amazon Bedrock AgentCore Gateway rate limits (genai).** The platform note on `gai_runaway_cost` and the
+  improvement plan on `gai_agent_bounds` said, as the AgentCore documentation does, that gateway rate limits fail
+  open by default. The documentation also names the cases: a rate limit service timeout, or a dimension that cannot be resolved from
+  the request, lets the request through. Both texts now name those cases (checked 2026-10-09). The
+  `gai_runaway_cost` helpful text is reworded slightly to stay within the 1,024-character limit.
+- **Documentation.** The README, `docs/facilitator-guide.md`, `docs/faq.md` and `docs/running-an-orr.md` no longer
+  say that a review that skips questions cannot score better than High on the decision question: the WA Tool does not
+  check `rd_scope_complete`, and it counts a statement marked not applicable as met, so confirm the review is complete
+  before you select it. The README also links the Generative AI, Agentic AI and Responsible AI lenses to their AWS
+  documentation pages, adds a Patch releases section, and points the install and upgrade steps at the version 2 line
+  rather than at 2.0.0 alone. `MIGRATION.md` notes that the v1.3.x procedure is the same for every version 2 file, and
+  `docs/gates.md` records the minor-version upgrade check.
+
 ## [2026-10-07] ORR - Generative AI and Agents 1.0.0
 
 ORR - Generative AI and Agents 1.0.0, a new companion lens for workloads that call foundation models or run AI

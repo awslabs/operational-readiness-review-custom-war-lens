@@ -41,7 +41,7 @@ Automated Framework checks complement an ORR; they do not replace the human evid
 
 ### Is there a module for generative AI workloads?
 
-Yes. ORR - Generative AI and Agents 1.0.0 (`orr-genai.json`) is for workloads that call foundation models or run
+Yes. ORR - Generative AI and Agents (`orr-genai.json`) is for workloads that call foundation models or run
 AI agents. Attach it alongside the core lens as part of the pre-launch ORR. It has 9 questions on model lifecycle
 and inference routing, token quotas and capacity, incomplete output and fallback models, pinned versions for model,
 prompt and guardrail changes, quality gates, telemetry coverage, safeguard enforcement, runaway token spend and
@@ -68,8 +68,12 @@ lens about 45 minutes on top of the core review. Field use measures these. See [
 
 ### Can I run only the core path?
 
-For triage and recurring check-ins, yes. A launch go or no-go requires the full core: `readiness_signoff` includes
-`rd_scope_complete`, so a review that skips questions cannot score better than High on the decision question.
+For triage and recurring check-ins, yes. A launch go or no-go requires the full core. `readiness_signoff` scores
+better than High only if `rd_scope_complete` is selected or marked not applicable (the WA Tool counts a
+not-applicable statement as met), and the WA Tool does not check that statement: unanswered questions show as
+Unanswered, not as High risk. Before selecting it, confirm in the lens review that no question in the core or an
+attached companion lens is still unanswered, and do not accept a not-applicable mark on any `readiness_signoff`
+statement or on the question itself.
 
 ### Who should answer the questions?
 
@@ -137,11 +141,12 @@ support.
 ### How do I upgrade?
 
 Edit your existing ORR lens; never create a new one. In the console: Custom lenses, select your existing ORR lens,
-Edit, Choose file (the new JSON), Submit; then Publish lens, choose Major version, and enter the version name
-(for example `2.0.0`)
+Edit, Choose file (the new JSON), Submit; then Publish lens, choose Major version, and enter the version of the
+file you uploaded as the version name (for example `2.0.1`)
 ([Publishing an update](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-publish-update.html)).
 Then upgrade each workload's lens review, which saves a milestone first. `MIGRATION.md` has the full steps,
-including the API path.
+including the API path. For a core lens that is already on 2.0.0, or a companion on 1.0.0, publish the new file
+as a Minor version instead ([Patch releases](../README.md#patch-releases)).
 
 ### Why not create a new custom lens for 2.0.0?
 

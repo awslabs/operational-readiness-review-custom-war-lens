@@ -5,9 +5,9 @@
 # IDs are never reused and never change meaning. Status: active | retired | reserved.
 schema: orrlens/ids/1
 lenses:
-  core: {current_version: "2.0.0"}
-  event: {current_version: "1.0.0"}
-  genai: {current_version: "1.0.0"}
+  core: {current_version: "2.0.1"}
+  event: {current_version: "1.0.1"}
+  genai: {current_version: "1.0.1"}
 v1_versions: ["1.3.2", "1.3.3", "1.3.4", "1.3.5", "1.3.6"]
 reserved:
   prefixes:

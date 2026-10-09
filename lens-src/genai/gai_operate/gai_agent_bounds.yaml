@@ -99,9 +99,10 @@ statements:
       Write the stop runbook: who decides, the deny-all lever for all agents, and how in-flight sessions are ended.
       Keep a current record of active session IDs (for example from invocation logs) so StopRuntimeSession can be
       called for each one. Implement each lever on a path that does not depend on the agent runtime, rehearse it in
-      pre-production or a game day, and record the time from the decision to the last tool call. On AgentCore,
-      StopRuntimeSession shares the runtime data plane quota, and a gateway rate limit of 0 takes up to 30 seconds
-      and rate limits fail open by default, so do not rely on a rate limit alone (as of 2026-10-07).
+      pre-production or a game day, and record the time from the decision to the last tool call. On Amazon Bedrock
+      AgentCore, StopRuntimeSession shares the runtime data plane quota, a gateway rate limit of 0 takes up to 30
+      seconds to apply, and rate limits fail open when the rate limit service is unavailable or a dimension cannot be
+      resolved, so do not rely on a rate limit alone (as of 2026-10-09).
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html
     additional_helpful:
       - display_text: Harness lifecycle hooks (AgentCore)

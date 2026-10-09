@@ -42,7 +42,7 @@ title: Overload protection and tenant fairness   # <= 128 characters; no (H)/(M)
 max_risk: HIGH                          # HIGH | MEDIUM
 priority: P0                            # P0 | P1 (authoring order only; not shown to users)
 core_path: true                         # true if the question is on the published 15-question core path
-category: Defense against customers     # one of the categories listed below
+category: Defense against overload      # one of the categories listed below
 lineage: [architecture_defensive_throttling, event_queue_backlog]   # v1.3.6 question ids it absorbs; [] if new
 choice_prefix: tp_                      # every statement id starts with this; unique within the lens
 description:
@@ -127,9 +127,13 @@ Required on `core` and `alt:` statements. One of:
 
 ### Categories
 
-Deployment safety, Defense against customers, Defense against dependencies, Data recovery, Operator safety,
+Deployment safety, Defense against overload, Defense against dependencies, Data recovery, Operator safety,
 Blast radius containment, Event detection, Service restart, Forensics, Escalation (the ORR whitepaper's ten), plus
-two additions: Readiness governance, Security readiness.
+two additions: Readiness governance, Security readiness. The whitepaper lists the second category as "Defense
+against customers" and describes the Architecture area as including how you protect your workload from its
+customers (for example, preventing overload).
+Since core 2.0.1, event 1.0.1 and genai 1.0.1, the lenses label it "Defense against overload", which names the
+risk rather than the people the workload serves.
 
 ## Rendering
 

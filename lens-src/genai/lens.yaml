@@ -1,7 +1,7 @@
 schema: orrlens/lens/1
 key: genai
 name: ORR - Generative AI and Agents
-version: 1.0.0
+version: 1.0.1
 file_stem: orr-genai
 description: >-
   ORR - Generative AI and Agents custom lens {version} for the AWS Well-Architected Tool. Attach it alongside a

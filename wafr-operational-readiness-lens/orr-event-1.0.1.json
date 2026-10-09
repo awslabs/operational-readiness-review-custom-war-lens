@@ -1,0 +1,726 @@
+{
+  "schemaVersion": "2021-11-01",
+  "name": "ORR - Mission-Critical Event Readiness",
+  "description": "ORR - Mission-Critical Event Readiness custom lens 1.0.1 for the AWS Well-Architected Tool. Attach it alongside a current Operational Readiness Review (ORR) core review before a planned peak, such as an election, an enrollment or tax deadline, a product launch, ticket sales, a broadcast, or a cutover. Suggested timing: procure 3-6 months before, complete this review at least 8 weeks before, re-test load 30-60 days before, close High risks 4 weeks before, and review within 2 weeks after. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
+  "pillars": [
+    {
+      "id": "evt_prepare",
+      "name": "01 - Prepare",
+      "questions": [
+        {
+          "id": "evt_calendar_freeze",
+          "title": "Event calendar, decision owner and change freeze",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Deployment safety. Before a scheduled peak, are the event dates, the accountable owner, the go/no-go criteria and the change controls for the event window fixed and written down? Evidence to collect: the event plan with its dates, partner and dependency dates and success criteria. The named owner, deputy and go/no-go criteria. The deployment blocker configuration for the freeze and the event window, and its emergency path. Notes from the final two-week review.",
+          "helpfulResource": {
+            "displayText": "OPS07-BP05 Informed deployment decisions (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html"
+          },
+          "choices": [
+            {
+              "id": "cf_dates",
+              "title": "The event window, key dates (including partner and dependency dates) and success criteria are documented",
+              "helpfulResource": {
+                "displayText": "Good looks like: A dated event plan lists the event window with its time zones; the rehearsal, re-test, freeze and post-event dates; and the dates that partners and dependencies control, such as a partner cutover, a vendor change window, a DNS or certificate change, or a data migration. Success criteria are measurable, for example peak requests per second served within the latency and error objectives of each critical journey. The plan is shared with every team, partner and provider that has a role in the event, and its deadlines are worked back from the event date: purchases 3-6 months out, this review at least 8 weeks out, a load re-test 30-60 days out, High risks closed 4 weeks out, and a freeze 2 weeks out.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html"
+              },
+              "improvementPlan": {
+                "displayText": "Write a one-page event plan: the window, the key dates of every dependency and partner, measurable success criteria, and the readiness deadlines worked back from the event date. Review it with the business owner and every team and provider involved, and put the dates in the shared calendar that your deployment blockers and on-call schedules use.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html"
+              }
+            },
+            {
+              "id": "cf_owner",
+              "title": "A named event owner and go/no-go criteria for the event are documented",
+              "helpfulResource": {
+                "displayText": "Good looks like: One named person, with a deputy, owns the event and can decide to proceed, degrade, delay or abort. Go/no-go criteria are written in advance and checkable, for example no open High risk without a recorded acceptance, the load re-test passed, quotas and capacity confirmed, and escalation contacts verified. The plan also sets the decision checkpoints (for example 2 weeks, 48 hours and 1 hour before the window), who attends each, and how each decision is recorded. The criteria reference the core question 'Readiness decision and risk acceptance' instead of repeating it.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html"
+              },
+              "improvementPlan": {
+                "displayText": "Name the event owner and a deputy, write go/no-go criteria and decision checkpoints, agree them with the accountable business owner, and record each checkpoint decision. Reuse the readiness decision from your core ORR review and add only the event-specific criteria.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html"
+              }
+            },
+            {
+              "id": "cf_freeze",
+              "title": "The event window is added to the core lens's deployment blockers, with an emergency path for urgent fixes",
+              "helpfulResource": {
+                "displayText": "Good looks like: The freeze period and the event window are blocked dates in the automated deployment blockers scored in the core phased-rollout question, for every pipeline that can change production: application, infrastructure, configuration and feature flags, and operator tools. The freeze does not depend on people remembering it. The emergency path scored in the core question on changes through reviewed pipelines and IaC still uses the pipeline and review, records who overrode the blocker and why, and is known to the event staff. Platform notes: For example, an AWS CodePipeline stage entry condition with a DeploymentWindow rule blocks a stage outside the allowed times, and conditions can be overridden at run time for an approved emergency. The rule's cron defines when deployment is allowed, so write a cron that excludes the freeze dates or use a LambdaInvoke rule that checks your event calendar. Other tools need an equivalent calendar check.",
+                "url": "https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments"
+              },
+              "improvementPlan": {
+                "displayText": "Add the freeze period and the event window to the deployment blockers of every production pipeline, including configuration, feature-flag and operator-tool pipelines. Test in a non-production copy that a deployment is blocked, and document and rehearse the emergency override: who may approve it, how it is logged, and which checks still apply.",
+                "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference-DeploymentWindow.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Configure conditions for a stage (AWS CodePipeline)",
+                      "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/stage-conditions.html"
+                    },
+                    {
+                      "displayText": "LambdaInvoke rule (AWS CodePipeline)",
+                      "url": "https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference-LambdaInvoke.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "cf_final_review",
+              "title": "In the final two weeks, open High risks, security findings, edge rules and privileged access were re-reviewed",
+              "helpfulResource": {
+                "displayText": "Good looks like: Within 14 days of the event the team re-checked: open High risks in the core and event reviews, and that no recorded acceptance expires before the event ends; new critical or high security findings; edge and AWS WAF rules, rate limits and the mode of any DDoS rule group; and who holds privileged or emergency access, removing access that is no longer needed. The results and any changes are recorded, for example in notes on a saved milestone.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html"
+              },
+              "improvementPlan": {
+                "displayText": "Schedule a short final review about two weeks before the event with the event owner, security and the on-call lead. Use a fixed checklist (open High risks and acceptance expiry dates, security findings, edge and rate-limit rules, privileged and emergency access), fix or accept each item before the freeze starts, and save a milestone so the pre-event state is recorded.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "cf_dates && cf_owner && cf_freeze && cf_final_review && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "cf_dates && cf_owner && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "evt_peak_retest",
+          "title": "Event-specific load re-test",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Has capacity been re-proven against this event's own forecast, recently enough that later changes cannot have invalidated the result? Evidence to collect: the agreed event forecast (peak, shape, ramp, duration, worst case and margin). The re-test plan and report with its date, achieved rate, latency, errors and first bottleneck. The alarm, scaling and runbook observations recorded during the test.",
+          "helpfulResource": {
+            "displayText": "REL12-BP03 Test scalability and performance requirements",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html"
+          },
+          "choices": [
+            {
+              "id": "pr_forecast",
+              "title": "The event's peak, shape, duration, ramp and worst case are agreed with the business owner",
+              "helpfulResource": {
+                "displayText": "Good looks like: A written forecast for this event, agreed with the business owner, gives expected and worst-case peak rates for each critical journey (for example requests, sign-ups, transactions or messages per second); the ramp, such as a spike when sales open or a broadcast mentions the site; how long the peak lasts; the mix of reads and writes; and the share of retries and automated traffic. It is based on comparable past events, registrations or marketing plans, and it states the margin the re-test must add. It builds on the demand forecast in the core question 'Peak demand, quotas and capacity headroom' instead of replacing it.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html"
+              },
+              "improvementPlan": {
+                "displayText": "Hold a forecasting session with the business owner, marketing and partners. Collect data from comparable events, model the opening spike and the sustained peak, add automated traffic, retries and a worst case, and agree in writing the numbers and the margin that the load re-test must prove.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_cost_analysis.html"
+              }
+            },
+            {
+              "id": "pr_retested",
+              "title": "The load test was re-run against this event's forecast plus margin within 30-60 days of the event",
+              "helpfulResource": {
+                "displayText": "Good looks like: Within 30-60 days before the event and after the last significant change, a production-like environment (or production in an agreed window) was tested with the event's traffic shape (ramp, peak and duration) at forecast plus the agreed margin, with representative data, accounts and dependency paths or approved stubs. Latency and errors stayed within the success criteria, and bottlenecks found were fixed and re-tested. High-volume tests follow the Amazon EC2 Testing Policy and the testing terms of every third-party provider in the path. Platform notes: EC2 and containers: include the scale-out ramp, not only steady state. Serverless: confirm that concurrency, account and downstream quotas in the test account match production, or the test proves less than it appears to.",
+                "url": "https://aws.amazon.com/ec2/testing/"
+              },
+              "improvementPlan": {
+                "displayText": "Book the re-test 30-60 days before the event and after the last major change. Script the event's ramp, peak and duration at forecast plus margin, include real dependency paths only where each provider (for example a payment or identity provider) has agreed in writing to the test volume and window, otherwise use their sandbox or an approved stub, follow each provider's testing policy and the Amazon EC2 Testing Policy, fix what breaks and test again, and record the achieved rate, latency, errors and first bottleneck.",
+                "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html"
+              }
+            },
+            {
+              "id": "pr_alarms_validated",
+              "title": "Alarms, scaling and runbooks were validated during the re-test, and the results were recorded",
+              "helpfulResource": {
+                "displayText": "Good looks like: During the re-test the team watched the event dashboards and confirmed that the alarms set for the event fired at the expected thresholds, that scaling or pre-scaled capacity behaved as expected, and that the staff for the event window ran at least one runbook step under load, for example turning off a feature or raising a limit. The observations, gaps and fixes are recorded with the test report. This extends the core question 'Load testing to peak margin and breaking point' (statement: Alarms, scaling and runbooks were observed working during the test) to the event's own thresholds and staff.",
+                "url": "https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html"
+              },
+              "improvementPlan": {
+                "displayText": "Make alarm, scaling and runbook checks an explicit part of the re-test plan: list the alarms and actions you expect at each load step, have the event-window staff run them, record what happened, and fix and re-check any alarm or runbook that did not work.",
+                "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "pr_forecast && pr_retested && pr_alarms_validated && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "pr_forecast && pr_retested && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "evt_capacity_quotas",
+          "title": "Quotas and capacity secured for the event dates",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Are the quotas and capacity that the event needs approved and in place for the event dates, with enough lead time, and is there a plan to scale back down afterward? Evidence to collect: applied quota values or approved increase requests for each account and Region, including recovery Regions and third-party APIs. Capacity reservations, scheduled scaling or pre-scaling settings for the event dates. The post-event scale-down and cost plan.",
+          "helpfulResource": {
+            "displayText": "REL01-BP01 Aware of service quotas (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html"
+          },
+          "choices": [
+            {
+              "id": "cq_quotas_raised",
+              "title": "Quota increases for peak plus failover were approved ahead of the event, without relying on automatic adjustment",
+              "helpfulResource": {
+                "displayText": "Good looks like: Every quota and limit the event can reach (for example vCPU, task and function concurrency, API request rates, database and stream throughput, load balancer and IP address limits, and third-party API limits) was compared with the event forecast plus failover. Increases were requested early, large ones months ahead, and show as applied before the freeze. The plan does not count on usage-based automatic increases or on requests filed during the event, and usage against key quotas is alarmed. Partition notes: Service Quotas is available in AWS GovCloud (US) as of 2026-10-06, but quota request templates are not; request increases in each GovCloud (US) account. Reader note: Some services named on this page are closed to new customers or reaching end of support (Amazon DevOps Guru and Amazon CodeGuru Reviewer). Service Quotas with Amazon CloudWatch alarms meets this practice.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html"
+              },
+              "improvementPlan": {
+                "displayText": "List the quotas each critical journey uses in every account and Region, including recovery Regions and third-party APIs. Compare them with the event forecast plus failover, request increases as soon as the forecast is agreed (large ones 3-6 months ahead, the rest at least 8 weeks ahead), confirm the applied values before the freeze, and add CloudWatch alarms on usage against the key quotas.",
+                "url": "https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Service Quotas and Amazon CloudWatch alarms",
+                      "url": "https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "cq_capacity_secured",
+              "title": "Capacity is reserved or pre-scaled for the event dates (for example future-dated Capacity Reservations or warm pools)",
+              "helpfulResource": {
+                "displayText": "Good looks like: The capacity the event needs in its first minutes is already running (pre-scaled) before the window, not launched at the peak. Reservations hold capacity for planned scale-out but still need launches, so they do not replace pre-scaling for the opening peak. The team checked a day before that it is in place. Platform notes: EC2: future-dated Capacity Reservations (C, G, I, M, R, T, U and X families) can be requested 5-120 days ahead (AWS recommends at least 56 days), need at least 32 vCPUs, and carry a minimum commitment (14 days for C, G, I, M, R and T; 12 weeks for U and X); also use scheduled scaling and warm pools. Containers: raise minimum task and node counts before the window and check launch-rate quotas. Serverless: AWS Lambda provisioned concurrency, and Amazon DynamoDB warm throughput. Partition notes: Future-dated Capacity Reservations, warm pools, Lambda provisioned concurrency and DynamoDB warm throughput are available in AWS GovCloud (US) as of 2026-10-06.",
+                "url": "https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-create.html"
+              },
+              "improvementPlan": {
+                "displayText": "From the forecast, work out the capacity needed at the opening minute and how fast you can add more. Reserve or pre-scale it for the event dates: request future-dated Capacity Reservations at least 8 weeks ahead where eligible and launch into them before the window, schedule minimum capacity to rise before the window, set provisioned concurrency or table throughput ahead of the peak, and confirm it is in place the day before.",
+                "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Related AWS Post-Event Summary (Oct 2025): new EC2 instance launches failed for about eight hours in one Region while instances that were already running stayed healthy, so have the capacity a fixed-date event needs already running before the window; a reservation that still needs a launch at the peak does not protect against this.",
+                      "url": "https://aws.amazon.com/message/101925/"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Scheduled scaling for Amazon EC2 Auto Scaling",
+                      "url": "https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html"
+                    },
+                    {
+                      "displayText": "Configuring provisioned concurrency for an AWS Lambda function",
+                      "url": "https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html"
+                    },
+                    {
+                      "displayText": "Understanding Amazon DynamoDB warm throughput",
+                      "url": "https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/warm-throughput.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "cq_scale_down_plan",
+              "title": "A post-event scale-down and cost plan exists",
+              "helpfulResource": {
+                "displayText": "Good looks like: A written plan says when and in what order the extra capacity, raised minimums, reservations, provisioned concurrency and temporary rules are removed after the event, what triggers each step, who approves it, and the expected cost of the event period. Capacity is not cut while late traffic or backlogs are still draining, and it is not left running for months. Reservation end dates and commitments are known. Partition notes: Billing and cost data for AWS GovCloud (US) accounts are viewed from the associated standard AWS account (as of 2026-10-06).",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html"
+              },
+              "improvementPlan": {
+                "displayText": "Write the scale-down plan with the capacity plan: list every temporary resource and setting with its end date, the trigger for removing it (for example backlogs drained and traffic below a threshold for a day) and its owner, set an AWS Budgets alert for the event period, and schedule the scale-down as normal pipeline changes after the window.",
+                "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "cq_quotas_raised && cq_capacity_secured && cq_scale_down_plan && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "cq_quotas_raised && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "evt_ddos_response",
+          "title": "DDoS response readiness for high-visibility endpoints",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Are the event's internet-facing endpoints ready to absorb and respond to network and application-layer DDoS attacks during a high-visibility event? Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep its evidence. Evidence to collect: the list of internet-facing endpoints and the web ACL in front of each. The application-layer DDoS mechanism, its mode, sensitivity and alarms. The IaC diff showing the web ACL reconciled. The DDoS tier decision. The DDoS runbook and the date and notes of its last rehearsal.",
+          "helpfulResource": {
+            "displayText": "AWS Best Practices for DDoS Resiliency (AWS whitepaper)",
+            "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html"
+          },
+          "choices": [
+            {
+              "id": "dd_not_public",
+              "title": "The workload has no internet-facing endpoints",
+              "helpfulResource": {
+                "displayText": "Good looks like: No component of the workload accepts traffic from the internet: there are no public load balancers, API endpoints, CDN distributions, public IP addresses or public DNS names, and users reach it only through private networks. Evidence to collect: an inventory from your IaC or network design showing no internet-facing endpoints, and the control that prevents new ones, for example an organization guardrail. If any endpoint used during the event is internet-facing, do not select this.",
+                "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html"
+              },
+              "improvementPlan": {
+                "displayText": "If any endpoint is internet-facing, answer the other statements instead. Keep the endpoint inventory current and guard it with a preventive control, so this scope exit stays true.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_network_protection_create_layers.html"
+              }
+            },
+            {
+              "id": "dd_l7_enforcing",
+              "title": "Application-layer DDoS rules were tuned in count mode, are enforcing before the event, and match IaC",
+              "helpfulResource": {
+                "displayText": "Good looks like: Each web ACL in front of event endpoints has a known Layer 7 DDoS mechanism (the Anti-DDoS managed rule group, Shield Advanced automatic mitigation or rate-based rules). Before the freeze it was evaluated in Count mode and set to Block, plus Challenge where clients support it, with a chosen sensitivity, and the live web ACL matches IaC. This applies the core edge baseline to the event; its paging alarms are scored in the core lens (ep_l7_detection_pages). Platform notes: Non-HTTP endpoints: network controls (security groups, network ACLs, Shield Standard, Shield Advanced on Elastic IPs if subscribed) with packet or connection alarms meet this. HTTP APIs and Lambda function URLs take no web ACL: put an ALB, a REST API or CloudFront with AWS WAF in front. Partition notes: Shield Advanced and CloudFront are not available in AWS GovCloud (US) as of 2026-10-06. Capabilities by Region lists AWS WAF DDoS Protection (the rule group) there; confirm with ListAvailableManagedRuleGroups.",
+                "url": "https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-anti-ddos.html"
+              },
+              "improvementPlan": {
+                "displayText": "Inventory the web ACLs in front of event endpoints and record which DDoS mechanism each uses. Evaluate the Anti-DDoS rule group or rate-based rules in Count mode (its metrics and labels appear only during detected events, so also check the challengeable-request labels and exempt URIs), set Block (and Challenge where suitable) and the sensitivity before the freeze, confirm that the core paging alarms on DDoSAttackRequests and rate-based rule metrics cover these web ACLs, and pull the web ACL into IaC. Add rate-based rules wherever the rule group is not offered. As announced (as of 2026-10-06), AWS auto-upgrades eligible Shield Advanced web ACLs from 2026-10-25 unless the owner opted out through AWS Support, keeping Block or Count, setting sensitivity to Low and leaving Challenge off, so review those settings. Migrate ineligible web ACLs through guided migration, until 2027-01-28. From 2027-01-29 automatic mitigation gets no performance updates, so later events use the rule group or rate-based rules.",
+                "url": "https://aws.amazon.com/blogs/security/aws-shield-advanced-is-embracing-the-aws-waf-anti-ddos-managed-rule-group-what-changes-and-how-to-prepare/"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Advanced Anti-DDoS protection using the AWS WAF Anti-DDoS managed rule group",
+                      "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html"
+                    }
+                  ]
+                },
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "IaC examples for the upgraded web ACL (aws-samples)",
+                      "url": "https://github.com/aws-samples/sample-ddos-shield-l7am-upgrade-to-waf-l7amr-helpers/tree/main/iac-webacl-examples"
+                    },
+                    {
+                      "displayText": "Using rate-based rule statements in AWS WAF",
+                      "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html"
+                    },
+                    {
+                      "displayText": "Monitoring AWS WAF with Amazon CloudWatch",
+                      "url": "https://docs.aws.amazon.com/waf/latest/developerguide/monitoring-cloudwatch.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "dd_ddos_tier",
+              "title": "Shield Advanced with SRT access and proactive engagement is configured, or a documented decision explains why not",
+              "helpfulResource": {
+                "displayText": "Good looks like: The team decided in writing, before purchase deadlines, whether the event needs AWS Shield Advanced (Shield Response Team access, proactive engagement and DDoS cost protection) or relies on AWS Shield Standard, AWS WAF and its own response. Shield Advanced needs a 1-year subscription and SRT access needs a qualifying support plan (the Shield documentation names Business or Enterprise Support as of 2026-10-06, and Business Support takes no new subscriptions outside AWS GovCloud (US), so confirm that your plan qualifies), so budget 3-6 months ahead. If subscribed: resources are protected, the SRT has the access it needs, proactive engagement has current contacts and Route 53 health checks, and the team knows proactive engagement does not trigger on Anti-DDoS rule group events, which need their own alarms. Partition notes: Shield Advanced is not available in AWS GovCloud (US) as of 2026-10-06; record the alternative edge and DDoS pattern and the AWS Support escalation path instead.",
+                "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html"
+              },
+              "improvementPlan": {
+                "displayText": "Decide the DDoS tier with the event owner by weighing the event's visibility and the cost of downtime against the subscription. If you subscribe, protect each resource, grant SRT access, set up proactive engagement with health checks and current contacts, and alarm on Anti-DDoS rule group events. If you do not, record the decision and the compensating controls.",
+                "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-srt-proactive-engagement.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Managed DDoS event response with Shield Response Team (SRT) support",
+                      "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-srt-support.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "dd_rehearsed",
+              "title": "The DDoS runbook was rehearsed, including how to engage AWS and, if subscribed, how to request cost protection",
+              "helpfulResource": {
+                "displayText": "Good looks like: The event shift rehearsed the DDoS runbook that the core question 'Edge and DDoS baseline for internet-facing endpoints' scores, for this event: spotting an attack from alarms and dashboards, tightening rate limits or rule sensitivity, blocking sources, scaling or degrading, and engaging AWS Support (and the SRT if subscribed). If subscribed, they know cost protection needs resources protected before the attack and a credit request within 15 days after the billing month. A tabletop rehearsal meets this. A live DDoS simulation must follow the AWS DDoS Simulation Testing Policy: an approved AWS DDoS Test Partner and a Shield Advanced protected target, or an approved exception requested at least 14 days ahead. Partition notes: Shield Advanced is not available in AWS GovCloud (US) as of 2026-10-06, so GovCloud (US)-only workloads cannot subscribe to it and rehearse DDoS response as a tabletop.",
+                "url": "https://aws.amazon.com/security/ddos-simulation-testing/"
+              },
+              "improvementPlan": {
+                "displayText": "Run a 60-minute DDoS tabletop with the event shift. Walk through detection, mitigation levers, AWS engagement and customer communications for a network flood and an HTTP request flood, time each step, fix gaps in the runbook, and confirm the cost protection prerequisites if you subscribe to Shield Advanced.",
+                "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Requesting a credit in AWS Shield Advanced after an attack",
+                      "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-request-service-credit.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "(dd_not_public || (dd_l7_enforcing && dd_ddos_tier && dd_rehearsed)) && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "dd_l7_enforcing && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "evt_rehearsal",
+          "title": "Event rehearsal",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Escalation. Has the team rehearsed the failure scenarios most likely to hurt this event, close enough to the event that the people, runbooks and contacts are current? Evidence to collect: the rehearsal plan and scenarios. The dates, attendees and notes of the tabletop and the game day. Detection and mitigation times. Findings with owners and their closure or acceptance.",
+          "helpfulResource": {
+            "displayText": "REL12-BP05 Conduct game days regularly (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html"
+          },
+          "choices": [
+            {
+              "id": "rh_tabletop",
+              "title": "An event-scenario tabletop (DDoS, AZ impairment, dependency outage, surge beyond forecast) ran within 60 days",
+              "helpfulResource": {
+                "displayText": "Good looks like: Within 60 days of the event, the event owner, the event shift, dependency owners and communications staff walked through the event's likely scenarios, at least a DDoS attack (for internet-facing workloads), an Availability Zone impairment, a critical dependency outage and demand beyond forecast, using the real dashboards, runbooks, escalation tree and status templates. Each scenario records the decisions made, how long they took and the gaps found. This applies the core question 'Incident exercises: game days, tabletops and recovery drills' to this event's people and scenarios.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html"
+              },
+              "improvementPlan": {
+                "displayText": "Schedule a tabletop 4-8 weeks before the event. Write a scenario for each major risk with injects (for example, the payment provider times out 10 minutes into the peak), have the event shift respond from the real runbooks and dashboards, time the key decisions, and log every gap as a tracked finding.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html"
+              }
+            },
+            {
+              "id": "rh_gameday",
+              "title": "A game day under event-like load ran within 60 days",
+              "helpfulResource": {
+                "displayText": "Good looks like: Within 60 days of the event, faults were injected while load matched the event's shape, for example during the load re-test: an Availability Zone impairment, a dependency returning errors or latency, a throttled quota, or a failed deployment. The staff for the event window detected and mitigated them with the real alarms and runbooks, and the time to detect and to mitigate was recorded. Platform notes: AWS FIS provides scenarios such as AZ Availability: Power Interruption and actions for EC2, containers and Lambda; check that the actions your platform needs exist, or use your own fault tooling. Partition notes: AWS FIS is available in AWS GovCloud (US) as of 2026-10-06, but its experiment scheduling and experiment reports are not.",
+                "url": "https://docs.aws.amazon.com/fis/latest/userguide/scenario-library.html"
+              },
+              "improvementPlan": {
+                "displayText": "Combine the game day with the load re-test or a second run. Agree stop conditions and a safe environment, inject the event's top faults at event-like load with AWS FIS or your own tooling, let the event shift respond without coaching, measure detection and mitigation times, and record the findings.",
+                "url": "https://docs.aws.amazon.com/fis/latest/userguide/az-availability-scenario.html"
+              }
+            },
+            {
+              "id": "rh_findings_closed",
+              "title": "Rehearsal findings were closed or formally accepted before the event",
+              "helpfulResource": {
+                "displayText": "Good looks like: Every finding from the tabletop and the game day has an owner and a due date before the freeze, and is fixed and re-checked, or formally accepted by the event owner with the acceptance recorded in your risk register. Runbooks, alarms, the escalation tree and status templates were updated from the findings, and the core review was updated where a finding showed a core gap.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html"
+              },
+              "improvementPlan": {
+                "displayText": "Track every rehearsal finding in the same tracker as your other operational work (for example AWS Systems Manager OpsCenter or your own tool), set due dates before the freeze, review open findings at each go/no-go checkpoint, and re-test the fixes for high-impact findings.",
+                "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "rh_tabletop && rh_gameday && rh_findings_closed && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "(rh_tabletop || rh_gameday) && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evt_operate",
+      "name": "02 - Operate",
+      "questions": [
+        {
+          "id": "evt_war_room",
+          "title": "Staffing, war room and escalation for the event window",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Escalation. Is the event window staffed with people who can act, and can they reach every team, partner and provider they depend on quickly, through more than one channel? Evidence to collect: the shift plan and roster for the event window. The escalation tree for each component and the date each entry was last tested. The shared channel and its fallback agreed with partners and, where your support plan provides it, AWS.",
+          "helpfulResource": {
+            "displayText": "OPS10-BP04 Define escalation paths (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html"
+          },
+          "choices": [
+            {
+              "id": "wr_staffing",
+              "title": "A staffed shift plan or war room covers the window, including dependency owners, with shifts and handoffs that limit fatigue",
+              "helpfulResource": {
+                "displayText": "Good looks like: A roster covers the whole event window and the hours just before and after it, with an incident lead, operators for each critical component, owners or contacts for critical dependencies (for example identity, network, database, payment and partners) and a communications lead, in-house or contracted. Shifts have a maximum length, handoffs are written, backups are named, and everyone tested their access, dashboards and runbooks before the window. This adds the event's extra staffing to the core question 'On-call paging, runbooks and escalation'. Partition notes: AWS Countdown Premium is offered for workloads in the AWS GovCloud (US) Regions as of 2026-10-06.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_org_culture_team_res_appro.html"
+              },
+              "improvementPlan": {
+                "displayText": "Build the event roster from the forecast and the risk list: name the incident lead, component operators, dependency contacts and communications lead for each shift, cap shift length, write a handoff checklist, and have everyone test their access to accounts, dashboards and runbooks a week before. Optional help such as AWS Countdown Premium (a paid add-on for Business Support+ and Enterprise Support, with one recurring subscription included in Unified Operations) can add AWS engineers to the plan; sign up 2-3 weeks before the event. Enterprise Support also includes AWS Countdown event management.",
+                "url": "https://aws.amazon.com/premiumsupport/aws-countdown/"
+              }
+            },
+            {
+              "id": "wr_escalation_tree",
+              "title": "An escalation tree per component, including AWS, partners and vendors, was verified within two weeks of the event",
+              "helpfulResource": {
+                "displayText": "Good looks like: For each critical component and dependency the tree lists primary and backup contacts, how to reach them out of hours and the expected response time, including AWS (the support path and case severity to use), partners, vendors, network providers and internal teams. Within two weeks of the event every entry was tested, for example with a test page or call, and the shift knows the fallbacks if the AWS Support Center console or API is impaired. It extends the escalation paths in the core questions 'On-call paging, runbooks and escalation' and 'Escalation to AWS and other providers, and provider-initiated change' to the event's extra parties. Reader note: This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any paging, on-call or escalation tool meets this practice.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html"
+              },
+              "improvementPlan": {
+                "displayText": "Extend the core escalation paths into an event tree: list each component and dependency, primary and backup contacts and channels, and the AWS support path and severity to use. Two weeks before the event, test every contact, fix stale entries, and give the event shift an access-controlled offline copy (for example an encrypted file, or a printed copy held by the incident lead) that is destroyed or refreshed after the event.",
+                "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "IMPROVEMENT_PLAN",
+                  "content": [
+                    {
+                      "displayText": "Case management (AWS Support)",
+                      "url": "https://docs.aws.amazon.com/awssupport/latest/user/case-management.html"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "wr_shared_channel",
+              "title": "A pre-agreed secure shared channel with AWS and partners exists, plus a fallback",
+              "helpfulResource": {
+                "displayText": "Good looks like: Before the event, the event shift and key partners agreed on an access-controlled channel for the window, such as a conference bridge or a chat channel, with who joins and when. The AWS leg is whatever your support plan or engagement provides: an account team or AWS Countdown Premium engagement where you have one, or otherwise the AWS Support case path with the chat or phone contact options of your plan and the case severity to use, written into the escalation tree. A fallback channel does not depend on the workload, its identity provider or its primary Region. Sensitive and export-controlled data stay out of shared channels.",
+                "url": "https://aws.amazon.com/premiumsupport/aws-countdown/"
+              },
+              "improvementPlan": {
+                "displayText": "Agree the channel and its fallback with each partner, and with AWS where your support plan or engagement provides for it, at least two weeks before the event. Test that every party can join, document who opens it and when, keep the joining details in the access-controlled offline copy of the escalation tree, and rotate bridge PINs or links after the event.",
+                "url": "https://docs.aws.amazon.com/awssupport/latest/user/case-management.html"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Related AWS Post-Event Summary (Oct 2025): for almost three hours customers could not create, view or update support cases through the AWS Support Console and API, so agree escalation channels with AWS and partners that do not depend on a single console.",
+                      "url": "https://aws.amazon.com/message/101925/"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "wr_staffing && wr_escalation_tree && wr_shared_channel && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "wr_staffing && wr_escalation_tree && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        },
+        {
+          "id": "evt_degraded_modes",
+          "title": "Tested degraded modes and public communications",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Blast radius containment. If demand or a dependency failure exceeds what the workload can serve during the event, can you shed load in tested ways and keep customers and stakeholders informed? Evidence to collect: the degraded modes and feature switches, with the date each was last tested under load and how long it took to engage. The pre-approved status messages, approvers and stakeholder notification list.",
+          "helpfulResource": {
+            "displayText": "REL05-BP01 Implement graceful degradation (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html"
+          },
+          "choices": [
+            {
+              "id": "dm_degraded_mode",
+              "title": "A waiting room or visitor prioritization, static fallback, read-only or async-intake mode was tested",
+              "helpfulResource": {
+                "displayText": "Good looks like: At least one degraded mode protects the critical journey when demand passes tested capacity or a dependency fails: an admission queue that lets users in at a sustainable rate (a partner product or your own), a static version of key pages, a read-only mode, or accepting requests for later processing with a confirmation. It is turned on by configuration or automatically, it was tested under load before the event, and customers see a clear message instead of errors. This extends the core question 'Core journeys keep working when dependencies fail' to event surges.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html"
+              },
+              "improvementPlan": {
+                "displayText": "Choose the degraded mode that fits the critical journey, build it so the normal code path serves it rather than a rarely used fallback, add a configuration switch and an automatic trigger where safe, and test it at event-like load during the re-test or game day, timing how long it takes to engage.",
+                "url": "https://builder.aws.com/content/3Eun1EEyX6p2e3VYNyRLSJzLuMV/using-load-shedding-to-avoid-overload"
+              },
+              "additionalResources": [
+                {
+                  "type": "HELPFUL_RESOURCE",
+                  "content": [
+                    {
+                      "displayText": "Avoiding fallback in distributed systems (Amazon Builders' Library)",
+                      "url": "https://builder.aws.com/content/3EuS9Sakq7L3VLQIF3qzfMfke1Y/avoiding-fallback-in-distributed-systems"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "dm_kill_switches",
+              "title": "Non-essential features can be shed within minutes without a deployment",
+              "helpfulResource": {
+                "displayText": "Good looks like: Non-essential features (for example recommendations, search suggestions, rich media, analytics calls or report generation) each have a switch that operators can turn off within minutes through validated, versioned configuration, without building or deploying code, and turning them off was tested under load. The runbook lists the switches in the order to use them and who may use them during the window. This adds feature shedding to the emergency levers in the core question 'Overload protection and tenant fairness'. Platform notes: For example AWS AppConfig feature flags, or your own flag service that caches a last-known-good value so a flag store outage cannot block requests.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html"
+              },
+              "improvementPlan": {
+                "displayText": "List the features the event does not need, rank them by cost and value, wrap each in a feature flag read from dynamic configuration with a safe default, deploy flag changes through a validated configuration pipeline, and practice turning them off at load, recording how long each takes.",
+                "url": "https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile-feature-flags.html"
+              }
+            },
+            {
+              "id": "dm_status_comms",
+              "title": "Pre-approved public status messages and a stakeholder notification list are ready for the event window",
+              "helpfulResource": {
+                "displayText": "Good looks like: Pre-approved public messages exist for the likely situations (slow service, queueing, partial outage, full outage, resolved), with the channels, the approver on each shift and the update cadence, plus a list of stakeholders to notify (for example partners, executives, regulators or election officials) with contact details. They extend the communication plan in the core question 'Identify impacted customers and keep them informed', and can be published through a channel that does not depend on the workload. Reader note: Some services named on this page are closed to new customers or have an announced end of support (for example AWS Systems Manager Incident Manager, closed to new customers, and Amazon Pinpoint, end of support 2026-10-30, as of 2026-10-06). Any incident-management, paging or notification tool meets this practice, for example Amazon SNS, AWS End User Messaging or a partner tool.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html"
+              },
+              "improvementPlan": {
+                "displayText": "Draft and pre-approve status messages for each likely situation with your communications and legal owners, list the stakeholders to notify and how, assign an approver to every shift, and rehearse publishing one message through the independent channel during the tabletop.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_dashboards.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores High risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "dm_degraded_mode && dm_kill_switches && dm_status_comms && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "(dm_degraded_mode || dm_kill_switches) && !none_no",
+              "risk": "MEDIUM_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "HIGH_RISK"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "evt_after",
+      "name": "03 - After the event",
+      "questions": [
+        {
+          "id": "evt_post_event",
+          "title": "Post-event review and scale-down",
+          "description": "Maximum risk: Medium (not launch-blocking, remediate on a plan). Category: Forensics. After the event, did you compare what happened with the plan, feed the lessons back into your reviews and plans, and return capacity and cost to normal? Evidence to collect: the post-event review document and its date. Actions with owners and due dates. The updated core review, the next event plan and the saved milestones. The scale-down record and the cost report for the event period.",
+          "helpfulResource": {
+            "displayText": "OPS11-BP02 Perform post-incident analysis (AWS Well-Architected)",
+            "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html"
+          },
+          "choices": [
+            {
+              "id": "px_retro",
+              "title": "A review within two weeks covered incidents, near-misses and capacity against forecast",
+              "helpfulResource": {
+                "displayText": "Good looks like: Within two weeks of the event, a blameless review compared actual traffic with the forecast and the capacity provided, and covered incidents, near-misses, alarms that fired or stayed silent, the decisions made and how long they took, which degraded modes or levers were used, and how escalations to partners and AWS worked. Actions have owners and due dates. This applies the core question 'Post-incident analysis and learning loop' to the event as a whole, not only to its incidents. Reader note: This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any post-incident analysis process or tool meets this practice.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html"
+              },
+              "improvementPlan": {
+                "displayText": "Book the review before the event so it happens within two weeks. Collect metrics against the forecast, the incident and near-miss log, and observations from the shift, partners and AWS; write the timeline and lessons without blame; and give each action an owner and a due date.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_rca_resiliency.html"
+              }
+            },
+            {
+              "id": "px_lessons_fed",
+              "title": "Lessons were fed into the core ORR and the next event plan, and a milestone was saved",
+              "helpfulResource": {
+                "displayText": "Good looks like: Lessons became changes: core review answers and notes were updated where the event exposed a gap, the event plan and forecast template for the next event were revised (for example new quotas, lead times or scenarios), and milestones were saved in the AWS Well-Architected Tool for the core and event reviews after the event, so the next review starts from evidence.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html"
+              },
+              "improvementPlan": {
+                "displayText": "For each lesson, decide where it belongs: a core question answer, a new or revised question in your own add-on lens, the next event plan, or a runbook. Make the updates, then save post-event milestones on the core and event reviews and link them from the review document.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html"
+              }
+            },
+            {
+              "id": "px_cost_review",
+              "title": "Scale-down and cost review are complete",
+              "helpfulResource": {
+                "displayText": "Good looks like: The scale-down plan was carried out: temporary capacity, raised minimums, reservations, provisioned concurrency and temporary rules were removed or returned to normal once traffic and backlogs settled, and the cost of the event period was compared with the budget, with any surprises explained and fed into the next forecast. Partition notes: Billing and cost data for AWS GovCloud (US) accounts are viewed from the associated standard AWS account (as of 2026-10-06).",
+                "url": "https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html"
+              },
+              "improvementPlan": {
+                "displayText": "Run the scale-down plan as normal pipeline changes, confirm each temporary resource is removed or back at its baseline, compare the event-period cost with the budget in AWS Cost Explorer, and record the cost per unit of event demand to improve the next forecast.",
+                "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html"
+              }
+            },
+            {
+              "id": "none_no",
+              "title": "None of these",
+              "helpfulResource": {
+                "displayText": "Select this if none of the statements above is true today. The question then scores Medium risk."
+              }
+            }
+          ],
+          "riskRules": [
+            {
+              "condition": "px_retro && px_lessons_fed && px_cost_review && !none_no",
+              "risk": "NO_RISK"
+            },
+            {
+              "condition": "default",
+              "risk": "MEDIUM_RISK"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

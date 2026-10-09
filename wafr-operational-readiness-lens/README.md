@@ -16,7 +16,7 @@ versions of the README.
 These files are never moved, renamed, edited or deleted, so existing links keep working. They are kept for
 reference only: v1.3.x has known scoring limitations (see the
 [README](../README.md#known-scoring-limitations-of-v13x)). For a new install, use the current release. To move a
-lens you already imported from v1.3.x to 2.0.0, follow [`MIGRATION.md`](../MIGRATION.md): edit your existing lens,
+lens you already imported from v1.3.x to version 2, follow [`MIGRATION.md`](../MIGRATION.md): edit your existing lens,
 never create a second one.
 
 ## Released files (from 2.0.0)

@@ -71,10 +71,12 @@ scores certificate pinning as High risk. Questions that refine a class already o
 `architecture_retry_timeouts`, `releases_phased_rollout`, `event_canary_alarms` and `event_az_evacuation`, stay in
 the full core with the same High bars.
 
-**A core-path-only session is preliminary.** A launch go or no-go requires the full core. `readiness_signoff`
-includes the core statement `rd_scope_complete` ("every question in this lens is answered or marked not
-applicable with a reason"), so a review that skips questions cannot score better than High on the decision
-question.
+**A core-path-only session is preliminary.** A launch go or no-go requires the full core. `readiness_signoff` scores
+better than High only if the core statement `rd_scope_complete` ("every question in this lens is answered or marked
+not applicable with a reason") is selected or marked not applicable, and the WA Tool does not check that statement:
+unanswered questions show as Unanswered, not as High risk. Before selecting it, confirm in the lens review that no
+question in the core or an attached companion lens is still unanswered, and do not accept a not-applicable mark on
+it.
 
 ## Roles
 

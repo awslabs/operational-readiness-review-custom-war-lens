@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2021-11-01",
   "name": "ORR - Mission-Critical Event Readiness",
-  "description": "ORR - Mission-Critical Event Readiness custom lens 1.0.0 for the AWS Well-Architected Tool. Attach it alongside a current Operational Readiness Review (ORR) core review before a planned peak, such as an election, an enrollment or tax deadline, a product launch, ticket sales, a broadcast, or a cutover. Suggested timing: procure 3-6 months before, complete this review at least 8 weeks before, re-test load 30-60 days before, close High risks 4 weeks before, and review within 2 weeks after. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
+  "description": "ORR - Mission-Critical Event Readiness custom lens 1.0.1 for the AWS Well-Architected Tool. Attach it alongside a current Operational Readiness Review (ORR) core review before a planned peak, such as an election, an enrollment or tax deadline, a product launch, ticket sales, a broadcast, or a cutover. Suggested timing: procure 3-6 months before, complete this review at least 8 weeks before, re-test load 30-60 days before, close High risks 4 weeks before, and review within 2 weeks after. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
   "pillars": [
     {
       "id": "evt_prepare",
@@ -105,7 +105,7 @@
         {
           "id": "evt_peak_retest",
           "title": "Event-specific load re-test",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Has capacity been re-proven against this event's own forecast, recently enough that later changes cannot have invalidated the result? Evidence to collect: the agreed event forecast (peak, shape, ramp, duration, worst case and margin). The re-test plan and report with its date, achieved rate, latency, errors and first bottleneck. The alarm, scaling and runbook observations recorded during the test.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Has capacity been re-proven against this event's own forecast, recently enough that later changes cannot have invalidated the result? Evidence to collect: the agreed event forecast (peak, shape, ramp, duration, worst case and margin). The re-test plan and report with its date, achieved rate, latency, errors and first bottleneck. The alarm, scaling and runbook observations recorded during the test.",
           "helpfulResource": {
             "displayText": "REL12-BP03 Test scalability and performance requirements",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html"
@@ -173,7 +173,7 @@
         {
           "id": "evt_capacity_quotas",
           "title": "Quotas and capacity secured for the event dates",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Are the quotas and capacity that the event needs approved and in place for the event dates, with enough lead time, and is there a plan to scale back down afterward? Evidence to collect: applied quota values or approved increase requests for each account and Region, including recovery Regions and third-party APIs. Capacity reservations, scheduled scaling or pre-scaling settings for the event dates. The post-event scale-down and cost plan.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Are the quotas and capacity that the event needs approved and in place for the event dates, with enough lead time, and is there a plan to scale back down afterward? Evidence to collect: applied quota values or approved increase requests for each account and Region, including recovery Regions and third-party APIs. Capacity reservations, scheduled scaling or pre-scaling settings for the event dates. The post-event scale-down and cost plan.",
           "helpfulResource": {
             "displayText": "REL01-BP01 Aware of service quotas (AWS Well-Architected)",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html"
@@ -280,7 +280,7 @@
         {
           "id": "evt_ddos_response",
           "title": "DDoS response readiness for high-visibility endpoints",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Are the event's internet-facing endpoints ready to absorb and respond to network and application-layer DDoS attacks during a high-visibility event? Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep its evidence. Evidence to collect: the list of internet-facing endpoints and the web ACL in front of each. The application-layer DDoS mechanism, its mode, sensitivity and alarms. The IaC diff showing the web ACL reconciled. The DDoS tier decision. The DDoS runbook and the date and notes of its last rehearsal.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Are the event's internet-facing endpoints ready to absorb and respond to network and application-layer DDoS attacks during a high-visibility event? Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep its evidence. Evidence to collect: the list of internet-facing endpoints and the web ACL in front of each. The application-layer DDoS mechanism, its mode, sensitivity and alarms. The IaC diff showing the web ACL reconciled. The DDoS tier decision. The DDoS runbook and the date and notes of its last rehearsal.",
           "helpfulResource": {
             "displayText": "AWS Best Practices for DDoS Resiliency (AWS whitepaper)",
             "url": "https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html"

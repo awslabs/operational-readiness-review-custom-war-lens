@@ -34,7 +34,7 @@ NONE_TITLE = "None of these"
 
 CATEGORIES = [
     "Deployment safety",
-    "Defense against customers",
+    "Defense against overload",   # the whitepaper's "Defense against customers" (renamed in core 2.0.1, event 1.0.1 and genai 1.0.1)
     "Defense against dependencies",
     "Data recovery",
     "Operator safety",

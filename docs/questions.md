@@ -5,7 +5,7 @@ The JSON files in `dist/` are generated from the same sources.
 
 Risk rules are evaluated top to bottom and the first true condition sets the risk. Tiers: a scope exit scores No risk on its own; core statements are needed to avoid High; one statement of each alternative group is needed to avoid High; secondary statements are needed only for No risk. "None of these" (`none_no`) appears only in the guard `&& !none_no` on the No risk and Medium rules (sandbox gate G1), so selecting it, alone or with other choices, scores the question's maximum risk.
 
-## AWS Operational Readiness Review 2.0.0
+## AWS Operational Readiness Review 2.0.1
 
 36 questions, 134 scored statements, 15 on the core path.
 
@@ -437,11 +437,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | Yes |
 | v1.3.6 lineage | `architecture_defensive_throttling`, `event_queue_backlog` |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. How do you stop one client, tenant or traffic source from overloading the workload and degrading it for everyone else? Out of scope if: the workload accepts no requests or events from users or other systems (rare). Mark the question as not applicable with that reason, and keep an inventory of entry points showing none. Evidence to collect: limit configuration per API, tenant or source. The last limit change and how long it took. Throttling and load-shedding metrics. The most recent surge test report.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. How do you stop one client, tenant or traffic source from overloading the workload and degrading it for everyone else? Out of scope if: the workload accepts no requests or events from users or other systems (rare). Mark the question as not applicable with that reason, and keep an inventory of entry points showing none. Evidence to collect: limit configuration per API, tenant or source. The last limit change and how long it took. Throttling and load-shedding metrics. The most recent surge test report.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -508,11 +508,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | Yes |
 | v1.3.6 lineage | `architecture_defensive_throttling` |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Do internet-facing endpoints have a web application firewall with rate limits, alarms that page on application-layer floods, and a rehearsed DDoS response that accounts for AWS Shield Advanced moving application-layer protection to the AWS WAF Anti-DDoS managed rule group? Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep the evidence. Evidence to collect: every internet-facing endpoint and the web ACL or network control that protects it. Managed and rate-based rules and their actions (Count or Block). Alarms on rate-based rule and Anti-DDoS rule group metrics and where they page. The DDoS runbook and the date of its last rehearsal. For Shield Advanced subscribers, which web ACLs run the Anti-DDoS managed rule group after the auto-upgrade that starts 2026-10-25 (AWS Security Blog, as updated 2026-10-05) and whether IaC matches.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Do internet-facing endpoints have a web application firewall with rate limits, alarms that page on application-layer floods, and a rehearsed DDoS response that accounts for AWS Shield Advanced moving application-layer protection to the AWS WAF Anti-DDoS managed rule group? Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep the evidence. Evidence to collect: every internet-facing endpoint and the web ACL or network control that protects it. Managed and rate-based rules and their actions (Count or Block). Alarms on rate-based rule and Anti-DDoS rule group metrics and where they page. The DDoS runbook and the date of its last rehearsal. For Shield Advanced subscribers, which web ACLs run the Anti-DDoS managed rule group after the auto-upgrade that starts 2026-10-25 (AWS Security Blog, as updated 2026-10-05) and whether IaC matches.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -650,11 +650,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | No |
 | v1.3.6 lineage | `architecture_demand_estimates` |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Do quotas, scaling limits and capacity cover forecast peak demand plus failover in every account and Region the workload uses, with enough lead time to get more? Evidence to collect: the demand forecast (normal and peak, key event dates, growth and failover scenarios) and who approved it. Current quotas and scaling ceilings compared with forecast peak plus failover in each account and Region. Quota usage alarms. Capacity reservations or scheduled scaling, and measured scaling lead times.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Do quotas, scaling limits and capacity cover forecast peak demand plus failover in every account and Region the workload uses, with enough lead time to get more? Evidence to collect: the demand forecast (normal and peak, key event dates, growth and failover scenarios) and who approved it. Current quotas and scaling ceilings compared with forecast peak plus failover in each account and Region. Quota usage alarms. Capacity reservations or scheduled scaling, and measured scaling lead times.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -710,11 +710,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | Yes |
 | v1.3.6 lineage | `architecture_load_testing` |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Has the workload been load tested at or above forecast peak with margin, do you know where and how it breaks, and did alarms and scaling work during the test? Penetration testing is scored in the security launch gate question. High-volume tests follow the Amazon EC2 Testing Policy. DDoS simulations follow the AWS DDoS Simulation Testing Policy, whose standard terms (an approved AWS DDoS Test Partner and a Shield Advanced protected target) GovCloud-only workloads cannot meet, as Shield Advanced is not available in AWS GovCloud (US) as of 2026-10-05. Other tests need prior AWS approval. Evidence to collect: the forecast peak and the documented margin. The latest load test report with its date, environment, traffic model and results against latency and error goals. The breaking load, first bottleneck and limiting quotas. The alarms, scaling events and runbook steps observed during the test.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Has the workload been load tested at or above forecast peak with margin, do you know where and how it breaks, and did alarms and scaling work during the test? Penetration testing is scored in the security launch gate question. High-volume tests follow the Amazon EC2 Testing Policy. DDoS simulations follow the AWS DDoS Simulation Testing Policy, whose standard terms (an approved AWS DDoS Test Partner and a Shield Advanced protected target) GovCloud-only workloads cannot meet, as Shield Advanced is not available in AWS GovCloud (US) as of 2026-10-05. Other tests need prior AWS approval. Evidence to collect: the forecast peak and the documented margin. The latest load test report with its date, environment, traffic model and results against latency and error goals. The breaking load, first bottleneck and limiting quotas. The alarms, scaling events and runbook steps observed during the test.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -2467,7 +2467,7 @@ Sources:
 - `rd_scope_complete`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/APIReference/API_UpdateAnswer.html>
 - `rd_next_review`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html>
 
-## ORR - Mission-Critical Event Readiness 1.0.0
+## ORR - Mission-Critical Event Readiness 1.0.1
 
 8 questions, 26 scored statements.
 
@@ -2555,11 +2555,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | No |
 | v1.3.6 lineage | new topic |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Has capacity been re-proven against this event's own forecast, recently enough that later changes cannot have invalidated the result? Evidence to collect: the agreed event forecast (peak, shape, ramp, duration, worst case and margin). The re-test plan and report with its date, achieved rate, latency, errors and first bottleneck. The alarm, scaling and runbook observations recorded during the test.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Has capacity been re-proven against this event's own forecast, recently enough that later changes cannot have invalidated the result? Evidence to collect: the agreed event forecast (peak, shape, ramp, duration, worst case and margin). The re-test plan and report with its date, achieved rate, latency, errors and first bottleneck. The alarm, scaling and runbook observations recorded during the test.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -2615,11 +2615,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | No |
 | v1.3.6 lineage | new topic |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Are the quotas and capacity that the event needs approved and in place for the event dates, with enough lead time, and is there a plan to scale back down afterward? Evidence to collect: applied quota values or approved increase requests for each account and Region, including recovery Regions and third-party APIs. Capacity reservations, scheduled scaling or pre-scaling settings for the event dates. The post-event scale-down and cost plan.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Are the quotas and capacity that the event needs approved and in place for the event dates, with enough lead time, and is there a plan to scale back down afterward? Evidence to collect: applied quota values or approved increase requests for each account and Region, including recovery Regions and third-party APIs. Capacity reservations, scheduled scaling or pre-scaling settings for the event dates. The post-event scale-down and cost plan.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -2675,11 +2675,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | No |
 | v1.3.6 lineage | new topic |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Are the event's internet-facing endpoints ready to absorb and respond to network and application-layer DDoS attacks during a high-visibility event? Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep its evidence. Evidence to collect: the list of internet-facing endpoints and the web ACL in front of each. The application-layer DDoS mechanism, its mode, sensitivity and alarms. The IaC diff showing the web ACL reconciled. The DDoS tier decision. The DDoS runbook and the date and notes of its last rehearsal.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Are the event's internet-facing endpoints ready to absorb and respond to network and application-layer DDoS attacks during a high-visibility event? Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep its evidence. Evidence to collect: the list of internet-facing endpoints and the web ACL in front of each. The application-layer DDoS mechanism, its mode, sensitivity and alarms. The IaC diff showing the web ACL reconciled. The DDoS tier decision. The DDoS runbook and the date and notes of its last rehearsal.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -2984,7 +2984,7 @@ Sources:
 - `px_lessons_fed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>
 - `px_cost_review`: helpful <https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html>
 
-## ORR - Generative AI and Agents 1.0.0
+## ORR - Generative AI and Agents 1.0.1
 
 9 questions, 25 scored statements.
 
@@ -3072,11 +3072,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | No |
 | v1.3.6 lineage | new topic |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Are token and request quotas for every model, inference profile, endpoint and Region sized from how the workload's requests actually consume quota, and protected from your own batch and test traffic? Evidence to collect: per model and call path, measured input and output tokens and the max_tokens setting. The quota calculation for peak plus failover and the granted quota values. Which traffic uses which capacity option or account.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Are token and request quotas for every model, inference profile, endpoint and Region sized from how the workload's requests actually consume quota, and protected from your own batch and test traffic? Evidence to collect: per model and call path, measured input and output tokens and the max_tokens setting. The quota calculation for peak plus failover and the granted quota values. Which traffic uses which capacity option or account.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -3390,11 +3390,11 @@ Sources:
 | | |
 |---|---|
 | Maximum risk | High |
-| Category | Defense against customers |
+| Category | Defense against overload |
 | Core path | No |
 | v1.3.6 lineage | new topic |
 
-Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against customers. Can one caller, bug or agent loop run up model spend faster than you can see it in billing, and is there a tested way to find and stop it? Evidence to collect: the token or cost budget per caller type and where it is enforced. The spend-stop trigger, threshold and the record of its last test. How on-call identifies the caller behind a spike.
+Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Can one caller, bug or agent loop run up model spend faster than you can see it in billing, and is there a tested way to find and stop it? Evidence to collect: the token or cost budget per caller type and where it is enforced. The spend-stop trigger, threshold and the record of its last test. How on-call identifies the caller behind a spike.
 
 | Choice | Tier | Statement |
 |---|---|---|
@@ -3414,7 +3414,7 @@ Statement detail:
 <details>
 <summary><code>sp_token_budgets</code>: Token or cost budgets per user, tenant or key are enforced before each call (or one trusted caller is capped by the spend stop)</summary>
 
-Good looks like: Every caller type, including anonymous, trial and internal callers, has a token or cost budget per period, checked at the entry point before each model call, not only a request-rate limit. One trusted internal caller meets this by recording that this question's spend stop caps it. Per-task and per-day agent budgets are scored by the Agentic AI Lens (AGENTCOST07-BP01). This statement scores budgets per caller identity and extends the core per-source limits statement, which owns request limits, to the token unit. Platform notes: AgentCore Gateway token rate limits are per minute, cover only known inference paths, fail open by default and can be briefly exceeded (as of 2026-10-07), so daily or monthly budgets need your own meter. Amazon API Gateway usage plans are best-effort and do not count tokens. Partition notes: As of 2026-10-07, AWS Capabilities by Region lists AgentCore Gateway rate limits in AWS GovCloud (US-West). Test them in your GovCloud account before relying on them.
+Good looks like: Every caller type, including anonymous, trial and internal callers, has a token or cost budget per period, checked at the entry point before each model call, not only a request-rate limit. One trusted internal caller meets this by recording that this question's spend stop caps it. Per-task and per-day agent budgets are scored by the Agentic AI Lens (AGENTCOST07-BP01). This statement extends the core per-source limits statement, which owns request limits, to tokens per caller. Platform notes: AgentCore Gateway token rate limits are per minute, cover only known inference paths, fail open on rate limit service timeouts or an unresolved dimension and can be briefly exceeded (as of 2026-10-09), so daily or monthly budgets need your own meter. Amazon API Gateway usage plans are best-effort and do not count tokens. Partition notes: As of 2026-10-07, AWS Capabilities by Region lists AgentCore Gateway rate limits in AWS GovCloud (US-West). Test them in your GovCloud account before relying on them.
 
 Improvement plan: Agree a budget per caller type and period with the business owner. Meter tokens per caller from the usage fields in each response, check the remaining budget at the entry point before every model call (in your own gateway for self-hosted and third-party models), and return a clear over-budget response. Test with one caller generating a surge while others keep working. Cost per request varies by orders of magnitude with tokens, and on Amazon Bedrock output tokens of some models count against quotas at a higher burndown rate, so size budgets in tokens, not requests.
 
@@ -3495,7 +3495,7 @@ Improvement plan: Restrict each tool backend, and any runtime target, with a res
 
 Good looks like: Operators can, within the minutes the runbook states, block new tool calls for all agents with a deny-all policy or flag and end in-flight sessions, on a path that does not depend on the agent runtime, and did so in pre-production or a game day with the time recorded. Per-agent containment, credential revocation and recurring containment tests are scored by the Agentic AI Lens (AGENTSEC07-BP04). It is separate from the event lens's feature switches and the core single-source lever. Platform notes: AgentCore (as of 2026-10-07): a forbid-all policy at the gateway, a harness before_invocation Lambda hook that returns deny (a before_tool_call deny only skips one tool call and the loop continues), StopRuntimeSession for each active session ID, and an IAM deny on the execution roles. Lambda hook failureMode defaults to deny. Partition notes: As of 2026-10-07, AWS Capabilities by Region lists the harness control-plane APIs and StopRuntimeSession in AWS GovCloud (US-West). Exercise each lever there.
 
-Improvement plan: Write the stop runbook: who decides, the deny-all lever for all agents, and how in-flight sessions are ended. Keep a current record of active session IDs (for example from invocation logs) so StopRuntimeSession can be called for each one. Implement each lever on a path that does not depend on the agent runtime, rehearse it in pre-production or a game day, and record the time from the decision to the last tool call. On AgentCore, StopRuntimeSession shares the runtime data plane quota, and a gateway rate limit of 0 takes up to 30 seconds and rate limits fail open by default, so do not rely on a rate limit alone (as of 2026-10-07).
+Improvement plan: Write the stop runbook: who decides, the deny-all lever for all agents, and how in-flight sessions are ended. Keep a current record of active session IDs (for example from invocation logs) so StopRuntimeSession can be called for each one. Implement each lever on a path that does not depend on the agent runtime, rehearse it in pre-production or a game day, and record the time from the decision to the last tool call. On Amazon Bedrock AgentCore, StopRuntimeSession shares the runtime data plane quota, a gateway rate limit of 0 takes up to 30 seconds to apply, and rate limits fail open when the rate limit service is unavailable or a dimension cannot be resolved, so do not rely on a rate limit alone (as of 2026-10-09).
 
 </details>
 

@@ -1,7 +1,7 @@
 schema: orrlens/lens/1
 key: event
 name: ORR - Mission-Critical Event Readiness
-version: 1.0.0
+version: 1.0.1
 file_stem: orr-event
 description: >-
   ORR - Mission-Critical Event Readiness custom lens {version} for the AWS Well-Architected Tool. Attach it

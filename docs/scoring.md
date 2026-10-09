@@ -2,7 +2,7 @@
 
 This page explains how answers become risk levels in the ORR lens family, what each level means, which properties
 the build proves for every question, how the bars are calibrated, and how they may change. It applies to the core
-lens (2.0.0), to ORR - Mission-Critical Event Readiness (1.0.0) and to ORR - Generative AI and Agents (1.0.0).
+lens (2.0.x), to ORR - Mission-Critical Event Readiness (1.0.x) and to ORR - Generative AI and Agents (1.0.x).
 
 ## Summary
 

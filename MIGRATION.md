@@ -4,6 +4,10 @@ This guide moves an existing ORR custom lens, and the workloads that use it, fro
 lens 2.0.0. The ORR - Mission-Critical Event Readiness and ORR - Generative AI and Agents companions are new
 lenses: install them with the first-install steps in the [README](README.md#first-install).
 
+The procedure is the same for every version 2 file. Where this guide says 2.0.0, use the version you are
+installing; going straight from v1.3.x to 2.0.1 is the same upgrade. To move a lens that is already on 2.0.0 to
+2.0.1, which changes only display text, see [Patch releases](README.md#patch-releases) instead.
+
 What to expect:
 
 - 2.0.0 is published as a **major version of the same lens**. Workloads that use the lens are notified and each

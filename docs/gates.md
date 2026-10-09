@@ -130,6 +130,40 @@ scaling plans and the `AWS::AutoScalingPlans::ScalingPlan` CloudFormation resour
 one of the three rewordings above, and it changes only a choice helpful-resource display text, a field that G4
 showed accepts every character tested, within the 1,024-character limit the lens keeps.
 
+## Patch release check, 2026-10-09 (core 2.0.1, event 1.0.1, genai 1.0.1)
+
+The patch releases change only display text (see `CHANGELOG.md`), so the gate checked the upgrade path that a patch
+uses: a minor version published over an existing lens. The check ran through the WA Tool API with AWS CLI v2 in the
+same non-production sandbox account, in us-east-1.
+
+1. The released `orr-core-2.0.0`, `orr-event-1.0.0` and `orr-genai-1.0.0` files were imported as new lenses and
+   published (`CreateLensVersion` 2.0.0, 1.0.0 and 1.0.0).
+2. A workload with all three lenses and the AWS Well-Architected Framework lens was defined, and four questions
+   were answered: one selected choice with notes on `architecture_edge_protection`, `evt_ddos_response` and
+   `gai_capacity_quotas`, and `readiness_signoff` marked "does not apply" with reason `OTHER` and notes.
+3. The 2.0.1 and 1.0.1 files were imported over each lens (`ImportLens` with `LensAlias`), each appeared as a
+   newer `DRAFT` under `ListLenses`, and `CreateLensVersion` succeeded with `IsMajorVersion=false`.
+
+| Check | Result |
+|---|---|
+| Lens version on the workload (`GetLensReview`) | Moved to 2.0.1, 1.0.1 and 1.0.1 without an upgrade step |
+| Notifications for the workload (`ListNotifications`) | None. The console showed no **Lens version not current** banner and no **Question upgraded** labels |
+| Selected choices, notes, risk, "does not apply" flag and reason (`GetAnswer`) | Unchanged on all four questions |
+| Lens risk counts (`GetLensReview`) | Unchanged on all three lenses |
+| Question description | Shows `Category: Defense against overload` |
+| `ExportLens` of each new version | Equal to the built file, apart from the `number` fields the WA Tool adds to questions and choices |
+| Positive control: the same genai file published once more as a major version | `ListNotifications` returned `LENS_VERSION_UPGRADED` (version in use 1.0.1), and the workload stayed on 1.0.1 until upgraded |
+
+The released files were then imported as new lenses (first install): each appeared as `DRAFT`, `CreateLensVersion`
+2.0.1, 1.0.1 and 1.0.1 succeeded, `GetLens` returned the published names, and a new workload listed 36, 8 and 9
+Unanswered questions in four, three and three pillars.
+
+The two question screenshots under `_img/` that show changed text (`WAT-Question.png` and
+`WAT-GenAIQuestion.png`) were retaken from the 2.0.1 and 1.0.1 lenses in a freshly defined workload. Version
+names accept only letters, digits, `_` and `.` (`CreateLensVersion` rejected a hyphen). Everything
+created for the run was deleted afterwards; the account held no workloads, custom lenses, review templates,
+profiles or share invitations.
+
 ## Details of the 2026-10-06 run
 
 ### G1: "None of these" exclusivity

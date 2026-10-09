@@ -6,7 +6,7 @@ title: Overload protection and tenant fairness
 max_risk: HIGH
 priority: P0
 core_path: true
-category: Defense against customers
+category: Defense against overload
 lineage: [architecture_defensive_throttling, event_queue_backlog]
 choice_prefix: tp_
 description:

@@ -276,14 +276,18 @@ class RepositoryData(unittest.TestCase):
 
     def test_genai_lens_metadata(self):
         meta = yaml.safe_load((REPO / "lens-src/genai/lens.yaml").read_text())
-        self.assertEqual((meta["key"], meta["name"], meta["version"], meta["file_stem"]),
-                         ("genai", "ORR - Generative AI and Agents", "1.0.0", "orr-genai"))
+        self.assertEqual((meta["key"], meta["name"], meta["file_stem"]),
+                         ("genai", "ORR - Generative AI and Agents", "orr-genai"))
+        # The version moves with each release; it must be SemVer and match the ID registry.
+        self.assertRegex(meta["version"], r"^1\.\d+\.\d+$")
+        ids = yaml.safe_load((REPO / "ids.yaml").read_text())
+        self.assertEqual(ids["lenses"]["genai"]["current_version"], meta["version"])
         self.assertIs(meta["none_exclusive_guard"], True)
         self.assertEqual([(p["id"], p["name"]) for p in meta["pillars"]], [
             ("gai_models", "01 - Models, capacity and dependencies"),
             ("gai_release", "02 - Change safety and evaluation"),
             ("gai_operate", "03 - Operations and safeguards")])
-        self.assertLessEqual(len(" ".join(meta["description"].split()).replace("{version}", "1.0.0")),
+        self.assertLessEqual(len(" ".join(meta["description"].split()).replace("{version}", meta["version"])),
                              C.MAX_LENS_DESCRIPTION)
         self.assertIn("genai", C.LENS_ORDER)
 

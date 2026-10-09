@@ -13,9 +13,12 @@ Read [running-an-orr.md](running-an-orr.md) first for the phases, roles, readout
 ## Three rules
 
 1. **Run the full core for a launch decision.** The 15-question core path is for triage and recurring check-ins. A
-   go or no-go needs every question answered or marked not applicable with a reason. `readiness_signoff` enforces
-   this through `rd_scope_complete`: a review that skips questions cannot score better than High on the decision
-   question.
+   go or no-go needs every question answered or marked not applicable with a reason. `readiness_signoff` scores
+   better than High only if `rd_scope_complete` is met (selected, or marked not applicable, which the WA Tool counts
+   as met), but the WA Tool does not check that statement:
+   unanswered questions show as Unanswered, not as High risk. Before selecting it, confirm in the lens review that
+   no question in the core or an attached companion lens is still unanswered, and do not accept a not-applicable
+   mark on that statement or on the decision question.
 2. **Accept a scope exit only with evidence.** A scope exit, such as "The workload has no internet-facing
    endpoints" or "Only Regional managed services on the critical path", scores No risk outright. Its helpful text
    lists the evidence to collect. If the team cannot show it, the scope exit is not selected.

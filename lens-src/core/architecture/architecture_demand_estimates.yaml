@@ -6,7 +6,7 @@ title: Peak demand, quotas and capacity headroom
 max_risk: HIGH
 priority: P1
 core_path: false
-category: Defense against customers
+category: Defense against overload
 lineage: [architecture_demand_estimates]
 choice_prefix: dem_
 description:

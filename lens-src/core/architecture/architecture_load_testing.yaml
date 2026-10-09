@@ -6,7 +6,7 @@ title: Load testing to peak margin and breaking point
 max_risk: HIGH
 priority: P0
 core_path: true
-category: Defense against customers
+category: Defense against overload
 lineage: [architecture_load_testing]
 choice_prefix: lt_
 description:

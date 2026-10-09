@@ -6,7 +6,7 @@ title: Edge and DDoS baseline for internet-facing endpoints
 max_risk: HIGH
 priority: P0
 core_path: true
-category: Defense against customers
+category: Defense against overload
 lineage: [architecture_defensive_throttling]
 choice_prefix: ep_
 description:

@@ -6,7 +6,7 @@ title: Token budgets per caller and a spend stop faster than billing data
 max_risk: HIGH
 priority: P1
 core_path: false
-category: Defense against customers
+category: Defense against overload
 lineage: []
 choice_prefix: sp_
 description:
@@ -30,11 +30,12 @@ statements:
       Every caller type, including anonymous, trial and internal callers, has a token or cost budget per period,
       checked at the entry point before each model call, not only a request-rate limit. One trusted internal caller
       meets this by recording that this question's spend stop caps it. Per-task and per-day agent budgets are scored
-      by the Agentic AI Lens (AGENTCOST07-BP01). This statement scores budgets per caller identity and extends the
-      core per-source limits statement, which owns request limits, to the token unit.
+      by the Agentic AI Lens (AGENTCOST07-BP01). This statement extends the core per-source limits statement, which
+      owns request limits, to tokens per caller.
     platform_notes: >-
-      AgentCore Gateway token rate limits are per minute, cover only known inference paths, fail open by default and
-      can be briefly exceeded (as of 2026-10-07), so daily or monthly budgets need your own meter. Amazon API Gateway
+      AgentCore Gateway token rate limits are per minute, cover only known inference paths, fail open on rate limit
+      service timeouts or an unresolved dimension and can be briefly exceeded (as of 2026-10-09), so daily or monthly
+      budgets need your own meter. Amazon API Gateway
       usage plans are best-effort and do not count tokens.
     partition_notes: >-
       As of 2026-10-07, AWS Capabilities by Region lists AgentCore Gateway rate limits in AWS GovCloud (US-West).

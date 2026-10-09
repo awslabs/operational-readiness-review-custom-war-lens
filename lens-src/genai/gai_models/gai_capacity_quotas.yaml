@@ -6,7 +6,7 @@ title: Token quotas and inference capacity sized from real request shape
 max_risk: HIGH
 priority: P0
 core_path: false
-category: Defense against customers
+category: Defense against overload
 lineage: []
 choice_prefix: tk_
 description:
