@@ -49,9 +49,6 @@ statements:
       alarm means, how to check customer impact, the first mitigation steps (for example roll back, shift
       traffic or add capacity), the permissions needed, and when to escalate. An alarm without a runbook does not
       page, and new paging alarms are reviewed for a runbook before they go live.
-    reader_note: >-
-      This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any
-      incident-management or paging tool, or a runbook link in the alarm description, meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_process_per_alert.html
     improvement: >-
       Inventory paging alarms, write a short runbook for each one (starting with the most frequent), put the
@@ -68,9 +65,6 @@ statements:
       than its author, in a game day, a pre-production drill or a real event, using the same roles and
       permissions on-call engineers have. Steps that failed, were unclear or needed missing access were fixed,
       and the runbook records the date it was last exercised.
-    reader_note: >-
-      This page links to an example that uses AWS CloudTrail Lake, which is closed to new customers; any runbook
-      format or tool meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html
     improvement: >-
       Add a last-exercised date to each runbook, schedule drills for runbooks older than 12 months or affected by
@@ -90,9 +84,6 @@ statements:
       team and internal dependency owners, with contacts kept current. Escalation to AWS and other providers is
       scored in event_provider_escalation, and reaching contacts when normal tools are down is scored in
       event_emergency_access.
-    reader_note: >-
-      This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any paging or
-      incident-management tool with escalation policies meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
     improvement: >-
       Configure an escalation policy in your paging tool (primary, secondary, manager), test it by leaving a test

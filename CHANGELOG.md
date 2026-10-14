@@ -13,6 +13,113 @@ Releases from 2.0.0 onward are dated tags that attach every lens file, `manifest
 files are never edited; fixes ship as a new version. Entries for v1.3.2 to v1.3.6 were reconstructed from the
 repository history.
 
+## [2026-10-14] core 2.0.2, ORR - Mission-Critical Event Readiness 1.0.2 and ORR - Generative AI and Agents 1.0.2
+
+Text-only patch releases, from feedback in a facilitated review of a go-live. No pillar, question or choice ID and no
+risk rule changed, and no statement asks for more than before, so answers, notes and risk counts stay as they are.
+
+- If your core lens is on 2.0.x, or a companion lens on 1.0.x, upload the new file to it with **Edit** and
+  publish it as a **Minor version** ([Patch releases](README.md#patch-releases)).
+- If your core lens is still on v1.3.x, publish 2.0.2 as a **Major version** and follow
+  [`MIGRATION.md`](MIGRATION.md).
+- If you have not installed a lens yet, install it with **Create custom lens** ([First install](README.md#first-install)).
+- Re-check `evt_post_event` if you answered it before the event (see below), and `cq_capacity_secured` if you
+  selected it for reservations alone: its good text never counted reservations without pre-scaling, and the title
+  now says so.
+
+### Changed (all three lenses)
+
+- **Only services that are open to new customers.** The lens text no longer names any service or feature that is
+  closed to new customers, in maintenance, discontinued or near end of support:
+  - 23 statements lose a reader note that said a linked AWS page mentions such a service;
+  - the improvement plans of `ot_dry_run_two_person`, `rd_next_review`, `sec_testing_closed`, `pp_parity` and
+    `qe_gate_blocks` (the generative AI companion) lose a trailing note of the same kind;
+  - `tr_open_tracing` drops a link to an SDK support timeline;
+  - `pe_support_fit` and `dd_ddos_tier` no longer name AWS Support plans that reach end of support;
+  - `dd_l7_enforcing` and `ep_l7_detection_pages` no longer name a Shield Advanced feature that reaches end of
+    support. `dd_l7_enforcing` still counts any Layer 7 DDoS mechanism, its improvement plan says which settings
+    to review after a web ACL moves to the Anti-DDoS rule group, and it drops a link to helpers for that move.
+
+  Apart from the two links removed above and the new AWS Shield Advanced pricing link (next item), every link is
+  unchanged, and any tool that meets a practice still counts.
+- **Shield Advanced and the Anti-DDoS rule group.** The improvement plans of `ep_l7_detection_pages` (core) and
+  `dd_ddos_tier` (event companion) add that a Shield Advanced subscription includes access to the Anti-DDoS
+  managed rule group, and point to pricing for the fees that still apply. `dd_ddos_tier` adds that the
+  subscription covers standard AWS WAF fees for protected resources up to a monthly request allowance, and links
+  AWS Shield Advanced pricing. Neither good text changes.
+
+### Changed (core 2.0.2)
+
+- **Statements that were read differently than intended.**
+  - `event_operator_tooling_safety` says that its tool and command statements cover the tools, scripts, automated
+    runbooks and console actions that change production outside the pipeline, and that resource protections apply
+    to every path, including pipeline deployments.
+    `ot_dry_run_two_person` is retitled to match. Its good text says that approving a person's access request
+    is scored in `event_mutating_access`.
+  - `gd_tabletop` is retitled to what it scores: incident command and business decisions for a realistic event.
+    Its question says when a security tabletop counts.
+  - `exp_alarms` is retitled. `exp_no_leaf_pinning` defines pinning and links the AWS Certificate Manager pinning
+    troubleshooting and best-practices pages in place of the ORR whitepaper's tool page, and its reader note is
+    removed.
+  - `sec_testing_closed` says that a control catalog or compliance baseline is not a threat model.
+- **Questions that assumed one setup.**
+  - `event_emergency_access` now covers teams that sign in to AWS with IAM users.
+  - `pa_jit_elevation` says that rotated IAM user keys and standing SSH keys are long-term credentials. Its
+    improvement plan adds SAML 2.0 federation to IAM for teams that cannot use IAM Identity Center.
+  - `architecture_edge_protection` accepts a third-party firewall or DDoS service with the same evidence. Its
+    evidence line drops a dated Shield Advanced auto-upgrade reference.
+  - `event_expiring_materials` covers materials that cannot renew automatically.
+  - `pia_process` covers a process that another team runs.
+  - `gd_fault_injection` and `rec_strategy` add improvement steps for owner approval and for recovery-Region
+    capacity.
+- **Readiness decision.**
+  - `readiness_signoff` says to answer it at the go or no-go meeting, after every companion lens, once each High
+    risk is fixed or formally accepted, or the owner has decided it blocks the launch.
+  - `rd_scope_complete` is retitled to include attached companion lenses.
+- **Cross-references.** `releases_manual_changes` and `event_mutating_access` name the related access questions.
+- **Detection routing.** `sec_detection_routed` starts its improvement plan with routing when detection is already
+  on.
+- **Links.** The Amazon Builders' Library article Static stability using Availability Zones now links to its AWS
+  Builder Center address, in three places.
+
+### Changed (ORR - Mission-Critical Event Readiness 1.0.2)
+
+- **The freeze statement.** `cf_freeze` is retitled to say that deployments are blocked automatically. Its good
+  text says that a manual notice or a change-board rule alone does not meet it, and names `pd_blockers` and
+  `cc_emergency_path` by ID.
+- **Timing.**
+  - `evt_rehearsal`, `evt_war_room`, `evt_peak_retest` and `evt_calendar_freeze` say which of their statements
+    stay unselected until the work is done inside its time window.
+  - `evt_post_event` says to answer it fully after the event: until then, select None of these, which scores
+    Medium and does not block the decision, and do not use earlier incidents as evidence.
+  - `rh_tabletop` says when a disaster recovery test counts.
+- **Go-live and cutover.** The improvement plans of `cf_dates`, `cq_scale_down_plan` and `px_cost_review` cover
+  a go-live: cutover success criteria, and a recorded decision to keep capacity that becomes the new baseline.
+  `cq_capacity_secured` is retitled to match its good text (the opening capacity is already running).
+- **Other.**
+  - `evt_degraded_modes` defines a degraded mode, and `dm_kill_switches` covers workloads where every
+    user-facing feature is essential.
+  - `evt_ddos_response` accepts third-party and SaaS-provider protection.
+  - `dd_l7_enforcing` says Count (monitor-only) mode.
+
+### Documentation
+
+- `docs/running-an-orr.md` and `docs/facilitator-guide.md` now cover:
+  - a `PLAN:` notes tag for work in progress, which stays unselected (also in `docs/scoring.md`);
+  - practices that another team in your organization runs;
+  - pre-production workloads;
+  - re-review triggers;
+  - sharing reports with a facilitator outside your account;
+  - a launch that is also the event, and what the lenses do not score for a cutover;
+  - saving a uniquely named milestone at the end of each session.
+- The README, FAQ and `MIGRATION.md` point the patch path at the 2.0.x and 1.0.x lines. `docs/gates.md` records
+  the patch check.
+- `CONTRIBUTING.md`, `lens-src/SCHEMA.md` and `data/lifecycle-denylist.yaml` say that lens text never names such a
+  service, not even to say that a linked page mentions it. The `lifecycle` check now fails on a listed name
+  anywhere in the text, reader notes included, and on any link to a listed service's documentation, including a
+  URL typed into display text. The denylist adds the AWS Support plans and the Shield Advanced feature that reach
+  end of support. `docs/govcloud.md` and the FAQ follow the same rule.
+
 ## [2026-10-09] core 2.0.1, ORR - Mission-Critical Event Readiness 1.0.1 and ORR - Generative AI and Agents 1.0.1
 
 Text-only patch releases of all three lenses. No pillar, question or choice ID and no risk rule changed, so
@@ -176,7 +283,7 @@ Operational Readiness Review (ORR) core lens 2.0.0. Publish it as a **major vers
   Medium on 23, a good practice raising the risk on `architecture_services_used`, the missing default rule on
   `releases_manual_changes`, and the unused `queueing` and `async_execution` choices.
 - **Stale guidance and links from v1.3.6**, which 2.0.0 replaces rather than shipping as a separate v1.3.7 text
-  release: the AWS X-Ray SDK guidance is now OpenTelemetry instrumentation; incident guidance is tool-neutral and
+  release: the tracing guidance is now OpenTelemetry instrumentation; incident guidance is tool-neutral and
   no longer names a product that is closed to new customers; the Amazon S3 eventual-consistency example, the "CW
   Synthetics" shorthand for dynamic alarms, the collectd JVM note, the network ACL based Availability Zone test and
   root credentials held "at the executive level" are gone; the two `wellarchitectedlabs.com` links, the redirected

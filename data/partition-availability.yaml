@@ -1779,8 +1779,7 @@ entries:
   aws: not available
   aws-us-gov: not available
   source: https://docs.aws.amazon.com/app-mesh/latest/userguide/what-is-app-mesh.html
-  notes: End of support on 2026-09-30 (see data/lifecycle-denylist.yaml). Named only in reader notes about linked
-    pages; not listed on the AWS GovCloud (US) User Guide services page (checked 2026-10-06).
+  notes: End of support on 2026-09-30 (see data/lifecycle-denylist.yaml). Not named in lens text; not listed on the AWS GovCloud (US) User Guide services page (checked 2026-10-06).
 - name: Amazon CodeCatalyst
   aliases:
   - CodeCatalyst
@@ -1788,8 +1787,8 @@ entries:
   aws: not available
   aws-us-gov: not available
   source: https://docs.aws.amazon.com/codecatalyst/latest/userguide/migration.html
-  notes: Closed to new customers since 2025-11-07 (see data/lifecycle-denylist.yaml). Named only in reader notes
-    about linked pages; not listed on the AWS GovCloud (US) User Guide services page (checked 2026-10-06).
+  notes: Closed to new customers since 2025-11-07 (see data/lifecycle-denylist.yaml). Not named in lens text; not
+    listed on the AWS GovCloud (US) User Guide services page (checked 2026-10-06).
 - name: AWS Budgets
   aliases:
   - Budgets

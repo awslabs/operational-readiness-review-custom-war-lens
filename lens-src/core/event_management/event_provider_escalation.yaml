@@ -42,9 +42,6 @@ statements:
       AWS GovCloud (US), as of 2026-10-06: open cases in the GovCloud Support Center with GovCloud credentials,
       choose severity carefully (it cannot be changed later), confirm partner fallbacks can manage GovCloud
       cases, and keep export-controlled data out of cases.
-    reader_note: >-
-      This page names AWS Systems Manager Incident Manager, closed to new customers; any paging tool meets this
-      practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
     improvement: >-
       For AWS and each critical provider, document how to open and escalate a case, your severity definitions, the
@@ -67,8 +64,7 @@ statements:
       gap is closed or accepted in writing. The arrangement may be an AWS Support plan, a reseller or partner support
       agreement, or both; the lens compares response targets, not plan names.
     partition_notes: >-
-      As of 2026-10-06 the AWS Support Plans page states that Developer, Business and Enterprise On-Ramp Support
-      remain available in AWS GovCloud (US), so plans for GovCloud accounts can differ from those for commercial
+      As of 2026-10-14, the support plans offered for AWS GovCloud (US) accounts can differ from those for commercial
       accounts; check the plan and response targets for each GovCloud account.
     helpful_url: https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html
     improvement: >-

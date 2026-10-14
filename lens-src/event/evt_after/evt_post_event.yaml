@@ -12,7 +12,9 @@ choice_prefix: px_
 description:
   question: >-
     After the event, did you compare what happened with the plan, feed the lessons back into your reviews and plans,
-    and return capacity and cost to normal?
+    and return capacity and cost to normal? Answer this fully after the event. Until then, select None of these, which
+    scores Medium and does not block the go or no-go decision, and do not use an earlier incident or event as
+    evidence.
   evidence_to_collect: >-
     the post-event review document and its date. Actions with owners and due dates. The updated core review, the next
     event plan and the saved milestones. The scale-down record and the cost report for the event period.
@@ -31,9 +33,6 @@ statements:
       they took, which degraded modes or levers were used, and how escalations to partners and AWS worked. Actions have
       owners and due dates. This applies the core question 'Post-incident analysis and learning loop' to the event as a
       whole, not only to its incidents.
-    reader_note: >-
-      This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any post-incident
-      analysis process or tool meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
     improvement: >-
       Book the review before the event so it happens within two weeks. Collect metrics against the forecast, the
@@ -72,5 +71,6 @@ statements:
     improvement: >-
       Run the scale-down plan as normal pipeline changes, confirm each temporary resource is removed or back at its
       baseline, compare the event-period cost with the budget in AWS Cost Explorer, and record the cost per unit of
-      event demand to improve the next forecast.
+      event demand to improve the next forecast. For a go-live or cutover whose capacity becomes the new baseline,
+      record the decision to keep that capacity, its approved run-rate cost and a date to right-size it.
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html

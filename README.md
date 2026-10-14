@@ -32,9 +32,9 @@ Contents:
 
 | Lens | Version | Contents | Attach it when | Release file |
 |---|---|---|---|---|
-| **AWS Operational Readiness Review** (the core ORR lens; it keeps its published name) | 2.0.1 | 36 questions and 134 scored statements in 4 pillars: 01 - Architecture, 02 - Release Quality, 03 - Event Management, 04 - Readiness Decision. A 15-question core path for triage and recurring check-ins | Every production workload, before launch and at least yearly | `orr-core.json` |
-| **ORR - Mission-Critical Event Readiness** | 1.0.1 | 8 questions and 26 scored statements in 3 pillars: 01 - Prepare, 02 - Operate, 03 - After the event | Before a planned peak, alongside a current core review | `orr-event.json` |
-| **ORR - Generative AI and Agents** | 1.0.1 | 9 questions and 25 scored statements in 3 pillars: 01 - Models, capacity and dependencies, 02 - Change safety and evaluation, 03 - Operations and safeguards | Workloads that call foundation models or run AI agents, alongside the core review | `orr-genai.json` |
+| **AWS Operational Readiness Review** (the core ORR lens; it keeps its published name) | 2.0.2 | 36 questions and 134 scored statements in 4 pillars: 01 - Architecture, 02 - Release Quality, 03 - Event Management, 04 - Readiness Decision. A 15-question core path for triage and recurring check-ins | Every production workload, before launch and at least yearly | `orr-core.json` |
+| **ORR - Mission-Critical Event Readiness** | 1.0.2 | 8 questions and 26 scored statements in 3 pillars: 01 - Prepare, 02 - Operate, 03 - After the event | Before a planned peak, alongside a current core review | `orr-event.json` |
+| **ORR - Generative AI and Agents** | 1.0.2 | 9 questions and 25 scored statements in 3 pillars: 01 - Models, capacity and dependencies, 02 - Change safety and evaluation, 03 - Operations and safeguards | Workloads that call foundation models or run AI agents, alongside the core review | `orr-genai.json` |
 
 Each lens keeps its own version number. The family deliberately stays small, because the WA Tool allows 15 custom
 lenses per account per Region and that quota cannot be raised
@@ -102,13 +102,13 @@ Stable links that always return the newest release:
 - Generative AI companion: https://github.com/awslabs/operational-readiness-review-custom-war-lens/releases/latest/download/orr-genai.json
   (minified: `orr-genai.min.json`)
 
-Versioned names, such as `orr-core-2.0.1.json`, stay pinned to their release. Each release's files are also copied
+Versioned names, such as `orr-core-2.0.2.json`, stay pinned to their release. Each release's files are also copied
 into [`wafr-operational-readiness-lens/`](wafr-operational-readiness-lens/README.md), where the v1.3.2 to v1.3.6 files
 remain unchanged.
 
 If you cannot use the release page, the same files are in
-[`wafr-operational-readiness-lens/`](wafr-operational-readiness-lens/README.md) (`orr-core-2.0.1.json`,
-`orr-event-1.0.1.json`, `orr-genai-1.0.1.json`) with their checksums in [`dist/SHA256SUMS`](dist/SHA256SUMS).
+[`wafr-operational-readiness-lens/`](wafr-operational-readiness-lens/README.md) (`orr-core-2.0.2.json`,
+`orr-event-1.0.2.json`, `orr-genai-1.0.2.json`) with their checksums in [`dist/SHA256SUMS`](dist/SHA256SUMS).
 
 Verify a download before you import it:
 
@@ -120,7 +120,7 @@ shasum -a 256 --ignore-missing -c SHA256SUMS    # macOS
 ### First install
 
 Use these steps only for a lens you have never imported into this account and Region. To move from v1.3.x to
-version 2, or to a newer release of a lens you already have (for example core 2.0.1 or a companion's 1.0.1), see
+version 2, or to a newer release of a lens you already have (for example core 2.0.2 or a companion's 1.0.2), see
 [Upgrade an existing ORR lens](#upgrade-an-existing-orr-lens) instead. Most screenshots in this README were taken with core 2.0.0 and the 1.0.0 companions; the steps are the
 same for later versions.
 
@@ -146,7 +146,7 @@ same for later versions.
 
    A **Publish** dialog opens, titled with the lens name (**Publish AWS Operational Readiness Review** for the
    core lens). In **Version name**, enter the version from the release file name or from `manifest.json`, for
-   example `2.0.1`, and choose **Publish** (the lens JSON itself has no version field; the WA Tool version is the
+   example `2.0.2`, and choose **Publish** (the lens JSON itself has no version field; the WA Tool version is the
    name you type here). A first publish has no major or minor choice; that choice appears only when you publish an
    update.
 
@@ -172,7 +172,7 @@ same for later versions.
 Details: [Creating a custom lens](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-create.html).
 The first time you import a companion it is a first install, because it is a new lens, so repeat the steps above
 with `orr-event.json` for the event companion and `orr-genai.json` for the generative AI companion. Later companion
-versions, such as 1.0.1, are uploaded with **Edit** on your existing companion lens (see
+versions, such as 1.0.2, are uploaded with **Edit** on your existing companion lens (see
 [Patch releases](#patch-releases)); never use **Create custom lens**. With all three lenses installed and published, the **Custom lenses** list looks like this:
 
 ![Custom lenses list with ORR - Generative AI and Agents version 1.0.0, ORR - Mission-Critical Event Readiness version 1.0.0 and AWS Operational Readiness Review version 2.0.0, all PUBLISHED.](_img/WAT-CustomLenses.png)
@@ -181,8 +181,8 @@ versions, such as 1.0.1, are uploaded with **Edit** on your existing companion l
 
 [`MIGRATION.md`](MIGRATION.md) has the full procedure, the API steps and the question-by-question mapping from
 v1.3.6. The steps below move a lens from v1.3.x to version 2. Upload the newest version 2 file (for example
-`orr-core-2.0.1.json`) and use its version as the version name. To move from 2.0.0 to 2.0.1, or a companion from
-1.0.0 to 1.0.1, see [Patch releases](#patch-releases).
+`orr-core-2.0.2.json`) and use its version as the version name. To move from an earlier 2.0.x release, or a
+companion from an earlier 1.0.x release, see [Patch releases](#patch-releases).
 
 1. If you modified the lens, for example in an ORR workshop, run `ExportLens` first and diff the export against
    v1.3.6. Uploading version 2 replaces the lens content, so move your own questions into a separate add-on lens
@@ -198,7 +198,7 @@ v1.3.6. The steps below move a lens from v1.3.x to version 2. Upload the newest 
 3. Then choose **Publish lens**. The publish page lists, per changed pillar, the **Updated questions**,
    **Removed questions** and **New questions** (each list is a small scrolling box). Under **Versioning**, for
    **Version change** choose **Major version** ("Will notify workloads using the lens"), enter the version, for
-   example `2.0.1`, in **Version name**, and choose **Publish custom lens**
+   example `2.0.2`, in **Version name**, and choose **Publish custom lens**
    ([Publishing an update to a custom lens](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-publish-update.html)).
 
    ![Publish custom lens page with the new pillar 04 - Readiness Decision listed, Major version selected and version name 2.0.0 entered.](_img/WAT-PublishMajor.png)
@@ -206,7 +206,7 @@ v1.3.6. The steps below move a lens from v1.3.x to version 2. Upload the newest 
 4. **API:** call `ImportLens` with `LensAlias` set to the existing lens ARN. Do not wait for an import status: in
    our sandbox test on 2026-10-06, `ImportLens` returned only the lens ARN. Instead, call `ListLenses` with
    `LensStatus=DRAFT` and `LensType=CUSTOM_SELF` until the lens appears with a newer update time, then call
-   `CreateLensVersion` with `IsMajorVersion=true` and `LensVersion="2.0.1"`. Keep the lens name: the WA Tool
+   `CreateLensVersion` with `IsMajorVersion=true` and `LensVersion="2.0.2"`. Keep the lens name: the WA Tool
    rejects an upload whose name differs from the published lens name. If your published lens is not named exactly
    "AWS Operational Readiness Review" (a lens first imported from the v1.3.3 or v1.3.4 file is named
    "AWS Operational Readiness Review v1.3.3" or "... v1.3.4"), edit the `name` field of the version 2 file to match
@@ -246,16 +246,16 @@ is published as a major version.
 
 #### Patch releases
 
-A patch release, such as core 2.0.1 or a companion's 1.0.1, changes only display text; every pillar, question
+A patch release, such as core 2.0.2 or a companion's 1.0.2, changes only display text; every pillar, question
 and choice ID and every risk rule stays the same ([`CHANGELOG.md`](CHANGELOG.md)). Use these steps only for a lens
-that is already on the previous release (core 2.0.0, or a companion on 1.0.0); from v1.3.x, follow the steps
-above. If you edited the `name` field of the 2.0.0 file to match your published lens, make the same edit in the
+that is already on an earlier release of the same line (core 2.0.x, or a companion on 1.0.x); from v1.3.x, follow
+the steps above. If you edited the `name` field of an earlier file to match your published lens, make the same edit in the
 new file before you upload it (step 4).
 
 Upload the file to your existing lens with **Edit** as in step 2, choose **Publish lens**, choose **Minor
-version**, enter the version (for example `2.0.1`), and choose **Publish custom lens**. With the API, call
+version**, enter the version (for example `2.0.2`), and choose **Publish custom lens**. With the API, call
 `ImportLens` with `LensAlias` set to the lens ARN, wait for the new draft in `ListLenses` as in step 4, then call
-`CreateLensVersion` with `LensVersion` set to the new version (for example `"2.0.1"`) and `IsMajorVersion=false`.
+`CreateLensVersion` with `LensVersion` set to the new version (for example `"2.0.2"`) and `IsMajorVersion=false`.
 Workloads that use the lens move to the new version without a notification, and their answers, notes and risk
 counts stay as they were. Publishing a patch as a major version also works, but every workload owner then gets an
 upgrade notice, and each workload keeps the previous text until its owner upgrades it as in step 6.
@@ -331,10 +331,11 @@ row of each question in [`docs/questions.md`](docs/questions.md). Print or share
 **A core-path session is preliminary.** A launch go or no-go requires the full core, with every question answered or
 marked not applicable with a reason. `readiness_signoff` scores better than High only when three of its statements
 are met: every high risk is fixed or accepted, the go or no-go criteria are documented, and "every question in this
-lens is answered or marked not applicable with a reason". The WA Tool counts a statement marked not applicable as
-met, and it does not check that last statement for you: unanswered questions show as Unanswered, not as High risk.
-Before you select it, confirm in the lens review that no question in this lens or in an attached companion lens is
-still unanswered. Do not accept a not-applicable mark on any of its statements or on the decision question itself.
+lens and in attached companion lenses is answered or marked not applicable with a reason". The WA Tool counts a
+statement marked not applicable as met, and it does not check that last statement for you: unanswered questions show
+as Unanswered, not as High risk. Before you select it, confirm in the lens review that no question in this lens or
+in an attached companion lens is still unanswered. Do not accept a not-applicable mark on any of its statements or
+on the decision question itself.
 
 ### What a question looks like
 
@@ -379,7 +380,7 @@ scores No risk, so the facilitator accepts it only with the evidence its helpful
 - **Readout.** A one-page summary of risks, mitigations, accepted risks with expiry dates, and the go or no-go
   decision, shared with the accountable owner and stakeholders.
 - **Accepted risks.** Record each accepted High in the question notes only as
-  `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>`, for example
+  `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>` (plus an optional `PLAN:` tag for the fix), for example
   `EXC:RR-0142 exp:2027-03-31 role:authorizing-official`. Keep the approver's name, the reason and the compensating
   controls in your risk register or POA&M.
 - **Inspect.** Report the date of the last ORR, open High items and expired acceptances per workload in your
@@ -463,8 +464,9 @@ for current status, and verify per Region.
 - Lens files contain no customer data. Answers and notes stay in your account and Region.
 - Notes appear in reports, and they sync to Jira when the connector is enabled. Do not paste secrets, credentials,
   personal data or sensitive incident details into notes; link to the evidence instead.
-- An accepted risk carries only the `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>` tag in notes. The
-  reason, the compensating controls and the approver's name stay in your risk register or POA&M.
+- An accepted risk carries only the `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>` tag in notes, plus an
+  optional `PLAN:` tag for the fix. The reason, the compensating controls and the approver's name stay in your risk
+  register or POA&M.
 - Milestone names follow `ORR-<yyyy-mm>-<purpose>` and should hold nothing sensitive.
 - This repository collects no telemetry and stores no customer answers.
 
@@ -549,7 +551,7 @@ compare the committed output with a fresh build, so `check` fails until the gene
 
 ## Disclaimer
 
-Operational Readiness Review (ORR) custom lens 2.0.1 for the AWS Well-Architected Tool, informed by the AWS
+Operational Readiness Review (ORR) custom lens 2.0.2 for the AWS Well-Architected Tool, informed by the AWS
 Operational Readiness Reviews whitepaper and Well-Architected best practice OPS07-BP02. High risk means
 launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a
 plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it
@@ -557,7 +559,7 @@ does not mean AWS has reviewed your workload, and it does not change the AWS sha
 targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates:
 https://github.com/awslabs/operational-readiness-review-custom-war-lens
 
-The same terms apply to ORR - Mission-Critical Event Readiness 1.0.1 and ORR - Generative AI and Agents 1.0.1.
+The same terms apply to ORR - Mission-Critical Event Readiness 1.0.2 and ORR - Generative AI and Agents 1.0.2.
 
 ## License
 

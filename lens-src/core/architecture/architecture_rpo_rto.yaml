@@ -86,10 +86,12 @@ statements:
       Regions, as of 2026-10-05. ARC Region switch is available in both GovCloud Regions; verify per Region.
     helpful_url: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html
     improvement: >-
-      For each component, compare the DR strategies with its RTO, RPO and budget, choose one, and document the
-      Region decision, the scenarios covered and excluded, residency constraints, the recovery runbook and the
-      dependencies the recovery itself needs. Prefer recovery steps that use data-plane operations and
-      pre-provisioned capacity. Review the strategy when objectives or architecture change.
+      For each component, compare the DR strategies with its RTO, RPO and budget, choose one, and document the Region
+      decision, the scenarios covered and excluded, residency constraints, the recovery runbook and the dependencies
+      the recovery itself needs. Prefer recovery steps that use data-plane operations and pre-provisioned capacity.
+      Review the strategy when objectives or architecture change. For a pilot light or warm standby strategy, consider
+      On-Demand Capacity Reservations in the recovery Region's Availability Zones for the instances recovery must
+      launch. They are billed whether or not instances run.
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_disaster_recovery.html
     additional_improvement:
       - display_text: ARC Region switch (orchestrated multi-Region recovery)

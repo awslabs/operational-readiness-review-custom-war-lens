@@ -80,9 +80,6 @@ statements:
       Each significant failure mode has a documented mitigation: a design control (for example redundancy, a
       timeout or a degraded mode), an automated response, or a runbook with tested steps. Failure modes the team
       chose not to mitigate are recorded with the reason and the accountable owner.
-    reader_note: >-
-      This page links an article that uses AWS CloudTrail Lake, which is closed to new customers; any runbook
-      format or tool meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html
     improvement: >-
       Add a mitigation column, link each failure mode to the control, automation or runbook that handles it, write

@@ -73,18 +73,13 @@ statements:
       As of 2026-10-06, AWS X-Ray is available in AWS GovCloud (US). For CloudWatch Transaction Search and the
       OTLP endpoint, the AWS GovCloud (US) User Guide says not available but AWS Capabilities by Region says
       available; test in your account first.
-    reader_note: >-
-      The linked support timeline covers the AWS X-Ray SDKs and daemon, in maintenance mode since 2026-02-25; use
-      OpenTelemetry for new instrumentation.
     helpful_url: https://opentelemetry.io/docs/concepts/context-propagation/
     improvement: >-
       Instrument each service with OpenTelemetry, starting with automatic instrumentation, propagate context
       through messaging, choose a sampling policy that keeps errors, and send traces to your tracing backend.
-      Move existing instrumentation built on maintenance-mode tracing SDKs to OpenTelemetry.
+      Move existing instrumentation that does not use an open standard to OpenTelemetry.
     improvement_url: https://aws.amazon.com/otel/
     additional_improvement:
-      - display_text: AWS X-Ray support timeline for legacy instrumentation (migrate to OpenTelemetry)
-        url: https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-daemon-timeline.html
       - display_text: CloudWatch OTLP endpoints
         url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTLPEndpoint.html
   - id: tr_alarm_diagnostics
@@ -102,9 +97,6 @@ statements:
       An Amazon EventBridge rule on alarm state changes, or an alarm action, can start an AWS Lambda function or
       an AWS Systems Manager Automation runbook that gathers data. Any incident or ticketing tool can hold the
       results.
-    reader_note: >-
-      This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30);
-      alarm actions, Amazon EventBridge rules and Systems Manager Automation runbooks meet this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_automate_response_monitor.html
     improvement: >-
       Add links to dashboards, saved queries and the change log to every paging alarm description, then automate

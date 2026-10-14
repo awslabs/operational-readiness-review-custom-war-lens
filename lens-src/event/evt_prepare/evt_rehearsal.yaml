@@ -12,7 +12,8 @@ choice_prefix: rh_
 description:
   question: >-
     Has the team rehearsed the failure scenarios most likely to hurt this event, close enough to the event that the
-    people, runbooks and contacts are current?
+    people, runbooks and contacts are current? The 60-day statements stay unselected until each exercise has run
+    inside that window. Re-answer them at the 4-week and 2-week checkpoints.
   evidence_to_collect: >-
     the rehearsal plan and scenarios. The dates, attendees and notes of the tabletop and the game day. Detection and
     mitigation times. Findings with owners and their closure or acceptance.
@@ -34,7 +35,8 @@ statements:
       Zone impairment, a critical dependency outage and demand beyond forecast, using the real dashboards, runbooks,
       escalation tree and status templates. Each scenario records the decisions made, how long they took and the gaps
       found. This applies the core question 'Incident exercises: game days, tabletops and recovery drills' to this
-      event's people and scenarios.
+      event's people and scenarios. A disaster recovery test counts only if it walked through the event's scenarios
+      with the event shift.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html
     improvement: >-
       Schedule a tabletop 4-8 weeks before the event. Write a scenario for each major risk with injects (for example,

@@ -12,7 +12,8 @@ choice_prefix: exp_
 description:
   question: >-
     Could an expired or replaced certificate, certificate authority, key, secret, token or other time-bound material
-    take the workload down, and would the owning team know and act well before it expires?
+    take the workload down, and would the owning team know and act well before it expires? Materials that cannot renew
+    automatically, such as imported certificates, need alarms with enough lead time for the manual renewal steps.
   evidence_to_collect: >-
     the inventory of expiring materials with owner, expiry date and renewal method. The expiry and renewal-failure
     alarms with their lead times. Client, device and partner trust configuration, including any pinning. The record
@@ -52,7 +53,9 @@ statements:
         url: https://docs.aws.amazon.com/privateca/latest/userguide/ca-lifecycle.html
   - id: exp_alarms
     tier: core
-    title: Expiry and renewal-failure alarms fire with a lead time longer than the renewal window
+    title: >-
+      Expiry alarms give more lead time than a manual renewal and deployment takes, and failed or stalled renewals
+      also alarm
     concept: expiry-alarms-lead-time
     severity_basis: "wa:SEC09-BP01 (High)"
     wa_bp: SEC09-BP01
@@ -91,19 +94,19 @@ statements:
       wp-orr:certificate pinning example in The ORR tool (a host that pins certificates is scored Yes, High Risk)
     good: >-
       No mobile app, device, partner integration, SDK configuration or service pins the leaf certificate of any
-      endpoint, so a routine renewal or replacement cannot break clients. Where a use case requires pinning, it pins to
-      a certificate authority you control or to all the issuing root CAs (for example all Amazon Trust Services root
-      certificates for ACM public certificates), and the pin set can be updated without a client release. Partners
-      that pin are told before CA changes.
-    reader_note: >-
-      The ORR whitepaper page linked here also mentions AWS Systems Manager Incident Manager, which is closed to new
-      customers; it is not needed for this practice.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/the-orr-tool.html
+      endpoint, so a routine renewal or replacement cannot break clients. Where a use case requires pinning, it pins
+      to a certificate authority you control or to all the issuing root CAs (for example all Amazon Trust Services
+      root certificates for ACM public certificates), and the pin set can be updated without a client release.
+      Partners that pin are told before CA changes. Pinning means a client trusts only the certificates or public keys
+      it has stored for a host, instead of any certificate that chains to a trusted root. The linked ACM pages also
+      list pinning an imported certificate. This lens treats that as a leaf pin, because replacing the certificate
+      breaks those clients.
+    helpful_url: https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting-pinning.html
     improvement: >-
       Search client code, mobile and device builds, SDK configurations and partner integration documents for pinned
       certificates or public-key hashes. Replace leaf pins with CA or root pins, or remove pinning, ship the change
       before the next renewal, and add a check to code review and the pipeline that rejects new leaf pins.
-    improvement_url: https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting-pinning.html
+    improvement_url: https://docs.aws.amazon.com/acm/latest/userguide/acm-bestpractices.html
   - id: exp_auto_renew_deploy
     tier: sec
     title: >-

@@ -67,7 +67,8 @@ statements:                             # 1-4 statements, in display order
       EC2 and containers: ... Serverless: ...
     partition_notes: >-                 # optional; rendered as "Partition notes: ..."
       Amazon CloudFront is not available in AWS GovCloud (US) as of 2026-10-05; ...
-    reader_note: >-                     # optional; rendered as "Reader note: ..." (lifecycle notes for linked pages)
+    reader_note: >-                     # optional; rendered as "Reader note: ..." (a short caution; never names a
+                                        # service in data/lifecycle-denylist.yaml)
       ...
     helpful_url: https://builder.aws.com/content/3Eupj3d2bo4fEvlzYbICMZNhQ3B/fairness-in-multi-tenant-systems
     improvement: >-                     # what to do; rendered as the improvement plan

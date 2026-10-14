@@ -170,9 +170,9 @@ best practice, with the reason: irreversibility, or a design lesson from a publi
 | `event_operator_tooling_safety` | `ot_blast_radius_limits` Operator tools and runbook commands validate inputs, cap what one action can change, and refuse to go below minimum capacity | OPS07-BP03 (Use runbooks to perform procedures), the nearest Framework best practice, is rated Medium; the lens rates it High because the February 2017 Post-Event Summary describes one incorrect input to an operational command removing a larger set of servers than intended, with hours of impact. |
 | `event_operator_tooling_safety` | `ot_resource_protections` Critical resources have deletion protection, stack policies or equivalent safeguards | deleting or replacing a critical stateful resource is often irreversible or slow to recover, and the AWS ORR whitepaper's Appendix A asks how an operator is prevented from deleting a stack or critical resources. |
 | `event_gameday` | `gd_fault_injection` On-call engineers mitigated injected failures (such as AZ impairment or dependency loss) with real alarms in the last 12 months | REL12-BP05 and REL12-BP04 are rated Medium; the lens rates exercises High because an unrehearsed response plan slows every recovery, and only an exercise shows that alarms, runbooks and access work together. |
-| `event_gameday` | `gd_tabletop` A tabletop or live exercise rehearsed incident command, stakeholder communications and escalation to AWS and vendors | REL12-BP05 and SEC10-BP07 are rated Medium; the lens rates exercises High because incident command, communications and provider escalation that were never rehearsed slow every recovery. |
+| `event_gameday` | `gd_tabletop` A tabletop or live exercise of a realistic event for this workload rehearsed incident command and business decisions | REL12-BP05 and SEC10-BP07 are rated Medium; the lens rates exercises High because incident command, communications and provider escalation that were never rehearsed slow every recovery. |
 | `evt_calendar_freeze` | `cf_owner` A named event owner and go/no-go criteria for the event are documented | Without a named owner and pre-agreed go/no-go criteria nobody can decide to proceed, degrade, delay or abort when a late risk appears, and on a fixed-date event that decision cannot wait for a meeting to be arranged. |
-| `evt_ddos_response` | `dd_l7_enforcing` Application-layer DDoS rules were tuned in count mode, are enforcing before the event, and match IaC | A high-visibility event is a predictable DDoS target, and an application-layer rule group left in Count mode, or reverted by the next IaC deployment, detects a request flood without stopping it. |
+| `evt_ddos_response` | `dd_l7_enforcing` Application-layer DDoS rules were tuned in Count (monitor-only) mode, are enforcing before the event, and match IaC | A high-visibility event is a predictable DDoS target, and an application-layer rule group left in Count mode, or reverted by the next IaC deployment, detects a request flood without stopping it. |
 | `evt_rehearsal` | `rh_tabletop` An event-scenario tabletop (DDoS, AZ impairment, dependency outage, surge beyond forecast) ran within 60 days | REL12-BP05 is rated Medium; the lens rates an unrehearsed event plan High because a fixed event window leaves no time to discover in production that runbooks, access or escalation paths do not work. |
 | `evt_rehearsal` | `rh_gameday` A game day under event-like load ran within 60 days | REL12-BP05 is rated Medium; the lens rates an unrehearsed event plan High because a fixed event window leaves no time to discover in production that runbooks, access or escalation paths do not work. |
 | `evt_war_room` | `wr_staffing` A staffed shift plan or war room covers the window, including dependency owners, with shifts and handoffs that limit fatigue | A fixed event window concentrates risk into hours that cannot be re-run, so an unstaffed shift or a missing dependency owner turns a recoverable fault into a failed event. |
@@ -264,6 +264,17 @@ consistent tag format lets you report acceptances that have expired.
 
 An accepted High still shows as High in the WA Tool. The tag records that the accountable owner decided to launch
 with it, until the expiry date.
+
+### Planned or in-progress work
+
+A statement that is not true today stays unselected, even when the work is under way. Record the plan in the
+question notes as a tag:
+
+```
+PLAN:<statement-id> <tracker-id> due:YYYY-MM-DD
+```
+
+A note can carry both tags: `EXC:` for an accepted High and `PLAN:` for the work that will close it.
 
 ## Calibration
 

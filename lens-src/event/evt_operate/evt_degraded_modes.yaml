@@ -12,7 +12,9 @@ choice_prefix: dm_
 description:
   question: >-
     If demand or a dependency failure exceeds what the workload can serve during the event, can you shed load in
-    tested ways and keep customers and stakeholders informed?
+    tested ways and keep customers and stakeholders informed? A degraded mode is a deliberate reduced service, for
+    example a waiting room, a read-only or static version, or accepting requests for later processing, instead of
+    errors. It is not an emergency code fix.
   evidence_to_collect: >-
     the degraded modes and feature switches, with the date each was last tested under load and how long it took to
     engage. The pre-approved status messages, approvers and stakeholder notification list.
@@ -56,7 +58,9 @@ statements:
       generation) each have a switch that operators can turn off within minutes through validated, versioned
       configuration, without building or deploying code, and turning them off was tested under load. The runbook lists
       the switches in the order to use them and who may use them during the window. This adds feature shedding to the
-      emergency levers in the core question 'Overload protection and tenant fairness'.
+      emergency levers in the core question 'Overload protection and tenant fairness'. If the business considers every
+      user-facing feature essential, the switches cover deferrable work instead, for example reports, bulk exports,
+      batch and sync jobs, and notifications, and the business owner agrees the list.
     platform_notes: >-
       For example AWS AppConfig feature flags, or your own flag service that caches a last-known-good value so a flag
       store outage cannot block requests.
@@ -77,11 +81,6 @@ statements:
       stakeholders to notify (for example partners, executives, regulators or election officials) with contact details.
       They extend the communication plan in the core question 'Identify impacted customers and keep them informed',
       and can be published through a channel that does not depend on the workload.
-    reader_note: >-
-      Some services named on this page are closed to new customers or have an announced end of support (for example
-      AWS Systems Manager Incident Manager, closed to new customers, and Amazon Pinpoint, end of support 2026-10-30, as
-      of 2026-10-06). Any incident-management, paging or notification tool meets this
-      practice, for example Amazon SNS, AWS End User Messaging or a partner tool.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
     improvement: >-
       Draft and pre-approve status messages for each likely situation with your communications and legal owners, list

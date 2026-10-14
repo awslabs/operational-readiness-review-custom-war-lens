@@ -33,17 +33,17 @@ statements:
       A documented process says which events need an analysis (every customer-impacting event and significant
       near-miss), who writes it and by when. Each analysis records customer impact, a timeline with detection,
       engagement, mitigation and resolution times, recent changes, the contributing factors found by asking why
-      repeatedly, and what would have detected, diagnosed or mitigated the event sooner. It is blameless: it looks
-      for missing mechanisms rather than people to fault, and it is reviewed by people outside the team.
-    reader_note: >-
-      This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any post-incident
-      analysis process or tool meets this practice.
+      repeatedly, and what would have detected, diagnosed or mitigated the event sooner. It is blameless: it looks for
+      missing mechanisms rather than people to fault, and it is reviewed by people outside the team. If another team
+      runs the process, for example a central incident or security team, it covers this workload's operational events,
+      not only security events.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
     improvement: >-
       Adopt a short template (impact, timeline, contributing factors, detection and mitigation questions, actions),
       define which events and near-misses require it and the deadline, collect timeline data automatically from
       alarms, deployments and chat logs, and review each analysis in a recurring meeting with someone outside the
-      owning team. Before launch, run the process on an exercise or on an event from a similar workload.
+      owning team. Before launch, run the process on an exercise or on an event from a similar workload. If another
+      team runs the process, take part in the analyses of this workload's events.
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.3-conduct-post-incident-analysis-for-continuous-improvement.html
   - id: pia_actions_tracked
     tier: core
@@ -56,9 +56,6 @@ statements:
       that reflects the risk, and open, overdue and recently closed actions are reviewed in a recurring operations
       review with leadership present. Actions that prevent recurrence are favored over reminders to be careful, and
       an action closes only when the fix is in production and verified.
-    reader_note: >-
-      The OPS11-BP02 page linked here refers to AWS Systems Manager Incident Manager, which is closed to new
-      customers; any work tracker meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
     improvement: >-
       Put every corrective action in the same tracker as other engineering work (for example AWS Systems Manager

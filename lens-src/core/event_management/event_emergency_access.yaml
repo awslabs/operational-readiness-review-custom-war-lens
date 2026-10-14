@@ -13,7 +13,9 @@ description:
   question: >-
     If your identity provider, your federation configuration or the Region that hosts your sign-in and identity
     configuration fails during an incident, can responders still reach the AWS accounts and tools they need to
-    mitigate it?
+    mitigate it? If people sign in to AWS with IAM users today, answer for that path: the sign-in endpoint and its
+    Region, MFA devices, and the account that holds the users. Your identity provider here means the one responders
+    use to reach AWS. Daily use of IAM users is scored in event_mutating_access.
   evidence_to_collect: >-
     the emergency access runbook for each failure mode. The emergency account, roles and credential custody
     records. The date, participants and result of the last test of each path. Where runbooks, the contact roster

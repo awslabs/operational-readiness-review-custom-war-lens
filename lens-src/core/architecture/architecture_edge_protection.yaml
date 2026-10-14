@@ -13,15 +13,15 @@ description:
   question: >-
     Do internet-facing endpoints have a web application firewall with rate limits, alarms that page on
     application-layer floods, and a rehearsed DDoS response that accounts for AWS Shield Advanced moving
-    application-layer protection to the AWS WAF Anti-DDoS managed rule group?
+    application-layer protection to the AWS WAF Anti-DDoS managed rule group? A third-party firewall or DDoS service
+    meets these statements when it has the same evidence.
   out_of_scope_if: >-
     the workload has no internet-facing endpoints. Select the first statement and keep the evidence.
   evidence_to_collect: >-
-    every internet-facing endpoint and the web ACL or network control that protects it. Managed and rate-based
-    rules and their actions (Count or Block). Alarms on rate-based rule and Anti-DDoS rule group metrics and
-    where they page. The DDoS runbook and the date of its last rehearsal. For Shield Advanced subscribers, which
-    web ACLs run the Anti-DDoS managed rule group after the auto-upgrade that starts 2026-10-25 (AWS Security
-    Blog, as updated 2026-10-05) and whether IaC matches.
+    every internet-facing endpoint and the web ACL or network control that protects it. Managed and rate-based rules
+    and their actions (Count or Block). Alarms on rate-based rule and Anti-DDoS rule group metrics and where they
+    page. The DDoS runbook and the date of its last rehearsal. For Shield Advanced subscribers, which web ACLs run the
+    Anti-DDoS managed rule group and whether IaC matches.
 helpful:
   display_text: REL02-BP01 Highly available public endpoints (Well-Architected)
   url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_users.html
@@ -106,9 +106,10 @@ statements:
     improvement: >-
       For each web ACL, alarm on rate-based and managed rule metrics against a baseline, and on DDoSAttackRequests
       where the Anti-DDoS managed rule group runs. Route the alarms to your paging system and link each one to the
-      DDoS runbook. If you subscribe to Shield Advanced, review alarms built on its application-layer detection,
-      because its application-layer automatic mitigation receives no further performance updates or priority
-      support from 2027-01-29 (as announced in the AWS Security Blog, updated 2026-10-05).
+      DDoS runbook. If you subscribe to Shield Advanced, the subscription includes access to the Anti-DDoS rule group
+      (as of 2026-10-14; check AWS Shield Advanced and AWS WAF pricing for the fees that apply when you add it); keep
+      these AWS WAF alarms too: rate-based rule metrics on every web ACL, and DDoSAttackRequests wherever the
+      Anti-DDoS rule group runs.
     improvement_url: https://docs.aws.amazon.com/waf/latest/developerguide/waf-metrics.html
     additional_helpful:
       - display_text: AWS Shield Advanced is embracing the AWS WAF Anti-DDoS managed rule group (AWS Security Blog)

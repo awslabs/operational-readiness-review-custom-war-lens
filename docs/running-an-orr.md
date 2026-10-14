@@ -46,6 +46,14 @@ Each lens you import uses one of the 15 custom-lens slots per account per Region
 3. **Facilitated review, 2-4 weeks before launch.** An independent facilitator challenges every answer against
    evidence. Run the full core. Answer `readiness_signoff` last, and save the launch milestone at sign-off.
 
+### What counts as a major change
+
+Re-answer the affected questions, starting from the last milestone, after any of these: a new or removed critical
+dependency; a new Region or disaster recovery strategy; a new data store or a major engine version upgrade; a
+change to how people sign in to AWS; a new internet-facing entry point; a change of operating team or support
+model; a large change in the demand forecast; or a high-severity incident. Run the full core at least yearly
+regardless.
+
 ## The core path, and why a launch decision needs the full core
 
 The core path is a published subset of 15 questions for triage and recurring check-ins. It covers every
@@ -72,11 +80,11 @@ scores certificate pinning as High risk. Questions that refine a class already o
 the full core with the same High bars.
 
 **A core-path-only session is preliminary.** A launch go or no-go requires the full core. `readiness_signoff` scores
-better than High only if the core statement `rd_scope_complete` ("every question in this lens is answered or marked
-not applicable with a reason") is selected or marked not applicable, and the WA Tool does not check that statement:
-unanswered questions show as Unanswered, not as High risk. Before selecting it, confirm in the lens review that no
-question in the core or an attached companion lens is still unanswered, and do not accept a not-applicable mark on
-it.
+better than High only if the core statement `rd_scope_complete` ("every question in this lens and in attached
+companion lenses is answered or marked not applicable with a reason") is selected or marked not applicable, and the
+WA Tool does not check that statement: unanswered questions show as Unanswered, not as High risk. Before selecting
+it, confirm in the lens review that no question in the core or an attached companion lens is still unanswered, and
+do not accept a not-applicable mark on it.
 
 ## Roles
 
@@ -95,6 +103,14 @@ a systems integrator or managed service provider, that runs part of the workload
 answers, it answers for its part with evidence you can inspect: for example its paging records, restore test
 reports or pipeline configuration. A contract clause alone is not evidence that a practice works.
 
+A practice that another team in your organization runs, such as a central platform, security operations or QA
+team, counts when this workload is in that team's scope and you can show that team's evidence for this workload.
+Name the owning team's role in the notes. If the practice is not in place for this workload, leave it unselected.
+
+For a pre-production workload, answer for the environment and support model that exist today.
+Statements about on-call, paging and production support stay unselected until the rotation is staffed. Tag the
+plan with `PLAN:` so that the launch review re-checks them.
+
 ## Before the review
 
 1. Import the lens (see the README quick start) and attach it to the workload. Attach the event lens too if a
@@ -110,10 +126,16 @@ reports or pipeline configuration. A contract clause alone is not evidence that 
 
 - Run the full core for a launch decision, in two sessions of about 90 minutes. A suggested split: session 1
   covers 01 - Architecture; session 2 covers 02 - Release Quality, 03 - Event Management and 04 - Readiness
-  Decision. If the generative AI lens is attached, answer it in about 45 more minutes before `readiness_signoff`,
-  so that its open High risks are part of the decision.
+  Decision. If the event or generative AI lens is attached, answer it before `readiness_signoff` (about 60 minutes
+  for the event lens and 45 for the generative AI lens), so that its open High risks are part of the decision.
+  Save a milestone at the end of each session with a unique name, for example `ORR-2026-11-launch-s1`, because
+  milestone names must be unique within a workload, and start the next session by reviewing what changed since that
+  milestone.
 - Select a statement only when it is true today and the evidence supports it. Selecting "None of these" means none
   of the statements is true, and the question scores its maximum risk.
+- A statement selected with a qualifying note ("partly", "in progress", "planned") is really an unselected
+  statement: clear it and record the plan in the notes as `PLAN:<statement-id> <tracker-id> due:YYYY-MM-DD`. The
+  improvement plan then carries the work, and the report shows the risk honestly.
 - A scope exit (for example "The workload has no internet-facing endpoints") scores No risk outright, so the
   facilitator accepts it only with the evidence its helpful text lists.
 - Mark a whole question "does not apply" only with a reason. Prefer a scope-exit statement where the question has
@@ -195,7 +217,13 @@ Pick one tracking path and use it for every workload:
 - Lens files contain no customer data. Answers and notes stay in your account and Region.
 - Notes appear in reports, and they sync to Jira when that is enabled. Never paste secrets, credentials, personal
   data or sensitive incident details into notes. Link to evidence instead.
-- Accepted risks carry only the `EXC:` tag in notes; everything else stays in the risk register or POA&M.
+- Accepted risks carry only the `EXC:` tag in notes, plus a `PLAN:` tag for the work that will close them;
+  everything else stays in the risk register or POA&M.
+- The lens review report lists unmitigated risks and includes the notes, so treat it as sensitive. To share
+  results with a facilitator outside your account, send the report for each attached lens through your
+  organization's approved secure file-sharing channel, not email. Sharing the workload read-only with the
+  facilitator's account, in the same Region, is another option where your policy allows; confirm that the
+  facilitator can see the ORR lens answers before you rely on it.
 - In AWS GovCloud (US), some workload fields may leave the GovCloud (US) Regions in normal operation. See
   [govcloud.md](govcloud.md#data-handling).
 
@@ -218,6 +246,18 @@ A time-boxed statement whose window has not opened yet stays unselected, and its
 
 The event lens is a self-assessment that comes before, or feeds, an AWS Countdown engagement; it does not replace
 one.
+
+### A launch that is also the event
+
+When the peak is the launch itself, such as a go-live or a cutover from an old system, the event window is the
+cutover plus the hypercare period that follows it. Follow both timelines: the event lens checkpoints (8, 4 and 2
+weeks before) and the facilitated core review 2-4 weeks before launch. Answer `readiness_signoff` at the 2-week
+checkpoint, after the event lens. In the post-event question, select None of these until hypercare ends, then
+answer it. The scale-down statements apply only to capacity added for the cutover; for capacity that becomes the new
+baseline, record the decision to keep it, as the improvement plans describe. The lenses do not score cutover
+fallback, data reconciliation between the old and new systems, or hypercare exit criteria (the `cf_dates`
+improvement plan suggests success criteria for them); track them in an add-on lens
+([customizing.md](customizing.md)).
 
 ## Generative AI and agent workloads
 

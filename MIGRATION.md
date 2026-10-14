@@ -5,8 +5,9 @@ lens 2.0.0. The ORR - Mission-Critical Event Readiness and ORR - Generative AI a
 lenses: install them with the first-install steps in the [README](README.md#first-install).
 
 The procedure is the same for every version 2 file. Where this guide says 2.0.0, use the version you are
-installing; going straight from v1.3.x to 2.0.1 is the same upgrade. To move a lens that is already on 2.0.0 to
-2.0.1, which changes only display text, see [Patch releases](README.md#patch-releases) instead.
+installing; going straight from v1.3.x to the newest 2.0.x file is the same upgrade. To move a lens that is already
+on version 2 to a newer 2.0.x release, which changes only display text, see [Patch releases](README.md#patch-releases)
+instead.
 
 What to expect:
 
@@ -238,7 +239,8 @@ aws wellarchitected upgrade-lens-review --workload-id "$WORKLOAD_ID" --lens-alia
    validation error ("No question with ID ... was found") on the current review; read it from the milestone.
 
 4. **Carry accepted risks forward with the `EXC:` convention.** For each High you accept in 2.0.0, record only
-   `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>` in the question notes, for example
+   `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>` in the question notes (plus an optional `PLAN:` tag for
+   the fix), for example
    `EXC:RR-0142 exp:2027-03-31 role:business-owner`. Keep the approver's name, the reason and the compensating
    controls in your risk register or plan of action and milestones (POA&M). An acceptance recorded against a
    v1.3.6 question does not transfer automatically: re-assess it against the 2.0.0 question that absorbed the

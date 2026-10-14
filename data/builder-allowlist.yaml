@@ -62,11 +62,10 @@ articles:
     url: https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments
   static-stability-using-availability-zones:
     legacy_url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
-    location: no-redirect
-    article_id: null
+    location: https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones
+    article_id: 3K9SiqiJ369TGkkGzqPM95BuYWI
     title: Static stability using Availability Zones
-    url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
-    notes: Still served directly from aws.amazon.com (HTTP 200, no redirect).
+    url: https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones
   going-faster-with-continuous-delivery:
     legacy_url: https://aws.amazon.com/builders-library/going-faster-with-continuous-delivery/
     location: https://builder.aws.com/content/3F08Mhh186qOa4VhG19egs06NJa/going-faster-with-continuous-delivery
@@ -131,11 +130,10 @@ articles:
     url: https://builder.aws.com/content/3Ev0vH0hfkcUizISUWYTvHibtcp/leader-election-in-distributed-systems
   caching-challenges-and-strategies:
     legacy_url: https://aws.amazon.com/builders-library/caching-challenges-and-strategies/
-    location: no-redirect
-    article_id: null
+    location: https://builder.aws.com/content/3K9TeXp6strMiJ4vhakpRD7BQWO/caching-challenges-and-strategies
+    article_id: 3K9TeXp6strMiJ4vhakpRD7BQWO
     title: Caching challenges and strategies
-    url: https://aws.amazon.com/builders-library/caching-challenges-and-strategies/
-    notes: Still served directly from aws.amazon.com (HTTP 200, no redirect).
+    url: https://builder.aws.com/content/3K9TeXp6strMiJ4vhakpRD7BQWO/caching-challenges-and-strategies
   challenges-with-distributed-systems:
     legacy_url: https://aws.amazon.com/builders-library/challenges-with-distributed-systems/
     location: https://builder.aws.com/content/3F08f7GPFiZMCgXD8gny6OjxR0Z/challenges-with-distributed-systems

@@ -12,7 +12,8 @@ choice_prefix: pr_
 description:
   question: >-
     Has capacity been re-proven against this event's own forecast, recently enough that later changes cannot have
-    invalidated the result?
+    invalidated the result? The re-test statement stays unselected until a re-test has run 30-60 days before the
+    event.
   evidence_to_collect: >-
     the agreed event forecast (peak, shape, ramp, duration, worst case and margin). The re-test plan and report with
     its date, achieved rate, latency, errors and first bottleneck. The alarm, scaling and runbook observations recorded

@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2021-11-01",
   "name": "AWS Operational Readiness Review",
-  "description": "Operational Readiness Review (ORR) custom lens 2.0.1 for the AWS Well-Architected Tool, informed by the AWS Operational Readiness Reviews whitepaper and Well-Architected best practice OPS07-BP02. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
+  "description": "Operational Readiness Review (ORR) custom lens 2.0.2 for the AWS Well-Architected Tool, informed by the AWS Operational Readiness Reviews whitepaper and Well-Architected best practice OPS07-BP02. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
   "pillars": [
     {
       "id": "architecture",
@@ -157,7 +157,7 @@
               "id": "sm_fma_mitigation",
               "title": "Each significant failure mode has a documented mitigation: a design control, automation or a runbook",
               "helpfulResource": {
-                "displayText": "Good looks like: Each significant failure mode has a documented mitigation: a design control (for example redundancy, a timeout or a degraded mode), an automated response, or a runbook with tested steps. Failure modes the team chose not to mitigate are recorded with the reason and the accountable owner. Reader note: This page links an article that uses AWS CloudTrail Lake, which is closed to new customers; any runbook format or tool meets this practice.",
+                "displayText": "Good looks like: Each significant failure mode has a documented mitigation: a design control (for example redundancy, a timeout or a degraded mode), an automated response, or a runbook with tested steps. Failure modes the team chose not to mitigate are recorded with the reason and the accountable owner.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html"
               },
               "improvementPlan": {
@@ -210,7 +210,7 @@
                   "content": [
                     {
                       "displayText": "Static stability using Availability Zones (Amazon Builders' Library)",
-                      "url": "https://aws.amazon.com/builders-library/static-stability-using-availability-zones/"
+                      "url": "https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones"
                     },
                     {
                       "displayText": "REL11-BP05 Use static stability to prevent bimodal behavior (AWS Well-Architected)",
@@ -735,7 +735,7 @@
               "id": "tp_per_source_limits",
               "title": "Per-client, tenant, API key or source limits are enforced (or there is one trusted, bounded caller)",
               "helpfulResource": {
-                "displayText": "Good looks like: Every entry point enforces a limit per caller identity (API key, tenant, account, or source IP for anonymous traffic), sized from measured capacity so no caller exceeds its share, and throttled callers get a fast, retryable response such as HTTP 429. Platform notes: EC2 and containers: AWS WAF rate-based rules at the edge, plus limits in the service or a sidecar. Amazon API Gateway: stage and method throttling, and usage plans with API keys (best-effort) for per-client fairness. AWS WAF rate-based rules on REST API stages, or on CloudFront in front of HTTP APIs, cannot be bypassed by callers but are approximate and can take minutes to engage, so keep precise per-tenant quotas in the service. Serverless: Lambda reserved concurrency. Partition notes: CloudFront is not available in AWS GovCloud (US) as of 2026-10-05; use AWS WAF on REST API stages or Application Load Balancers. Reader note: REL05-BP02 lists the discontinued Virtual Waiting Room on AWS solution; this practice does not need it.",
+                "displayText": "Good looks like: Every entry point enforces a limit per caller identity (API key, tenant, account, or source IP for anonymous traffic), sized from measured capacity so no caller exceeds its share, and throttled callers get a fast, retryable response such as HTTP 429. Platform notes: EC2 and containers: AWS WAF rate-based rules at the edge, plus limits in the service or a sidecar. Amazon API Gateway: stage and method throttling, and usage plans with API keys (best-effort) for per-client fairness. AWS WAF rate-based rules on REST API stages, or on CloudFront in front of HTTP APIs, cannot be bypassed by callers but are approximate and can take minutes to engage, so keep precise per-tenant quotas in the service. Serverless: Lambda reserved concurrency. Partition notes: CloudFront is not available in AWS GovCloud (US) as of 2026-10-05; use AWS WAF on REST API stages or Application Load Balancers.",
                 "url": "https://builder.aws.com/content/3Eupj3d2bo4fEvlzYbICMZNhQ3B/fairness-in-multi-tenant-systems"
               },
               "improvementPlan": {
@@ -827,7 +827,7 @@
         {
           "id": "architecture_edge_protection",
           "title": "Edge and DDoS baseline for internet-facing endpoints",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Do internet-facing endpoints have a web application firewall with rate limits, alarms that page on application-layer floods, and a rehearsed DDoS response that accounts for AWS Shield Advanced moving application-layer protection to the AWS WAF Anti-DDoS managed rule group? Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep the evidence. Evidence to collect: every internet-facing endpoint and the web ACL or network control that protects it. Managed and rate-based rules and their actions (Count or Block). Alarms on rate-based rule and Anti-DDoS rule group metrics and where they page. The DDoS runbook and the date of its last rehearsal. For Shield Advanced subscribers, which web ACLs run the Anti-DDoS managed rule group after the auto-upgrade that starts 2026-10-25 (AWS Security Blog, as updated 2026-10-05) and whether IaC matches.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Defense against overload. Do internet-facing endpoints have a web application firewall with rate limits, alarms that page on application-layer floods, and a rehearsed DDoS response that accounts for AWS Shield Advanced moving application-layer protection to the AWS WAF Anti-DDoS managed rule group? A third-party firewall or DDoS service meets these statements when it has the same evidence. Out of scope if: the workload has no internet-facing endpoints. Select the first statement and keep the evidence. Evidence to collect: every internet-facing endpoint and the web ACL or network control that protects it. Managed and rate-based rules and their actions (Count or Block). Alarms on rate-based rule and Anti-DDoS rule group metrics and where they page. The DDoS runbook and the date of its last rehearsal. For Shield Advanced subscribers, which web ACLs run the Anti-DDoS managed rule group and whether IaC matches.",
           "helpfulResource": {
             "displayText": "REL02-BP01 Highly available public endpoints (Well-Architected)",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_users.html"
@@ -897,7 +897,7 @@
                 "url": "https://docs.aws.amazon.com/waf/latest/developerguide/ddos-srt-proactive-engagement.html"
               },
               "improvementPlan": {
-                "displayText": "For each web ACL, alarm on rate-based and managed rule metrics against a baseline, and on DDoSAttackRequests where the Anti-DDoS managed rule group runs. Route the alarms to your paging system and link each one to the DDoS runbook. If you subscribe to Shield Advanced, review alarms built on its application-layer detection, because its application-layer automatic mitigation receives no further performance updates or priority support from 2027-01-29 (as announced in the AWS Security Blog, updated 2026-10-05).",
+                "displayText": "For each web ACL, alarm on rate-based and managed rule metrics against a baseline, and on DDoSAttackRequests where the Anti-DDoS managed rule group runs. Route the alarms to your paging system and link each one to the DDoS runbook. If you subscribe to Shield Advanced, the subscription includes access to the Anti-DDoS rule group (as of 2026-10-14; check AWS Shield Advanced and AWS WAF pricing for the fees that apply when you add it); keep these AWS WAF alarms too: rate-based rule metrics on every web ACL, and DDoSAttackRequests wherever the Anti-DDoS rule group runs.",
                 "url": "https://docs.aws.amazon.com/waf/latest/developerguide/waf-metrics.html"
               },
               "additionalResources": [
@@ -1111,7 +1111,7 @@
               "id": "dem_quota_headroom",
               "title": "Quotas and scaling ceilings in every account and Region, including recovery Regions, cover peak plus failover and are alarmed",
               "helpfulResource": {
-                "displayText": "Good looks like: Every quota and limit the workload can reach (service quotas, account concurrency and throughput limits, Auto Scaling maximums, IP space, third-party API limits) covers forecast peak plus failover with a documented margin in every production account and Region, including recovery Regions, and CloudWatch alarms fire on usage well before each limit. Fixed quotas are designed around. Platform notes: Serverless: Lambda account concurrency and per-function scaling rate. EC2 and containers: vCPU-based instance quotas, Auto Scaling and capacity provider maximums, and subnet IP space. Partition notes: Service Quotas is available in AWS GovCloud (US) as of 2026-10-05, but quota request templates are not (checked 2026-10-06), so request GovCloud increases per account. Reader note: REL01-BP01, BP02 and BP06 list Amazon DevOps Guru (no new customers from 2026-10-29), and REL01-BP01 and BP02 list Amazon CodeGuru Reviewer (no new repository associations since 2025-11-07); neither is needed here.",
+                "displayText": "Good looks like: Every quota and limit the workload can reach (service quotas, account concurrency and throughput limits, Auto Scaling maximums, IP space, third-party API limits) covers forecast peak plus failover with a documented margin in every production account and Region, including recovery Regions, and CloudWatch alarms fire on usage well before each limit. Fixed quotas are designed around. Platform notes: Serverless: Lambda account concurrency and per-function scaling rate. EC2 and containers: vCPU-based instance quotas, Auto Scaling and capacity provider maximums, and subnet IP space. Partition notes: Service Quotas is available in AWS GovCloud (US) as of 2026-10-05, but quota request templates are not (checked 2026-10-06), so request GovCloud increases per account.",
                 "url": "https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html"
               },
               "improvementPlan": {
@@ -1386,7 +1386,7 @@
                 "url": "https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html"
               },
               "improvementPlan": {
-                "displayText": "For each component, compare the DR strategies with its RTO, RPO and budget, choose one, and document the Region decision, the scenarios covered and excluded, residency constraints, the recovery runbook and the dependencies the recovery itself needs. Prefer recovery steps that use data-plane operations and pre-provisioned capacity. Review the strategy when objectives or architecture change.",
+                "displayText": "For each component, compare the DR strategies with its RTO, RPO and budget, choose one, and document the Region decision, the scenarios covered and excluded, residency constraints, the recovery runbook and the dependencies the recovery itself needs. Prefer recovery steps that use data-plane operations and pre-provisioned capacity. Review the strategy when objectives or architecture change. For a pilot light or warm standby strategy, consider On-Demand Capacity Reservations in the recovery Region's Availability Zones for the instances recovery must launch. They are billed whether or not instances run.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_disaster_recovery.html"
               },
               "additionalResources": [
@@ -1679,7 +1679,7 @@
         {
           "id": "releases_manual_changes",
           "title": "Changes only through reviewed pipelines and IaC, including emergencies",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Deployment safety. Is every production change, including infrastructure, configuration, feature flags and changes proposed by scripts, bots or AI agents, reviewed by someone other than its author and applied only through pipelines, even during emergencies? Evidence to collect: the list of production change paths (IaC, application configuration, feature flags, pipelines, database changes). Repository protection rules and pipeline permissions. Which people and roles can change production outside the pipeline, and the guardrails that stop them. Drift detection results and alarms. The emergency change procedure and the audit record of its last use.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Deployment safety. Is every production change, including infrastructure, configuration, feature flags and changes proposed by scripts, bots or AI agents, reviewed by someone other than its author and applied only through pipelines, even during emergencies? Related: human write access to production is scored in event_mutating_access, emergency sign-in in event_emergency_access, and commands run outside the pipeline in event_operator_tooling_safety. Evidence to collect: the list of production change paths (IaC, application configuration, feature flags, pipelines, database changes). Repository protection rules and pipeline permissions. Which people and roles can change production outside the pipeline, and the guardrails that stop them. Drift detection results and alarms. The emergency change procedure and the audit record of its last use.",
           "helpfulResource": {
             "displayText": "REL08-BP05 Deploy changes with automation (AWS Well-Architected)",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_automated_changemgmt.html"
@@ -1837,7 +1837,7 @@
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_multi_env.html"
               },
               "improvementPlan": {
-                "displayText": "Template every environment from the same IaC with per-environment parameters, move pre-production into its own accounts, build each artifact once and promote it by digest or version, and add a pipeline check that fails if the artifact about to reach production differs from the one tested in pre-production. Record any intended difference between environments and why it is safe. Reader note: This page refers to AWS App Mesh, which reached end of support on 2026-09-30; for canary deployments on Amazon ECS, use ECS built-in canary deployments instead.",
+                "displayText": "Template every environment from the same IaC with per-environment parameters, move pre-production into its own accounts, build each artifact once and promote it by digest or version, and add a pipeline check that fails if the artifact about to reach production differs from the one tested in pre-production. Record any intended difference between environments and why it is safe.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_immutable_infrastructure.html"
               },
               "additionalResources": [
@@ -1856,7 +1856,7 @@
               "id": "pp_build_gates",
               "title": "Unit tests, static analysis, and dependency, secret and IaC scans fail the build above an agreed severity",
               "helpfulResource": {
-                "displayText": "Good looks like: Every build runs unit tests, static analysis, dependency (software composition) analysis, secret detection and IaC checks, and fails on any finding at or above the severity agreed with the security owner, for example critical or high. Thresholds are written down; exceptions carry an expiry date. Platform notes: Any platform: IaC checks such as cfn-lint, AWS CloudFormation Guard or CloudFormation Hooks; vulnerability scanning of container images in Amazon ECR and of Lambda functions with Amazon Inspector; and your static analysis and secret scanning tools run in AWS CodeBuild or your CI system. Partition notes: Amazon Inspector Lambda code scanning and code repository scanning are not available in AWS GovCloud (US) as of 2026-10-06; use Inspector image and package scanning plus your own static analysis there. Reader note: This page refers to Amazon CodeGuru Security, which was discontinued on 2025-11-20; any static analysis and secret scanning tool meets this practice.",
+                "displayText": "Good looks like: Every build runs unit tests, static analysis, dependency (software composition) analysis, secret detection and IaC checks, and fails on any finding at or above the severity agreed with the security owner, for example critical or high. Thresholds are written down; exceptions carry an expiry date. Platform notes: Any platform: IaC checks such as cfn-lint, AWS CloudFormation Guard or CloudFormation Hooks; vulnerability scanning of container images in Amazon ECR and of Lambda functions with Amazon Inspector; and your static analysis and secret scanning tools run in AWS CodeBuild or your CI system. Partition notes: Amazon Inspector Lambda code scanning and code repository scanning are not available in AWS GovCloud (US) as of 2026-10-06; use Inspector image and package scanning plus your own static analysis there.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_automate_testing_throughout_lifecycle.html"
               },
               "improvementPlan": {
@@ -2178,11 +2178,11 @@
               "id": "sec_testing_closed",
               "title": "The threat model and security testing are current for this release, and critical or high findings are fixed or accepted",
               "helpfulResource": {
-                "displayText": "Good looks like: A threat model covers this release's architecture, data flows and trust boundaries, and was updated for the changes in it. Security testing in proportion to the risk, for example penetration testing, dynamic scanning or a focused review of new interfaces, ran against this release or a production-like copy. Every critical and high finding is fixed and retested, or formally accepted by the accountable owner with an expiry date. Testing of AWS resources follows the AWS penetration testing policy.",
+                "displayText": "Good looks like: A threat model covers this release's architecture, data flows and trust boundaries, and was updated for the changes in it. Security testing in proportion to the risk, for example penetration testing, dynamic scanning or a focused review of new interfaces, ran against this release or a production-like copy. Every critical and high finding is fixed and retested, or formally accepted by the accountable owner with an expiry date. Testing of AWS resources follows the AWS penetration testing policy. A security control catalog or compliance baseline is not a threat model, though the threat model can map its mitigations to one.",
                 "url": "https://aws.amazon.com/security/penetration-testing/"
               },
               "improvementPlan": {
-                "displayText": "Update the threat model for this release, plan security testing for the new or changed attack surface, run it against a production-like environment within the AWS penetration testing policy, and track every finding to closure. Before launch, fix and retest critical and high findings, or record a time-bound acceptance in your risk register. Reader note: The Threat Composer page mentions Amazon CodeCatalyst, which is closed to new customers; Threat Composer works without it.",
+                "displayText": "Update the threat model for this release, plan security testing for the new or changed attack surface, run it against a production-like environment within the AWS penetration testing policy, and track every finding to closure. Before launch, fix and retest critical and high findings, or record a time-bound acceptance in your risk register.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_threat_model.html"
               },
               "additionalResources": [
@@ -2201,11 +2201,11 @@
               "id": "sec_detection_routed",
               "title": "Threat detection and posture findings are enabled in every Region used and routed to an owned on-call queue",
               "helpfulResource": {
-                "displayText": "Good looks like: Threat detection and posture management (for example Amazon GuardDuty and AWS Security Hub) run in every account and every Region the workload uses, including recovery Regions, managed from a delegated administrator account. Findings at or above an agreed severity reach an owned on-call queue within minutes, for example through Amazon EventBridge rules, and the route was tested. Platform notes: EC2 and containers: add GuardDuty Runtime Monitoring and Amazon Inspector scanning. Serverless: add GuardDuty Lambda Protection and Inspector scanning of Lambda functions. Partition notes: GuardDuty, Security Hub, Security Hub CSPM and Inspector are available in AWS GovCloud (US) as of 2026-10-06. There, Security Hub has no third-party integrations and Security Hub CSPM supports only some integrations; route findings with EventBridge. Reader note: This page refers to AWS CloudTrail Lake, which is closed to new customers; a CloudTrail trail to Amazon S3 or CloudWatch Logs meets this practice.",
+                "displayText": "Good looks like: Threat detection and posture management (for example Amazon GuardDuty and AWS Security Hub) run in every account and every Region the workload uses, including recovery Regions, managed from a delegated administrator account. Findings at or above an agreed severity reach an owned on-call queue within minutes, for example through Amazon EventBridge rules, and the route was tested. Platform notes: EC2 and containers: add GuardDuty Runtime Monitoring and Amazon Inspector scanning. Serverless: add GuardDuty Lambda Protection and Inspector scanning of Lambda functions. Partition notes: GuardDuty, Security Hub, Security Hub CSPM and Inspector are available in AWS GovCloud (US) as of 2026-10-06. There, Security Hub has no third-party integrations and Security Hub CSPM supports only some integrations; route findings with EventBridge.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_app_service_logging.html"
               },
               "improvementPlan": {
-                "displayText": "Enable threat detection and posture findings organization-wide through a delegated administrator, in every Region the workload uses, and restrict unused Regions, for example with service control policies. Add rules that send findings at or above an agreed severity to the owning team's on-call queue, with a runbook per finding type, and generate sample findings to prove the route works.",
+                "displayText": "If detection is already on, start with the routing step below. Otherwise, enable threat detection and posture findings organization-wide through a delegated administrator, in every Region the workload uses, and restrict unused Regions, for example with service control policies. Add rules that send findings at or above an agreed severity to the owning team's on-call queue, with a runbook per finding type, and generate sample findings to prove the route works.",
                 "url": "https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_eventbridge.html"
               }
             },
@@ -2225,7 +2225,7 @@
               "id": "sec_audit_logs",
               "title": "Audit and workload logs are centralized in a restricted account, tamper-resistant, and retained to the applicable mandate",
               "helpfulResource": {
-                "displayText": "Good looks like: AWS CloudTrail (an organization trail for all accounts and Regions) and the network, load balancer and application logs that investigations need are delivered to a dedicated log archive account that workload teams cannot change. Log files are protected against change or deletion, for example with S3 Object Lock and CloudTrail log file integrity validation, read access is restricted and audited, and retention meets the longest applicable legal, regulatory or contractual mandate. Partition notes: In AWS GovCloud (US), CloudTrail records events from global services such as IAM and AWS STS in AWS GovCloud (US-West); use a multi-Region trail to capture them (as of 2026-10-06). Reader note: This page refers to AWS CloudTrail Lake, which is closed to new customers; a CloudTrail organization trail to Amazon S3 meets this practice.",
+                "displayText": "Good looks like: AWS CloudTrail (an organization trail for all accounts and Regions) and the network, load balancer and application logs that investigations need are delivered to a dedicated log archive account that workload teams cannot change. Log files are protected against change or deletion, for example with S3 Object Lock and CloudTrail log file integrity validation, read access is restricted and audited, and retention meets the longest applicable legal, regulatory or contractual mandate. Partition notes: In AWS GovCloud (US), CloudTrail records events from global services such as IAM and AWS STS in AWS GovCloud (US-West); use a multi-Region trail to capture them (as of 2026-10-06).",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_logs.html"
               },
               "improvementPlan": {
@@ -2380,7 +2380,7 @@
               "id": "slo_defined",
               "title": "Availability, latency and async-completion SLOs are defined for each critical user journey and API",
               "helpfulResource": {
-                "displayText": "Good looks like: Each critical user journey and API has written SLOs measured from the customer's side: availability (successful requests over valid requests), latency at a high percentile (for example p99), and, for asynchronous work, time to completion. Each SLO has an owner, a target, a measurement window and an error budget, is derived from business needs, and is tighter than any SLA. CloudWatch Application Signals can track latency and availability SLOs, or you can compute them from your own metrics. Partition notes: As of 2026-10-06, CloudWatch Application Signals is available in AWS GovCloud (US) (AWS Capabilities by Region) but not for Lambda functions (AWS GovCloud (US) User Guide); compute Lambda SLOs from your own CloudWatch metrics. Verify per Region. Reader note: This page mentions AWS Service Catalog AppRegistry, which is closed to new customers; associating an SLO with an application there is optional and is not needed for this practice.",
+                "displayText": "Good looks like: Each critical user journey and API has written SLOs measured from the customer's side: availability (successful requests over valid requests), latency at a high percentile (for example p99), and, for asynchronous work, time to completion. Each SLO has an owner, a target, a measurement window and an error budget, is derived from business needs, and is tighter than any SLA. CloudWatch Application Signals can track latency and availability SLOs, or you can compute them from your own metrics. Partition notes: As of 2026-10-06, CloudWatch Application Signals is available in AWS GovCloud (US) (AWS Capabilities by Region) but not for Lambda functions (AWS GovCloud (US) User Guide); compute Lambda SLOs from your own CloudWatch metrics. Verify per Region.",
                 "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-ServiceLevelObjectives.html"
               },
               "improvementPlan": {
@@ -2392,7 +2392,7 @@
               "id": "slo_alarms_before_breach",
               "title": "Paging alarms on customer-facing error rates and latency percentiles fire before the SLO or SLA is breached",
               "helpfulResource": {
-                "displayText": "Good looks like: Every SLO has at least one alarm that pages the on-call engineer when the error rate or latency percentile crosses a threshold, or the error budget burns at a rate, that leaves time to act before the SLO or SLA is breached. Alarms use rates and percentiles (for example server errors over requests, p99 latency) rather than averages or raw counts, and cover each Region and entry point. Informational alarms go to a ticket queue, not a pager. Platform notes: EC2 and containers behind a load balancer: Application Load Balancer metrics such as HTTPCode_Target_5XX_Count and TargetResponseTime, with metric math for rates. Serverless: API Gateway 5XXError and Latency, and Lambda Errors and Duration. Asynchronous journeys: alarm on completion time or success rate, not only on API errors. Reader note: This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30); CloudWatch alarms, composite alarms and CloudWatch anomaly detection meet this practice.",
+                "displayText": "Good looks like: Every SLO has at least one alarm that pages the on-call engineer when the error rate or latency percentile crosses a threshold, or the error budget burns at a rate, that leaves time to act before the SLO or SLA is breached. Alarms use rates and percentiles (for example server errors over requests, p99 latency) rather than averages or raw counts, and cover each Region and entry point. Informational alarms go to a ticket queue, not a pager. Platform notes: EC2 and containers behind a load balancer: Application Load Balancer metrics such as HTTPCode_Target_5XX_Count and TargetResponseTime, with metric math for rates. Serverless: API Gateway 5XXError and Latency, and Lambda Errors and Duration. Asynchronous journeys: alarm on completion time or success rate, not only on API errors.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_create_alerts.html"
               },
               "improvementPlan": {
@@ -2592,7 +2592,7 @@
               "id": "sat_compute",
               "title": "Compute or function saturation (CPU, memory, disk, handles, pools, concurrency, throttles) is alarmed and covers new resources",
               "helpfulResource": {
-                "displayText": "Good looks like: Alarms watch the resources that run out first for each compute type, with thresholds that leave time to act: CPU, memory, disk space and inodes, file descriptors, thread and connection pools, runtime signals such as garbage collection, and concurrency and throttling for managed compute. Alarms are created by IaC or tag-driven automation, so new instances, clusters and functions are covered without manual steps. Platform notes: EC2: the CloudWatch agent collects memory, disk and process metrics that EC2 does not publish by default, and JVM workloads can publish JMX metrics. Containers: CloudWatch Container Insights for task, pod and node CPU and memory. Serverless: Lambda Throttles, ConcurrentExecutions and Duration against the timeout, and Lambda Insights for memory. Reader note: This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30); CloudWatch alarms and CloudWatch anomaly detection meet this practice.",
+                "displayText": "Good looks like: Alarms watch the resources that run out first for each compute type, with thresholds that leave time to act: CPU, memory, disk space and inodes, file descriptors, thread and connection pools, runtime signals such as garbage collection, and concurrency and throttling for managed compute. Alarms are created by IaC or tag-driven automation, so new instances, clusters and functions are covered without manual steps. Platform notes: EC2: the CloudWatch agent collects memory, disk and process metrics that EC2 does not publish by default, and JVM workloads can publish JMX metrics. Containers: CloudWatch Container Insights for task, pod and node CPU and memory. Serverless: Lambda Throttles, ConcurrentExecutions and Duration against the timeout, and Lambda Insights for memory.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_monitor_resources.html"
               },
               "improvementPlan": {
@@ -2623,7 +2623,7 @@
               "id": "sat_datastore_deps",
               "title": "Data stores and critical dependencies are alarmed on errors, throttling, latency and capacity headroom, measured from your side",
               "helpfulResource": {
-                "displayText": "Good looks like: Each data store and critical dependency, including AWS services, internal services and third-party APIs, has alarms on the errors, throttles, latency and timeouts your code sees when it calls it, measured with client-side metrics, plus provider metrics for capacity headroom such as connections, storage, read and write capacity or replica lag. The operational dashboard has a view of critical dependencies, so responders can tell quickly whether a problem is in the workload or in a dependency. Platform notes: Managed databases: alarm on connections, storage, CPU and replica lag (for example Amazon RDS and Amazon Aurora metrics). Amazon DynamoDB: alarm on throttled requests and system errors. Third parties: emit your own call metrics from each client, because the provider's metrics are not visible to you. Reader note: This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30); CloudWatch alarms on your own dependency metrics meet this practice.",
+                "displayText": "Good looks like: Each data store and critical dependency, including AWS services, internal services and third-party APIs, has alarms on the errors, throttles, latency and timeouts your code sees when it calls it, measured with client-side metrics, plus provider metrics for capacity headroom such as connections, storage, read and write capacity or replica lag. The operational dashboard has a view of critical dependencies, so responders can tell quickly whether a problem is in the workload or in a dependency. Platform notes: Managed databases: alarm on connections, storage, CPU and replica lag (for example Amazon RDS and Amazon Aurora metrics). Amazon DynamoDB: alarm on throttled requests and system errors. Third parties: emit your own call metrics from each client, because the provider's metrics are not visible to you.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_dependency_telemetry.html"
               },
               "improvementPlan": {
@@ -2763,21 +2763,17 @@
               "id": "tr_open_tracing",
               "title": "Requests are traced across components, including async hops, with open-standard instrumentation (for example OpenTelemetry)",
               "helpfulResource": {
-                "displayText": "Good looks like: Services use OpenTelemetry instrumentation (for example the AWS Distro for OpenTelemetry), propagate trace context through synchronous calls, queues, streams and events, and send traces to a backend such as AWS X-Ray, with sampling that keeps errors and slow requests. Responders can open the trace for a request ID from a log line or an error response. Platform notes: EC2 and containers: run an OpenTelemetry Collector or the CloudWatch agent on the host, as a sidecar or as a daemon set. Serverless: the AWS Distro for OpenTelemetry Lambda layer or Lambda active tracing. Partition notes: As of 2026-10-06, AWS X-Ray is available in AWS GovCloud (US). For CloudWatch Transaction Search and the OTLP endpoint, the AWS GovCloud (US) User Guide says not available but AWS Capabilities by Region says available; test in your account first. Reader note: The linked support timeline covers the AWS X-Ray SDKs and daemon, in maintenance mode since 2026-02-25; use OpenTelemetry for new instrumentation.",
+                "displayText": "Good looks like: Services use OpenTelemetry instrumentation (for example the AWS Distro for OpenTelemetry), propagate trace context through synchronous calls, queues, streams and events, and send traces to a backend such as AWS X-Ray, with sampling that keeps errors and slow requests. Responders can open the trace for a request ID from a log line or an error response. Platform notes: EC2 and containers: run an OpenTelemetry Collector or the CloudWatch agent on the host, as a sidecar or as a daemon set. Serverless: the AWS Distro for OpenTelemetry Lambda layer or Lambda active tracing. Partition notes: As of 2026-10-06, AWS X-Ray is available in AWS GovCloud (US). For CloudWatch Transaction Search and the OTLP endpoint, the AWS GovCloud (US) User Guide says not available but AWS Capabilities by Region says available; test in your account first.",
                 "url": "https://opentelemetry.io/docs/concepts/context-propagation/"
               },
               "improvementPlan": {
-                "displayText": "Instrument each service with OpenTelemetry, starting with automatic instrumentation, propagate context through messaging, choose a sampling policy that keeps errors, and send traces to your tracing backend. Move existing instrumentation built on maintenance-mode tracing SDKs to OpenTelemetry.",
+                "displayText": "Instrument each service with OpenTelemetry, starting with automatic instrumentation, propagate context through messaging, choose a sampling policy that keeps errors, and send traces to your tracing backend. Move existing instrumentation that does not use an open standard to OpenTelemetry.",
                 "url": "https://aws.amazon.com/otel/"
               },
               "additionalResources": [
                 {
                   "type": "IMPROVEMENT_PLAN",
                   "content": [
-                    {
-                      "displayText": "AWS X-Ray support timeline for legacy instrumentation (migrate to OpenTelemetry)",
-                      "url": "https://docs.aws.amazon.com/xray/latest/devguide/xray-sdk-daemon-timeline.html"
-                    },
                     {
                       "displayText": "CloudWatch OTLP endpoints",
                       "url": "https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTLPEndpoint.html"
@@ -2790,7 +2786,7 @@
               "id": "tr_alarm_diagnostics",
               "title": "Alarms link to dashboards, saved queries and recent changes, and diagnostics are gathered automatically when they fire",
               "helpfulResource": {
-                "displayText": "Good looks like: Each paging alarm's description or ticket links to the dashboard, saved log queries and traces for the affected component, and to recent deployments and configuration changes. When the alarm fires, automation collects the first diagnostics (for example top errors, affected hosts or tenants, recent change events, and thread dumps where safe) and attaches them to the ticket, so responders start with evidence instead of gathering it. Platform notes: An Amazon EventBridge rule on alarm state changes, or an alarm action, can start an AWS Lambda function or an AWS Systems Manager Automation runbook that gathers data. Any incident or ticketing tool can hold the results. Reader note: This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30); alarm actions, Amazon EventBridge rules and Systems Manager Automation runbooks meet this practice.",
+                "displayText": "Good looks like: Each paging alarm's description or ticket links to the dashboard, saved log queries and traces for the affected component, and to recent deployments and configuration changes. When the alarm fires, automation collects the first diagnostics (for example top errors, affected hosts or tenants, recent change events, and thread dumps where safe) and attaches them to the ticket, so responders start with evidence instead of gathering it. Platform notes: An Amazon EventBridge rule on alarm state changes, or an alarm action, can start an AWS Lambda function or an AWS Systems Manager Automation runbook that gathers data. Any incident or ticketing tool can hold the results.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_automate_response_monitor.html"
               },
               "improvementPlan": {
@@ -2857,7 +2853,7 @@
               "id": "oc_runbook_per_alarm",
               "title": "Every paging alarm links to a runbook from the alarm or the ticket",
               "helpfulResource": {
-                "displayText": "Good looks like: Each paging alarm's description, or the ticket it creates, links to a runbook for that alarm: what the alarm means, how to check customer impact, the first mitigation steps (for example roll back, shift traffic or add capacity), the permissions needed, and when to escalate. An alarm without a runbook does not page, and new paging alarms are reviewed for a runbook before they go live. Reader note: This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any incident-management or paging tool, or a runbook link in the alarm description, meets this practice.",
+                "displayText": "Good looks like: Each paging alarm's description, or the ticket it creates, links to a runbook for that alarm: what the alarm means, how to check customer impact, the first mitigation steps (for example roll back, shift traffic or add capacity), the permissions needed, and when to escalate. An alarm without a runbook does not page, and new paging alarms are reviewed for a runbook before they go live.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_process_per_alert.html"
               },
               "improvementPlan": {
@@ -2869,7 +2865,7 @@
               "id": "oc_runbooks_exercised",
               "title": "Runbooks, including the permissions they need, were exercised in the last 12 months or after major changes",
               "helpfulResource": {
-                "displayText": "Good looks like: Each runbook was run end to end in the last 12 months, or since the last major change, by someone other than its author, in a game day, a pre-production drill or a real event, using the same roles and permissions on-call engineers have. Steps that failed, were unclear or needed missing access were fixed, and the runbook records the date it was last exercised. Reader note: This page links to an example that uses AWS CloudTrail Lake, which is closed to new customers; any runbook format or tool meets this practice.",
+                "displayText": "Good looks like: Each runbook was run end to end in the last 12 months, or since the last major change, by someone other than its author, in a game day, a pre-production drill or a real event, using the same roles and permissions on-call engineers have. Steps that failed, were unclear or needed missing access were fixed, and the runbook records the date it was last exercised.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html"
               },
               "improvementPlan": {
@@ -2881,7 +2877,7 @@
               "id": "oc_escalation",
               "title": "Unacknowledged pages escalate automatically, and incident-lead, management, security and dependency-owner paths are documented",
               "helpfulResource": {
-                "displayText": "Good looks like: The paging tool escalates a page that is not acknowledged within the target to a secondary responder and then to a manager. Documented paths say when and how to engage an incident lead, management, the security team and internal dependency owners, with contacts kept current. Escalation to AWS and other providers is scored in event_provider_escalation, and reaching contacts when normal tools are down is scored in event_emergency_access. Reader note: This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any paging or incident-management tool with escalation policies meets this practice.",
+                "displayText": "Good looks like: The paging tool escalates a page that is not acknowledged within the target to a secondary responder and then to a manager. Documented paths say when and how to engage an incident lead, management, the security team and internal dependency owners, with contacts kept current. Escalation to AWS and other providers is scored in event_provider_escalation, and reaching contacts when normal tools are down is scored in event_emergency_access.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html"
               },
               "improvementPlan": {
@@ -2925,7 +2921,7 @@
               "id": "pe_escalation_runbook",
               "title": "A tested runbook escalates to AWS and other providers, with fallbacks that do not depend on the Support Center console or API",
               "helpfulResource": {
-                "displayText": "Good looks like: A runbook says when and how to open and escalate a case with AWS and each critical third-party provider: severity, account, Region and resource details, who may escalate, and response commitments. Fallbacks do not depend on the AWS Support Center console or API (for example account team contacts, if your support includes them, or a contracted operations partner), and provider contacts and contract IDs are reachable during the event. In the last 12 months contacts were confirmed and each fallback was used once (such as a low-severity test case); exercise rehearsal is scored in event_gameday. Partition notes: AWS GovCloud (US), as of 2026-10-06: open cases in the GovCloud Support Center with GovCloud credentials, choose severity carefully (it cannot be changed later), confirm partner fallbacks can manage GovCloud cases, and keep export-controlled data out of cases. Reader note: This page names AWS Systems Manager Incident Manager, closed to new customers; any paging tool meets this practice.",
+                "displayText": "Good looks like: A runbook says when and how to open and escalate a case with AWS and each critical third-party provider: severity, account, Region and resource details, who may escalate, and response commitments. Fallbacks do not depend on the AWS Support Center console or API (for example account team contacts, if your support includes them, or a contracted operations partner), and provider contacts and contract IDs are reachable during the event. In the last 12 months contacts were confirmed and each fallback was used once (such as a low-severity test case); exercise rehearsal is scored in event_gameday. Partition notes: AWS GovCloud (US), as of 2026-10-06: open cases in the GovCloud Support Center with GovCloud credentials, choose severity carefully (it cannot be changed later), confirm partner fallbacks can manage GovCloud cases, and keep export-controlled data out of cases.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html"
               },
               "improvementPlan": {
@@ -2957,7 +2953,7 @@
               "id": "pe_support_fit",
               "title": "Each production account has a support arrangement whose target initial-response time fits the workload's RTO",
               "helpfulResource": {
-                "displayText": "Good looks like: For each production account, including accounts that host shared networking, identity and logging, you know which support arrangement covers it, its target initial-response time for your most severe case type, and how that compares with the workload's recovery time objective (RTO). Where the target is too slow for the RTO, the gap is closed or accepted in writing. The arrangement may be an AWS Support plan, a reseller or partner support agreement, or both; the lens compares response targets, not plan names. Partition notes: As of 2026-10-06 the AWS Support Plans page states that Developer, Business and Enterprise On-Ramp Support remain available in AWS GovCloud (US), so plans for GovCloud accounts can differ from those for commercial accounts; check the plan and response targets for each GovCloud account.",
+                "displayText": "Good looks like: For each production account, including accounts that host shared networking, identity and logging, you know which support arrangement covers it, its target initial-response time for your most severe case type, and how that compares with the workload's recovery time objective (RTO). Where the target is too slow for the RTO, the gap is closed or accepted in writing. The arrangement may be an AWS Support plan, a reseller or partner support agreement, or both; the lens compares response targets, not plan names. Partition notes: As of 2026-10-14, the support plans offered for AWS GovCloud (US) accounts can differ from those for commercial accounts; check the plan and response targets for each GovCloud account.",
                 "url": "https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html"
               },
               "improvementPlan": {
@@ -3091,7 +3087,7 @@
               "id": "ci_comms_plan",
               "title": "A communication plan (channels, templates, approvers, cadence, required notices) exists and has been exercised",
               "helpfulResource": {
-                "displayText": "Good looks like: A written plan says who decides to notify, who approves the wording, which channels reach which audiences, how often to update during an event, and which contractual or regulatory notice deadlines apply, with pre-approved templates. In the last 12 months it was used in a real event or an exercise, or each channel and approver was checked, for example with a test notice. Rehearsing communications in an incident exercise is scored in event_gameday (gd_tabletop). Reader note: Some services named on this page are closed to new customers or have an announced end of support (for example AWS Systems Manager Incident Manager, closed to new customers, and Amazon Pinpoint, whose support ends on 2026-10-30). Any incident-management, paging or notification tool meets this practice, for example Amazon SNS, AWS End User Messaging or a partner tool.",
+                "displayText": "Good looks like: A written plan says who decides to notify, who approves the wording, which channels reach which audiences, how often to update during an event, and which contractual or regulatory notice deadlines apply, with pre-approved templates. In the last 12 months it was used in a real event or an exercise, or each channel and approver was checked, for example with a test notice. Rehearsing communications in an incident exercise is scored in event_gameday (gd_tabletop).",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html"
               },
               "improvementPlan": {
@@ -3151,7 +3147,7 @@
           "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Blast radius containment. If one Availability Zone becomes impaired at peak load, can the workload keep serving customers using only the capacity already running in the other Availability Zones? Out of scope if: never as a whole question. If the critical path uses only Regional managed services, select the first statement and keep the AZ layout as evidence. Evidence to collect: per-AZ capacity compared with peak demand. The AZ layout of every tier, data store and network path. The report of the last AZ-loss test at load.",
           "helpfulResource": {
             "displayText": "Static stability using Availability Zones (Builders' Library)",
-            "url": "https://aws.amazon.com/builders-library/static-stability-using-availability-zones/"
+            "url": "https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones"
           },
           "choices": [
             {
@@ -3194,7 +3190,7 @@
               "title": "Capacity already running in the remaining AZs carries peak load with no scaling or new launches during the event",
               "helpfulResource": {
                 "displayText": "Good looks like: Each AZ runs enough capacity that losing any one AZ leaves the rest able to serve peak load within latency goals (for example, with three AZs each holds at least half of peak), and recovery does not depend on launching instances, tasks or pods, which may be slow or impaired during the same event. Capacity Reservations can hold capacity for critical instance types. The AWS ORR whitepaper's example questions treat not being statically stable to the loss of an AZ as high risk. Platform notes: EC2: per-AZ Auto Scaling minimums and Capacity Reservations. Containers: Amazon ECS desired counts and Kubernetes node groups sized so each AZ already runs its share of peak with headroom, because new task, pod and AWS Fargate launches can also be impaired during the event. Serverless: AWS manages the AZ capacity of AWS Lambda, so size only the zonal components on the path.",
-                "url": "https://aws.amazon.com/builders-library/static-stability-using-availability-zones/"
+                "url": "https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones"
               },
               "improvementPlan": {
                 "displayText": "Calculate the capacity each AZ must hold to absorb the loss of one AZ at peak, provision it (with Capacity Reservations for critical instance types if needed), set Auto Scaling minimums so scale-in cannot remove it, and alarm when capacity in any AZ falls below the target.",
@@ -3393,7 +3389,7 @@
         {
           "id": "event_mutating_access",
           "title": "Production access: read-only by default, time-bound elevation",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Operator safety. How do you reduce the chance and the impact of human error and credential misuse when people and automation can change production? Evidence to collect: the roles or permission sets people use in production and their default permissions. The elevation workflow with its approvals and session logs. Root user controls for every account. The last access review and the roles used by pipelines, automation and AI agents.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Operator safety. How do you reduce the chance and the impact of human error and credential misuse when people and automation can change production? Related: changes through pipelines are scored in releases_manual_changes, sign-in when the identity provider fails in event_emergency_access, and command safeguards in event_operator_tooling_safety. Evidence to collect: the roles or permission sets people use in production and their default permissions. The elevation workflow with its approvals and session logs. Root user controls for every account. The last access review and the roles used by pipelines, automation and AI agents.",
           "helpfulResource": {
             "displayText": "SEC03-BP02 Grant least privilege access (AWS Well-Architected)",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_least_privileges.html"
@@ -3434,11 +3430,11 @@
               "id": "pa_jit_elevation",
               "title": "Human write access is time-bound, approved and session-logged, and people use no long-term access keys for daily work",
               "helpfulResource": {
-                "displayText": "Good looks like: When a person needs write access to production, they request it for a specific task and time, someone else approves it, the access expires automatically, and the session and its API calls are logged and attributable to that person (for example AWS CloudTrail plus session logs). People sign in through federation or IAM Identity Center and use temporary credentials; nobody uses long-term IAM user access keys for daily work. Partition notes: IAM Identity Center is available in both AWS GovCloud (US) Regions (as of 2026-10-06); the administrative console, SDK and CLI use FIPS endpoints there.",
+                "displayText": "Good looks like: When a person needs write access to production, they request it for a specific task and time, someone else approves it, the access expires automatically, and the session and its API calls are logged and attributable to that person (for example AWS CloudTrail plus session logs). People sign in through federation or IAM Identity Center and use temporary credentials; nobody uses long-term IAM user access keys for daily work. IAM user access keys are long-term credentials even when they are rotated on a schedule, and so are standing SSH keys to production hosts. Partition notes: IAM Identity Center is available in both AWS GovCloud (US) Regions (as of 2026-10-06); the administrative console, SDK and CLI use FIPS endpoints there.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_identities_unique.html"
               },
               "improvementPlan": {
-                "displayText": "Choose a temporary elevated access mechanism, for example a validated partner solution that integrates with IAM Identity Center or the open-source TEAM solution, define who may approve elevation and for how long, log every elevated session, and replace IAM users and long-term access keys used by people with federated sign-in and temporary credentials.",
+                "displayText": "Choose a temporary elevated access mechanism, for example a validated partner solution that integrates with IAM Identity Center or the open-source TEAM solution, define who may approve elevation and for how long, log every elevated session, and replace IAM users and long-term access keys used by people with federated sign-in and temporary credentials. If IAM Identity Center is not available for AWS account access, for example because another team controls the organization, federate your workforce identity provider to IAM with SAML 2.0 in one account and assume roles from there (role chaining limits those sessions to one hour), keeping IAM users only for the tested emergency path.",
                 "url": "https://docs.aws.amazon.com/singlesignon/latest/userguide/temporary-elevated-access.html"
               },
               "additionalResources": [
@@ -3452,6 +3448,10 @@
                     {
                       "displayText": "Logging IAM and AWS STS API calls with AWS CloudTrail",
                       "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html"
+                    },
+                    {
+                      "displayText": "Create a SAML identity provider in IAM (federation when IAM Identity Center is not available)",
+                      "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml.html"
                     }
                   ]
                 }
@@ -3522,7 +3522,7 @@
         {
           "id": "event_emergency_access",
           "title": "Emergency access that works when normal sign-in fails",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Operator safety. If your identity provider, your federation configuration or the Region that hosts your sign-in and identity configuration fails during an incident, can responders still reach the AWS accounts and tools they need to mitigate it? Evidence to collect: the emergency access runbook for each failure mode. The emergency account, roles and credential custody records. The date, participants and result of the last test of each path. Where runbooks, the contact roster and the incident bridge are hosted and how people sign in to them.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Operator safety. If your identity provider, your federation configuration or the Region that hosts your sign-in and identity configuration fails during an incident, can responders still reach the AWS accounts and tools they need to mitigate it? If people sign in to AWS with IAM users today, answer for that path: the sign-in endpoint and its Region, MFA devices, and the account that holds the users. Your identity provider here means the one responders use to reach AWS. Daily use of IAM users is scored in event_mutating_access. Evidence to collect: the emergency access runbook for each failure mode. The emergency account, roles and credential custody records. The date, participants and result of the last test of each path. Where runbooks, the contact roster and the incident bridge are hosted and how people sign in to them.",
           "helpfulResource": {
             "displayText": "SEC03-BP03 Emergency access process (AWS Well-Architected)",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html"
@@ -3645,7 +3645,7 @@
         {
           "id": "event_operator_tooling_safety",
           "title": "Operator tools prevent a mistaken action from causing an outage",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Operator safety. If an operator enters a wrong input or targets the wrong resource with a runbook command, script or console action, what stops that one action from taking the workload down or deleting critical data? Evidence to collect: the list of operator tools, scripts and runbook commands that change production. Their input validation, rate and scope limits and minimum-capacity checks. Deletion protection and stack policy settings on critical resources. How high-impact commands are previewed or approved.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Operator safety. If an operator enters a wrong input or targets the wrong resource with a runbook command, script or console action, what stops that one action from taking the workload down or deleting critical data? Changes deployed through your pipeline are reviewed in releases_manual_changes. The tool and command statements here cover the tools, scripts, automated runbooks and console actions that change production outside the pipeline, including under emergency access. Resource protections (ot_resource_protections) apply to every path, including pipeline deployments. Evidence to collect: the list of operator tools, scripts and runbook commands that change production. Their input validation, rate and scope limits and minimum-capacity checks. Deletion protection and stack policy settings on critical resources. How high-impact commands are previewed or approved.",
           "helpfulResource": {
             "displayText": "AWS ORR whitepaper Appendix A, guidance from an incident",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html"
@@ -3724,13 +3724,13 @@
             },
             {
               "id": "ot_dry_run_two_person",
-              "title": "High-impact commands support a dry run or require a second person to approve",
+              "title": "High-impact operator commands run outside the pipeline show a preview (dry run) or need a second person's approval",
               "helpfulResource": {
-                "displayText": "Good looks like: Commands that can remove capacity, delete data, change routing or change access show exactly what they will do before they do it (for example an automation step that lists the resolved targets and waits for confirmation, or a tool flag that only prints the intended actions), and the highest-impact ones need a second person to approve before they run. The approval works out of hours, is recorded with the change, and the emergency path for urgent fixes is logged and reviewed afterward. Previews of infrastructure as code changes are scored in releases_manual_changes.",
+                "displayText": "Good looks like: Commands that can remove capacity, delete data, change routing or change access show exactly what they will do before they do it (for example an automation step that lists the resolved targets and waits for confirmation, or a tool flag that only prints the intended actions), and the highest-impact ones need a second person to approve before they run. The approval works out of hours, is recorded with the change, and the emergency path for urgent fixes is logged and reviewed afterward. Previews of infrastructure as code changes are scored in releases_manual_changes. Approving a person's access request is scored in event_mutating_access.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html"
               },
               "improvementPlan": {
-                "displayText": "Classify operator commands by impact. For the high-impact ones, add a preview step that prints the intended actions and targets, and an approval step by someone other than the operator, for example the aws:approve action in a Systems Manager Automation runbook or a manual approval action in AWS CodePipeline. Review approval records and emergency bypasses in your operations review. Reader note: the aws:approve page also describes an input used only by AWS Systems Manager Change Manager templates; Change Manager is closed to new customers and is not needed for this practice.",
+                "displayText": "Classify operator commands by impact. For the high-impact ones, add a preview step that prints the intended actions and targets, and an approval step by someone other than the operator, for example the aws:approve action in a Systems Manager Automation runbook or a manual approval action in AWS CodePipeline. Review approval records and emergency bypasses in your operations review.",
                 "url": "https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-action-approve.html"
               },
               "additionalResources": [
@@ -3771,7 +3771,7 @@
         {
           "id": "event_expiring_materials",
           "title": "Certificates, credentials and other expiring materials",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Event detection. Could an expired or replaced certificate, certificate authority, key, secret, token or other time-bound material take the workload down, and would the owning team know and act well before it expires? Evidence to collect: the inventory of expiring materials with owner, expiry date and renewal method. The expiry and renewal-failure alarms with their lead times. Client, device and partner trust configuration, including any pinning. The record of the last renewal or rotation of each kind of material.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Event detection. Could an expired or replaced certificate, certificate authority, key, secret, token or other time-bound material take the workload down, and would the owning team know and act well before it expires? Materials that cannot renew automatically, such as imported certificates, need alarms with enough lead time for the manual renewal steps. Evidence to collect: the inventory of expiring materials with owner, expiry date and renewal method. The expiry and renewal-failure alarms with their lead times. Client, device and partner trust configuration, including any pinning. The record of the last renewal or rotation of each kind of material.",
           "helpfulResource": {
             "displayText": "SEC09-BP01 Key and certificate management (AWS Well-Architected)",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_protect_data_transit_key_cert_mgmt.html"
@@ -3806,7 +3806,7 @@
             },
             {
               "id": "exp_alarms",
-              "title": "Expiry and renewal-failure alarms fire with a lead time longer than the renewal window",
+              "title": "Expiry alarms give more lead time than a manual renewal and deployment takes, and failed or stalled renewals also alarm",
               "helpfulResource": {
                 "displayText": "Good looks like: Each inventoried material has an alarm that reaches the owning team early enough to renew, distribute and verify by hand if automation fails (for example 30 days or more before a certificate expires, a suggestion), plus an alarm on any failed or stalled renewal. Examples: CloudWatch alarms on the ACM DaysToExpiry metric, EventBridge rules on ACM expiration and renewal-action events, the AWS Config rule acm-certificate-expiration-check, and scheduled checks for materials outside AWS. Imported certificates, which ACM does not renew, are covered. Public certificate lifetimes are shrinking, so expiries come round more often. Platform notes: EC2 and containers: ACM cannot see certificates installed on hosts or in images, so check what each endpoint serves. Kubernetes: include the cluster CA. Serverless and managed endpoints: prefer ACM certificates. Partition notes: ACM, AWS Config and Amazon EventBridge are available in AWS GovCloud (US) as of 2026-10-06; verify per Region.",
                 "url": "https://docs.aws.amazon.com/acm/latest/userguide/cloudwatch-metrics.html"
@@ -3844,12 +3844,12 @@
               "id": "exp_no_leaf_pinning",
               "title": "No client or component pins a leaf certificate, and any pinning is to a certificate authority",
               "helpfulResource": {
-                "displayText": "Good looks like: No mobile app, device, partner integration, SDK configuration or service pins the leaf certificate of any endpoint, so a routine renewal or replacement cannot break clients. Where a use case requires pinning, it pins to a certificate authority you control or to all the issuing root CAs (for example all Amazon Trust Services root certificates for ACM public certificates), and the pin set can be updated without a client release. Partners that pin are told before CA changes. Reader note: The ORR whitepaper page linked here also mentions AWS Systems Manager Incident Manager, which is closed to new customers; it is not needed for this practice.",
-                "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/the-orr-tool.html"
+                "displayText": "Good looks like: No mobile app, device, partner integration, SDK configuration or service pins the leaf certificate of any endpoint, so a routine renewal or replacement cannot break clients. Where a use case requires pinning, it pins to a certificate authority you control or to all the issuing root CAs (for example all Amazon Trust Services root certificates for ACM public certificates), and the pin set can be updated without a client release. Partners that pin are told before CA changes. Pinning means a client trusts only the certificates or public keys it has stored for a host, instead of any certificate that chains to a trusted root. The linked ACM pages also list pinning an imported certificate. This lens treats that as a leaf pin, because replacing the certificate breaks those clients.",
+                "url": "https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting-pinning.html"
               },
               "improvementPlan": {
                 "displayText": "Search client code, mobile and device builds, SDK configurations and partner integration documents for pinned certificates or public-key hashes. Replace leaf pins with CA or root pins, or remove pinning, ship the change before the next renewal, and add a check to code review and the pipeline that rejects new leaf pins.",
-                "url": "https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting-pinning.html"
+                "url": "https://docs.aws.amazon.com/acm/latest/userguide/acm-bestpractices.html"
               }
             },
             {
@@ -3913,7 +3913,7 @@
         {
           "id": "event_gameday",
           "title": "Incident exercises: game days, tabletops and recovery drills",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Escalation. Have the people who would respond to a real event proven, through exercises, that your alarms, runbooks, tools, access and escalation paths work together under realistic conditions? Evidence to collect: the exercise calendar and the reports of the last fault-injection game day and the last tabletop exercise (scenario, date, participants, time to detect and mitigate, findings). The tracker that holds the findings. Restore, failover, break-glass, AZ-shift, runbook, customer-communication and provider-escalation drills are scored in their own questions.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Escalation. Have the people who would respond to a real event proven, through exercises, that your alarms, runbooks, tools, access and escalation paths work together under realistic conditions? A security incident tabletop meets the tabletop statement only if it rehearsed incident command and business decisions for this workload. Security playbook exercises are scored in releases_security_readiness. Evidence to collect: the exercise calendar and the reports of the last fault-injection game day and the last tabletop exercise (scenario, date, participants, time to detect and mitigate, findings). The tracker that holds the findings. Restore, failover, break-glass, AZ-shift, runbook, customer-communication and provider-escalation drills are scored in their own questions.",
           "helpfulResource": {
             "displayText": "REL12-BP05 Conduct game days regularly (AWS Well-Architected)",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html"
@@ -3927,7 +3927,7 @@
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html"
               },
               "improvementPlan": {
-                "displayText": "Pick two or three failure modes from your failure model, such as loss of one AZ and loss of a critical dependency, and build each as an experiment with stop conditions on customer-facing alarms, for example from the AWS FIS scenario library. Run it first in pre-production at production-like load, then in production with a limited blast radius, with the on-call engineer responding as if it were real. Record time to detect and to mitigate, and file every gap as a finding.",
+                "displayText": "Pick two or three failure modes from your failure model, such as loss of one AZ and loss of a critical dependency, and build each as an experiment with stop conditions on customer-facing alarms, for example from the AWS FIS scenario library. Run it first in pre-production at production-like load, then in production with a limited blast radius, with the on-call engineer responding as if it were real. Record time to detect and to mitigate, and file every gap as a finding. If the platform owner must approve fault injection, request approval early and start with a narrow experiment in a pre-production account.",
                 "url": "https://docs.aws.amazon.com/fis/latest/userguide/scenario-library.html"
               },
               "additionalResources": [
@@ -3948,7 +3948,7 @@
             },
             {
               "id": "gd_tabletop",
-              "title": "A tabletop or live exercise rehearsed incident command, stakeholder communications and escalation to AWS and vendors",
+              "title": "A tabletop or live exercise of a realistic event for this workload rehearsed incident command and business decisions",
               "helpfulResource": {
                 "displayText": "Good looks like: In the last 12 months, a facilitated tabletop or live exercise walked through a realistic event of the workload's own (for example a Regional impairment, a bad deployment or a data corruption) and rehearsed who leads the incident, how responders are assembled, how status reaches stakeholders and customers, when and how to open a case with AWS Support and other providers, and who makes business decisions such as failing over or accepting degraded service. Gaps and decisions were written up in an after-action report. The same exercise can serve as evidence for the communication plan (event_customer_impact) and provider escalation (event_provider_escalation); this statement scores incident command and decision making.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html"
@@ -4018,11 +4018,11 @@
               "id": "pia_process",
               "title": "A blameless written analysis (impact, timeline, contributing factors) follows each customer-impacting event or near-miss",
               "helpfulResource": {
-                "displayText": "Good looks like: A documented process says which events need an analysis (every customer-impacting event and significant near-miss), who writes it and by when. Each analysis records customer impact, a timeline with detection, engagement, mitigation and resolution times, recent changes, the contributing factors found by asking why repeatedly, and what would have detected, diagnosed or mitigated the event sooner. It is blameless: it looks for missing mechanisms rather than people to fault, and it is reviewed by people outside the team. Reader note: This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any post-incident analysis process or tool meets this practice.",
+                "displayText": "Good looks like: A documented process says which events need an analysis (every customer-impacting event and significant near-miss), who writes it and by when. Each analysis records customer impact, a timeline with detection, engagement, mitigation and resolution times, recent changes, the contributing factors found by asking why repeatedly, and what would have detected, diagnosed or mitigated the event sooner. It is blameless: it looks for missing mechanisms rather than people to fault, and it is reviewed by people outside the team. If another team runs the process, for example a central incident or security team, it covers this workload's operational events, not only security events.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html"
               },
               "improvementPlan": {
-                "displayText": "Adopt a short template (impact, timeline, contributing factors, detection and mitigation questions, actions), define which events and near-misses require it and the deadline, collect timeline data automatically from alarms, deployments and chat logs, and review each analysis in a recurring meeting with someone outside the owning team. Before launch, run the process on an exercise or on an event from a similar workload.",
+                "displayText": "Adopt a short template (impact, timeline, contributing factors, detection and mitigation questions, actions), define which events and near-misses require it and the deadline, collect timeline data automatically from alarms, deployments and chat logs, and review each analysis in a recurring meeting with someone outside the owning team. Before launch, run the process on an exercise or on an event from a similar workload. If another team runs the process, take part in the analyses of this workload's events.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.3-conduct-post-incident-analysis-for-continuous-improvement.html"
               }
             },
@@ -4030,7 +4030,7 @@
               "id": "pia_actions_tracked",
               "title": "Corrective actions have owners and due dates and are tracked to closure in a recurring review",
               "helpfulResource": {
-                "displayText": "Good looks like: Every corrective action from an analysis is recorded in a work tracker with an owner, a due date and a priority that reflects the risk, and open, overdue and recently closed actions are reviewed in a recurring operations review with leadership present. Actions that prevent recurrence are favored over reminders to be careful, and an action closes only when the fix is in production and verified. Reader note: The OPS11-BP02 page linked here refers to AWS Systems Manager Incident Manager, which is closed to new customers; any work tracker meets this practice.",
+                "displayText": "Good looks like: Every corrective action from an analysis is recorded in a work tracker with an owner, a due date and a priority that reflects the risk, and open, overdue and recently closed actions are reviewed in a recurring operations review with leadership present. Actions that prevent recurrence are favored over reminders to be careful, and an action closes only when the fix is in production and verified.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html"
               },
               "improvementPlan": {
@@ -4093,7 +4093,7 @@
         {
           "id": "readiness_signoff",
           "title": "Readiness decision and risk acceptance (answer last)",
-          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Readiness governance. Has the accountable owner made an explicit, recorded go or no-go decision on a complete review, with every high risk either fixed or formally accepted? Answer this question last. Out of scope if: none. Evidence to collect: the list of open high risks with owners and dates. Risk-register or POA&M entries for accepted risks, with expiry dates. Go or no-go criteria and the decision record. The milestone saved at sign-off.",
+          "description": "Maximum risk: High (launch-blocking unless remediated or formally accepted). Category: Readiness governance. Has the accountable owner made an explicit, recorded go or no-go decision on a complete review, with every high risk either fixed or formally accepted? Answer this question last: after every companion lens attached to the workload, at the go or no-go meeting, once each High risk in the report is fixed or formally accepted, or the owner has decided it blocks the launch. A risk process alone does not fix or accept a High. Out of scope if: none. Evidence to collect: the list of open high risks with owners and dates. Risk-register or POA&M entries for accepted risks, with expiry dates. Go or no-go criteria and the decision record. The milestone saved at sign-off.",
           "helpfulResource": {
             "displayText": "Operational Readiness Reviews whitepaper (AWS)",
             "url": "https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html"
@@ -4125,7 +4125,7 @@
             },
             {
               "id": "rd_scope_complete",
-              "title": "Every question in this lens is answered or marked not applicable with a reason (a core-path-only session is preliminary)",
+              "title": "Every question in this lens and in attached companion lenses is answered or marked not applicable with a reason",
               "helpfulResource": {
                 "displayText": "Good looks like: Before the go or no-go decision, every question in this lens, and in any companion lens attached to the same workload, is answered or marked not applicable with a Reason value and a one-line explanation in the question notes, so no unanswered question can hide a launch-blocking risk. Unanswered questions show as Unanswered in the WA Tool, not as High risk. A session that covered only the core path is a triage or check-in, not a launch decision.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html"
@@ -4143,7 +4143,7 @@
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html"
               },
               "improvementPlan": {
-                "displayText": "Compare current answers with the last milestone and update every answer that changes or incidents affect, save the milestone right after answering this question, add a recurring calendar entry for the next review, and set a reminder for each accepted risk's expiry date. Reader note: This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any post-incident analysis process or tool meets this practice.",
+                "displayText": "Compare current answers with the last milestone and update every answer that changes or incidents affect, save the milestone right after answering this question, add a recurring calendar entry for the next review, and set a reminder for each accepted risk's expiry date.",
                 "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html"
               }
             },

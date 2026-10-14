@@ -36,9 +36,6 @@ statements:
     partition_notes: >-
       Service Quotas is available in AWS GovCloud (US) as of 2026-10-06, but quota request templates are not; request
       increases in each GovCloud (US) account.
-    reader_note: >-
-      Some services named on this page are closed to new customers or reaching end of support (Amazon DevOps Guru and
-      Amazon CodeGuru Reviewer). Service Quotas with Amazon CloudWatch alarms meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html
     improvement: >-
       List the quotas each critical journey uses in every account and Region, including recovery Regions and
@@ -51,7 +48,7 @@ statements:
         url: https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html
   - id: cq_capacity_secured
     tier: sec
-    title: Capacity is reserved or pre-scaled for the event dates (for example future-dated Capacity Reservations or warm pools)
+    title: The capacity for the opening peak is already running (pre-scaled) before the window, not launched at the peak
     concept: event-capacity-reserved
     wa_bp: REL07-BP03
     good: >-
@@ -97,9 +94,10 @@ statements:
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html
     improvement: >-
       Write the scale-down plan with the capacity plan: list every temporary resource and setting with its end date,
-      the trigger for removing it (for example backlogs drained and traffic below a threshold for a day) and its owner,
-      set an AWS Budgets alert for the event period, and schedule the scale-down as normal pipeline changes after the
-      window.
+      the trigger for removing it (for example backlogs drained and traffic below a threshold for a day) and its
+      owner, set an AWS Budgets alert for the event period, and schedule the scale-down as normal pipeline changes
+      after the window. For a go-live or cutover whose capacity becomes the new baseline, record the decision to keep
+      that capacity, its approved run-rate cost and a date to right-size it.
     improvement_url: https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html
 pes_lesson:
   statement: cq_capacity_secured

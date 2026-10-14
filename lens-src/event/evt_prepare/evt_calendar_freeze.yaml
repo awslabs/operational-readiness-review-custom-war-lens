@@ -12,7 +12,8 @@ choice_prefix: cf_
 description:
   question: >-
     Before a scheduled peak, are the event dates, the accountable owner, the go/no-go criteria and the change controls
-    for the event window fixed and written down?
+    for the event window fixed and written down? The final-review statement stays unselected until that review is done
+    in the final two weeks.
   evidence_to_collect: >-
     the event plan with its dates, partner and dependency dates and success criteria. The named owner, deputy and
     go/no-go criteria. The deployment blocker configuration for the freeze and the event window, and its emergency
@@ -40,7 +41,9 @@ statements:
       Write a one-page event plan: the window, the key dates of every dependency and partner, measurable success
       criteria, and the readiness deadlines worked back from the event date. Review it with the business owner and
       every team and provider involved, and put the dates in the shared calendar that your deployment blockers and
-      on-call schedules use.
+      on-call schedules use. For a go-live or cutover, include success criteria for the cutover itself, for example
+      data reconciled between the old and new systems, users able to complete each critical journey, and the
+      conditions for falling back to the previous system.
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html
   - id: cf_owner
     tier: core
@@ -65,15 +68,17 @@ statements:
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html
   - id: cf_freeze
     tier: sec
-    title: The event window is added to the core lens's deployment blockers, with an emergency path for urgent fixes
+    title: >-
+      Deployments are blocked automatically during the freeze and the event window, with a logged emergency path for
+      urgent fixes
     concept: event-change-freeze-window
     wa_bp: OPS06-BP03
     good: >-
-      The freeze period and the event window are blocked dates in the automated deployment blockers scored in the core
-      phased-rollout question, for every pipeline that can change production: application, infrastructure,
-      configuration and feature flags, and operator tools. The freeze does not depend on people remembering it. The
-      emergency path scored in the core question on changes through reviewed pipelines and IaC still uses the pipeline
-      and review, records who overrode the blocker and why, and is known to the event staff.
+      The freeze period and the event window are blocked dates in the automated deployment blockers (pd_blockers in
+      the core lens) for every pipeline that can change production: application, infrastructure, configuration and
+      feature flags, and operator tools. A manual freeze notice or a change-board rule alone does not meet this. The
+      emergency path (cc_emergency_path in the core lens) still uses the pipeline and review, records who overrode the
+      blocker and why, and is known to the event staff.
     platform_notes: >-
       For example, an AWS CodePipeline stage entry condition with a DeploymentWindow rule blocks a stage outside the
       allowed times, and conditions can be overridden at run time for an approved emergency. The rule's cron defines

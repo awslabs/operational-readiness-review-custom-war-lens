@@ -52,7 +52,7 @@ statements:
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_avoid_control_plane.html
     additional_helpful:
       - display_text: Static stability using Availability Zones (Amazon Builders' Library)
-        url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
+        url: https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones
       - display_text: REL11-BP05 Use static stability to prevent bimodal behavior (AWS Well-Architected)
         url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html
     additional_improvement:

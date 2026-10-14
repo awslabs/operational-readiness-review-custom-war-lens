@@ -12,7 +12,9 @@ choice_prefix: rd_
 description:
   question: >-
     Has the accountable owner made an explicit, recorded go or no-go decision on a complete review, with every high
-    risk either fixed or formally accepted? Answer this question last.
+    risk either fixed or formally accepted? Answer this question last: after every companion lens attached to the
+    workload, at the go or no-go meeting, once each High risk in the report is fixed or formally accepted, or the
+    owner has decided it blocks the launch. A risk process alone does not fix or accept a High.
   out_of_scope_if: none.
   evidence_to_collect: >-
     the list of open high risks with owners and dates. Risk-register or POA&M entries for accepted risks, with
@@ -56,7 +58,7 @@ statements:
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/inspect-the-process.html
   - id: rd_scope_complete
     tier: core
-    title: Every question in this lens is answered or marked not applicable with a reason (a core-path-only session is preliminary)
+    title: Every question in this lens and in attached companion lenses is answered or marked not applicable with a reason
     concept: review-scope-complete
     severity_basis: "wa:OPS07-BP02 (High)"
     wa_bp: OPS07-BP02
@@ -84,11 +86,8 @@ statements:
       checked. A milestone named for the decision (for example ORR-2026-12-launch) is saved immediately after this
       question is answered, and the next review is scheduled: at least yearly, and before major launches, architecture changes or peak events.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html
-    # The reader note stays in the improvement text because the improvement URL, OPS11-BP02, is the linked page
-    # that names AWS Systems Manager Incident Manager.
     improvement: >-
       Compare current answers with the last milestone and update every answer that changes or incidents affect,
       save the milestone right after answering this question, add a recurring calendar entry for the next review, and set a reminder for each
-      accepted risk's expiry date. Reader note: This page refers to AWS Systems Manager Incident Manager, which is
-      closed to new customers; any post-incident analysis process or tool meets this practice.
+      accepted risk's expiry date.
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html

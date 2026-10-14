@@ -59,12 +59,6 @@ statements:
       templates. In the last 12 months it was used in a real event or an exercise, or each channel and approver
       was checked, for example with a test notice. Rehearsing communications in an incident exercise is scored in
       event_gameday (gd_tabletop).
-    reader_note: >-
-      Some services named on this page are closed to new customers or have an announced end of support (for
-      example AWS Systems Manager Incident Manager, closed to new customers, and Amazon Pinpoint, whose support
-      ends on 2026-10-30).
-      Any incident-management, paging or notification tool meets this practice, for example Amazon SNS, AWS End
-      User Messaging or a partner tool.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
     improvement: >-
       Write the plan with your communications, legal and customer-support owners, pre-approve templates for common

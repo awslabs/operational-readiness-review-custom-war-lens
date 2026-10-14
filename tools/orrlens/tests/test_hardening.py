@@ -189,7 +189,7 @@ class Language(unittest.TestCase):
 
 
 class ReaderNotes(unittest.TestCase):
-    def test_only_the_source_field_and_a_trailing_improvement_note_are_exempt(self):
+    def test_only_the_source_field_is_split_off(self):
         st = {"reader_note": "This page names Example Old Service, which is closed to new customers."}
         helpful = "Good looks like: fine. Reader note: This page names Example Old Service, which is closed to new customers."
         self.assertEqual(strip_statement_reader_notes("helpfulResource.displayText", helpful, st), ("Good looks like: fine.", []))
@@ -197,12 +197,12 @@ class ReaderNotes(unittest.TestCase):
         body, probs = strip_statement_reader_notes("helpfulResource.displayText", forged, {})
         self.assertIn("Example Old Service", body)
         self.assertTrue(probs)
-        ok = "Do the thing. Reader note: the page names Example Old Service, which is closed to new customers."
-        self.assertEqual(strip_statement_reader_notes("improvementPlan.displayText", ok, {}), ("Do the thing.", []))
-        bad = "Do the thing. Reader note: adopt Example Old Service for paging."
-        body, probs = strip_statement_reader_notes("improvementPlan.displayText", bad, {})
-        self.assertIn("Example Old Service", body)
-        self.assertTrue(probs)
+        for imp in ("Do the thing. Reader note: the page names Example Old Service, which is closed to new customers.",
+                    "Do the thing. Reader note: adopt Example Old Service for paging."):
+            with self.subTest(imp):
+                body, probs = strip_statement_reader_notes("improvementPlan.displayText", imp, {})
+                self.assertIn("Example Old Service", body)
+                self.assertTrue(probs)
         _, probs = strip_statement_reader_notes("title", "A title. Reader note: x", None)
         self.assertTrue(probs)
 
@@ -286,11 +286,29 @@ class CheckLevel(unittest.TestCase):
         self.repo.question("core", question("arch_q", "architecture", "aq_", list(sts), **kw))
         return CK.make_context(self.repo.root)
 
-    def test_lifecycle_urls_need_a_reader_note(self):
+    def test_lifecycle_urls_fail_even_with_a_reader_note(self):
         ctx = self.q(statement("aq_one", "core", improvement_url=OLD_URL), statement("aq_two", "sec"))
         self.assertIn("links documentation of Example Old Service", " ".join(CK.check_lifecycle(ctx)[0]))
         ctx = self.q(statement("aq_one", "core", improvement_url=OLD_URL,
-                               reader_note="The linked page is about Example Old Service, closed to new customers."),
+                               reader_note="The linked page is about a service that no longer takes new customers."),
+                     statement("aq_two", "sec"))
+        self.assertIn("links documentation of Example Old Service", " ".join(CK.check_lifecycle(ctx)[0]))
+
+    def test_lifecycle_urls_fail_in_display_text(self):
+        ctx = self.q(statement("aq_one", "core", improvement=f"Read {OLD_URL} first."), statement("aq_two", "sec"))
+        self.assertIn("links documentation of Example Old Service", " ".join(CK.check_lifecycle(ctx)[0]))
+
+    def test_lifecycle_names_fail_in_reader_notes(self):
+        ctx = self.q(statement("aq_one", "core",
+                               reader_note="This page names Example Old Service, which is closed to new customers."),
+                     statement("aq_two", "sec"))
+        self.assertIn("names 'Example Old Service'", " ".join(CK.check_lifecycle(ctx)[0]))
+        ctx = self.q(statement("aq_one", "core", improvement="Do the thing. Reader note: the page names Example Old "
+                               "Service, which is closed to new customers."), statement("aq_two", "sec"))
+        f = " ".join(CK.check_lifecycle(ctx)[0])
+        self.assertIn("names 'Example Old Service'", f)
+        self.assertIn("may appear only in the reader_note field", f)
+        ctx = self.q(statement("aq_one", "core", reader_note="Never switch the whole gateway to log-only mode."),
                      statement("aq_two", "sec"))
         self.assertEqual(CK.check_lifecycle(ctx)[0], [])
 
@@ -354,3 +372,59 @@ class ReleaseNotes(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class RealLifecycleDenylist(unittest.TestCase):
+    """The shipped denylist entries match what they should and leave current names alone."""
+
+    @classmethod
+    def setUpClass(cls):
+        import re
+        import yaml
+        root = Path(__file__).resolve().parents[3]
+        d = yaml.safe_load((root / "data/lifecycle-denylist.yaml").read_text())
+        cls.rx = {e["name"]: ([re.compile(p, re.I) for p in e["patterns"]],
+                              [re.compile(p, re.I) for p in e["url_patterns"]]) for e in d["entries"]}
+
+    def hits(self, name, text, url=False):
+        return any(r.search(text) for r in self.rx[name][1 if url else 0])
+
+    def test_support_plans(self):
+        n = "AWS Developer Support, Business Support and Enterprise On-Ramp"
+        for text in ("Developer Support", "Business Support", "Business or Enterprise Support",
+                     "the Business Support plan", "Enterprise On-Ramp", "Enterprise OnRamp"):
+            with self.subTest(text):
+                self.assertTrue(self.hits(n, text))
+        for text in ("Business Support+", "Business Support +", "AWS Enterprise Support", "AWS Unified Operations",
+                     "Business Support+ and Enterprise Support", "developer supports", "AWS Support"):
+            with self.subTest(text):
+                self.assertFalse(self.hits(n, text))
+        for url in ("https://aws.amazon.com/premiumsupport/plans/developers/",
+                    "https://aws.amazon.com/premiumsupport/plans/business",
+                    "https://aws.amazon.com/premiumsupport/plans/enterprise-onramp/",
+                    "https://docs.aws.amazon.com/awssupport/latest/user/support-plans-eos.html"):
+            with self.subTest(url):
+                self.assertTrue(self.hits(n, url, url=True))
+        for url in ("https://aws.amazon.com/premiumsupport/plans/",
+                    "https://aws.amazon.com/premiumsupport/plans/business-support-plus/",
+                    "https://aws.amazon.com/premiumsupport/plans/enterprise/"):
+            with self.subTest(url):
+                self.assertFalse(self.hits(n, url, url=True))
+
+    def test_shield_automatic_mitigation(self):
+        n = "AWS Shield Advanced automatic application layer DDoS mitigation"
+        for text in ("Shield Advanced automatic mitigation", "automatic application layer DDoS mitigation",
+                     "its application-layer automatic mitigation", "Layer 7 Auto Mitigation", "the L7AM feature",
+                     "Shield Advanced auto-mitigation"):
+            with self.subTest(text):
+                self.assertTrue(self.hits(n, text))
+        for text in ("AWS Shield Advanced", "the Anti-DDoS managed rule group", "automatic inline mitigations",
+                     "automatic rollback", "an automatic mitigation such as rollback", "Shield Advanced proactive engagement",
+                     "Shield Standard applies automatic mitigation",
+                     "Shield Advanced automatic mitigation for network-layer attacks"):
+            with self.subTest(text):
+                self.assertFalse(self.hits(n, text))
+        self.assertTrue(self.hits(n, "https://github.com/aws-samples/sample-ddos-shield-l7am-upgrade-to-waf-l7amr-helpers",
+                                  url=True))
+        self.assertFalse(self.hits(n, "https://aws.amazon.com/blogs/security/aws-shield-advanced-is-embracing-the-aws-waf-"
+                                      "anti-ddos-managed-rule-group-what-changes-and-how-to-prepare/", url=True))

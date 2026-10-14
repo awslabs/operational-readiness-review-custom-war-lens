@@ -1,24 +1,24 @@
 # Services and features that ORR lens text must never recommend (see CONTRIBUTING.md, "Content rules").
 # A curated subset of the AWS General Reference "Services in Maintenance" and "Services in Sunset" pages, read
-# live on 2026-10-06 (re-read on 2026-10-07 for the generative AI entries), plus each service's own
+# live on 2026-10-06 (re-read on 2026-10-07 for the generative AI entries, and on 2026-10-14), plus each service's own
 # availability-change or end-of-support page: it carries the items a
 # readiness review might otherwise recommend, not every item on those pages. Check both pages before naming a
 # service in lens text. Refresh at each release and quarterly review.
 #
 # patterns: case-insensitive regular expressions (Python re syntax) that detect a mention of the item.
 # url_patterns: case-insensitive regular expressions matched against every link in lens text (helpful, improvement
-#   and additional-resource URLs). A link to the item's own documentation fails unless the statement carries a
-#   reader note (the reader_note field, or a trailing "Reader note:" in the improvement text). Every entry needs one.
+#   and additional-resource URLs). A link to the item's own documentation always fails. Every entry needs one.
 #   They are deliberately specific so they do not match allowed services or ordinary words, for example
 #   "X-Ray SDK" but not "AWS X-Ray", "ARC readiness check" but not "operational readiness", and
-#   "Amazon Pinpoint" but not the verb "pinpoint". Text marked as a reader note is exempt.
+#   "Amazon Pinpoint" but not the verb "pinpoint". Nothing is exempt: lens text never names these items, not
+#   even in a reader note to say that a linked page mentions one.
 # status: maintenance | closed to new customers | end of support | discontinued | preview
 #   ("maintenance" on the Services in Maintenance page means closed to new customers and no new features;
 #   "preview" marks a feature whose documentation says it is in preview: lens bars never depend on previews).
 # effective: the date the status took or takes effect, from the source page. Where the source page gives no
 #   date, the announcement date from the Services in Maintenance page is used and the notes say so.
 schema: orrlens/lifecycle-denylist/1
-as_of: 2026-10-07
+as_of: 2026-10-14
 source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
 sources:
 - https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
@@ -416,3 +416,27 @@ entries:
     alternative: Transform objects in your own application or behind Amazon CloudFront
     source: https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html
     notes: Listed on the Services in Maintenance page (November 7, 2025, checked 2026-10-07).
+  - name: AWS Developer Support, Business Support and Enterprise On-Ramp
+    patterns: ['\b(?:developer|business)\b(?:\s*(?:,|or|and)\s*(?:developer|business|enterprise))*\s+support\b(?!\s*\+)', 'enterprise on-?ramp']
+    url_patterns: ['docs\.aws\.amazon\.com/awssupport/latest/user/support-plans-eos', 'aws\.amazon\.com/premiumsupport/plans/(?:developers?|business|enterprise-onramp)(?:[/?#]|$)']
+    status: end of support
+    effective: 2027-01-01
+    alternative: AWS Business Support+, AWS Enterprise Support or AWS Unified Operations
+    source: https://docs.aws.amazon.com/awssupport/latest/user/support-plans-eos.html
+    notes: The AWS Support Plans page (read 2026-10-14) says Developer Support and Business Support are discontinued
+      on 2027-01-01 and Enterprise On-Ramp customers move to Enterprise Support; all three remain available in AWS
+      GovCloud (US). The patterns match "Business or Enterprise Support" but not "Business Support+" or
+      "Enterprise Support".
+  - name: AWS Shield Advanced automatic application layer DDoS mitigation
+    patterns: ['automatic application[- ]layer (?:ddos )?mitigation', 'application[- ]layer automatic (?:ddos )?(?:mitigation|response)', 'shield advanced(?:''s)? auto(?:matic)?[- ]mitigation(?!s? (?:for|of|against) (?:network|infrastructure|transport|layer[- ]?[34]))', 'layer[- ]?7 auto(?:matic)?[- ]mitigation', '\bl7 ?am\b', '\bl7 auto(?:matic)?[- ]mitigation']
+    url_patterns: ['docs\.aws\.amazon\.com/waf/latest/developerguide/ddos-automatic-app-layer', 'ApplicationLayerAutomaticResponse', 'aws-shield-advanced-update-automatic-application-layer-ddos-mitigation', 'sample-ddos-shield-l7am']
+    status: end of support
+    effective: 2027-01-29
+    alternative: The AWS WAF Anti-DDoS managed rule group and AWS WAF rate-based rules
+    source: https://aws.amazon.com/blogs/security/aws-shield-advanced-is-embracing-the-aws-waf-anti-ddos-managed-rule-group-what-changes-and-how-to-prepare/
+    notes: A feature of AWS Shield Advanced, which stays available. The Shield developer guide calls it Layer 7 Auto
+      Mitigation (L7AM) and says that since 2026-03-26 the Anti-DDoS managed rule group supersedes it and new Shield
+      Advanced customers need AWS Support to use it. The AWS Security Blog post (updated 2026-10-05, read 2026-10-14)
+      sets its sunset for 2027-01-29 and moves eligible web ACLs to the rule group from 2026-10-25. It is not on the
+      Services in Sunset page. That blog post stays linked from the lens because it documents the current rule group and
+      the settings an upgraded web ACL gets.

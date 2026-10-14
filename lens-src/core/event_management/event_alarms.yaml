@@ -37,9 +37,6 @@ statements:
       As of 2026-10-06, CloudWatch Application Signals is available in AWS GovCloud (US) (AWS Capabilities by
       Region) but not for Lambda functions (AWS GovCloud (US) User Guide); compute Lambda SLOs from your own
       CloudWatch metrics. Verify per Region.
-    reader_note: >-
-      This page mentions AWS Service Catalog AppRegistry, which is closed to new customers; associating an SLO
-      with an application there is optional and is not needed for this practice.
     helpful_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-ServiceLevelObjectives.html
     improvement: >-
       For each critical journey and API, agree availability, latency-percentile and completion-time targets with
@@ -63,9 +60,6 @@ statements:
       and TargetResponseTime, with metric math for rates. Serverless: API Gateway 5XXError and Latency, and Lambda
       Errors and Duration. Asynchronous journeys: alarm on completion time or success rate, not only on API
       errors.
-    reader_note: >-
-      This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30);
-      CloudWatch alarms, composite alarms and CloudWatch anomaly detection meet this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_create_alerts.html
     improvement: >-
       Create an alarm for each SLO on error rate and on latency percentile, with thresholds that fire while error

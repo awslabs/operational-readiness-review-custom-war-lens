@@ -60,9 +60,6 @@ statements:
     partition_notes: >-
       Service Quotas is available in AWS GovCloud (US) as of 2026-10-05, but quota request templates are not (checked
       2026-10-06), so request GovCloud increases per account.
-    reader_note: >-
-      REL01-BP01, BP02 and BP06 list Amazon DevOps Guru (no new customers from 2026-10-29), and REL01-BP01 and BP02
-      list Amazon CodeGuru Reviewer (no new repository associations since 2025-11-07); neither is needed here.
     helpful_url: https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html
     improvement: >-
       Inventory the quotas and limits each component can reach, compare them with forecast peak plus failover in

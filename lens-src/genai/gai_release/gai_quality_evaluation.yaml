@@ -47,9 +47,7 @@ statements:
       index that production queries, so for retrieval changes either ingest into a staging knowledge base and
       promote it with a gated change of the knowledge base ID in configuration, or evaluate right after each sync,
       alarm on a regression and keep a documented way to restore the previous content (for example, re-sync from a
-      versioned copy of the source data). Test each path with a known-bad candidate. Reader note: do not depend on
-      Bedrock human-based evaluation jobs, whose work teams use SageMaker AI Ground Truth (in maintenance as of
-      2026-10-07).
+      versioned copy of the source data). Test each path with a known-bad candidate.
     improvement_url: https://docs.aws.amazon.com/bedrock/latest/userguide/evaluation-automatic.html
     additional_helpful:
       - display_text: Amazon Bedrock AgentCore Evaluations is generally available (What's New, Mar 2026)

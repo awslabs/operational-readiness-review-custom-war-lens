@@ -356,7 +356,7 @@ def check_ownership(ctx):
 # ---------------------------------------------------------------------------
 
 def _statement_text(doc, qid, sid, statement=None, problems=None):
-    """Rendered text of one choice, without its exempt reader notes (see strip_statement_reader_notes)."""
+    """Rendered text of one choice, without its reader_note field (see strip_statement_reader_notes)."""
     for p in doc.get("pillars", []):
         for q in p["questions"]:
             if q["id"] != qid:
@@ -520,14 +520,6 @@ def usage_plan_problems(text: str) -> list:
     return out
 
 
-def _statement_has_reader_note(statement) -> bool:
-    if not statement:
-        return False
-    if statement.get("reader_note"):
-        return True
-    return "Reader note:" in t(statement.get("improvement"))
-
-
 def check_lifecycle(ctx):
     fails, notes = [], []
     df = ctx.data("lifecycle")
@@ -546,28 +538,28 @@ def check_lifecycle(ctx):
         for where, fld, text, sid, qid in rendered_strings(doc, key):
             is_url = fld.endswith(".url")
             statement = sts.get((key, qid, sid)) if sid else None
-            if is_url:
-                body = text
-            else:
-                body, probs = strip_statement_reader_notes(fld, text, statement)
+            # Lens text names only services open to new customers: no exemption, not even in a reader note.
+            if not is_url:
+                _, probs = strip_statement_reader_notes(fld, text, statement)
                 fails += [f"{where} {fld}: {pr}" for pr in probs]
             for name, rx, kind in rxs:
-                if (kind == "url") != is_url:
+                if kind == "url":
+                    # link fields, and any URL typed into display text
+                    targets = [text] if is_url else extract_urls(text)
+                elif is_url:
                     continue
-                m = rx.search(body)
+                else:
+                    targets = [text]
+                m = next((m for m in (rx.search(x) for x in targets) if m), None)
                 if not m:
                     continue
-                if is_url and _statement_has_reader_note(statement):
-                    continue
                 e = df.entries[name]
-                if is_url:
-                    fails.append(f"{where} {fld}: links documentation of {name} ({e['status']} {e['effective']}) "
-                                 "without a reader note on the statement")
+                if kind == "url":
+                    fails.append(f"{where} {fld}: links documentation of {name} ({e['status']} {e['effective']})")
                 else:
-                    fails.append(f"{where} {fld}: names '{m.group(0)}' ({name}: {e['status']} {e['effective']}) "
-                                 "outside a 'Reader note:'")
+                    fails.append(f"{where} {fld}: names '{m.group(0)}' ({name}: {e['status']} {e['effective']})")
             if not is_url:
-                fails += [f"{where} {fld}: {pr}" for pr in usage_plan_problems(body)]
+                fails += [f"{where} {fld}: {pr}" for pr in usage_plan_problems(text)]
     notes.append(f"{C.DATA_LIFECYCLE}: {len(df.entries)} services")
     return fails, notes
 

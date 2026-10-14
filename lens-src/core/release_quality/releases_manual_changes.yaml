@@ -13,7 +13,8 @@ description:
   question: >-
     Is every production change, including infrastructure, configuration, feature flags and changes proposed by
     scripts, bots or AI agents, reviewed by someone other than its author and applied only through pipelines, even
-    during emergencies?
+    during emergencies? Related: human write access to production is scored in event_mutating_access, emergency
+    sign-in in event_emergency_access, and commands run outside the pipeline in event_operator_tooling_safety.
   evidence_to_collect: >-
     the list of production change paths (IaC, application configuration, feature flags, pipelines, database
     changes). Repository protection rules and pipeline permissions. Which people and roles can change production

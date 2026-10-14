@@ -130,6 +130,28 @@ scaling plans and the `AWS::AutoScalingPlans::ScalingPlan` CloudFormation resour
 one of the three rewordings above, and it changes only a choice helpful-resource display text, a field that G4
 showed accepts every character tested, within the 1,024-character limit the lens keeps.
 
+## Patch release check, 2026-10-14 (core 2.0.2, event 1.0.2, genai 1.0.2)
+
+The same check as on 2026-10-09 (below), in the same sandbox account and Region, on the final 2.0.2, 1.0.2 and 1.0.2
+files.
+
+1. The released 2.0.1, 1.0.1 and 1.0.1 files were imported and published. A workload was defined with all three
+   lenses and the AWS Well-Architected Framework lens, and four questions were answered, one of them marked "does
+   not apply" with notes.
+2. The 2.0.2, 1.0.2 and 1.0.2 files were imported over each lens and published as minor versions.
+
+| Check | Result |
+|---|---|
+| Lens version on the workload (`GetLensReview`) | Moved to 2.0.2, 1.0.2 and 1.0.2 without an upgrade step. The check waits for the new version before it takes its snapshot, because an earlier run that took it 5 seconds after the publish still read the previous version |
+| Notifications (`ListNotifications`) | None |
+| Selected choices, notes, risk, "does not apply" flag and reason | Unchanged on all four questions |
+| Lens risk counts | Unchanged |
+| `ExportLens` | Equal to the built files, apart from the tool-added `number` fields |
+| First install of 2.0.2, 1.0.2 and 1.0.2 as new lenses | Published; a new workload listed 36, 8 and 9 Unanswered questions in four, three and three pillars |
+
+Everything created for the run was deleted afterwards; the account held no workloads, custom lenses, review
+templates, profiles or share invitations.
+
 ## Patch release check, 2026-10-09 (core 2.0.1, event 1.0.1, genai 1.0.1)
 
 The patch releases change only display text (see `CHANGELOG.md`), so the gate checked the upgrade path that a patch

@@ -11,8 +11,10 @@ lineage: [architecture_failure_testing, event_gameday]
 choice_prefix: gd_
 description:
   question: >-
-    Have the people who would respond to a real event proven, through exercises, that your alarms, runbooks,
-    tools, access and escalation paths work together under realistic conditions?
+    Have the people who would respond to a real event proven, through exercises, that your alarms, runbooks, tools,
+    access and escalation paths work together under realistic conditions? A security incident tabletop meets the
+    tabletop statement only if it rehearsed incident command and business decisions for this workload. Security
+    playbook exercises are scored in releases_security_readiness.
   evidence_to_collect: >-
     the exercise calendar and the reports of the last fault-injection game day and the last tabletop exercise
     (scenario, date, participants, time to detect and mitigate, findings). The tracker that holds the findings.
@@ -48,10 +50,11 @@ statements:
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html
     improvement: >-
       Pick two or three failure modes from your failure model, such as loss of one AZ and loss of a critical
-      dependency, and build each as an experiment with stop conditions on customer-facing alarms, for example from
-      the AWS FIS scenario library. Run it first in pre-production at production-like load, then in production with a
+      dependency, and build each as an experiment with stop conditions on customer-facing alarms, for example from the
+      AWS FIS scenario library. Run it first in pre-production at production-like load, then in production with a
       limited blast radius, with the on-call engineer responding as if it were real. Record time to detect and to
-      mitigate, and file every gap as a finding.
+      mitigate, and file every gap as a finding. If the platform owner must approve fault injection, request approval
+      early and start with a narrow experiment in a pre-production account.
     improvement_url: https://docs.aws.amazon.com/fis/latest/userguide/scenario-library.html
     additional_improvement:
       - display_text: 'AWS FIS scenario: AZ Availability: Power Interruption'
@@ -60,9 +63,7 @@ statements:
         url: https://docs.aws.amazon.com/fis/latest/userguide/use-lambda-actions.html
   - id: gd_tabletop
     tier: alt:A
-    title: >-
-      A tabletop or live exercise rehearsed incident command, stakeholder communications and escalation to AWS and
-      vendors
+    title: A tabletop or live exercise of a realistic event for this workload rehearsed incident command and business decisions
     concept: incident-command-tabletop
     severity_basis: >-
       deviation:REL12-BP05 and SEC10-BP07 are rated Medium; the lens rates exercises High because incident command,

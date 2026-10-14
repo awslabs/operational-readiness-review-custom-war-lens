@@ -42,8 +42,6 @@ statements:
     partition_notes: >-
       CloudFront is not available in AWS GovCloud (US) as of 2026-10-05; use AWS WAF on REST API stages or Application
       Load Balancers.
-    reader_note: >-
-      REL05-BP02 lists the discontinued Virtual Waiting Room on AWS solution; this practice does not need it.
     helpful_url: https://builder.aws.com/content/3Eupj3d2bo4fEvlzYbICMZNhQ3B/fairness-in-multi-tenant-systems
     improvement: >-
       Inventory every entry point and caller type. Set per-caller quotas and rate limits from load test results,

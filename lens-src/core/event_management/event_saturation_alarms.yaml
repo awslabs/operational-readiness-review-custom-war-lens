@@ -38,9 +38,6 @@ statements:
       and JVM workloads can publish JMX metrics. Containers: CloudWatch Container Insights for task, pod and node
       CPU and memory. Serverless: Lambda Throttles, ConcurrentExecutions and Duration against the timeout, and
       Lambda Insights for memory.
-    reader_note: >-
-      This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30);
-      CloudWatch alarms and CloudWatch anomaly detection meet this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_monitor_resources.html
     improvement: >-
       List the saturation signals for each compute type in the workload, add alarms with headroom thresholds
@@ -72,9 +69,6 @@ statements:
       Managed databases: alarm on connections, storage, CPU and replica lag (for example Amazon RDS and Amazon
       Aurora metrics). Amazon DynamoDB: alarm on throttled requests and system errors. Third parties: emit your
       own call metrics from each client, because the provider's metrics are not visible to you.
-    reader_note: >-
-      This page refers to Amazon DevOps Guru (closed to new customers from 2026-10-29, end of support 2027-09-30);
-      CloudWatch alarms on your own dependency metrics meet this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_dependency_telemetry.html
     improvement: >-
       Instrument each dependency client to emit latency, error, throttle and timeout metrics per dependency and

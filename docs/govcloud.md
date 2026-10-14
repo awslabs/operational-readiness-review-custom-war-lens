@@ -27,7 +27,7 @@ before you rely on a row. Partition notes in each lens statement say "verify per
 | AWS Security Incident Response | 2026-10-06 | Use your own security incident playbooks and AWS Support (`sec_ir_exercised`) |
 | AWS Backup logically air-gapped vaults | 2026-10-06 | See the alternative for `dc_immutable_isolated` below |
 | AWS Backup restore testing | 2026-10-06 | Run and record restore tests yourself (`rec_restore_tested`, `dc_point_restore_rehearsed`) |
-| Amazon Application Recovery Controller (ARC) readiness checks and routing control | 2026-10-06 | Readiness checks are also closed to new customers in every partition. Zonal shift, zonal autoshift and Region switch are available (below) |
+| Amazon Application Recovery Controller (ARC) routing control | 2026-10-06 | Zonal shift, zonal autoshift and Region switch are available (below) |
 | Next-generation AWS Resilience Hub | 2026-10-05 | The classic AWS Resilience Hub is available (below) |
 | AWS Well-Architected Agent (preview) | 2026-10-05 | It onboards workloads from AWS commercial Regions only. Its architecture reviews support only the Well-Architected Framework lens, so it does not evaluate the ORR lenses in any partition (checked 2026-10-06) |
 | Amazon CloudWatch Transaction Search | 2026-10-06 | The GovCloud CloudWatch page lists Transaction Search as not available ([CloudWatch in GovCloud (US)](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-cw.html)). Send OpenTelemetry traces to AWS X-Ray and correlate them with logs instead (`tr_open_tracing`) |
@@ -59,7 +59,7 @@ statement's evidence depends on them:
 
 | Item | How to check | If it is not available |
 |---|---|---|
-| The AWS WAF Anti-DDoS managed rule group (`AWSManagedRulesAntiDDoSRuleSet`) | On 2026-10-06, AWS Capabilities by Region listed AWS WAF DDoS Protection (the rule group) as available in both GovCloud (US) Regions, so the lens data records it as available, with lower confidence because no GovCloud page names it. The separate application-layer automatic mitigation entry that is not listed in GovCloud belongs to Shield Advanced. Call `ListAvailableManagedRuleGroups` for a regional web ACL in your GovCloud (US) Region and look for the rule group. Add AWS WAF rate-based rules either way | Use AWS WAF rate-based rules and the other AWS managed rule groups, and page on rate-based rule metrics (`ep_l7_detection_pages`, `dd_l7_enforcing`) |
+| The AWS WAF Anti-DDoS managed rule group (`AWSManagedRulesAntiDDoSRuleSet`) | On 2026-10-06, AWS Capabilities by Region listed AWS WAF DDoS Protection (the rule group) as available in both GovCloud (US) Regions, so the lens data records it as available, with lower confidence because no GovCloud page names it. Call `ListAvailableManagedRuleGroups` for a regional web ACL in your GovCloud (US) Region and look for the rule group. Add AWS WAF rate-based rules either way | Use AWS WAF rate-based rules and the other AWS managed rule groups, and page on rate-based rule metrics (`ep_l7_detection_pages`, `dd_l7_enforcing`) |
 | AWS FIS scenarios AZ Availability: Power Interruption and the gray-failure scenarios | The GovCloud (US) FIS page lists no scenario-library difference (checked 2026-10-06); it names only experiment scheduling and experiment report configuration ([FIS in GovCloud (US)](https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-fis.html)). Open the FIS scenario library in your GovCloud (US) Region and confirm each action the scenario uses | Build the experiment from the individual FIS actions that are available, or test the same failure another way, and record what you ran (`az_tested_at_load`, `ev_per_az_detection`, `df_faults_injected`) |
 | AWS CodePipeline `InspectorScan` action | The GovCloud (US) CodePipeline page does not list it among the actions that differ (checked 2026-10-06). Check the action list in the CodePipeline console in your GovCloud (US) Region | Run a vulnerability scanner in a build or test stage instead; Amazon Inspector is available in AWS GovCloud (US) (checked 2026-10-06) |
 | Delivery of organization-level AWS Health events to Amazon EventBridge | When AWS announced organization-level delivery to EventBridge on 2023-10-05, GovCloud (US) was excluded. Check the current [AWS Health documentation](https://docs.aws.amazon.com/health/latest/ug/aggregating-health-events.html) | Create EventBridge rules for AWS Health in each production account, or poll the organization-level Health API on a schedule, and route the events to an owned on-call queue (`pe_events_routed`) |
@@ -138,11 +138,10 @@ use them as the feed.
 
 ## Support plans
 
-The [AWS Support plans](https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html) page (checked
-2026-10-06) gives 2027-01-01 as the end-of-support date for Developer Support, Business Support and Enterprise
-On-Ramp, and states that these three plans remain available in the AWS GovCloud (US) Region. The lens does not
-depend on plan names: `pe_support_fit` asks whether your support arrangement's target initial-response time fits
-the workload's RTO.
+The support plans offered for AWS GovCloud (US) accounts can differ from those for commercial accounts; see
+[AWS Support plans](https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html) (checked 2026-10-14).
+The lens does not depend on plan names: `pe_support_fit` asks whether your support arrangement's target
+initial-response time fits the workload's RTO.
 
 ## Data handling
 
@@ -165,7 +164,8 @@ So:
 - Use a role or team alias as the review owner where your policy allows it.
 - Notes appear in reports. Link to evidence held in your own systems instead of pasting it. Never paste secrets,
   credentials, personal data or sensitive incident details.
-- Accepted risks carry only `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>` in notes. The reason, the
+- Accepted risks carry only `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>` in notes, plus an optional
+  `PLAN:` tag for the fix. The reason, the
   compensating controls and the approver's name stay in your risk register or POA&M.
 
 The lens files themselves contain no customer data, and answers and notes stay in your account and Region except

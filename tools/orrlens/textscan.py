@@ -108,16 +108,13 @@ def rendered_strings(doc: dict, lens_key: str):
 
 READER_NOTE_LABEL = "Reader note:"
 READER_NOTE_RE = re.compile(r"Reader note:.*?(?=(?:\s(?:Good looks like|Platform notes|Partition notes):)|$)", re.S)
-# An inline reader note at the end of an improvement text must say why the linked page names a service.
-READER_NOTE_STATUS_RE = re.compile(r"closed to new customers|end of support|maintenance|discontinued|"
-                                   r"no longer (?:available|accept)|not needed|not required", re.I)
 
 
 def strip_reader_notes(text: str) -> str:
     """Remove every "Reader note: ..." segment from rendered text (used where no source fields are available).
 
-    The checks use strip_statement_reader_notes instead, which exempts only the reader_note source field and a
-    trailing note in the improvement text, so an author cannot exempt text by typing "Reader note:" anywhere.
+    The checks use strip_statement_reader_notes instead, which splits off only the reader_note source field, so an
+    author cannot hide text by typing "Reader note:" anywhere.
     """
     return READER_NOTE_RE.sub("", text or "")
 
@@ -126,21 +123,11 @@ def _norm(v) -> str:
     return " ".join(str(v).split()) if v is not None else ""
 
 
-def split_trailing_reader_note(text: str):
-    """(body, note) for an improvement text that ends with exactly one "Reader note: ..."; note is None otherwise."""
-    t = text or ""
-    if t.count(READER_NOTE_LABEL) != 1:
-        return t, None
-    i = t.index(READER_NOTE_LABEL)
-    return t[:i].rstrip(), t[i:]
-
-
 def strip_statement_reader_notes(field: str, text: str, statement: dict | None):
-    """Return (text_without_exempt_reader_notes, problems) for one rendered choice field.
+    """Return (text_without_the_reader_note, problems) for one rendered choice field.
 
-    Exempt: the rendered reader_note field at the end of helpfulResource.displayText, and one trailing
-    "Reader note:" in improvementPlan.displayText that states a lifecycle status ("closed to new customers",
-    "end of support", ...). Any other "Reader note:" is a problem and is not exempt.
+    Only the rendered reader_note field at the end of helpfulResource.displayText is split off. Any other
+    "Reader note:" is a problem. The lifecycle check scans the full text, reader note included.
     """
     text = text or ""
     problems = []
@@ -148,17 +135,8 @@ def strip_statement_reader_notes(field: str, text: str, statement: dict | None):
         suffix = f" {READER_NOTE_LABEL} {_norm(statement['reader_note'])}"
         if text.endswith(suffix):
             text = text[:-len(suffix)]
-    elif statement is not None and field == "improvementPlan.displayText":
-        body, note = split_trailing_reader_note(text)
-        if note is not None:
-            if READER_NOTE_STATUS_RE.search(note):
-                text = body
-            else:
-                problems.append("the trailing 'Reader note:' in the improvement text must say why the linked page "
-                                "names the service (for example 'closed to new customers' or 'end of support')")
     if READER_NOTE_LABEL.lower() in text.lower():
-        problems.append("'Reader note:' may appear only in the reader_note field or once at the end of the "
-                        "improvement text")
+        problems.append("'Reader note:' may appear only in the reader_note field")
     return text, problems
 
 

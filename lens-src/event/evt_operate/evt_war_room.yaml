@@ -12,7 +12,8 @@ choice_prefix: wr_
 description:
   question: >-
     Is the event window staffed with people who can act, and can they reach every team, partner and provider they
-    depend on quickly, through more than one channel?
+    depend on quickly, through more than one channel? The escalation-tree statement stays unselected until the tree is
+    verified in the final two weeks. Re-answer it at the 2-week checkpoint.
   evidence_to_collect: >-
     the shift plan and roster for the event window. The escalation tree for each component and the date each entry was
     last tested. The shared channel and its fallback agreed with partners and, where your support plan provides it, AWS.
@@ -60,9 +61,6 @@ statements:
       with a test page or call, and the shift knows the fallbacks if the AWS Support Center console or API is impaired.
       It extends the escalation paths in the core questions 'On-call paging, runbooks and escalation' and 'Escalation
       to AWS and other providers, and provider-initiated change' to the event's extra parties.
-    reader_note: >-
-      This page refers to AWS Systems Manager Incident Manager, which is closed to new customers; any paging, on-call
-      or escalation tool meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
     improvement: >-
       Extend the core escalation paths into an event tree: list each component and dependency, primary and backup

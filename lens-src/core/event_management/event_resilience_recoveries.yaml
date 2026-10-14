@@ -21,7 +21,7 @@ description:
     of the last AZ-loss test at load.
 helpful:
   display_text: Static stability using Availability Zones (Builders' Library)
-  url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
+  url: https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones
 statements:
   - id: az_regional_managed
     tier: scope
@@ -82,7 +82,7 @@ statements:
       Kubernetes node groups sized so each AZ already runs its share of peak with headroom, because new task, pod
       and AWS Fargate launches can also be impaired during the event. Serverless: AWS manages the AZ capacity of
       AWS Lambda, so size only the zonal components on the path.
-    helpful_url: https://aws.amazon.com/builders-library/static-stability-using-availability-zones/
+    helpful_url: https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones
     improvement: >-
       Calculate the capacity each AZ must hold to absorb the loss of one AZ at peak, provision it (with Capacity
       Reservations for critical instance types if needed), set Auto Scaling minimums so scale-in cannot remove it,

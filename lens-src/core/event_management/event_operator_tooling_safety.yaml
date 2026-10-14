@@ -12,7 +12,11 @@ choice_prefix: ot_
 description:
   question: >-
     If an operator enters a wrong input or targets the wrong resource with a runbook command, script or console
-    action, what stops that one action from taking the workload down or deleting critical data?
+    action, what stops that one action from taking the workload down or deleting critical data? Changes deployed
+    through your pipeline are reviewed in releases_manual_changes. The tool and command statements here cover the
+    tools, scripts, automated runbooks and console actions that change production outside the pipeline, including
+    under emergency access. Resource protections (ot_resource_protections) apply to every path, including pipeline
+    deployments.
   evidence_to_collect: >-
     the list of operator tools, scripts and runbook commands that change production. Their input validation, rate
     and scope limits and minimum-capacity checks. Deletion protection and stack policy settings on critical
@@ -91,24 +95,22 @@ statements:
         url: https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html
   - id: ot_dry_run_two_person
     tier: sec
-    title: High-impact commands support a dry run or require a second person to approve
+    title: High-impact operator commands run outside the pipeline show a preview (dry run) or need a second person's approval
     concept: high-impact-command-preview-or-approval
     wa_bp: OPS07-BP03
     good: >-
       Commands that can remove capacity, delete data, change routing or change access show exactly what they will do
-      before they do it (for example an automation step that lists the resolved targets and waits for confirmation,
-      or a tool flag that only prints the intended actions), and the highest-impact ones need a second person to
-      approve before they run. The approval works out of hours, is recorded with the change, and the emergency path
-      for urgent fixes is logged and reviewed afterward. Previews of infrastructure as code changes are scored in
-      releases_manual_changes.
+      before they do it (for example an automation step that lists the resolved targets and waits for confirmation, or
+      a tool flag that only prints the intended actions), and the highest-impact ones need a second person to approve
+      before they run. The approval works out of hours, is recorded with the change, and the emergency path for urgent
+      fixes is logged and reviewed afterward. Previews of infrastructure as code changes are scored in
+      releases_manual_changes. Approving a person's access request is scored in event_mutating_access.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html
     improvement: >-
       Classify operator commands by impact. For the high-impact ones, add a preview step that prints the intended
       actions and targets, and an approval step by someone other than the operator, for example the aws:approve
       action in a Systems Manager Automation runbook or a manual approval action in AWS CodePipeline. Review approval
-      records and emergency bypasses in your operations review. Reader note: the aws:approve page also describes an
-      input used only by AWS Systems Manager Change Manager templates; Change Manager is closed to new customers and
-      is not needed for this practice.
+      records and emergency bypasses in your operations review.
     improvement_url: https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-action-approve.html
     additional_improvement:
       - display_text: Add a manual approval action to a stage (AWS CodePipeline)

@@ -30,17 +30,17 @@ statements:
     wa_bp: SEC11-BP03
     good: >-
       A threat model covers this release's architecture, data flows and trust boundaries, and was updated for the
-      changes in it. Security testing in proportion to the risk, for example penetration testing, dynamic scanning
-      or a focused review of new interfaces, ran against this release or a production-like copy. Every critical and
-      high finding is fixed and retested, or formally accepted by the accountable owner with an expiry date.
-      Testing of AWS resources follows the AWS penetration testing policy.
+      changes in it. Security testing in proportion to the risk, for example penetration testing, dynamic scanning or
+      a focused review of new interfaces, ran against this release or a production-like copy. Every critical and high
+      finding is fixed and retested, or formally accepted by the accountable owner with an expiry date. Testing of AWS
+      resources follows the AWS penetration testing policy. A security control catalog or compliance baseline is not a
+      threat model, though the threat model can map its mitigations to one.
     helpful_url: https://aws.amazon.com/security/penetration-testing/
     improvement: >-
       Update the threat model for this release, plan security testing for the new or changed attack surface, run
       it against a production-like environment within the AWS penetration testing policy, and track every finding
       to closure. Before launch, fix and retest critical and high findings, or record a time-bound acceptance in
-      your risk register. Reader note: The Threat Composer page mentions Amazon CodeCatalyst, which is closed to new
-      customers; Threat Composer works without it.
+      your risk register.
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_threat_model.html
     additional_improvement:
       - display_text: Threat Composer (open-source threat modeling tool from AWS)
@@ -66,15 +66,13 @@ statements:
       GuardDuty, Security Hub, Security Hub CSPM and Inspector are available in AWS GovCloud (US) as of 2026-10-06.
       There, Security Hub has no third-party integrations and Security Hub CSPM supports only some integrations;
       route findings with EventBridge.
-    reader_note: >-
-      This page refers to AWS CloudTrail Lake, which is closed to new customers; a CloudTrail trail to Amazon S3 or
-      CloudWatch Logs meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_app_service_logging.html
     improvement: >-
-      Enable threat detection and posture findings organization-wide through a delegated administrator, in every
-      Region the workload uses, and restrict unused Regions, for example with service control policies. Add rules
-      that send findings at or above an agreed severity to the owning team's on-call queue, with a runbook per
-      finding type, and generate sample findings to prove the route works.
+      If detection is already on, start with the routing step below. Otherwise, enable threat detection and posture
+      findings organization-wide through a delegated administrator, in every Region the workload uses, and restrict
+      unused Regions, for example with service control policies. Add rules that send findings at or above an agreed
+      severity to the owning team's on-call queue, with a runbook per finding type, and generate sample findings to
+      prove the route works.
     improvement_url: https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_eventbridge.html
   - id: sec_ir_exercised
     tier: sec
@@ -107,9 +105,6 @@ statements:
     partition_notes: >-
       In AWS GovCloud (US), CloudTrail records events from global services such as IAM and AWS STS in AWS GovCloud
       (US-West); use a multi-Region trail to capture them (as of 2026-10-06).
-    reader_note: >-
-      This page refers to AWS CloudTrail Lake, which is closed to new customers; a CloudTrail organization trail to
-      Amazon S3 meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_logs.html
     improvement: >-
       Create an organization trail into a log archive account, add the other log sources investigations need, turn

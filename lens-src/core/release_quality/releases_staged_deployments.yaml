@@ -72,9 +72,7 @@ statements:
       Template every environment from the same IaC with per-environment parameters, move pre-production into its
       own accounts, build each artifact once and promote it by digest or version, and add a pipeline check that
       fails if the artifact about to reach production differs from the one tested in pre-production. Record any
-      intended difference between environments and why it is safe. Reader note: This page refers to AWS App Mesh,
-      which reached end of support on 2026-09-30; for canary deployments on Amazon ECS, use ECS built-in canary
-      deployments instead.
+      intended difference between environments and why it is safe.
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_immutable_infrastructure.html
     additional_improvement:
       - display_text: Preventing image tags from being overwritten in Amazon ECR
@@ -95,9 +93,6 @@ statements:
     partition_notes: >-
       Amazon Inspector Lambda code scanning and code repository scanning are not available in AWS GovCloud (US) as
       of 2026-10-06; use Inspector image and package scanning plus your own static analysis there.
-    reader_note: >-
-      This page refers to Amazon CodeGuru Security, which was discontinued on 2025-11-20; any static analysis and
-      secret scanning tool meets this practice.
     helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_automate_testing_throughout_lifecycle.html
     improvement: >-
       Add the missing scan types to the build, run them in report-only mode first to baseline existing findings,

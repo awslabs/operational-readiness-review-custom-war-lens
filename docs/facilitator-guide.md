@@ -24,7 +24,8 @@ Read [running-an-orr.md](running-an-orr.md) first for the phases, roles, readout
    lists the evidence to collect. If the team cannot show it, the scope exit is not selected.
 3. **Select a statement only when it is true today.** Intended work, a ticket, a design document or a practice that
    works "most of the time" does not count. If it is not true today, leave it unselected and put the work on the
-   improvement plan.
+   improvement plan. A statement selected with a qualifying note is an unselected statement: clear it and tag the
+   plan in the notes (`PLAN:<statement-id> <tracker-id> due:YYYY-MM-DD`).
 
 ## Before the session
 
@@ -32,8 +33,9 @@ Read [running-an-orr.md](running-an-orr.md) first for the phases, roles, readout
   slots of about 90 minutes each.
 - Send the team the `Evidence to collect:` lines from each question description and ask for links to evidence 2-4
   days ahead. Unanswered evidence requests are a finding in themselves.
-- Check that the lens version attached to the workload is the current release, and that a milestone from any
+- Check that every lens attached to the workload is on its current release, and that a milestone from any
   earlier review exists.
+- Confirm that the person entering answers is the workload owner or has Contributor access to the workload.
 - If the workload is in AWS GovCloud (US), read [govcloud.md](govcloud.md); some statements name services that are
   not available there, and the helpful text offers a method-based alternative.
 
@@ -67,6 +69,8 @@ Ask for the artifact, not the intent. Useful prompts:
 | "AWS handles that" | Which part is AWS's under the shared responsibility model, and which configuration or design choice is yours? |
 | "Our partner does that" | Show the partner's evidence (paging records, test reports, pipeline configuration), not only the contract clause |
 | "That does not apply to us" | Which scope exit or reason applies, and what evidence shows it? |
+| "Another team owns that" | Is this workload in that team's scope, and can that team show its evidence for this workload? Name the team's role in the notes |
+| "We are working on it" | Leave the statement unselected and tag the plan with `PLAN:` |
 
 Other signs that an answer needs a second look:
 
@@ -97,8 +101,11 @@ Other signs that an answer needs a second look:
 
 - Keep notes short: what evidence was shown, as links. Notes appear in reports and sync to Jira when it is enabled.
 - Never put secrets, credentials, personal data, customer names or sensitive incident details in notes.
-- For an accepted High risk, the note carries only `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>`. The
-  approver's name, the reason and the compensating controls stay in the risk register or POA&M.
+- For an accepted High risk, the note carries only `EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>`, plus an
+  optional `PLAN:` tag for the fix. The approver's name, the reason and the compensating controls stay in the risk
+  register or POA&M.
+- For work in progress, the note carries `PLAN:<statement-id> <tracker-id> due:YYYY-MM-DD`, and the statement
+  stays unselected. A note can carry both: `EXC:` for an accepted High and `PLAN:` for the work that will close it.
 
 ### Disagreements
 
@@ -112,7 +119,9 @@ If the team and the facilitator disagree on whether a statement is true:
 
 ## Closing the review
 
-- Answer `readiness_signoff` last, after every other question in this lens and any companion lens.
+- Answer `readiness_signoff` last, after every other question in this lens and any companion lens, at the go or
+  no-go meeting, once every High risk in the report is fixed or formally accepted, or the owner has decided it
+  blocks the launch.
 - Walk the accountable owner through the High risks first, then the Medium risks.
 - Confirm each accepted High has an `EXC:` tag, a register entry and an expiry date.
 - Save a milestone named `ORR-<yyyy-mm>-<purpose>` (for example `ORR-2026-12-launch`).

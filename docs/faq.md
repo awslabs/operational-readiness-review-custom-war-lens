@@ -114,8 +114,8 @@ with the evidence its helpful text lists. Otherwise mark the whole question "doe
 
 The accountable owner (the business owner or, in government, the authorizing official) records the acceptance in
 your risk register or POA&M, with an expiry date. The question notes carry only a tag:
-`EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>`. The approver's name, the reason and the compensating
-controls stay in the register. An accepted High still shows as High in the WA Tool.
+`EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>`, plus an optional `PLAN:` tag for the fix. The approver's
+name, the reason and the compensating controls stay in the register. An accepted High still shows as High in the WA Tool.
 
 ### What can I put in notes?
 
@@ -133,8 +133,8 @@ per-lens breakdown covers only the Framework lens. See [running-an-orr.md](runni
 
 No. Statements describe capabilities and name AWS services only as examples ("for example AWS AppConfig"); any
 tool that meets the practice counts. Where a service is not available in a partition, the helpful text offers a
-method-based alternative. The lens never recommends services that are closed to new customers or near end of
-support.
+method-based alternative. The lens names only services that are open to new customers, and never names one that is
+in maintenance, discontinued or near end of support.
 
 ## Upgrading from v1.3.x
 
@@ -142,10 +142,10 @@ support.
 
 Edit your existing ORR lens; never create a new one. In the console: Custom lenses, select your existing ORR lens,
 Edit, Choose file (the new JSON), Submit; then Publish lens, choose Major version, and enter the version of the
-file you uploaded as the version name (for example `2.0.1`)
+file you uploaded as the version name (for example `2.0.2`)
 ([Publishing an update](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-publish-update.html)).
 Then upgrade each workload's lens review, which saves a milestone first. `MIGRATION.md` has the full steps,
-including the API path. For a core lens that is already on 2.0.0, or a companion on 1.0.0, publish the new file
+including the API path. For a core lens that is already on version 2 (2.0.x), or a companion on 1.0.x, publish the new file
 as a Minor version instead ([Patch releases](../README.md#patch-releases)).
 
 ### Why not create a new custom lens for 2.0.0?

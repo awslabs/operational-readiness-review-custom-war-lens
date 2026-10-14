@@ -99,9 +99,10 @@ Every change to lens content must follow these rules. Reviewers reject changes t
    [OWASP GenAI Security Project](https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/) content is licensed
    CC BY-SA 4.0.
 6. **Use current, available services.** Name AWS services as examples of a capability ("for example AWS
-   AppConfig"). Never recommend a service that is closed to new customers, in maintenance, discontinued, or at or
-   near end of support; check the
-   [AWS Services in Maintenance](https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html) page.
+   AppConfig"). Never name a service that is closed to new customers, in maintenance, discontinued, or at or
+   near end of support, not even to say that a linked page mentions it, and never link its documentation; check the
+   [AWS Services in Maintenance](https://docs.aws.amazon.com/general/latest/gr/maintenance_services.html) and
+   [AWS Services in Sunset](https://docs.aws.amazon.com/general/latest/gr/sunset_services.html) pages.
    Never present Amazon API Gateway usage plans as a hard limit or a way to block a caller: their throttling and
    quotas are applied on a best-effort basis.
 7. **Date every availability statement** ("as of 2026-10-06"), and record only "available" or "not available".
