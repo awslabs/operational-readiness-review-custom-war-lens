@@ -5,7 +5,7 @@ The JSON files in `dist/` are generated from the same sources.
 
 Risk rules are evaluated top to bottom and the first true condition sets the risk. Tiers: a scope exit scores No risk on its own; core statements are needed to avoid High; one statement of each alternative group is needed to avoid High; secondary statements are needed only for No risk. "None of these" (`none_no`) appears only in the guard `&& !none_no` on the No risk and Medium rules (sandbox gate G1), so selecting it, alone or with other choices, scores the question's maximum risk.
 
-## AWS Operational Readiness Review 2.0.2
+## AWS Operational Readiness Review 2.0.3
 
 36 questions, 134 scored statements, 15 on the core path.
 
@@ -2128,7 +2128,7 @@ Improvement plan: List where each incident tool is hosted and how people sign in
 Sources:
 
 - Question: SEC03-BP03 Emergency access process (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html>
-- `ea_per_failure_mode`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html>; improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/emergency-access.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.sad.5-implement-break-glass-procedures.html>; additional improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/appendix-a---partitional-service-guidance.html>
+- `ea_per_failure_mode`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html>; improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/emergency-access.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.sad.5-implement-break-glass-procedures.html>; additional improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/partitional-services-best-practices.html>
 - `ea_tested_independent`: helpful <https://aws.amazon.com/blogs/security/how-to-use-regional-saml-endpoints-for-failover/>; improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/multi-region-iam-identity-center.html>; additional helpful <https://docs.aws.amazon.com/singlesignon/latest/userguide/emergency-access.html>; additional helpful <https://aws.amazon.com/about-aws/whats-new/2026/02/aws-iam-identity-center-multi-region-aws-account-access-and-application-deployment/>; additional helpful <https://aws.amazon.com/about-aws/whats-new/2026/10/aws-iam-identity-center-extends-multi-region-support-to-more-aws-regions/>; additional helpful <https://docs.aws.amazon.com/IAM/latest/UserGuide/disaster-recovery-resiliency.html>; additional helpful <https://aws.amazon.com/message/101925/>; additional improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html>; additional improvement <https://docs.aws.amazon.com/general/latest/gr/signin-service.html>
 - `ea_out_of_band`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_develop_management_plans.html>; improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/global-services.html>
 
