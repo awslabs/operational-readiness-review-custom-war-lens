@@ -350,8 +350,8 @@ entries:
     status: discontinued
     effective: 2026-09-30
     alternative: A private or vendor workforce
-    source: https://docs.aws.amazon.com/sagemaker/latest/dg/sms-workforce-management-public.html
-    notes: Listed on the Services in Sunset page as "Amazon SageMaker AI - Mechanical Turk" with end of support September 30, 2026; the workforce page says Amazon Mechanical Turk permanently closes on September 30, 2026 (checked 2026-10-07).
+    source: https://docs.aws.amazon.com/general/latest/gr/sunset_services.html
+    notes: Listed on the Services in Sunset page as "Amazon SageMaker AI - Mechanical Turk" with end of support September 30, 2026 (checked 2026-11-02); its workforce page, which said Amazon Mechanical Turk permanently closes on September 30, 2026 (checked 2026-10-07), redirected to the guide home on 2026-11-02, so the Sunset page is the source.
   - name: Amazon Rekognition batch image content moderation
     patterns: ['batch image content moderation']
     url_patterns: ['docs\.aws\.amazon\.com/rekognition/latest/dg/rekognition-batch-image-content-moderation']
