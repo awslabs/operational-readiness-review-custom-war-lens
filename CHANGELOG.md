@@ -13,6 +13,31 @@ Releases from 2.0.0 onward are dated tags that attach every lens file, `manifest
 files are never edited; fixes ship as a new version. Entries for v1.3.2 to v1.3.6 were reconstructed from the
 repository history.
 
+## [2026-11-02] core 2.0.3
+
+Text-only patch release of the core lens. One link moved because AWS restructured the AWS Fault Isolation
+Boundaries whitepaper. No pillar, question or choice ID and no risk rule changed, so answers, notes and risk counts
+stay as they are. ORR - Mission-Critical Event Readiness and ORR - Generative AI and Agents stay on 1.0.2.
+
+- If your core lens is on 2.0.x, upload the new file to it with **Edit** and publish it as a **Minor version**
+  ([Patch releases](README.md#patch-releases)).
+- If your core lens is still on v1.3.x, publish 2.0.3 as a **Major version** and follow
+  [`MIGRATION.md`](MIGRATION.md).
+- If you have not installed the core lens yet, install it with **Create custom lens**
+  ([First install](README.md#first-install)).
+
+### Changed (core 2.0.3)
+
+- `ea_per_failure_mode`: the improvement link "Statically stable break-glass credentials (fault isolation
+  whitepaper)" now opens Partitional services best practices. The appendix it opened was removed when the
+  whitepaper was restructured on October 29, 2026.
+
+### Documentation
+
+- `docs/gates.md` records the minor-version upgrade check for 2.0.3.
+- The lifecycle denylist entry for the SageMaker AI Mechanical Turk workforce now cites the AWS Services in Sunset
+  page, because the workforce page it cited was removed.
+
 ## [2026-10-14] core 2.0.2, ORR - Mission-Critical Event Readiness 1.0.2 and ORR - Generative AI and Agents 1.0.2
 
 Text-only patch releases, from feedback in a facilitated review of a go-live. No pillar, question or choice ID and no

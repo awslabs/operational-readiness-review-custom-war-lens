@@ -50,7 +50,7 @@ statements:
       - display_text: DevOps Guidance AG.SAD.5 Implement break-glass procedures
         url: https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.sad.5-implement-break-glass-procedures.html
       - display_text: Statically stable break-glass credentials (fault isolation whitepaper)
-        url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/appendix-a---partitional-service-guidance.html
+        url: https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/partitional-services-best-practices.html
   - id: ea_tested_independent
     tier: core
     title: >-
