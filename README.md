@@ -15,7 +15,7 @@ own improvement plans, milestones, reports and sharing.
 Contents:
 - [The lens family](#the-lens-family)
 - [Quick start](#quick-start)
-- [Running an ORR](#running-an-orr)
+- [Running an ORR](#running-an-orr) (also [with an AI agent](#running-an-orr-with-an-ai-agent))
 - [How 2.0.0 scores](#how-200-scores)
 - [Known scoring limitations of v1.3.x](#known-scoring-limitations-of-v13x)
 - [AWS GovCloud (US)](#aws-govcloud-us)
@@ -393,6 +393,25 @@ scores No risk, so the facilitator accepts it only with the evidence its helpful
   `GetLensReview`: the JSON consolidated report breaks counts down only for the AWS Well-Architected Framework
   lens, and its workload totals include every lens on the workload.
 
+### Running an ORR with an AI agent
+
+The [`orr-review`](skills/orr-review/README.md) agent skill runs an ORR from the same lens files in a coding agent
+or chat assistant, with or without the WA Tool. It follows the open Agent Skills format, so Claude Code, Kiro, Kiro
+Crew and OpenAI Codex load it, and Amazon Quick can use it as a desktop skill or a web chat agent. The agent asks
+each question and the evidence it needs, records the answers, scores them with the lens's own risk rules, and
+writes a findings report with the High and Medium risks, their improvement plans and the accepted risks. Coding
+agents run
+its standard-library Python script on the release lens files; agents that cannot run code, such as Amazon Quick,
+read the plain-text copy of each lens bundled with the skill and score by hand from its risk rules. It needs no AWS
+credentials and makes no network calls. To install it with the skills CLI:
+
+```bash
+npx skills add awslabs/operational-readiness-review-custom-war-lens --skill orr-review
+```
+
+[`skills/orr-review/README.md`](skills/orr-review/README.md) gives the install steps for each tool and the skill's
+limits.
+
 ---
 
 ## How 2.0.0 scores
@@ -516,6 +535,7 @@ for current status, and verify per Region.
 | `dist/` | CI-built lens files; never edited by hand |
 | `wafr-operational-readiness-lens/` | The v1.3.2 to v1.3.6 files, unchanged, plus a copy of each released file |
 | `docs/` | Running an ORR, facilitator guide, FAQ, scoring, customizing, GovCloud notes, recurring operations review agenda, related AWS Post-Event Summaries, sandbox gate results, decisions, readable questions |
+| `skills/orr-review/` | The `orr-review` agent skill: instructions, a standard-library Python script that scores answers with the lens rules, and a facilitation reference |
 | `MIGRATION.md`, `CHANGELOG.md` | Upgrade guide from v1.3.x and release history |
 
 Build and check locally from the repository root:

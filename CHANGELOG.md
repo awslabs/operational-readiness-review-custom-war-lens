@@ -13,6 +13,22 @@ Releases from 2.0.0 onward are dated tags that attach every lens file, `manifest
 files are never edited; fixes ship as a new version. Entries for v1.3.2 to v1.3.6 were reconstructed from the
 repository history.
 
+## [Unreleased]
+
+No lens file changed: core stays on 2.0.3, and ORR - Mission-Critical Event Readiness and ORR - Generative AI and
+Agents stay on 1.0.2.
+
+### Added
+
+- The `orr-review` agent skill in [`skills/orr-review/`](skills/orr-review/README.md). It runs an ORR in Claude
+  Code, Kiro, Kiro Crew and OpenAI Codex, and can be imported into Amazon Quick. Its standard-library script records
+  answers, scores them with the lens's own risk rules and writes a findings report. For agents that cannot run it,
+  such as Amazon Quick, the skill bundles each lens as plain text with its risk rules in words, and the agent scores
+  by hand. Unit tests check that both ways give the generator's risk for every answer combination of every
+  question, and that the skill's core-path list matches the lens sources.
+- `python3 -m tools.orrlens docs` also writes the skill's plain-text lens files, so the `docs` check fails when
+  they are stale. The language check also covers the skill's Markdown files.
+
 ## [2026-11-02] core 2.0.3
 
 Text-only patch release of the core lens. One link moved because AWS restructured the AWS Fault Isolation
