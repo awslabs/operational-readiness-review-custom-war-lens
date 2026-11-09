@@ -397,7 +397,7 @@ scores No risk, so the facilitator accepts it only with the evidence its helpful
 
 The [`orr-review`](skills/orr-review/README.md) agent skill runs an ORR from the same lens files in a coding agent
 or chat assistant, with or without the WA Tool. It follows the open Agent Skills format, so Claude Code, Kiro, Kiro
-Crew and OpenAI Codex load it, and Amazon Quick can use it as a desktop skill or a web chat agent. The agent asks
+Crew and OpenAI Codex load it, and Amazon Quick runs it as a custom chat agent. The agent asks
 each question and the evidence it needs, records the answers, scores them with the lens's own risk rules, and
 writes a findings report with the High and Medium risks, their improvement plans and the accepted risks. Coding
 agents run
@@ -535,7 +535,7 @@ for current status, and verify per Region.
 | `dist/` | CI-built lens files; never edited by hand |
 | `wafr-operational-readiness-lens/` | The v1.3.2 to v1.3.6 files, unchanged, plus a copy of each released file |
 | `docs/` | Running an ORR, facilitator guide, FAQ, scoring, customizing, GovCloud notes, recurring operations review agenda, related AWS Post-Event Summaries, sandbox gate results, decisions, readable questions |
-| `skills/orr-review/` | The `orr-review` agent skill: instructions, a standard-library Python script that scores answers with the lens rules, and a facilitation reference |
+| `skills/orr-review/` | The `orr-review` agent skill: instructions, a standard-library Python script that scores answers with the lens rules, a plain-text copy of each lens and its improvement plans, a report template and a facilitation reference |
 | `MIGRATION.md`, `CHANGELOG.md` | Upgrade guide from v1.3.x and release history |
 
 Build and check locally from the repository root:
