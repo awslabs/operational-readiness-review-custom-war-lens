@@ -38,9 +38,9 @@ Readiness and ORR - Generative AI and Agents stay on 1.0.2.
 ### Documentation
 
 - The `orr-review` skill README describes the new Amazon Quick agent builder (Customize, Agents, Create, From chat)
-  with three screenshots, and adds the skill import from a folder or a `.zip`, which now works in the Quick web app
-  as well as the desktop app. Its Chat agent context sources link moved to the current Amazon Quick user guide
-  address.
+  with three screenshots, and adds the skill import from a folder or a `.zip`, which the maintainers tested in the
+  Quick web app (the desktop app import is not tested yet). Its Chat agent context sources link moved to the
+  current Amazon Quick user guide address.
 - `docs/gates.md` records the minor-version upgrade check for 2.0.5.
 
 ## [2026-11-08] core 2.0.4
