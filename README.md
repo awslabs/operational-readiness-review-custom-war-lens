@@ -32,7 +32,7 @@ Contents:
 
 | Lens | Version | Contents | Attach it when | Release file |
 |---|---|---|---|---|
-| **AWS Operational Readiness Review** (the core ORR lens; it keeps its published name) | 2.0.3 | 36 questions and 134 scored statements in 4 pillars: 01 - Architecture, 02 - Release Quality, 03 - Event Management, 04 - Readiness Decision. A 15-question core path for triage and recurring check-ins | Every production workload, before launch and at least yearly | `orr-core.json` |
+| **AWS Operational Readiness Review** (the core ORR lens; it keeps its published name) | 2.0.4 | 36 questions and 134 scored statements in 4 pillars: 01 - Architecture, 02 - Release Quality, 03 - Event Management, 04 - Readiness Decision. A 15-question core path for triage and recurring check-ins | Every production workload, before launch and at least yearly | `orr-core.json` |
 | **ORR - Mission-Critical Event Readiness** | 1.0.2 | 8 questions and 26 scored statements in 3 pillars: 01 - Prepare, 02 - Operate, 03 - After the event | Before a planned peak, alongside a current core review | `orr-event.json` |
 | **ORR - Generative AI and Agents** | 1.0.2 | 9 questions and 25 scored statements in 3 pillars: 01 - Models, capacity and dependencies, 02 - Change safety and evaluation, 03 - Operations and safeguards | Workloads that call foundation models or run AI agents, alongside the core review | `orr-genai.json` |
 
@@ -102,12 +102,12 @@ Stable links that always return the newest release:
 - Generative AI companion: https://github.com/awslabs/operational-readiness-review-custom-war-lens/releases/latest/download/orr-genai.json
   (minified: `orr-genai.min.json`)
 
-Versioned names, such as `orr-core-2.0.3.json`, stay pinned to their release. Each release's files are also copied
+Versioned names, such as `orr-core-2.0.4.json`, stay pinned to their release. Each release's files are also copied
 into [`wafr-operational-readiness-lens/`](wafr-operational-readiness-lens/README.md), where the v1.3.2 to v1.3.6 files
 remain unchanged.
 
 If you cannot use the release page, the same files are in
-[`wafr-operational-readiness-lens/`](wafr-operational-readiness-lens/README.md) (`orr-core-2.0.3.json`,
+[`wafr-operational-readiness-lens/`](wafr-operational-readiness-lens/README.md) (`orr-core-2.0.4.json`,
 `orr-event-1.0.2.json`, `orr-genai-1.0.2.json`) with their checksums in [`dist/SHA256SUMS`](dist/SHA256SUMS).
 
 Verify a download before you import it:
@@ -120,7 +120,7 @@ shasum -a 256 --ignore-missing -c SHA256SUMS    # macOS
 ### First install
 
 Use these steps only for a lens you have never imported into this account and Region. To move from v1.3.x to
-version 2, or to a newer release of a lens you already have (for example core 2.0.3 or a companion's 1.0.2), see
+version 2, or to a newer release of a lens you already have (for example core 2.0.4 or a companion's 1.0.2), see
 [Upgrade an existing ORR lens](#upgrade-an-existing-orr-lens) instead. Most screenshots in this README were taken with core 2.0.0 and the 1.0.0 companions; the steps are the
 same for later versions.
 
@@ -146,7 +146,7 @@ same for later versions.
 
    A **Publish** dialog opens, titled with the lens name (**Publish AWS Operational Readiness Review** for the
    core lens). In **Version name**, enter the version from the release file name or from `manifest.json`, for
-   example `2.0.3`, and choose **Publish** (the lens JSON itself has no version field; the WA Tool version is the
+   example `2.0.4`, and choose **Publish** (the lens JSON itself has no version field; the WA Tool version is the
    name you type here). A first publish has no major or minor choice; that choice appears only when you publish an
    update.
 
@@ -181,7 +181,7 @@ versions, such as 1.0.2, are uploaded with **Edit** on your existing companion l
 
 [`MIGRATION.md`](MIGRATION.md) has the full procedure, the API steps and the question-by-question mapping from
 v1.3.6. The steps below move a lens from v1.3.x to version 2. Upload the newest version 2 file (for example
-`orr-core-2.0.3.json`) and use its version as the version name. To move from an earlier 2.0.x release, or a
+`orr-core-2.0.4.json`) and use its version as the version name. To move from an earlier 2.0.x release, or a
 companion from an earlier 1.0.x release, see [Patch releases](#patch-releases).
 
 1. If you modified the lens, for example in an ORR workshop, run `ExportLens` first and diff the export against
@@ -198,7 +198,7 @@ companion from an earlier 1.0.x release, see [Patch releases](#patch-releases).
 3. Then choose **Publish lens**. The publish page lists, per changed pillar, the **Updated questions**,
    **Removed questions** and **New questions** (each list is a small scrolling box). Under **Versioning**, for
    **Version change** choose **Major version** ("Will notify workloads using the lens"), enter the version, for
-   example `2.0.3`, in **Version name**, and choose **Publish custom lens**
+   example `2.0.4`, in **Version name**, and choose **Publish custom lens**
    ([Publishing an update to a custom lens](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-publish-update.html)).
 
    ![Publish custom lens page with the new pillar 04 - Readiness Decision listed, Major version selected and version name 2.0.0 entered.](_img/WAT-PublishMajor.png)
@@ -206,7 +206,7 @@ companion from an earlier 1.0.x release, see [Patch releases](#patch-releases).
 4. **API:** call `ImportLens` with `LensAlias` set to the existing lens ARN. Do not wait for an import status: in
    our sandbox test on 2026-10-06, `ImportLens` returned only the lens ARN. Instead, call `ListLenses` with
    `LensStatus=DRAFT` and `LensType=CUSTOM_SELF` until the lens appears with a newer update time, then call
-   `CreateLensVersion` with `IsMajorVersion=true` and `LensVersion="2.0.3"`. Keep the lens name: the WA Tool
+   `CreateLensVersion` with `IsMajorVersion=true` and `LensVersion="2.0.4"`. Keep the lens name: the WA Tool
    rejects an upload whose name differs from the published lens name. If your published lens is not named exactly
    "AWS Operational Readiness Review" (a lens first imported from the v1.3.3 or v1.3.4 file is named
    "AWS Operational Readiness Review v1.3.3" or "... v1.3.4"), edit the `name` field of the version 2 file to match
@@ -246,16 +246,16 @@ is published as a major version.
 
 #### Patch releases
 
-A patch release, such as core 2.0.3 or a companion's 1.0.2, changes only display text; every pillar, question
+A patch release, such as core 2.0.4 or a companion's 1.0.2, changes only display text; every pillar, question
 and choice ID and every risk rule stays the same ([`CHANGELOG.md`](CHANGELOG.md)). Use these steps only for a lens
 that is already on an earlier release of the same line (core 2.0.x, or a companion on 1.0.x); from v1.3.x, follow
 the steps above. If you edited the `name` field of an earlier file to match your published lens, make the same edit in the
 new file before you upload it (step 4).
 
 Upload the file to your existing lens with **Edit** as in step 2, choose **Publish lens**, choose **Minor
-version**, enter the version (for example `2.0.3`), and choose **Publish custom lens**. With the API, call
+version**, enter the version (for example `2.0.4`), and choose **Publish custom lens**. With the API, call
 `ImportLens` with `LensAlias` set to the lens ARN, wait for the new draft in `ListLenses` as in step 4, then call
-`CreateLensVersion` with `LensVersion` set to the new version (for example `"2.0.3"`) and `IsMajorVersion=false`.
+`CreateLensVersion` with `LensVersion` set to the new version (for example `"2.0.4"`) and `IsMajorVersion=false`.
 Workloads that use the lens move to the new version without a notification, and their answers, notes and risk
 counts stay as they were. Publishing a patch as a major version also works, but every workload owner then gets an
 upgrade notice, and each workload keeps the previous text until its owner upgrades it as in step 6.
@@ -571,7 +571,7 @@ compare the committed output with a fresh build, so `check` fails until the gene
 
 ## Disclaimer
 
-Operational Readiness Review (ORR) custom lens 2.0.3 for the AWS Well-Architected Tool, informed by the AWS
+Operational Readiness Review (ORR) custom lens 2.0.4 for the AWS Well-Architected Tool, informed by the AWS
 Operational Readiness Reviews whitepaper and Well-Architected best practice OPS07-BP02. High risk means
 launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a
 plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it

@@ -13,21 +13,40 @@ Releases from 2.0.0 onward are dated tags that attach every lens file, `manifest
 files are never edited; fixes ship as a new version. Entries for v1.3.2 to v1.3.6 were reconstructed from the
 repository history.
 
-## [Unreleased]
+## [2026-11-08] core 2.0.4
 
-No lens file changed: core stays on 2.0.3, and ORR - Mission-Critical Event Readiness and ORR - Generative AI and
-Agents stay on 1.0.2.
+Text-only patch release of the core lens, plus the `orr-review` agent skill. One link moved because the AWS Hybrid
+Connectivity whitepaper's web pages now redirect to the AWS Direct Connect User Guide. No pillar, question or choice
+ID and no risk rule changed, so answers, notes and risk counts stay as they are. ORR - Mission-Critical Event
+Readiness and ORR - Generative AI and Agents stay on 1.0.2.
+
+- If your core lens is on 2.0.x, upload the new file to it with **Edit** and publish it as a **Minor version**
+  ([Patch releases](README.md#patch-releases)).
+- If your core lens is still on v1.3.x, publish 2.0.4 as a **Major version** and follow
+  [`MIGRATION.md`](MIGRATION.md).
+- If you have not installed the core lens yet, install it with **Create custom lens**
+  ([First install](README.md#first-install)).
+
+### Changed (core 2.0.4)
+
+- `hy_none`: the helpful link now opens the Hybrid connectivity section of the Building a Scalable and Secure
+  Multi-VPC AWS Network Infrastructure whitepaper. The Hybrid Connectivity whitepaper page it opened redirects to the
+  AWS Direct Connect User Guide home page (checked November 8, 2026).
 
 ### Added
 
 - The `orr-review` agent skill in [`skills/orr-review/`](skills/orr-review/README.md). It runs an ORR in Claude
-  Code, Kiro, Kiro Crew and OpenAI Codex, and can be imported into Amazon Quick. Its standard-library script records
-  answers, scores them with the lens's own risk rules and writes a findings report. For agents that cannot run it,
-  such as Amazon Quick, the skill bundles each lens as plain text with its risk rules in words, and the agent scores
-  by hand. Unit tests check that both ways give the generator's risk for every answer combination of every
-  question, and that the skill's core-path list matches the lens sources.
+  Code, Kiro, Kiro Crew and OpenAI Codex, and Amazon Quick can run it as a custom chat agent. Its standard-library
+  script records answers, scores them with the lens's own risk rules and writes a findings report. For agents that
+  cannot run it, such as Amazon Quick, the skill bundles each lens as plain text with its risk rules in words, and
+  the agent scores by hand. Unit tests check that both ways give the generator's risk for every answer combination
+  of every question, and that the skill's core-path list matches the lens sources.
 - `python3 -m tools.orrlens docs` also writes the skill's plain-text lens files, so the `docs` check fails when
   they are stale. The language check also covers the skill's Markdown files.
+
+### Documentation
+
+- `docs/gates.md` records the minor-version upgrade check for 2.0.4.
 
 ## [2026-11-02] core 2.0.3
 

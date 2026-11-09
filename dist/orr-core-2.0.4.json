@@ -1,7 +1,7 @@
 {
   "schemaVersion": "2021-11-01",
   "name": "AWS Operational Readiness Review",
-  "description": "Operational Readiness Review (ORR) custom lens 2.0.3 for the AWS Well-Architected Tool, informed by the AWS Operational Readiness Reviews whitepaper and Well-Architected best practice OPS07-BP02. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
+  "description": "Operational Readiness Review (ORR) custom lens 2.0.4 for the AWS Well-Architected Tool, informed by the AWS Operational Readiness Reviews whitepaper and Well-Architected best practice OPS07-BP02. High risk means launch-blocking unless remediated or formally accepted in writing by the accountable owner. Medium means fix on a plan. This lens is guidance. It is not an AWS certification, compliance attestation, audit or SLA. Completing it does not mean AWS has reviewed your workload, and it does not change the AWS shared responsibility model. Numeric targets are this lens's suggestions. Provided as is under the MIT-0 license. Source and updates: https://github.com/awslabs/operational-readiness-review-custom-war-lens",
   "pillars": [
     {
       "id": "architecture",
@@ -609,7 +609,7 @@
               "title": "The critical path has no private connection to on-premises, state or partner networks",
               "helpfulResource": {
                 "displayText": "Good looks like: No request, job or recovery step on the critical path depends on a system reached over AWS Direct Connect, AWS Site-to-Site VPN, a transit or partner network, or another private link. Count indirect dependencies too: DNS forwarded to on-premises resolvers, identity providers or directories hosted on premises, license servers and file transfers. Evidence to collect: route tables and transit gateway or virtual private gateway attachments showing no on-premises or partner routes on the critical path, and a data-flow diagram reviewed by the network owner. When this is selected, the other statements do not change the score.",
-                "url": "https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/hybrid-connectivity.html"
+                "url": "https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/hybrid-connectivity.html"
               },
               "improvementPlan": {
                 "displayText": "If any critical-path dependency is reached over a private link, clear this statement and answer the other statements. Recheck at every architecture change, because new integrations often add a private link.",

@@ -5,7 +5,7 @@ The JSON files in `dist/` are generated from the same sources.
 
 Risk rules are evaluated top to bottom and the first true condition sets the risk. Tiers: a scope exit scores No risk on its own; core statements are needed to avoid High; one statement of each alternative group is needed to avoid High; secondary statements are needed only for No risk. "None of these" (`none_no`) appears only in the guard `&& !none_no` on the No risk and Medium rules (sandbox gate G1), so selecting it, alone or with other choices, scores the question's maximum risk.
 
-## AWS Operational Readiness Review 2.0.3
+## AWS Operational Readiness Review 2.0.4
 
 36 questions, 134 scored statements, 15 on the core path.
 
@@ -427,7 +427,7 @@ Improvement plan: List every on-premises and partner dependency on the critical 
 Sources:
 
 - Question: REL02-BP02 Redundant private connectivity (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_network_topology_ha_conn_private_networks.html>
-- `hy_none`: helpful <https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/hybrid-connectivity.html>; improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/introduction.html>
+- `hy_none`: helpful <https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/hybrid-connectivity.html>; improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-vpc-connectivity-options/introduction.html>
 - `hy_redundant_paths`: helpful <https://aws.amazon.com/directconnect/resiliency-recommendation/>; improvement <https://docs.aws.amazon.com/directconnect/latest/UserGuide/resiliency_toolkit.html>; additional helpful <https://docs.aws.amazon.com/vpn/latest/s2svpn/disaster-recovery-resiliency.html>; additional helpful <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-dc.html>; additional helpful <https://aws.amazon.com/message/17908/>; additional improvement <https://docs.aws.amazon.com/directconnect/latest/UserGuide/monitoring-cloudwatch.html>; additional improvement <https://docs.aws.amazon.com/vpn/latest/s2svpn/monitoring-cloudwatch-vpn.html>; additional improvement <https://docs.aws.amazon.com/vpn/latest/s2svpn/VPNTunnels.html>
 - `hy_failover_tested`: helpful <https://docs.aws.amazon.com/directconnect/latest/UserGuide/resiliency_failover.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>
 - `hy_onprem_deps`: helpful <https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_planning_for_recovery_disaster_recovery.html>; additional improvement <https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resolver.html>

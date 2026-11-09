@@ -142,7 +142,7 @@ in maintenance, discontinued or near end of support.
 
 Edit your existing ORR lens; never create a new one. In the console: Custom lenses, select your existing ORR lens,
 Edit, Choose file (the new JSON), Submit; then Publish lens, choose Major version, and enter the version of the
-file you uploaded as the version name (for example `2.0.3`)
+file you uploaded as the version name (for example `2.0.4`)
 ([Publishing an update](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-publish-update.html)).
 Then upgrade each workload's lens review, which saves a milestone first. `MIGRATION.md` has the full steps,
 including the API path. For a core lens that is already on version 2 (2.0.x), or a companion on 1.0.x, publish the new file

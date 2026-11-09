@@ -130,6 +130,29 @@ scaling plans and the `AWS::AutoScalingPlans::ScalingPlan` CloudFormation resour
 one of the three rewordings above, and it changes only a choice helpful-resource display text, a field that G4
 showed accepts every character tested, within the 1,024-character limit the lens keeps.
 
+## Patch release check, 2026-11-08 (core 2.0.4)
+
+The same check as on 2026-11-02 (below), in the same sandbox account and Region, on the final 2.0.4 file. Only the
+core lens changed, so only the core lens was tested.
+
+1. The released 2.0.3 file was imported and published. A workload was defined with the core lens and the AWS
+   Well-Architected Framework lens, and three questions were answered: one selected choice with notes on
+   `architecture_edge_protection`, `hy_none` (the choice whose link changed) with notes on
+   `architecture_hybrid_connectivity`, and `readiness_signoff` marked "does not apply" with reason `OTHER` and notes.
+2. The 2.0.4 file was imported over the lens and published as a minor version.
+
+| Check | Result |
+|---|---|
+| Lens version on the workload (`GetLensReview`) | Moved to 2.0.4 without an upgrade step |
+| Notifications (`ListNotifications`) | None |
+| Selected choices, notes, risk, "does not apply" flag and reason | Unchanged on all three questions |
+| Lens risk counts | Unchanged |
+| `ExportLens` | Equal to the built file, apart from the tool-added `number` fields |
+| First install of 2.0.4 as a new lens | Published; a new workload listed 36 Unanswered questions in four pillars |
+
+Everything created for the run was deleted afterwards; the account held no workloads, custom lenses, review
+templates, profiles or share invitations.
+
 ## Patch release check, 2026-11-02 (core 2.0.3)
 
 The same check as on 2026-10-14 (below), in the same sandbox account and Region, on the final 2.0.3 file. Only the
