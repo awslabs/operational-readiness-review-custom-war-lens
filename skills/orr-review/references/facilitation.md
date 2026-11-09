@@ -12,7 +12,7 @@ https://github.com/awslabs/operational-readiness-review-custom-war-lens/tree/mai
 | ORR - Mission-Critical Event Readiness | `event` | 8 in 3 pillars | Before a planned peak, alongside a current core review |
 | ORR - Generative AI and Agents | `genai` | 9 in 3 pillars | Workloads that call foundation models or run AI agents, alongside the core review |
 
-Question counts are for core 2.0.3, event 1.0.2 and genai 1.0.2; `orr.py lenses` prints the counts of the files you
+Question counts are for core 2.0.4, event 1.0.2 and genai 1.0.2; `orr.py lenses` prints the counts of the files you
 have.
 
 ## Review types and time boxes

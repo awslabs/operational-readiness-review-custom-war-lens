@@ -35,7 +35,7 @@ statements:
       servers and file transfers. Evidence to collect: route tables and transit gateway or virtual private
       gateway attachments showing no on-premises or partner routes on the critical path, and a data-flow diagram
       reviewed by the network owner. When this is selected, the other statements do not change the score.
-    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/hybrid-connectivity/hybrid-connectivity.html
+    helpful_url: https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/hybrid-connectivity.html
     improvement: >-
       If any critical-path dependency is reached over a private link, clear this statement and answer the other
       statements. Recheck at every architecture change, because new integrations often add a private link.
