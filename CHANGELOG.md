@@ -13,6 +13,36 @@ Releases from 2.0.0 onward are dated tags that attach every lens file, `manifest
 files are never edited; fixes ship as a new version. Entries for v1.3.2 to v1.3.6 were reconstructed from the
 repository history.
 
+## [2026-11-09] core 2.0.5
+
+Text-only patch release of the core lens. Two links moved because the English pages of the AWS Prescriptive
+Guidance "Cloud design patterns, architectures, and implementations" guide now return 404. No pillar, question or
+choice ID and no risk rule changed, so answers, notes and risk counts stay as they are. ORR - Mission-Critical Event
+Readiness and ORR - Generative AI and Agents stay on 1.0.2.
+
+- If your core lens is on 2.0.x, upload the new file to it with **Edit** and publish it as a **Minor version**
+  ([Patch releases](README.md#patch-releases)).
+- If your core lens is still on v1.3.x, publish 2.0.5 as a **Major version** and follow
+  [`MIGRATION.md`](MIGRATION.md).
+- If you have not installed the core lens yet, install it with **Create custom lens**
+  ([First install](README.md#first-install)).
+
+### Changed (core 2.0.5)
+
+- `rt_retry_budget`: the helpful link now opens REL05-BP01 Implement graceful degradation to transform applicable
+  hard dependencies into soft dependencies (AWS Well-Architected), which covers the circuit breaker pattern. The
+  Circuit breaker pattern page it opened returns 404 (checked November 9, 2026).
+- `rt_bounded_backoff`: the additional improvement link "Retry with backoff pattern (AWS Prescriptive Guidance)",
+  which returns 404, is replaced by Exponential backoff and jitter (AWS Architecture Blog).
+
+### Documentation
+
+- The `orr-review` skill README describes the new Amazon Quick agent builder (Customize, Agents, Create, From chat)
+  with three screenshots, and adds the skill import from a folder or a `.zip`, which now works in the Quick web app
+  as well as the desktop app. Its Chat agent context sources link moved to the current Amazon Quick user guide
+  address.
+- `docs/gates.md` records the minor-version upgrade check for 2.0.5.
+
 ## [2026-11-08] core 2.0.4
 
 Text-only patch release of the core lens, plus the `orr-review` agent skill. One link moved because the AWS Hybrid

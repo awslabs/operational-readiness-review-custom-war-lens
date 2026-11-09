@@ -5,7 +5,7 @@ The JSON files in `dist/` are generated from the same sources.
 
 Risk rules are evaluated top to bottom and the first true condition sets the risk. Tiers: a scope exit scores No risk on its own; core statements are needed to avoid High; one statement of each alternative group is needed to avoid High; secondary statements are needed only for No risk. "None of these" (`none_no`) appears only in the guard `&& !none_no` on the No risk and Medium rules (sandbox gate G1), so selecting it, alone or with other choices, scores the question's maximum risk.
 
-## AWS Operational Readiness Review 2.0.4
+## AWS Operational Readiness Review 2.0.5
 
 36 questions, 134 scored statements, 15 on the core path.
 
@@ -286,8 +286,8 @@ Sources:
 
 - Question: REL05-BP03 Control and limit retry calls (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_limit_retries.html>
 - `rt_timeouts`: helpful <https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_client_timeouts.html>
-- `rt_bounded_backoff`: helpful <https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_limit_retries.html>; additional improvement <https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html>; additional improvement <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-configuring.html>; additional improvement <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html>; additional improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/retry-backoff.html>
-- `rt_retry_budget`: helpful <https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/circuit-breaker.html>; improvement <https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter>; additional helpful <https://aws.amazon.com/message/12721/>
+- `rt_bounded_backoff`: helpful <https://docs.aws.amazon.com/sdkref/latest/guide/feature-retry-behavior.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_limit_retries.html>; additional improvement <https://docs.aws.amazon.com/step-functions/latest/dg/concepts-error-handling.html>; additional improvement <https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-configuring.html>; additional improvement <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html>; additional improvement <https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/>
+- `rt_retry_budget`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html>; improvement <https://builder.aws.com/content/3EumjoZascWd1oZiEgL8ORlv3qE/timeouts-retries-and-backoff-with-jitter>; additional helpful <https://aws.amazon.com/message/12721/>
 - `rt_idempotent`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_prevent_interaction_failure_idempotent.html>; improvement <https://docs.aws.amazon.com/lambda/latest/dg/services-sqs-errorhandling.html>; additional helpful <https://builder.aws.com/content/3Ev0BENTyBr0XxzRk5FDZzgNYos/making-retries-safe-with-idempotent-apis>; additional helpful <https://docs.aws.amazon.com/ec2/latest/devguide/ec2-api-idempotency.html>
 
 #### `architecture_dependency_failure_handling`: Core journeys keep working when dependencies fail
