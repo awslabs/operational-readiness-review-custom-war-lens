@@ -181,7 +181,7 @@ DASHES = {"\u2014": "em dash", "\u2013": "en dash"}
 LANGUAGE_FILE_GLOBS = [
     "README.md", "MIGRATION.md", "CHANGELOG.md", "CONTRIBUTING.md", "SECURITY.md", "CODEOWNERS",
     "docs/**/*.md", "docs/**/*.csv", "crosswalk/**/*.csv", "lens-src/**/*.yaml", "lens-src/**/*.md",
-    "data/**/*.yaml", "templates/**/*.json", "wafr-operational-readiness-lens/README.md",
+    "data/**/*.yaml", "templates/**/*.json", "wafr-operational-readiness-lens/README.md", "skills/**/*.md",
 ]
 
 # Files and folders scanned for links (links command and the online part of check).
