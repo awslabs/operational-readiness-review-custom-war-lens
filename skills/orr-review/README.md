@@ -96,22 +96,57 @@ script and no file access beyond the skill. The agent scores each answer by hand
 the report. The repository's unit tests check that this hand scoring gives the same risk as the lens rules for
 every possible answer.
 
-- **Desktop app:** choose **Customize**, **Skills**, **Create**, **From folder**, and select the `orr-review`
-  folder (or **From file** with a `.zip` of it). Review and save it, then choose **Try it** or ask for an ORR. See
-  [Skills](https://docs.aws.amazon.com/quick/latest/userguide/skills-desktop.html).
-- **Web (custom chat agent):** create a chat agent and attach as reference documents `SKILL.md`,
-  `references/lens-core.md`, `references/plans-core.md`, `references/facilitation.md` and
-  `references/report-template.md` (about 129,000 characters). Set its persona instructions to "Run Operational
-  Readiness Reviews by following SKILL.md in your reference documents, in reference mode." Launch the agent, then
-  chat with it. As of 2026-11-06 the chat agent builder accepts up to 10 documents and 200,000 characters of
-  extracted text; the user guide gives a lower limit, so if your builder refuses the files, leave out
-  `plans-core.md` and the report says "Improvement plan: not available" instead of the plan text. Attach the
-  `event` or `genai` lens files as well only if they fit. See
-  [Chat agent context sources](https://docs.aws.amazon.com/quicksuite/latest/userguide/agent-knowledge-sources-best-practices.html).
+There are two ways to set it up. Importing the skill is simpler and brings every lens; a custom chat agent holds
+only the files you attach.
 
-On 2026-11-06 the maintainers ran the web chat agent setup above with the core lens: it scored the test question
-with the right risk line, copied the improvement plans word for word and wrote the report from the template. The
-desktop skill import has not been run yet; please report what you find in an issue.
+- **Skill import (web app and desktop app):** choose **Customize**, **Skills**, **Create**, then **From folder** and
+  select the `orr-review` folder, or **From file** and select a `.zip` of that folder (not `SKILL.md` alone: the
+  agent needs the files in `references/`). Quick adds the skill as a draft with its 11 files. Open it, choose its
+  menu (the three dots), choose **Try it**, and ask for an ORR. See
+  [Skills](https://docs.aws.amazon.com/quick/latest/userguide/skills-desktop.html).
+- **Custom chat agent (web app):**
+
+  1. Choose **Customize**, **Agents**, **Create**, **From chat**, and choose **Create from scratch**.
+  2. Tell the builder the name and the job, for example "Name it ORR review. It runs Operational Readiness Reviews
+     from its reference documents. Just me, when I ask, answers in chat. No connectors."
+  3. When it asks for the reference documents, choose **Add context** (**+**), **Upload files**, and attach
+     `SKILL.md`, `references/lens-core.md`, `references/plans-core.md`, `references/facilitation.md` and
+     `references/report-template.md` (about 129,000 characters). Send them with this message:
+
+     ```text
+     Use these five files as the reference documents. Set the instructions to exactly this sentence and nothing else: "Run Operational Readiness Reviews by following SKILL.md in your reference documents, in reference mode." Keep the name ORR review and create the agent.
+     ```
+
+  4. Quick saves the agent as a draft and opens it in a panel next to the chat. On the **Instructions** tab, check
+     that **Instructions** holds only that sentence. The builder also writes a description, a welcome message and
+     starter prompts; keep or change them.
+
+     ![Amazon Quick agent editor panel for a draft agent named ORR review, Instructions tab, with a two-line description and the Instructions box holding the one sentence that points the agent at SKILL.md in reference mode.](../../_img/QS-ChatAgentSetup.png)
+
+  5. On the **Capabilities** tab, check that the five files are listed under **Additional documents**.
+
+     ![Additional documents card on the Capabilities tab listing SKILL.md, lens-core.md, plans-core.md, facilitation.md and report-template.md, with Browse files or drag and drop below and a note that supports CSV, DOC, DOCX, HTML, MD, PDF and TXT, with a maximum of 10 files.](../../_img/QS-ChatAgentFiles.png)
+
+  6. Choose **Chat with draft** and ask for an ORR, for example "Run an ORR on our benefits-portal workload with
+     the core lens." Quick keeps a draft visible only to you; choose **Publish** when you want the agent in the
+     agent picker.
+
+     The agent's first reply names the lens version and agrees the scope before the first question:
+
+     ![Amazon Quick chat with the draft ORR review agent. It says it runs in reference mode and names AWS Operational Readiness Review 2.0.5 with 36 questions in 4 pillars, asks for the review type, the accountable owner and who will answer, and a milestone name, notes that the event and generative AI lens files are not attached, lists ground rules for evidence, and offers a Review type choice of Full or Core path.](../../_img/QS-ChatAgentReview.png)
+
+  As of 2026-11-06 the chat agent builder accepts up to 10 documents and 200,000 characters of extracted text; the
+  user guide gives a lower limit, so if your builder refuses the files, leave out `plans-core.md` and the report
+  says "Improvement plan: not available" instead of the plan text. Attach the `event` or `genai` lens files as
+  well only if they fit. See
+  [Chat agent context sources](https://docs.aws.amazon.com/quick/latest/userguide/agent-knowledge-sources-best-practices.html).
+
+On 2026-11-06 the maintainers ran the custom chat agent setup with the core lens: it scored the test question with
+the right risk line, copied the improvement plans word for word and wrote the report from the template. On
+2026-11-09 they imported the skill in the web app from a `.zip` and from a folder; with **Try it**, the agent read
+`references/lens-core.md`, named core 2.0.5 and asked the first question with its statements and risk rules. The
+same day they checked the chat agent steps above against the new agent builder, up to the draft agent's first
+reply. The desktop app import has not been run yet; please report what you find in an issue.
 
 ## Use the script without an agent
 

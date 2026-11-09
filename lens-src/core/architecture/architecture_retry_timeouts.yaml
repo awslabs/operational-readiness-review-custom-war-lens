@@ -72,8 +72,8 @@ statements:
         url: https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-configuring.html
       - display_text: Using dead-letter queues in Amazon SQS
         url: https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-dead-letter-queues.html
-      - display_text: Retry with backoff pattern (AWS Prescriptive Guidance)
-        url: https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/retry-backoff.html
+      - display_text: Exponential backoff and jitter (AWS Architecture Blog)
+        url: https://aws.amazon.com/blogs/architecture/exponential-backoff-and-jitter/
   - id: rt_retry_budget
     tier: sec
     title: A retry budget or circuit breaker stops retries to unhealthy or throttling dependencies, and only one layer retries
@@ -85,7 +85,7 @@ statements:
       quota, or stopped by a circuit breaker while a dependency is unhealthy or throttling, so retry traffic falls
       as errors rise. Only one layer in the call chain retries a given failure and the other layers fail fast.
       Calls to third-party APIs stay within their published rate limits.
-    helpful_url: https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/circuit-breaker.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
     improvement: >-
       Map the call chain and remove retries from all but one layer. Enable a retry quota or budget in that layer.
       Add a circuit breaker only where a dependency can stay unhealthy for long periods, and test it, because

@@ -15,7 +15,7 @@ Commands (python3 orr.py <command> --help for the options of each):
 
 Lens files are found in --lens-dir folders, or else in the current folder, ./dist and
 ./wafr-operational-readiness-lens. They are the release files orr-core.json, orr-event.json and orr-genai.json
-(or their versioned names, such as orr-core-2.0.4.json).
+(or their versioned names, such as orr-core-2.0.5.json).
 """
 
 from __future__ import annotations
