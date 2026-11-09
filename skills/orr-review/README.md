@@ -3,7 +3,7 @@
 `orr-review` lets a coding agent or chat assistant run an Operational Readiness Review (ORR) with the lenses in this
 repository, with or without the AWS Well-Architected Tool (WA Tool). It follows the open
 [Agent Skills](https://agentskills.io/specification) format: a `SKILL.md` with instructions, a standard-library
-Python script, and one reference file.
+Python script, and reference files.
 
 The agent asks each question, shows the evidence to collect, records the team's answers, scores each answer with
 the lens's own risk rules (the same rules the WA Tool applies to the imported lens), and writes a Markdown findings
