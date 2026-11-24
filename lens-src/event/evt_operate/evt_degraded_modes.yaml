@@ -20,7 +20,7 @@ description:
     engage. The pre-approved status messages, approvers and stakeholder notification list.
 helpful:
   display_text: REL05-BP01 Implement graceful degradation (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
 statements:
   - id: dm_degraded_mode
     tier: alt:A
@@ -35,7 +35,7 @@ statements:
       turned on by configuration or automatically, it was tested under load before the event, and customers see a
       clear message instead of errors. This extends the core question 'Core journeys keep
       working when dependencies fail' to event surges.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html
     improvement: >-
       Choose the degraded mode that fits the critical journey, build it so the normal code path serves it rather than
       a rarely used fallback, add a configuration switch and an automatic trigger where safe, and test it at event-like
@@ -64,7 +64,7 @@ statements:
     platform_notes: >-
       For example AWS AppConfig feature flags, or your own flag service that caches a last-known-good value so a flag
       store outage cannot block requests.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html
     improvement: >-
       List the features the event does not need, rank them by cost and value, wrap each in a feature flag read from
       dynamic configuration with a safe default, deploy flag changes through a validated configuration pipeline, and
@@ -81,9 +81,9 @@ statements:
       stakeholders to notify (for example partners, executives, regulators or election officials) with contact details.
       They extend the communication plan in the core question 'Identify impacted customers and keep them informed',
       and can be published through a channel that does not depend on the workload.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html
     improvement: >-
       Draft and pre-approve status messages for each likely situation with your communications and legal owners, list
       the stakeholders to notify and how, assign an approver to every shift, and rehearse publishing one message
       through the independent channel during the tabletop.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_dashboards.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_dashboards.html

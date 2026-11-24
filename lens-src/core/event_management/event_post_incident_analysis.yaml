@@ -37,7 +37,7 @@ statements:
       missing mechanisms rather than people to fault, and it is reviewed by people outside the team. If another team
       runs the process, for example a central incident or security team, it covers this workload's operational events,
       not only security events.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html
     improvement: >-
       Adopt a short template (impact, timeline, contributing factors, detection and mitigation questions, actions),
       define which events and near-misses require it and the deadline, collect timeline data automatically from
@@ -56,7 +56,7 @@ statements:
       that reflects the risk, and open, overdue and recently closed actions are reviewed in a recurring operations
       review with leadership present. Actions that prevent recurrence are favored over reminders to be careful, and
       an action closes only when the fix is in production and verified.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html
     improvement: >-
       Put every corrective action in the same tracker as other engineering work (for example AWS Systems Manager
       OpsCenter or your ticketing system) with owner, due date and priority, add an overdue-actions view to your

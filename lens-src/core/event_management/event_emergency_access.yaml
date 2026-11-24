@@ -22,7 +22,7 @@ description:
     and the incident bridge are hosted and how people sign in to them.
 helpful:
   display_text: SEC03-BP03 Emergency access process (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html
 statements:
   - id: ea_per_failure_mode
     tier: sec
@@ -38,7 +38,7 @@ statements:
       start it, who approves it (including out of hours, with secondary approvers), which pre-created emergency
       account and roles it uses, and how its use is logged, alerted and linked to an incident record. Emergency
       credentials are rotated after each use, and any use outside a declared incident raises an alert.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html
     improvement: >-
       List what responders depend on to sign in (identity provider, IAM Identity Center and its Region, SAML
       configuration, MFA devices, credential vault) and how each can fail. For each failure mode, write a short
@@ -117,7 +117,7 @@ statements:
     partition_notes: >-
       AWS WickrGov, the AWS GovCloud (US) offering of AWS Wickr and one example of an out-of-band channel, is
       available only in the AWS GovCloud (US-West) Region as of 2026-10-06; verify per Region.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_develop_management_plans.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_develop_management_plans.html
     improvement: >-
       List where each incident tool is hosted and how people sign in to it, and remove shared dependencies on your
       identity provider and the workload's primary Region. Keep a current read-only copy of runbooks and contacts in a

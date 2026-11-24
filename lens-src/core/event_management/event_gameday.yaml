@@ -77,7 +77,7 @@ statements:
       accepting degraded service. Gaps and decisions were written up in an after-action report. The same exercise can
       serve as evidence for the communication plan (event_customer_impact) and provider escalation
       (event_provider_escalation); this statement scores incident command and decision making.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_run_game_days.html
     improvement: >-
       Schedule a tabletop exercise with a facilitator, a written scenario and objectives agreed by leadership. Include
       the incident lead, on-call engineers, communications and support owners and a business decision maker, and
@@ -101,7 +101,7 @@ statements:
       rather than from the team that wrote the runbooks, invite the business decision maker and dependency owners,
       and confirm each person's contact details and access during the exercise. Track who has taken part, and add
       new on-call engineers to the next exercise.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_develop_management_plans.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_develop_management_plans.html
   - id: gd_findings_closed
     tier: sec
     title: Exercise findings are tracked to closure, and runbooks, alarms and this checklist are updated
@@ -112,7 +112,7 @@ statements:
       contact, a slow decision) is recorded as an action with an owner and a due date in the same tracker as other
       operational work, reviewed in a recurring operations review until closed, and reflected in the runbooks,
       alarms, escalation documents and the answers in this lens. The next exercise checks that the fixes worked.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_feedback_loops.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_feedback_loops.html
     improvement: >-
       After each exercise, write the findings as actions with owners and due dates in your work tracker (for example
       AWS Systems Manager OpsCenter or your ticketing system), review open actions in your operations review, update

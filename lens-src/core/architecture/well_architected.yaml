@@ -18,16 +18,16 @@ description:
     The date of the last major architecture change. The open high-risk issues with owner role, target date or
     risk-register reference.
 helpful:
-  display_text: The review process (AWS Well-Architected Framework)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html
+  display_text: The review process (AWS Well-Architected Framework, June 2024)
+  url: https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/the-review-process.html
 statements:
   - id: wa_current
     tier: core
     title: A Well-Architected Framework review was completed in the last 12 months and after the last major architecture change
     concept: wa-framework-review-current
     severity_basis: >-
-      deviation:the Framework review process calls for a review before go-live and after significant architecture
-      changes; a review that predates the current design leaves its design risks unknown at launch, and no
+      deviation:the Framework review process (June 2024 edition) calls for a review before go-live and after
+      significant architecture changes; a review that predates the current design leaves its design risks unknown at launch, and no
       Framework best practice carries a risk level for this step
     good: >-
       The workload has a Framework review covering all six pillars, recorded in the AWS Well-Architected Tool or an
@@ -39,7 +39,7 @@ statements:
       Jira connector. Account IDs associated with a workload, the workload name, milestone names and the review
       owner may leave the AWS GovCloud (US) Regions in normal operation, so keep export-controlled and sensitive
       data out of those fields.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/the-review-process.html
     improvement: >-
       Run or refresh the Framework review in the AWS Well-Architected Tool with the people who own the design,
       answer every question against the architecture as it is today, save a milestone, and schedule the next
@@ -72,7 +72,7 @@ statements:
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/userguide/tutorial.html
     additional_helpful:
       - display_text: OPS01-BP06 Evaluate tradeoffs while managing benefits and risks (AWS Well-Architected)
-        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_eval_tradeoffs.html
+        url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_priorities_eval_tradeoffs.html
   - id: wa_lenses_applied
     tier: sec
     title: Applicable AWS lenses (for example Government, Serverless Applications, Generative AI) were applied, or none apply

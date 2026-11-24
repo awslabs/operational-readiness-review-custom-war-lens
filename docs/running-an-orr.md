@@ -4,7 +4,7 @@ This guide explains how to run an Operational Readiness Review (ORR) with this l
 Tool (WA Tool): when to run it, who takes part, how long it takes, what you produce, and how you follow up. It
 follows the AWS [Operational Readiness Reviews whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html)
 and Well-Architected best practice
-[OPS07-BP02 Ensure a consistent review of operational readiness](https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html).
+[OPS07-BP02 Ensure a consistent review of operational readiness](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html).
 
 Cadences and time boxes on this page are the maintainers' suggestions. Field use measures them, and they change
 when the evidence says so.

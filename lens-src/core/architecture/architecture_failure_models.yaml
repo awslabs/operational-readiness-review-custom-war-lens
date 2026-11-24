@@ -80,7 +80,7 @@ statements:
       Each significant failure mode has a documented mitigation: a design control (for example redundancy, a
       timeout or a degraded mode), an automated response, or a runbook with tested steps. Failure modes the team
       chose not to mitigate are recorded with the reason and the accountable owner.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_runbooks.html
     improvement: >-
       Add a mitigation column, link each failure mode to the control, automation or runbook that handles it, write
       runbooks for the gaps, and put design changes for failure modes with high customer impact and no mitigation

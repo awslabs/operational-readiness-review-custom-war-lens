@@ -19,7 +19,7 @@ description:
     if any. Deployment window and blocker settings. The last rollout that a stage gate stopped.
 helpful:
   display_text: OPS06-BP03 Safe deployment strategies (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_deploy_mgmt_sys.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_deploy_mgmt_sys.html
 statements:
   - id: pd_staged_expansion
     tier: core

@@ -20,7 +20,7 @@ description:
     by pipelines, automation and AI agents.
 helpful:
   display_text: SEC03-BP02 Grant least privilege access (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_least_privileges.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_least_privileges.html
 statements:
   - id: pa_automation_default
     tier: alt:A
@@ -39,7 +39,7 @@ statements:
       restrict who can start sessions. Containers: give people read-only Kubernetes permissions, for example with
       Amazon EKS access entries and access policies, and restrict Amazon ECS Exec. Serverless: read-only roles keep
       people from editing functions, state machines or API configurations in the console.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_least_privileges.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_least_privileges.html
     improvement: >-
       List the roles and permission sets people use in production, replace standing write access with read-only or
       view-only defaults (the AWS managed job-function policies ReadOnlyAccess, or ViewOnlyAccess where people should
@@ -69,7 +69,7 @@ statements:
     partition_notes: >-
       IAM Identity Center is available in both AWS GovCloud (US) Regions (as of 2026-10-06); the administrative
       console, SDK and CLI use FIPS endpoints there.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_identities_unique.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_identities_unique.html
     improvement: >-
       Choose a temporary elevated access mechanism, for example a validated partner solution that integrates with IAM
       Identity Center or the open-source TEAM solution, define who may approve elevation and for how long, log every
@@ -110,7 +110,7 @@ statements:
     improvement_url: https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html
     additional_helpful:
       - display_text: SEC01-BP02 Secure account root user and properties (AWS Well-Architected)
-        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_aws_account.html
+        url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_securely_operate_aws_account.html
       - display_text: AWS Identity and Access Management in AWS GovCloud (US)
         url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-iam.html
   - id: pa_access_reviewed
@@ -123,7 +123,7 @@ statements:
       example quarterly) by each account's owner, and unused roles and permissions are removed. Pipelines, automation
       and AI agents that can change production run under their own least-privilege roles, never with a person's
       credentials, and their actions are logged and attributable.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_continuous_reduction.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_continuous_reduction.html
     improvement: >-
       Schedule access reviews with account owners, review every elevated session, use IAM Access Analyzer unused
       access findings and last-accessed information to remove permissions nobody uses, give each pipeline,

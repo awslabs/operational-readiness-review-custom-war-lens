@@ -19,7 +19,7 @@ description:
     mitigation times. Findings with owners and their closure or acceptance.
 helpful:
   display_text: REL12-BP05 Conduct game days regularly (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html
 statements:
   - id: rh_tabletop
     tier: alt:A
@@ -37,12 +37,12 @@ statements:
       found. This applies the core question 'Incident exercises: game days, tabletops and recovery drills' to this
       event's people and scenarios. A disaster recovery test counts only if it walked through the event's scenarios
       with the event shift.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html
     improvement: >-
       Schedule a tabletop 4-8 weeks before the event. Write a scenario for each major risk with injects (for example,
       the payment provider times out 10 minutes into the peak), have the event shift respond from the real runbooks and
       dashboards, time the key decisions, and log every gap as a tracked finding.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_run_game_days.html
   - id: rh_gameday
     tier: alt:A
     title: A game day under event-like load ran within 60 days
@@ -78,7 +78,7 @@ statements:
       re-checked, or formally accepted by the event owner with the acceptance recorded in your risk register. Runbooks,
       alarms, the escalation tree and status templates were updated from the findings, and the core review was updated
       where a finding showed a core gap.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html
     improvement: >-
       Track every rehearsal finding in the same tracker as your other operational work (for example AWS Systems Manager
       OpsCenter or your own tool), set due dates before the freeze, review open findings at each go/no-go checkpoint,

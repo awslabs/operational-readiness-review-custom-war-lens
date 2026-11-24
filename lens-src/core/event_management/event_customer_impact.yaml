@@ -19,7 +19,7 @@ description:
     channel and its dependencies. The last exercise or event that used them.
 helpful:
   display_text: OPS10-BP05 Customer communication plan (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html
 statements:
   - id: ci_identify
     tier: alt:A
@@ -41,7 +41,7 @@ statements:
     improvement_url: https://aws.amazon.com/blogs/mt/accelerate-troubleshooting-with-structured-logs-in-amazon-cloudwatch/
     additional_helpful:
       - display_text: OPS10-BP03 Prioritize operational events based on business impact (AWS Well-Architected)
-        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_prioritize_events.html
+        url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_prioritize_events.html
   - id: ci_comms_plan
     tier: alt:A
     title: A communication plan (channels, templates, approvers, cadence, required notices) exists and has been exercised
@@ -59,12 +59,12 @@ statements:
       templates. In the last 12 months it was used in a real event or an exercise, or each channel and approver
       was checked, for example with a test notice. Rehearsing communications in an incident exercise is scored in
       event_gameday (gd_tabletop).
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html
     improvement: >-
       Write the plan with your communications, legal and customer-support owners, pre-approve templates for common
       event types, list notice obligations and deadlines, and check each channel and approver at least once a
       year, for example with a test notice or in your next exercise.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html
   - id: ci_status_independent
     tier: sec
     title: Customer status updates use a channel that does not depend on the affected workload or its Region
@@ -79,7 +79,7 @@ statements:
       Map the dependencies of your status and notification path, move it to infrastructure that does not share
       accounts, identity or Region with the workload, or to a separate provider, keep a documented manual fallback,
       and practice publishing through the fallback in a game day.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_dashboards.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_dashboards.html
 pes_lesson:
   statement: ci_status_independent
   month: Nov 2020

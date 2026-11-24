@@ -46,7 +46,7 @@ questions:
         with dates and expiry dates. The reminder or ticket that tracks each renewal.
     helpful:
       display_text: OPS01-BP04 Evaluate compliance requirements
-      url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html
+      url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_priorities_compliance_reqs.html
     statements:
       - id: x_example_la_none_required
         tier: scope
@@ -55,11 +55,11 @@ questions:
         good: >-
           A policy owner confirmed in writing that no launch approvals apply to this workload's data classification
           and audience. Evidence to collect: the policy section, and the confirmation with its date.
-        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html
+        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_priorities_compliance_reqs.html
         improvement: >-
           Ask your policy owner to confirm in writing which launch approvals apply to this workload, and link the
           answer from the question notes.
-        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html
+        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_priorities_compliance_reqs.html
       - id: x_example_la_approvals_recorded
         tier: core
         title: Every approval the organization requires (for example security, privacy, accessibility) is granted and recorded
@@ -71,12 +71,12 @@ questions:
           The team holds the current list of approvals its policy requires for this workload, each approval is
           granted by the named approving body, and each record (with its date and scope) is stored where an auditor
           or the accountable owner can inspect it. Notes link to the records; they do not copy them.
-        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_compliance_reqs.html
+        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_priorities_compliance_reqs.html
         improvement: >-
           List the approvals your policy requires for this workload's data classification and audience, request
           each one with the evidence the approving body asks for, and record the approval IDs in your launch
           decision record.
-        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html
+        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html
       - id: x_example_la_renewals_tracked
         tier: sec
         title: Approval expiry and renewal dates are tracked with an owner, and renewal starts before expiry
@@ -84,11 +84,11 @@ questions:
         good: >-
           Each approval with an expiry date has an owner and a reminder that fires early enough to complete the
           renewal before the approval lapses, and the recurring ORR checks the dates.
-        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_activity_owners.html
+        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ops_model_def_activity_owners.html
         improvement: >-
           Add each approval's expiry date to your tracker with an owner and a reminder at least one renewal cycle
           before expiry, and add the dates to the agenda of your recurring operations review.
-        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_activity_owners.html
+        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ops_model_def_activity_owners.html
 
   - id: x_example_service_inventory
     pillar: x_example_org
@@ -108,7 +108,7 @@ questions:
         that link AWS resources to that entry. The date the entry was last reviewed.
     helpful:
       display_text: OPS02-BP01 Resources have identified owners
-      url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html
+      url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ops_model_def_resource_owners.html
     statements:
       - id: x_example_si_registered
         tier: sec
@@ -118,11 +118,11 @@ questions:
           The organization's service inventory (or configuration management database) has an entry for the
           workload with the accountable owner, the on-call contact or escalation path, the support tier and its
           dependencies, and the team reviews it at least yearly and after ownership changes.
-        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html
+        helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ops_model_def_resource_owners.html
         improvement: >-
           Create or update the workload's inventory entry with owner, on-call contact, support tier and
           dependencies, and add the review to your recurring ORR.
-        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ops_model_def_resource_owners.html
+        improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ops_model_def_resource_owners.html
       - id: x_example_si_tags_enforced
         tier: sec
         title: Production resources carry the organization's required ownership tags, and missing tags are detected

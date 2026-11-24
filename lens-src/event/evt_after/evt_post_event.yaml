@@ -20,7 +20,7 @@ description:
     event plan and the saved milestones. The scale-down record and the cost report for the event period.
 helpful:
   display_text: OPS11-BP02 Perform post-incident analysis (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html
 statements:
   - id: px_retro
     tier: sec
@@ -33,12 +33,12 @@ statements:
       they took, which degraded modes or levers were used, and how escalations to partners and AWS worked. Actions have
       owners and due dates. This applies the core question 'Post-incident analysis and learning loop' to the event as a
       whole, not only to its incidents.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html
     improvement: >-
       Book the review before the event so it happens within two weeks. Collect metrics against the forecast, the
       incident and near-miss log, and observations from the shift, partners and AWS; write the timeline and lessons
       without blame; and give each action an owner and a due date.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_rca_resiliency.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_rca_resiliency.html
   - id: px_lessons_fed
     tier: sec
     title: Lessons were fed into the core ORR and the next event plan, and a milestone was saved
@@ -73,4 +73,4 @@ statements:
       baseline, compare the event-period cost with the budget in AWS Cost Explorer, and record the cost per unit of
       event demand to improve the next forecast. For a go-live or cutover whose capacity becomes the new baseline,
       record the decision to keep that capacity, its approved run-rate cost and a date to right-size it.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_dynamic.html

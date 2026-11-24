@@ -36,7 +36,7 @@ statements:
       compensating controls and approver live in your risk register or POA&M. The question notes carry only a tag
       such as EXC:<register-id> exp:YYYY-MM-DD role:<approver-role>, never names or sensitive details, so
       acceptances can be reported and revisited.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html
     improvement: >-
       Export the high risks from the review report, give each an owner and a date, fix each one or record a
       time-bound acceptance in your risk register, and add the EXC tag to the question notes before sign-off.
@@ -90,4 +90,4 @@ statements:
       Compare current answers with the last milestone and update every answer that changes or incidents affect,
       save the milestone right after answering this question, add a recurring calendar entry for the next review, and set a reminder for each
       accepted risk's expiry date.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html

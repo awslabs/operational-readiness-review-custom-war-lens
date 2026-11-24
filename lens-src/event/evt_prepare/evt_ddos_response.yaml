@@ -40,7 +40,7 @@ statements:
     improvement: >-
       If any endpoint is internet-facing, answer the other statements instead. Keep the endpoint inventory current and
       guard it with a preventive control, so this scope exit stays true.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_network_protection_create_layers.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_network_protection_create_layers.html
   - id: dd_l7_enforcing
     tier: core
     title: Application-layer DDoS rules were tuned in Count (monitor-only) mode, are enforcing before the event, and match IaC

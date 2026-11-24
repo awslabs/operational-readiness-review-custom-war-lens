@@ -13,6 +13,45 @@ Releases from 2.0.0 onward are dated tags that attach every lens file, `manifest
 files are never edited; fixes ship as a new version. Entries for v1.3.2 to v1.3.6 were reconstructed from the
 repository history.
 
+## [2026-11-24] core 2.0.6 and ORR - Mission-Critical Event Readiness 1.0.3
+
+Text-only patch releases of the core lens and the event companion. The AWS Well-Architected Framework update of
+November 16, 2026 removed the Framework copies of the best-practice pages these lenses link to, so those links
+returned 404. They now open the same best practices in the pillar whitepapers. No pillar, question or choice ID and
+no risk rule changed, so answers, notes and risk counts stay as they are. ORR - Generative AI and Agents stays on
+1.0.2.
+
+- If your core lens is on 2.0.x, or the event companion on 1.0.x, upload the new file to it with **Edit** and
+  publish it as a **Minor version** ([Patch releases](README.md#patch-releases)).
+- If your core lens is still on v1.3.x, publish 2.0.6 as a **Major version** and follow
+  [`MIGRATION.md`](MIGRATION.md).
+- If you have not installed a lens yet, install it with **Create custom lens**
+  ([First install](README.md#first-install)).
+
+### Changed (core 2.0.6 and event 1.0.3)
+
+- 62 links in the core lens and 27 in the event companion now open the pillar whitepaper page of the same best
+  practice, for example `operational-excellence-pillar/ops_ready_to_support_const_orr.html` in place of
+  `framework/ops_ready_to_support_const_orr.html`. The best-practice IDs, titles and levels of risk that the lenses
+  cite are those of the November 6, 2024 Framework, which the pillar whitepapers still hold. Those pages now say
+  that the whitepapers are for historical reference only and will be deprecated in the future (checked November 24,
+  2026), so these links will have to change again when that happens. The updated Framework reuses some of these IDs
+  for other practices.
+- `well_architected` (core): the question's helpful link and the `wa_current` helpful link opened The review process
+  page, which the updated Framework no longer has. They now open the June 27, 2024 edition of that page, and the
+  question's display text says "June 2024".
+
+### Documentation
+
+- The organization add-on template ([`templates/org-addon-lens.json`](templates/org-addon-lens.json)) gets the
+  same link change in its 10 Well-Architected links. If you built your add-on lens from an earlier copy, replace
+  `latest/framework/` with the pillar path in its links the same way.
+- `README.md`, `docs/questions.md`, `docs/scoring.md`, `docs/faq.md` and `docs/running-an-orr.md` link the pillar
+  pages. `README.md` and `docs/scoring.md` say that the lenses' best-practice IDs are those of the November 6, 2024
+  Framework, and the patch release steps say that a patch changes display text and links. `data/wa-best-practices.yaml` no longer lists the removed Framework addresses and records the Framework
+  Release notes page as its version source.
+- `docs/gates.md` records the minor-version upgrade check for core 2.0.6 and event 1.0.3.
+
 ## [2026-11-09] core 2.0.5
 
 Text-only patch release of the core lens. Two links moved because the English pages of the AWS Prescriptive
