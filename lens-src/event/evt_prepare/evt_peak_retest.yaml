@@ -20,7 +20,7 @@ description:
     during the test.
 helpful:
   display_text: REL12-BP03 Test scalability and performance requirements
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_test_non_functional.html
 statements:
   - id: pr_forecast
     tier: core
@@ -35,12 +35,12 @@ statements:
       the share of retries and automated traffic. It is based on comparable past events, registrations or marketing
       plans, and it states the margin the re-test must add. It builds on the demand forecast in the
       core question 'Peak demand, quotas and capacity headroom' instead of replacing it.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_test_non_functional.html
     improvement: >-
       Hold a forecasting session with the business owner, marketing and partners. Collect data from comparable events,
       model the opening spike and the sustained peak, add automated traffic, retries and a worst case, and agree in
       writing the numbers and the margin that the load re-test must prove.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_cost_analysis.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_cost_analysis.html
   - id: pr_retested
     tier: core
     title: The load test was re-run against this event's forecast plus margin within 30-60 days of the event

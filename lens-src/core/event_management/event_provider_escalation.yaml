@@ -20,7 +20,7 @@ description:
     where it was tested first.
 helpful:
   display_text: OPS10-BP04 Define escalation paths (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html
 statements:
   - id: pe_escalation_runbook
     tier: core
@@ -42,7 +42,7 @@ statements:
       AWS GovCloud (US), as of 2026-10-06: open cases in the GovCloud Support Center with GovCloud credentials,
       choose severity carefully (it cannot be changed later), confirm partner fallbacks can manage GovCloud
       cases, and keep export-controlled data out of cases.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html
     improvement: >-
       For AWS and each critical provider, document how to open and escalate a case, your severity definitions, the
       details to include, approvers and contacts. Add at least one fallback that works when the AWS Support Center
@@ -123,7 +123,7 @@ statements:
       certificate authorities) with their end-of-support dates, link each to the matching AWS Health or provider
       notice, and schedule every change through pre-production with your normal tests and bake time before
       production. Pin or control versions where the service allows, and track each deadline as owned work.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_patch_mgmt.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_patch_mgmt.html
     additional_improvement:
       - display_text: Understand the Kubernetes version lifecycle on Amazon EKS
         url: https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html

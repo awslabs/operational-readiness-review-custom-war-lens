@@ -19,7 +19,7 @@ description:
     attainment and alarm noise.
 helpful:
   display_text: OPS04-BP01 Identify KPIs (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_identify_kpis.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_identify_kpis.html
 statements:
   - id: slo_defined
     tier: core
@@ -42,7 +42,7 @@ statements:
       For each critical journey and API, agree availability, latency-percentile and completion-time targets with
       the business owner, set them tighter than any SLA, choose the metric that measures each one from the
       customer's side, and publish them with an owner and an error budget.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_identify_kpis.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_identify_kpis.html
   - id: slo_alarms_before_breach
     tier: core
     title: Paging alarms on customer-facing error rates and latency percentiles fire before the SLO or SLA is breached
@@ -60,7 +60,7 @@ statements:
       and TargetResponseTime, with metric math for rates. Serverless: API Gateway 5XXError and Latency, and Lambda
       Errors and Duration. Asynchronous journeys: alarm on completion time or success rate, not only on API
       errors.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_create_alerts.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_create_alerts.html
     improvement: >-
       Create an alarm for each SLO on error rate and on latency percentile, with thresholds that fire while error
       budget remains; consider a fast-burn and a slow-burn alarm per SLO. Route them to the paging rotation,

@@ -140,7 +140,9 @@ Medium total these statements cause.
 
 Every core and alt statement records why missing it is launch-blocking, as one of:
 
-- `wa:<BP-ID> (High)`: a Well-Architected best practice whose level of risk is High;
+- `wa:<BP-ID> (High)`: a Well-Architected best practice whose level of risk is High. IDs, titles and levels of risk
+  are those of the November 6, 2024 Framework, which the pillar whitepapers hold; the Framework update of
+  November 16, 2026 reuses some of these IDs for other practices;
 - `wp-orr:<example>`: an example question that the
   [ORR whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html)
   scores High risk;
@@ -158,7 +160,7 @@ best practice, with the reason: irreversibility, or a design lesson from a publi
 <!-- BEGIN GENERATED DEVIATIONS -->
 | Question | Statement | Rationale |
 |---|---|---|
-| `well_architected` | `wa_current` A Well-Architected Framework review was completed in the last 12 months and after the last major architecture change | the Framework review process calls for a review before go-live and after significant architecture changes; a review that predates the current design leaves its design risks unknown at launch, and no Framework best practice carries a risk level for this step |
+| `well_architected` | `wa_current` A Well-Architected Framework review was completed in the last 12 months and after the last major architecture change | the Framework review process (June 2024 edition) calls for a review before go-live and after significant architecture changes; a review that predates the current design leaves its design risks unknown at launch, and no Framework best practice carries a risk level for this step |
 | `well_architected` | `wa_hri_dispositioned` Every open high-risk issue from that review is remediated, owned with a target date, or formally accepted | a high-risk issue with no owner, target date or written acceptance is an unmanaged risk at launch, and this lens treats unmanaged High risks as launch-blocking |
 | `architecture_recovery_dependencies` | `rp_dataplane_recovery` Failover uses data-plane actions on pre-provisioned resources, and no recovery step creates resources in the impaired location | REL11-BP04 is rated Medium; the October 2025 Post-Event Summary reports that new EC2 instance launches failed for hours while existing instances remained healthy, so a recovery plan that creates resources can fail exactly when it is needed |
 | `architecture_recovery_dependencies` | `rp_no_cross_region_cp` The critical path and recovery steps have no runtime dependency on another Region or on a global service's control plane | REL11-BP04 is rated Medium; the AWS Fault Isolation Boundaries whitepaper states that most global services host their control plane in a single Region, so a runtime dependency on one couples the workload to an event in that Region |
@@ -216,7 +218,7 @@ two prerequisites move from High to Medium.
 Two statements ship as secondary in 2.0.0 (decision D-3): `az_tested_at_load` and `tp_dynamic_limits`. Their
 public bases,
 [REL12-BP04](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html)
-and [REL05-BP07](https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html),
+and [REL05-BP07](https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html),
 are rated Medium. A later release promotes either to core only under rule 5 in [How bars change](#how-bars-change).
 
 ## Not applicable

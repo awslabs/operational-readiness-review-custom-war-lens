@@ -20,7 +20,7 @@ description:
     of the last renewal or rotation of each kind of material.
 helpful:
   display_text: SEC09-BP01 Key and certificate management (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_protect_data_transit_key_cert_mgmt.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_protect_data_transit_key_cert_mgmt.html
 statements:
   - id: exp_inventory
     tier: core
@@ -38,7 +38,7 @@ statements:
       expiry date, issuer, renewal method and every consumer that must receive the new version. The inventory is
       generated or reconciled automatically, for example from AWS Certificate Manager, AWS Private CA, AWS Secrets
       Manager and the IAM credential report, and is reviewed when the architecture changes.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_protect_data_transit_key_cert_mgmt.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_protect_data_transit_key_cert_mgmt.html
     improvement: >-
       Build the inventory from the sources you can query (ACM and AWS Private CA certificates, Secrets Manager
       secrets, IAM access keys from the credential report, identity provider metadata, registrar and license records)

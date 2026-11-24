@@ -9,7 +9,7 @@ repeatable review of launch-blocking operational risk, run before launch and on 
 informed by the AWS
 [Operational Readiness Reviews whitepaper](https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html)
 and Well-Architected best practice
-[OPS07-BP02](https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html).
+[OPS07-BP02](https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html).
 The family has a 36-question core lens and two companions: the 8-question ORR - Mission-Critical Event Readiness
 lens and the 9-question ORR - Generative AI and Agents lens.
 
@@ -142,7 +142,7 @@ in maintenance, discontinued or near end of support.
 
 Edit your existing ORR lens; never create a new one. In the console: Custom lenses, select your existing ORR lens,
 Edit, Choose file (the new JSON), Submit; then Publish lens, choose Major version, and enter the version of the
-file you uploaded as the version name (for example `2.0.5`)
+file you uploaded as the version name (for example `2.0.6`)
 ([Publishing an update](https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses-publish-update.html)).
 Then upgrade each workload's lens review, which saves a milestone first. `MIGRATION.md` has the full steps,
 including the API path. For a core lens that is already on version 2 (2.0.x), or a companion on 1.0.x, publish the new file

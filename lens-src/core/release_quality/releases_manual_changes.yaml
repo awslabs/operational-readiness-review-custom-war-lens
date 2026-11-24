@@ -43,7 +43,7 @@ statements:
     partition_notes: >-
       In AWS GovCloud (US), CodePipeline cross-Region actions are not available and third-party source connections
       work only in AWS GovCloud (US-East), as of 2026-10-05; verify per Region.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_deploy_software_programmatically.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_deploy_software_programmatically.html
     improvement: >-
       Inventory every way production changes today (console, CLI, scripts, configuration tools, feature-flag
       dashboards, database clients). Move each into version control with a pipeline deployment, restrict human
@@ -77,7 +77,7 @@ statements:
       the author, no direct pushes, no self-approval, required status checks), apply them to bot and AI agent
       identities too, restrict who can change the rules or the pipeline's checks, and make the pipeline deploy only
       reviewed commits from protected branches. Audit regularly for bypasses.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_regularly_assess_security_properties_of_pipelines.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_regularly_assess_security_properties_of_pipelines.html
     additional_improvement:
       - display_text: AWS CodePipeline manual approval actions (limit who can approve)
         url: https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html
@@ -120,4 +120,4 @@ statements:
       never are (review, safety tests, rollback), and how break-glass access is granted, alarmed and revoked. Add a
       pipeline option that skips only time-based gates with a recorded approver, rehearse the path in a game day,
       and review every use within a few days.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html

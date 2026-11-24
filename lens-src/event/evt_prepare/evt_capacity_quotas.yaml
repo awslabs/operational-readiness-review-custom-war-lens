@@ -19,7 +19,7 @@ description:
     post-event scale-down and cost plan.
 helpful:
   display_text: REL01-BP01 Aware of service quotas (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_quotas_and_constraints.html
 statements:
   - id: cq_quotas_raised
     tier: core
@@ -36,7 +36,7 @@ statements:
     partition_notes: >-
       Service Quotas is available in AWS GovCloud (US) as of 2026-10-06, but quota request templates are not; request
       increases in each GovCloud (US) account.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_quotas_and_constraints.html
     improvement: >-
       List the quotas each critical journey uses in every account and Region, including recovery Regions and
       third-party APIs. Compare them with the event forecast plus failover, request increases as soon as the forecast
@@ -91,7 +91,7 @@ statements:
     partition_notes: >-
       Billing and cost data for AWS GovCloud (US) accounts are viewed from the associated standard AWS account (as of
       2026-10-06).
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_dynamic.html
     improvement: >-
       Write the scale-down plan with the capacity plan: list every temporary resource and setting with its end date,
       the trigger for removing it (for example backlogs drained and traffic below a threshold for a day) and its

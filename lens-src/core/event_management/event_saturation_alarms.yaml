@@ -69,7 +69,7 @@ statements:
       Managed databases: alarm on connections, storage, CPU and replica lag (for example Amazon RDS and Amazon
       Aurora metrics). Amazon DynamoDB: alarm on throttled requests and system errors. Third parties: emit your
       own call metrics from each client, because the provider's metrics are not visible to you.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_dependency_telemetry.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_dependency_telemetry.html
     improvement: >-
       Instrument each dependency client to emit latency, error, throttle and timeout metrics per dependency and
       operation (for example with the CloudWatch embedded metric format), add alarms on those metrics and on
@@ -130,6 +130,6 @@ statements:
     improvement_url: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html
     additional_improvement:
       - display_text: COST01-BP06 Monitor cost proactively (AWS Well-Architected)
-        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_cloud_financial_management_proactive_process.html
+        url: https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_cloud_financial_management_proactive_process.html
       - display_text: AWS GovCloud (US) billing and payment
         url: https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/usage-and-payment.html

@@ -19,7 +19,7 @@ description:
     The last rollback, planned or real, and how long it took. The schema and data-format change policy.
 helpful:
   display_text: OPS06-BP04 Automate testing and rollback (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_auto_testing_and_rollback.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_auto_testing_and_rollback.html
 statements:
   - id: rb_auto
     tier: core
@@ -101,9 +101,9 @@ statements:
       or a production-like environment with one action, knows how long it takes, and keeps a runbook for the cases
       where automation does not trigger. The Well-Architected Framework (OPS06-BP01) asks that a rollback plan be
       documented and tested before deployment so that the time to revert a change is minimized.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_plan_for_unsucessful_changes.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_plan_for_unsucessful_changes.html
     improvement: >-
       At least once a year, and ideally each quarter and after pipeline changes, run a planned rollback drill:
       deploy a harmless change, roll it back with the documented single action, time it, and remove any manual step
       you needed.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_auto_testing_and_rollback.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_auto_testing_and_rollback.html

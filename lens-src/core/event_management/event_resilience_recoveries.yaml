@@ -62,7 +62,7 @@ statements:
     improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html
     additional_helpful:
       - display_text: REL10-BP01 Deploy the workload to multiple locations (AWS Well-Architected)
-        url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_fault_isolation_multiaz_region_system.html
+        url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_multiaz_region_system.html
   - id: az_static_capacity
     tier: core
     title: Capacity already running in the remaining AZs carries peak load with no scaling or new launches during the event

@@ -20,7 +20,7 @@ description:
     access policy.
 helpful:
   display_text: SEC11-BP03 Penetration testing (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_perform_regular_penetration_testing.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_perform_regular_penetration_testing.html
 statements:
   - id: sec_testing_closed
     tier: core
@@ -41,7 +41,7 @@ statements:
       it against a production-like environment within the AWS penetration testing policy, and track every finding
       to closure. Before launch, fix and retest critical and high findings, or record a time-bound acceptance in
       your risk register.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_threat_model.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_securely_operate_threat_model.html
     additional_improvement:
       - display_text: Threat Composer (open-source threat modeling tool from AWS)
         url: https://github.com/awslabs/threat-composer
@@ -66,7 +66,7 @@ statements:
       GuardDuty, Security Hub, Security Hub CSPM and Inspector are available in AWS GovCloud (US) as of 2026-10-06.
       There, Security Hub has no third-party integrations and Security Hub CSPM supports only some integrations;
       route findings with EventBridge.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_app_service_logging.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_detect_investigate_events_app_service_logging.html
     improvement: >-
       If detection is already on, start with the routing step below. Otherwise, enable threat detection and posture
       findings organization-wide through a delegated administrator, in every Region the workload uses, and restrict
@@ -85,7 +85,7 @@ statements:
       how to contain, preserve evidence, recover and notify. Each was exercised in the last 12 months as a tabletop
       or simulation with the people who would respond, including any operations partner under contract, and the
       gaps found were tracked to closure.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_run_game_days.html
     improvement: >-
       Write or adapt playbooks for credential compromise, ransomware and data exposure, run a tabletop exercise on
       one of them each quarter with the on-call, security and business contacts, and track each gap to closure.
@@ -105,7 +105,7 @@ statements:
     partition_notes: >-
       In AWS GovCloud (US), CloudTrail records events from global services such as IAM and AWS STS in AWS GovCloud
       (US-West); use a multi-Region trail to capture them (as of 2026-10-06).
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_logs.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_detect_investigate_events_logs.html
     improvement: >-
       Create an organization trail into a log archive account, add the other log sources investigations need, turn
       on log file integrity validation and write-once protection such as S3 Object Lock, restrict read access to

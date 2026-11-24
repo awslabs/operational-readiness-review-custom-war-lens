@@ -130,6 +130,31 @@ scaling plans and the `AWS::AutoScalingPlans::ScalingPlan` CloudFormation resour
 one of the three rewordings above, and it changes only a choice helpful-resource display text, a field that G4
 showed accepts every character tested, within the 1,024-character limit the lens keeps.
 
+## Patch release check, 2026-11-24 (core 2.0.6, event 1.0.3)
+
+The same check as on 2026-11-09 (below), in the same sandbox account and Region, on the final 2.0.6 and 1.0.3
+files. The generative AI companion did not change, so it was not tested.
+
+1. The released 2.0.5 and 1.0.2 files were imported and published. A workload was defined with both lenses and the
+   AWS Well-Architected Framework lens, and four questions were answered: one selected choice with notes on
+   `architecture_edge_protection`, `wa_current` (whose link changed) with notes on `well_architected`,
+   `readiness_signoff` marked "does not apply" with reason `OTHER` and notes, and `wr_staffing` (in a question
+   whose links changed) with notes on `evt_war_room`.
+2. The 2.0.6 and 1.0.3 files were imported over each lens and published as minor versions.
+
+| Check | Result |
+|---|---|
+| Lens version on the workload (`GetLensReview`) | Moved to 2.0.6 and 1.0.3 without an upgrade step (a read about 6 seconds after the publish still showed 2.0.5 and 1.0.2; one about 10 seconds after showed 2.0.6 and 1.0.3) |
+| Notifications (`ListNotifications`) | None |
+| Selected choices, notes, risk, "does not apply" flag and reason | Unchanged on all four questions |
+| Lens risk counts | Unchanged |
+| `ExportLens` | Equal to the built files, apart from the tool-added `number` fields |
+| First install of 2.0.6 and 1.0.3 as new lenses | Published; a new workload listed 36 and 8 Unanswered questions in four and three pillars |
+
+A first attempt stopped on a script error after its first import; that draft lens was deleted before the run above.
+Everything created for the run was deleted afterwards; the account held no workloads, custom lenses, review
+templates, profiles or share invitations before or after it.
+
 ## Patch release check, 2026-11-09 (core 2.0.5)
 
 The same check as on 2026-11-08 (below), in the same sandbox account and Region, on the final 2.0.5 file. Only the

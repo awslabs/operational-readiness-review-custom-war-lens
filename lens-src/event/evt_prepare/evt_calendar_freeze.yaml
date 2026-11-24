@@ -20,7 +20,7 @@ description:
     path. Notes from the final two-week review.
 helpful:
   display_text: OPS07-BP05 Informed deployment decisions (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_informed_deploy_decisions.html
 statements:
   - id: cf_dates
     tier: core
@@ -36,7 +36,7 @@ statements:
       team, partner and provider that has a role in the event, and its deadlines are worked back from the event date:
       purchases 3-6 months out, this review at least 8 weeks out, a load re-test 30-60 days out, High risks closed 4
       weeks out, and a freeze 2 weeks out.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html
     improvement: >-
       Write a one-page event plan: the window, the key dates of every dependency and partner, measurable success
       criteria, and the readiness deadlines worked back from the event date. Review it with the business owner and
@@ -60,7 +60,7 @@ statements:
       decision checkpoints (for example 2 weeks, 48 hours and 1 hour before the window), who attends each, and how each
       decision is recorded. The criteria reference the core question 'Readiness decision and risk acceptance' instead
       of repeating it.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_informed_deploy_decisions.html
     improvement: >-
       Name the event owner and a deputy, write go/no-go criteria and decision checkpoints, agree them with the
       accountable business owner, and record each checkpoint decision. Reuse the readiness decision from your core ORR
@@ -113,4 +113,4 @@ statements:
       lead. Use a fixed checklist (open High risks and acceptance expiry dates, security findings, edge and rate-limit
       rules, privileged and emergency access), fix or accept each item before the freeze starts, and save a milestone
       so the pre-event state is recorded.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html

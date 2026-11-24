@@ -18,7 +18,7 @@ description:
     alarm-to-runbook mapping. The date each runbook was last exercised. Escalation policies and contact paths.
 helpful:
   display_text: OPS07-BP01 Ensure personnel capability (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_personnel_capability.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_personnel_capability.html
 statements:
   - id: oc_paged
     tier: core
@@ -32,7 +32,7 @@ statements:
       On-call engineers are trained on the workload and have the access they need before their shift starts. Time
       to acknowledge has a target (for example 5 to 15 minutes for critical pages) and is tracked. The rotation
       may be in-house or provided by an operations partner under contract, with evidence you can inspect.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_personnel_capability.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_personnel_capability.html
     improvement: >-
       Define the hours the workload must be supported, staff a rotation with enough trained people to cover them
       sustainably, connect paging alarms to a paging tool (for example through Amazon SNS to a partner paging
@@ -49,7 +49,7 @@ statements:
       alarm means, how to check customer impact, the first mitigation steps (for example roll back, shift
       traffic or add capacity), the permissions needed, and when to escalate. An alarm without a runbook does not
       page, and new paging alarms are reviewed for a runbook before they go live.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_process_per_alert.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_process_per_alert.html
     improvement: >-
       Inventory paging alarms, write a short runbook for each one (starting with the most frequent), put the
       runbook link in the alarm description, and add a check to alarm code review or CI that fails when a paging
@@ -65,7 +65,7 @@ statements:
       than its author, in a game day, a pre-production drill or a real event, using the same roles and
       permissions on-call engineers have. Steps that failed, were unclear or needed missing access were fixed,
       and the runbook records the date it was last exercised.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_runbooks.html
     improvement: >-
       Add a last-exercised date to each runbook, schedule drills for runbooks older than 12 months or affected by
       major changes, run them with on-call roles and permissions, and fix what failed. Combine drills with your
@@ -84,9 +84,9 @@ statements:
       team and internal dependency owners, with contacts kept current. Escalation to AWS and other providers is
       scored in event_provider_escalation, and reaching contacts when normal tools are down is scored in
       event_emergency_access.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html
     improvement: >-
       Configure an escalation policy in your paging tool (primary, secondary, manager), test it by leaving a test
       page unacknowledged, and document escalation paths and contacts for incident command, management, security
       and internal dependency owners. Review the contacts at each rotation change.
-    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
+    improvement_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html

@@ -19,7 +19,7 @@ description:
     last tested. The shared channel and its fallback agreed with partners and, where your support plan provides it, AWS.
 helpful:
   display_text: OPS10-BP04 Define escalation paths (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html
 statements:
   - id: wr_staffing
     tier: core
@@ -37,7 +37,7 @@ statements:
       window. This adds the event's extra staffing to the core question 'On-call paging, runbooks and escalation'.
     partition_notes: >-
       AWS Countdown Premium is offered for workloads in the AWS GovCloud (US) Regions as of 2026-10-06.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_org_culture_team_res_appro.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_org_culture_team_res_appro.html
     improvement: >-
       Build the event roster from the forecast and the risk list: name the incident lead, component operators,
       dependency contacts and communications lead for each shift, cap shift length, write a handoff checklist, and have
@@ -61,7 +61,7 @@ statements:
       with a test page or call, and the shift knows the fallbacks if the AWS Support Center console or API is impaired.
       It extends the escalation paths in the core questions 'On-call paging, runbooks and escalation' and 'Escalation
       to AWS and other providers, and provider-initiated change' to the event's extra parties.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html
     improvement: >-
       Extend the core escalation paths into an event tree: list each component and dependency, primary and backup
       contacts and channels, and the AWS support path and severity to use. Two weeks before the event, test every

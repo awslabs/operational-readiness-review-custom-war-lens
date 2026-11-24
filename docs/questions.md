@@ -5,7 +5,7 @@ The JSON files in `dist/` are generated from the same sources.
 
 Risk rules are evaluated top to bottom and the first true condition sets the risk. Tiers: a scope exit scores No risk on its own; core statements are needed to avoid High; one statement of each alternative group is needed to avoid High; secondary statements are needed only for No risk. "None of these" (`none_no`) appears only in the guard `&& !none_no` on the No risk and Medium rules (sandbox gate G1), so selecting it, alone or with other choices, scores the question's maximum risk.
 
-## AWS Operational Readiness Review 2.0.5
+## AWS Operational Readiness Review 2.0.6
 
 36 questions, 134 scored statements, 15 on the core path.
 
@@ -73,9 +73,9 @@ Improvement plan: Compare the Lens Catalog, and the AWS lenses distributed as cu
 
 Sources:
 
-- Question: The review process (AWS Well-Architected Framework) <https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html>
-- `wa_current`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/the-review-process.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>
-- `wa_hri_dispositioned`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/tutorial.html>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_priorities_eval_tradeoffs.html>
+- Question: The review process (AWS Well-Architected Framework, June 2024) <https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/the-review-process.html>
+- `wa_current`: helpful <https://docs.aws.amazon.com/wellarchitected/2024-06-27/framework/the-review-process.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>
+- `wa_hri_dispositioned`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/tutorial.html>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_priorities_eval_tradeoffs.html>
 - `wa_lenses_applied`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/lens-catalog.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/lenses.html>; additional improvement <https://github.com/aws-samples/sample-well-architected-custom-lens>
 
 #### `architecture_failure_models`: System model: diagrams, critical journeys and failure modes
@@ -146,7 +146,7 @@ Sources:
 - `sm_diagrams_journeys`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html>; improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-analysis-framework/introduction.html>
 - `sm_fma_documented`: helpful <https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-analysis-framework/introduction.html>; improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/failure-mode-effects-analysis/introduction.html>
 - `sm_fma_detection`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_monitoring_health.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html>
-- `sm_fma_mitigation`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html>; improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/failure-mode-effects-analysis/introduction.html>
+- `sm_fma_mitigation`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_runbooks.html>; improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/failure-mode-effects-analysis/introduction.html>
 
 #### `architecture_recovery_dependencies`: Regional isolation and data-plane-only recovery
 
@@ -500,7 +500,7 @@ Sources:
 - Question: REL05-BP02 Throttle requests (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_throttle_requests.html>
 - `tp_per_source_limits`: helpful <https://builder.aws.com/content/3Eupj3d2bo4fEvlzYbICMZNhQ3B/fairness-in-multi-tenant-systems>; improvement <https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html>; additional improvement <https://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-api-usage-plans.html>
 - `tp_shed_early`: helpful <https://builder.aws.com/content/3Eun1EEyX6p2e3VYNyRLSJzLuMV/using-load-shedding-to-avoid-overload>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_fail_fast.html>; additional helpful <https://aws.amazon.com/message/12721/>
-- `tp_dynamic_limits`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html>; improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html>
+- `tp_dynamic_limits`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html>; improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html>
 - `tp_surge_tested`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html>; improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html>
 
 #### `architecture_edge_protection`: Edge and DDoS baseline for internet-facing endpoints
@@ -1045,10 +1045,10 @@ Improvement plan: Write the emergency change procedure: who can invoke it, which
 Sources:
 
 - Question: REL08-BP05 Deploy changes with automation (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_automated_changemgmt.html>
-- `cc_pipeline_only`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_deploy_software_programmatically.html>; improvement <https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments>; additional improvement <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html>; additional improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/what-is-appconfig.html>
-- `cc_review_enforced`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_regularly_assess_security_properties_of_pipelines.html>; additional improvement <https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html>
+- `cc_pipeline_only`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_deploy_software_programmatically.html>; improvement <https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments>; additional improvement <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html>; additional improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/what-is-appconfig.html>
+- `cc_review_enforced`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_regularly_assess_security_properties_of_pipelines.html>; additional improvement <https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html>
 - `cc_preview_drift`: helpful <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-stack-drift.html>; improvement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-updating-stacks-changesets.html>; additional improvement <https://docs.aws.amazon.com/config/latest/developerguide/cloudformation-stack-drift-detection-check.html>
-- `cc_emergency_path`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.sad.5-implement-break-glass-procedures.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html>
+- `cc_emergency_path`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.sad.5-implement-break-glass-procedures.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html>
 
 #### `releases_staged_deployments`: Pre-production parity and automated test gates
 
@@ -1115,11 +1115,11 @@ Improvement plan: Pick the performance-sensitive paths, define a short, represen
 
 Sources:
 
-- Question: REL08-BP02 Integrate functional testing (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_functional_testing.html>
-- `pp_tests_block`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.1-test-deployments-in-pre-production-environments.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_functional_testing.html>; additional improvement <https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html>; additional improvement <https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html>
-- `pp_parity`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_multi_env.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_tracking_change_management_immutable_infrastructure.html>; additional improvement <https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html>
-- `pp_build_gates`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_automate_testing_throughout_lifecycle.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-security-testing.html>; additional improvement <https://github.com/aws-cloudformation/cloudformation-guard>; additional improvement <https://docs.aws.amazon.com/inspector/latest/user/scanning-ecr.html>
-- `pp_perf_regression`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html>; improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html>; additional improvement <https://docs.aws.amazon.com/solutions/latest/distributed-load-testing-on-aws/solution-overview.html>; additional improvement <https://aws.amazon.com/ec2/testing/>
+- Question: REL08-BP02 Integrate functional testing (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_functional_testing.html>
+- `pp_tests_block`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.1-test-deployments-in-pre-production-environments.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_functional_testing.html>; additional improvement <https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html>; additional improvement <https://docs.aws.amazon.com/codebuild/latest/userguide/test-reporting.html>
+- `pp_parity`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_multi_env.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_tracking_change_management_immutable_infrastructure.html>; additional improvement <https://docs.aws.amazon.com/AmazonECR/latest/userguide/image-tag-mutability.html>
+- `pp_build_gates`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_automate_testing_throughout_lifecycle.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/indicators-for-security-testing.html>; additional improvement <https://github.com/aws-cloudformation/cloudformation-guard>; additional improvement <https://docs.aws.amazon.com/inspector/latest/user/scanning-ecr.html>
+- `pp_perf_regression`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_test_non_functional.html>; improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html>; additional improvement <https://docs.aws.amazon.com/solutions/latest/distributed-load-testing-on-aws/solution-overview.html>; additional improvement <https://aws.amazon.com/ec2/testing/>
 
 #### `releases_phased_rollout`: Phased production rollout with automated stage gates
 
@@ -1186,7 +1186,7 @@ Improvement plan: Add a check before each production stage that blocks deploymen
 
 Sources:
 
-- Question: OPS06-BP03 Safe deployment strategies (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_deploy_mgmt_sys.html>
+- Question: OPS06-BP03 Safe deployment strategies (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_deploy_mgmt_sys.html>
 - `pd_staged_expansion`: helpful <https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.3-use-staggered-deployment-and-release-strategies.html>; additional improvement <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html>; additional improvement <https://aws.amazon.com/blogs/containers/gradual-deployments-in-amazon-ecs-with-linear-and-canary-strategies/>; additional improvement <https://docs.aws.amazon.com/lambda/latest/dg/configuring-alias-routing.html>; additional improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html>; additional improvement <https://docs.aws.amazon.com/autoscaling/ec2/userguide/asg-adding-checkpoints-instance-refresh.html>
 - `pd_fault_boundary_waves`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.6-utilize-cell-based-architectures-for-granular-deployment-and-release.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reducing-scope-of-impact-with-cell-based-architecture/reducing-scope-of-impact-with-cell-based-architecture.html>; additional improvement <https://aws.amazon.com/blogs/devops/fault-isolated-zonal-deployments-with-aws-codedeploy/>
 - `pd_bake_time`: helpful <https://aws.amazon.com/blogs/devops/fault-isolated-zonal-deployments-with-aws-codedeploy/>; improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html>
@@ -1257,11 +1257,11 @@ Improvement plan: At least once a year, and ideally each quarter and after pipel
 
 Sources:
 
-- Question: OPS06-BP04 Automate testing and rollback (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_auto_testing_and_rollback.html>
+- Question: OPS06-BP04 Automate testing and rollback (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_auto_testing_and_rollback.html>
 - `rb_auto`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.2-implement-automatic-rollbacks-for-failed-deployments.html>; improvement <https://docs.aws.amazon.com/codedeploy/latest/userguide/deployments-rollback-and-redeploy.html>; additional improvement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-rollback-triggers.html>; additional improvement <https://aws.amazon.com/blogs/containers/automate-rollbacks-for-amazon-ecs-rolling-deployments-with-cloudwatch-alarms/>; additional improvement <https://docs.aws.amazon.com/codepipeline/latest/userguide/stage-rollback.html>; additional improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-deployment-strategy.html>; additional improvement <https://docs.aws.amazon.com/autoscaling/ec2/userguide/instance-refresh-rollback.html>
 - `rb_alarms_scoped`: helpful <https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html>
 - `rb_backward_compatible`: helpful <https://builder.aws.com/content/3F04j2yRAAMBuPSPs50xwXZqg01/ensuring-rollback-safety-during-deployments>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/dl.ads.5-ensure-backwards-compatibility-for-data-store-and-schema-changes.html>
-- `rb_exercised`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_plan_for_unsucessful_changes.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_mit_deploy_risks_auto_testing_and_rollback.html>
+- `rb_exercised`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_plan_for_unsucessful_changes.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_mit_deploy_risks_auto_testing_and_rollback.html>
 
 #### `releases_security_readiness`: Security launch gate: testing, detection and incident readiness
 
@@ -1328,11 +1328,11 @@ Improvement plan: Create an organization trail into a log archive account, add t
 
 Sources:
 
-- Question: SEC11-BP03 Penetration testing (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_appsec_perform_regular_penetration_testing.html>
-- `sec_testing_closed`: helpful <https://aws.amazon.com/security/penetration-testing/>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_threat_model.html>; additional improvement <https://github.com/awslabs/threat-composer>
-- `sec_detection_routed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_app_service_logging.html>; improvement <https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_eventbridge.html>
-- `sec_ir_exercised`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html>; improvement <https://github.com/aws-samples/aws-incident-response-playbooks>
-- `sec_audit_logs`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_detect_investigate_events_logs.html>; improvement <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html>; additional improvement <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html>; additional improvement <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html>
+- Question: SEC11-BP03 Penetration testing (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_appsec_perform_regular_penetration_testing.html>
+- `sec_testing_closed`: helpful <https://aws.amazon.com/security/penetration-testing/>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_securely_operate_threat_model.html>; additional improvement <https://github.com/awslabs/threat-composer>
+- `sec_detection_routed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_detect_investigate_events_app_service_logging.html>; improvement <https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_findings_eventbridge.html>
+- `sec_ir_exercised`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_run_game_days.html>; improvement <https://github.com/aws-samples/aws-incident-response-playbooks>
+- `sec_audit_logs`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_detect_investigate_events_logs.html>; improvement <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-trail-organization.html>; additional improvement <https://docs.aws.amazon.com/AmazonS3/latest/userguide/object-lock.html>; additional improvement <https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-log-file-validation-intro.html>
 
 ### 03 - Event Management
 
@@ -1460,9 +1460,9 @@ Improvement plan: Schedule a recurring operations review with a fixed agenda: SL
 
 Sources:
 
-- Question: OPS04-BP01 Identify KPIs (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_identify_kpis.html>
-- `slo_defined`: helpful <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-ServiceLevelObjectives.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_identify_kpis.html>
-- `slo_alarms_before_breach`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_workload_observability_create_alerts.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_monitor.html>
+- Question: OPS04-BP01 Identify KPIs (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_identify_kpis.html>
+- `slo_defined`: helpful <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-ServiceLevelObjectives.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_identify_kpis.html>
+- `slo_alarms_before_breach`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_workload_observability_create_alerts.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_monitor.html>
 - `slo_alarm_quality`: helpful <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarm-evaluation.html>; additional helpful <https://aws.amazon.com/message/11201/>; additional improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Anomaly_Detection.html>
 - `slo_reviewed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_review_monitoring.html>; improvement <https://builder.aws.com/content/3Ev2iw3R3ahQOM8BT4OUR0WP51z/building-dashboards-for-operational-visibility>
 
@@ -1521,7 +1521,7 @@ Improvement plan: Move canaries and their alarms to a separate monitoring accoun
 
 Sources:
 
-- Question: OPS04-BP03 User experience telemetry (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_customer_telemetry.html>
+- Question: OPS04-BP03 User experience telemetry (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_customer_telemetry.html>
 - `can_coverage`: helpful <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_Blueprints.html>; additional improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-RUM.html>
 - `can_own_metrics_alarms`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_metrics.html>; additional improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/alarms-and-missing-data.html>
 - `can_independent`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Synthetics_Canaries_Create.html>; additional helpful <https://aws.amazon.com/message/12721/>
@@ -1593,9 +1593,9 @@ Sources:
 
 - Question: REL06-BP03 Send notifications (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_notification_monitor.html>
 - `sat_compute`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_monitor_resources.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Install-CloudWatch-Agent.html>; additional improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContainerInsights.html>; additional improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Lambda-Insights.html>; additional improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-JMX-metrics.html>
-- `sat_datastore_deps`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_dependency_telemetry.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format.html>; additional helpful <https://builder.aws.com/content/3EuxPBdIiiUhB5IK47p3O3fxhy7/instrumenting-distributed-systems-for-operational-visibility>
+- `sat_datastore_deps`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_dependency_telemetry.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Embedded_Metric_Format.html>; additional helpful <https://builder.aws.com/content/3EuxPBdIiiUhB5IK47p3O3fxhy7/instrumenting-distributed-systems-for-operational-visibility>
 - `sat_async_age`: helpful <https://builder.aws.com/content/3EuRcgkTP1MI0c7zM8W6HL3WIqA/avoiding-insurmountable-queue-backlogs>; improvement <https://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSDeveloperGuide/sqs-available-cloudwatch-metrics.html>; additional improvement <https://docs.aws.amazon.com/streams/latest/dev/monitoring-with-cloudwatch.html>; additional improvement <https://docs.aws.amazon.com/lambda/latest/dg/monitoring-metrics-types.html>
-- `sat_usage_cost`: helpful <https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_cloud_financial_management_proactive_process.html>; additional improvement <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/usage-and-payment.html>
+- `sat_usage_cost`: helpful <https://docs.aws.amazon.com/cost-management/latest/userguide/manage-ad.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_cloud_financial_management_proactive_process.html>; additional improvement <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/usage-and-payment.html>
 
 #### `event_transaction_tracing`: Request correlation, tracing and automated diagnostics
 
@@ -1652,7 +1652,7 @@ Improvement plan: Add links to dashboards, saved queries and the change log to e
 
 Sources:
 
-- Question: OPS04-BP02 Application telemetry (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_application_telemetry.html>
+- Question: OPS04-BP02 Application telemetry (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_application_telemetry.html>
 - `tr_correlated_logs`: helpful <https://aws.amazon.com/blogs/mt/accelerate-troubleshooting-with-structured-logs-in-amazon-cloudwatch/>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/AnalyzingLogData.html>; additional improvement <https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs-logformat.html>; additional improvement <https://docs.aws.amazon.com/powertools/python/latest/>; additional improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/mask-sensitive-log-data.html>
 - `tr_open_tracing`: helpful <https://opentelemetry.io/docs/concepts/context-propagation/>; improvement <https://aws.amazon.com/otel/>; additional improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-OTLPEndpoint.html>
 - `tr_alarm_diagnostics`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_monitor_aws_resources_automate_response_monitor.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html>; additional helpful <https://builder.aws.com/content/3Ev2iw3R3ahQOM8BT4OUR0WP51z/building-dashboards-for-operational-visibility>
@@ -1722,11 +1722,11 @@ Improvement plan: Configure an escalation policy in your paging tool (primary, s
 
 Sources:
 
-- Question: OPS07-BP01 Ensure personnel capability (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_personnel_capability.html>
-- `oc_paged`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_personnel_capability.html>; improvement <https://docs.aws.amazon.com/sns/latest/dg/welcome.html>
-- `oc_runbook_per_alarm`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_process_per_alert.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html>
-- `oc_runbooks_exercised`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>
-- `oc_escalation`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html>
+- Question: OPS07-BP01 Ensure personnel capability (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_personnel_capability.html>
+- `oc_paged`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_personnel_capability.html>; improvement <https://docs.aws.amazon.com/sns/latest/dg/welcome.html>
+- `oc_runbook_per_alarm`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_process_per_alert.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation.html>
+- `oc_runbooks_exercised`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_runbooks.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>
+- `oc_escalation`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html>
 
 #### `event_provider_escalation`: Escalation to AWS and other providers, and provider-initiated change
 
@@ -1793,11 +1793,11 @@ Improvement plan: Inventory the provider-managed versions you depend on (engines
 
 Sources:
 
-- Question: OPS10-BP04 Define escalation paths (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html>
-- `pe_escalation_runbook`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html>; improvement <https://docs.aws.amazon.com/awssupport/latest/user/case-management.html>; additional helpful <https://aws.amazon.com/message/101925/>; additional improvement <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-support.html>
+- Question: OPS10-BP04 Define escalation paths (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html>
+- `pe_escalation_runbook`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html>; improvement <https://docs.aws.amazon.com/awssupport/latest/user/case-management.html>; additional helpful <https://aws.amazon.com/message/101925/>; additional improvement <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-support.html>
 - `pe_support_fit`: helpful <https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html>; improvement <https://aws.amazon.com/premiumsupport/plans/>
 - `pe_events_routed`: helpful <https://docs.aws.amazon.com/health/latest/ug/cloudwatch-events-health.html>; improvement <https://docs.aws.amazon.com/health/latest/ug/aggregate-events.html>; additional helpful <https://docs.aws.amazon.com/health/latest/ug/aws-health-planned-lifecycle-events.html>; additional helpful <https://aws.amazon.com/blogs/aws/new-manage-planned-lifecycle-events-on-aws-health/>; additional improvement <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-health.html>
-- `pe_changes_staged`: helpful <https://docs.aws.amazon.com/health/latest/ug/aws-health-planned-lifecycle-events.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_dev_integ_patch_mgmt.html>; additional improvement <https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html>; additional improvement <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html>; additional improvement <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL-certificate-rotation.html>
+- `pe_changes_staged`: helpful <https://docs.aws.amazon.com/health/latest/ug/aws-health-planned-lifecycle-events.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_dev_integ_patch_mgmt.html>; additional improvement <https://docs.aws.amazon.com/eks/latest/userguide/kubernetes-versions.html>; additional improvement <https://docs.aws.amazon.com/lambda/latest/dg/runtimes-update.html>; additional improvement <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/UsingWithRDS.SSL-certificate-rotation.html>
 
 #### `event_customer_impact`: Identify impacted customers and keep them informed
 
@@ -1854,10 +1854,10 @@ Improvement plan: Map the dependencies of your status and notification path, mov
 
 Sources:
 
-- Question: OPS10-BP05 Customer communication plan (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html>
-- `ci_identify`: helpful <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights.html>; improvement <https://aws.amazon.com/blogs/mt/accelerate-troubleshooting-with-structured-logs-in-amazon-cloudwatch/>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_prioritize_events.html>
-- `ci_comms_plan`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html>
-- `ci_status_independent`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_dashboards.html>; additional helpful <https://aws.amazon.com/message/11201/>
+- Question: OPS10-BP05 Customer communication plan (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html>
+- `ci_identify`: helpful <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/ContributorInsights.html>; improvement <https://aws.amazon.com/blogs/mt/accelerate-troubleshooting-with-structured-logs-in-amazon-cloudwatch/>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_prioritize_events.html>
+- `ci_comms_plan`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html>
+- `ci_status_independent`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_dashboards.html>; additional helpful <https://aws.amazon.com/message/11201/>
 
 #### `event_resilience_recoveries`: Survive the loss of one Availability Zone without scaling
 
@@ -1926,7 +1926,7 @@ Sources:
 
 - Question: Static stability using Availability Zones (Builders' Library) <https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones>
 - `az_regional_managed`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html>; improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html>
-- `az_multi_az`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_fault_isolation_multiaz_region_system.html>
+- `az_multi_az`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/static-stability.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_static_stability.html>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_fault_isolation_multiaz_region_system.html>
 - `az_static_capacity`: helpful <https://builder.aws.com/content/3K9SiqiJ369TGkkGzqPM95BuYWI/static-stability-using-availability-zones>; improvement <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-capacity-reservations.html>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html>; additional helpful <https://aws.amazon.com/message/101925/>
 - `az_tested_at_load`: helpful <https://docs.aws.amazon.com/fis/latest/userguide/az-availability-scenario.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html>; additional improvement <https://docs.aws.amazon.com/r53recovery/latest/dg/testing-zonal-autoshift-fis.html>
 
@@ -1995,7 +1995,7 @@ Improvement plan: Set a time-to-mitigate target for an AZ impairment, schedule p
 
 Sources:
 
-- Question: REL11-BP01 Monitor all components to detect failures <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_withstand_component_failures_monitoring_health.html>
+- Question: REL11-BP01 Monitor all components to detect failures <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_monitoring_health.html>
 - `ev_regional_managed`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/availability-zones.html>; improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/abstract-and-introduction.html>
 - `ev_shift_mechanism`: helpful <https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-shift.html>; improvement <https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-autoshift.html>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-b-example-orr-questions.html>; additional improvement <https://docs.aws.amazon.com/r53recovery/latest/dg/arc-zonal-shift.resource-types.html>; additional improvement <https://aws.amazon.com/blogs/architecture/running-multi-day-az-evacuation-drills-with-arc-zonal-shift/>
 - `ev_per_az_detection`: helpful <https://docs.aws.amazon.com/elasticloadbalancing/latest/application/load-balancer-cloudwatch-metrics.html>; improvement <https://docs.aws.amazon.com/fis/latest/userguide/az-application-slowdown-scenario.html>; additional helpful <https://aws.amazon.com/message/56489/>; additional improvement <https://docs.aws.amazon.com/fis/latest/userguide/cross-az-traffic-slowdown-scenario.html>; additional improvement <https://docs.aws.amazon.com/fis/latest/userguide/scenario-library-scenarios.html>
@@ -2066,11 +2066,11 @@ Improvement plan: Schedule access reviews with account owners, review every elev
 
 Sources:
 
-- Question: SEC03-BP02 Grant least privilege access (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_least_privileges.html>
-- `pa_automation_default`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_least_privileges.html>; improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html>; additional improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html>; additional improvement <https://docs.aws.amazon.com/eks/latest/userguide/access-entries.html>; additional improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-logging.html>
-- `pa_jit_elevation`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_identities_unique.html>; improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/temporary-elevated-access.html>; additional improvement <https://github.com/aws-samples/iam-identity-center-team>; additional improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html>; additional improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml.html>
-- `pa_root_secured`: helpful <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html>; improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_securely_operate_aws_account.html>; additional helpful <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-iam.html>
-- `pa_access_reviewed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_continuous_reduction.html>; improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-findings.html>
+- Question: SEC03-BP02 Grant least privilege access (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_least_privileges.html>
+- `pa_automation_default`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_least_privileges.html>; improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_job-functions.html>; additional improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/permissionsetsconcept.html>; additional improvement <https://docs.aws.amazon.com/eks/latest/userguide/access-entries.html>; additional improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-logging.html>
+- `pa_jit_elevation`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_identities_unique.html>; improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/temporary-elevated-access.html>; additional improvement <https://github.com/aws-samples/iam-identity-center-team>; additional improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html>; additional improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_saml.html>
+- `pa_root_secured`: helpful <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-user.html>; improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_root-enable-root-access.html>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_securely_operate_aws_account.html>; additional helpful <https://docs.aws.amazon.com/govcloud-us/latest/UserGuide/govcloud-iam.html>
+- `pa_access_reviewed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_continuous_reduction.html>; improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/access-analyzer-findings.html>
 
 #### `event_emergency_access`: Emergency access that works when normal sign-in fails
 
@@ -2127,10 +2127,10 @@ Improvement plan: List where each incident tool is hosted and how people sign in
 
 Sources:
 
-- Question: SEC03-BP03 Emergency access process (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html>
-- `ea_per_failure_mode`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_permissions_emergency_process.html>; improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/emergency-access.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.sad.5-implement-break-glass-procedures.html>; additional improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/partitional-services-best-practices.html>
+- Question: SEC03-BP03 Emergency access process (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html>
+- `ea_per_failure_mode`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_permissions_emergency_process.html>; improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/emergency-access.html>; additional improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/ag.sad.5-implement-break-glass-procedures.html>; additional improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/partitional-services-best-practices.html>
 - `ea_tested_independent`: helpful <https://aws.amazon.com/blogs/security/how-to-use-regional-saml-endpoints-for-failover/>; improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/multi-region-iam-identity-center.html>; additional helpful <https://docs.aws.amazon.com/singlesignon/latest/userguide/emergency-access.html>; additional helpful <https://aws.amazon.com/about-aws/whats-new/2026/02/aws-iam-identity-center-multi-region-aws-account-access-and-application-deployment/>; additional helpful <https://aws.amazon.com/about-aws/whats-new/2026/10/aws-iam-identity-center-extends-multi-region-support-to-more-aws-regions/>; additional helpful <https://docs.aws.amazon.com/IAM/latest/UserGuide/disaster-recovery-resiliency.html>; additional helpful <https://aws.amazon.com/message/101925/>; additional improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_temp_enable-regions.html>; additional improvement <https://docs.aws.amazon.com/general/latest/gr/signin-service.html>
-- `ea_out_of_band`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_develop_management_plans.html>; improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/global-services.html>
+- `ea_out_of_band`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_develop_management_plans.html>; improvement <https://docs.aws.amazon.com/whitepapers/latest/aws-fault-isolation-boundaries/global-services.html>
 
 #### `event_operator_tooling_safety`: Operator tools prevent a mistaken action from causing an outage
 
@@ -2190,7 +2190,7 @@ Sources:
 - Question: AWS ORR whitepaper Appendix A, guidance from an incident <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html>
 - `ot_blast_radius_limits`: helpful <https://docs.aws.amazon.com/systems-manager/latest/userguide/running-automations-scale-controls.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/documents-syntax-data-elements-parameters.html>; additional helpful <https://aws.amazon.com/message/41926/>; additional improvement <https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-instance-protection.html>
 - `ot_resource_protections`: helpful <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/protect-stack-resources.html>; improvement <https://docs.aws.amazon.com/AWSCloudFormation/latest/TemplateReference/aws-attribute-deletionpolicy.html>; additional improvement <https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/using-cfn-protect-stacks.html>; additional improvement <https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_DeleteInstance.html>; additional improvement <https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.Basics.html>; additional improvement <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/Using_ChangingDisableAPITermination.html>; additional improvement <https://docs.aws.amazon.com/organizations/latest/userguide/orgs_manage_policies_scps.html>
-- `ot_dry_run_two_person`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-action-approve.html>; additional improvement <https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html>
+- `ot_dry_run_two_person`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_runbooks.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/automation-action-approve.html>; additional improvement <https://docs.aws.amazon.com/codepipeline/latest/userguide/approvals.html>
 
 #### `event_expiring_materials`: Certificates, credentials and other expiring materials
 
@@ -2257,8 +2257,8 @@ Improvement plan: Move certificates to ACM managed renewal with DNS validation w
 
 Sources:
 
-- Question: SEC09-BP01 Key and certificate management (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_protect_data_transit_key_cert_mgmt.html>
-- `exp_inventory`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_protect_data_transit_key_cert_mgmt.html>; improvement <https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-list.html>; additional improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html>; additional improvement <https://docs.aws.amazon.com/privateca/latest/userguide/ca-lifecycle.html>
+- Question: SEC09-BP01 Key and certificate management (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_protect_data_transit_key_cert_mgmt.html>
+- `exp_inventory`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_protect_data_transit_key_cert_mgmt.html>; improvement <https://docs.aws.amazon.com/acm/latest/userguide/gs-acm-list.html>; additional improvement <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html>; additional improvement <https://docs.aws.amazon.com/privateca/latest/userguide/ca-lifecycle.html>
 - `exp_alarms`: helpful <https://docs.aws.amazon.com/acm/latest/userguide/cloudwatch-metrics.html>; improvement <https://docs.aws.amazon.com/acm/latest/userguide/supported-events.html>; additional helpful <https://docs.aws.amazon.com/config/latest/developerguide/acm-certificate-expiration-check.html>; additional helpful <https://aws.amazon.com/certificate-manager/faqs/>; additional improvement <https://aws.amazon.com/blogs/security/how-to-manage-certificate-lifecycles-using-acm-event-driven-workflows/>
 - `exp_no_leaf_pinning`: helpful <https://docs.aws.amazon.com/acm/latest/userguide/troubleshooting-pinning.html>; improvement <https://docs.aws.amazon.com/acm/latest/userguide/acm-bestpractices.html>
 - `exp_auto_renew_deploy`: helpful <https://docs.aws.amazon.com/acm/latest/userguide/managed-renewal.html>; improvement <https://docs.aws.amazon.com/secretsmanager/latest/userguide/rotating-secrets.html>; additional improvement <https://docs.aws.amazon.com/eks/latest/userguide/certificate-authority-rotation.html>; additional improvement <https://docs.aws.amazon.com/singlesignon/latest/userguide/managesamlcerts.html>; additional improvement <https://docs.aws.amazon.com/config/latest/developerguide/access-keys-rotated.html>; additional improvement <https://aws.amazon.com/about-aws/whats-new/2026/08/amazon-eks-certificate-authority-ca-rotation-automated-lifecycle-management/>
@@ -2330,9 +2330,9 @@ Sources:
 
 - Question: REL12-BP05 Conduct game days regularly (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>
 - `gd_fault_injection`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_failure_injection_resiliency.html>; improvement <https://docs.aws.amazon.com/fis/latest/userguide/scenario-library.html>; additional improvement <https://docs.aws.amazon.com/fis/latest/userguide/az-availability-scenario.html>; additional improvement <https://docs.aws.amazon.com/fis/latest/userguide/use-lambda-actions.html>
-- `gd_tabletop`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>
-- `gd_people_engaged`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_develop_management_plans.html>
-- `gd_findings_closed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_feedback_loops.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html>
+- `gd_tabletop`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_run_game_days.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>
+- `gd_people_engaged`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_develop_management_plans.html>
+- `gd_findings_closed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_feedback_loops.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html>
 
 #### `event_post_incident_analysis`: Post-incident analysis and learning loop
 
@@ -2390,8 +2390,8 @@ Improvement plan: Add ORR questions to your analysis template. For each gap, dra
 Sources:
 
 - Question: REL12-BP02 Perform post-incident analysis (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_rca_resiliency.html>
-- `pia_process`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.3-conduct-post-incident-analysis-for-continuous-improvement.html>
-- `pia_actions_tracked`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html>
+- `pia_process`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/o.cm.3-conduct-post-incident-analysis-for-continuous-improvement.html>
+- `pia_actions_tracked`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html>
 - `pia_orr_feedback`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/inspect-the-process.html>; improvement <https://github.com/awslabs/operational-readiness-review-custom-war-lens>; additional helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html>
 
 ### 04 - Readiness Decision
@@ -2462,12 +2462,12 @@ Improvement plan: Compare current answers with the last milestone and update eve
 Sources:
 
 - Question: Operational Readiness Reviews whitepaper (AWS) <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html>
-- `rd_highs_dispositioned`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/inspect-the-process.html>
+- `rd_highs_dispositioned`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/inspect-the-process.html>
 - `rd_criteria_owner`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/inspect-the-process.html>
 - `rd_scope_complete`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/workloads.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/APIReference/API_UpdateAnswer.html>
-- `rd_next_review`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html>
+- `rd_next_review`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html>
 
-## ORR - Mission-Critical Event Readiness 1.0.2
+## ORR - Mission-Critical Event Readiness 1.0.3
 
 8 questions, 26 scored statements.
 
@@ -2544,11 +2544,11 @@ Improvement plan: Schedule a short final review about two weeks before the event
 
 Sources:
 
-- Question: OPS07-BP05 Informed deployment decisions (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html>
-- `cf_dates`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html>
-- `cf_owner`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_informed_deploy_decisions.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html>
+- Question: OPS07-BP05 Informed deployment decisions (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_informed_deploy_decisions.html>
+- `cf_dates`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html>
+- `cf_owner`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_informed_deploy_decisions.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html>
 - `cf_freeze`: helpful <https://builder.aws.com/content/3ErTKQOTKc5NIw031UePBPxTQ6I/automating-safe-hands-off-deployments>; improvement <https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference-DeploymentWindow.html>; additional improvement <https://docs.aws.amazon.com/codepipeline/latest/userguide/stage-conditions.html>; additional improvement <https://docs.aws.amazon.com/codepipeline/latest/userguide/rule-reference-LambdaInvoke.html>
-- `cf_final_review`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_const_orr.html>
+- `cf_final_review`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_const_orr.html>
 
 #### `evt_peak_retest`: Event-specific load re-test
 
@@ -2605,8 +2605,8 @@ Improvement plan: Make alarm, scaling and runbook checks an explicit part of the
 
 Sources:
 
-- Question: REL12-BP03 Test scalability and performance requirements <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html>
-- `pr_forecast`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_test_non_functional.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_cost_analysis.html>
+- Question: REL12-BP03 Test scalability and performance requirements <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_test_non_functional.html>
+- `pr_forecast`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_test_non_functional.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_cost_analysis.html>
 - `pr_retested`: helpful <https://aws.amazon.com/ec2/testing/>; improvement <https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html>
 - `pr_alarms_validated`: helpful <https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/introduction.html>; improvement <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch_Alarms.html>
 
@@ -2665,10 +2665,10 @@ Improvement plan: Write the scale-down plan with the capacity plan: list every t
 
 Sources:
 
-- Question: REL01-BP01 Aware of service quotas (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html>
-- `cq_quotas_raised`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_manage_service_limits_aware_quotas_and_constraints.html>; improvement <https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html>; additional improvement <https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html>
+- Question: REL01-BP01 Aware of service quotas (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_quotas_and_constraints.html>
+- `cq_quotas_raised`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_manage_service_limits_aware_quotas_and_constraints.html>; improvement <https://docs.aws.amazon.com/servicequotas/latest/userguide/request-quota-increase.html>; additional improvement <https://docs.aws.amazon.com/servicequotas/latest/userguide/configure-cloudwatch.html>
 - `cq_capacity_secured`: helpful <https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/capacity-reservations-create.html>; improvement <https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-warm-pools.html>; additional helpful <https://aws.amazon.com/message/101925/>; additional improvement <https://docs.aws.amazon.com/autoscaling/ec2/userguide/ec2-auto-scaling-scheduled-scaling.html>; additional improvement <https://docs.aws.amazon.com/lambda/latest/dg/provisioned-concurrency.html>; additional improvement <https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/warm-throughput.html>
-- `cq_scale_down_plan`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html>; improvement <https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html>
+- `cq_scale_down_plan`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_dynamic.html>; improvement <https://docs.aws.amazon.com/cost-management/latest/userguide/budgets-managing-costs.html>
 
 #### `evt_ddos_response`: DDoS response readiness for high-visibility endpoints
 
@@ -2736,7 +2736,7 @@ Improvement plan: Run a 60-minute DDoS tabletop with the event shift. Walk throu
 Sources:
 
 - Question: AWS Best Practices for DDoS Resiliency (AWS whitepaper) <https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html>
-- `dd_not_public`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_network_protection_create_layers.html>
+- `dd_not_public`: helpful <https://docs.aws.amazon.com/whitepapers/latest/aws-best-practices-ddos-resiliency/aws-best-practices-ddos-resiliency.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_network_protection_create_layers.html>
 - `dd_l7_enforcing`: helpful <https://docs.aws.amazon.com/waf/latest/developerguide/aws-managed-rule-groups-anti-ddos.html>; improvement <https://aws.amazon.com/blogs/security/aws-shield-advanced-is-embracing-the-aws-waf-anti-ddos-managed-rule-group-what-changes-and-how-to-prepare/>; additional helpful <https://docs.aws.amazon.com/waf/latest/developerguide/waf-anti-ddos-advanced.html>; additional improvement <https://docs.aws.amazon.com/waf/latest/developerguide/waf-rule-statement-type-rate-based.html>; additional improvement <https://docs.aws.amazon.com/waf/latest/developerguide/monitoring-cloudwatch.html>
 - `dd_ddos_tier`: helpful <https://docs.aws.amazon.com/waf/latest/developerguide/ddos-advanced-summary.html>; improvement <https://docs.aws.amazon.com/waf/latest/developerguide/ddos-srt-proactive-engagement.html>; additional improvement <https://docs.aws.amazon.com/waf/latest/developerguide/ddos-srt-support.html>; additional improvement <https://aws.amazon.com/shield/pricing/>
 - `dd_rehearsed`: helpful <https://aws.amazon.com/security/ddos-simulation-testing/>; improvement <https://docs.aws.amazon.com/waf/latest/developerguide/ddos-responding.html>; additional helpful <https://docs.aws.amazon.com/waf/latest/developerguide/ddos-request-service-credit.html>
@@ -2796,10 +2796,10 @@ Improvement plan: Track every rehearsal finding in the same tracker as your othe
 
 Sources:
 
-- Question: REL12-BP05 Conduct game days regularly (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html>
-- `rh_tabletop`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/sec_incident_response_run_game_days.html>
+- Question: REL12-BP05 Conduct game days regularly (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>
+- `rh_tabletop`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/security-pillar/sec_incident_response_run_game_days.html>
 - `rh_gameday`: helpful <https://docs.aws.amazon.com/fis/latest/userguide/scenario-library.html>; improvement <https://docs.aws.amazon.com/fis/latest/userguide/az-availability-scenario.html>
-- `rh_findings_closed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_game_days_resiliency.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html>
+- `rh_findings_closed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html>; improvement <https://docs.aws.amazon.com/systems-manager/latest/userguide/OpsCenter.html>
 
 ### 02 - Operate
 
@@ -2858,9 +2858,9 @@ Improvement plan: Agree the channel and its fallback with each partner, and with
 
 Sources:
 
-- Question: OPS10-BP04 Define escalation paths (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html>
-- `wr_staffing`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_org_culture_team_res_appro.html>; improvement <https://aws.amazon.com/premiumsupport/aws-countdown/>
-- `wr_escalation_tree`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_define_escalation_paths.html>; improvement <https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html>; additional improvement <https://docs.aws.amazon.com/awssupport/latest/user/case-management.html>
+- Question: OPS10-BP04 Define escalation paths (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html>
+- `wr_staffing`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_org_culture_team_res_appro.html>; improvement <https://aws.amazon.com/premiumsupport/aws-countdown/>
+- `wr_escalation_tree`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_define_escalation_paths.html>; improvement <https://docs.aws.amazon.com/awssupport/latest/user/aws-support-plans.html>; additional improvement <https://docs.aws.amazon.com/awssupport/latest/user/case-management.html>
 - `wr_shared_channel`: helpful <https://aws.amazon.com/premiumsupport/aws-countdown/>; improvement <https://docs.aws.amazon.com/awssupport/latest/user/case-management.html>; additional helpful <https://aws.amazon.com/message/101925/>
 
 #### `evt_degraded_modes`: Tested degraded modes and public communications
@@ -2918,10 +2918,10 @@ Improvement plan: Draft and pre-approve status messages for each likely situatio
 
 Sources:
 
-- Question: REL05-BP01 Implement graceful degradation (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html>
-- `dm_degraded_mode`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_graceful_degradation.html>; improvement <https://builder.aws.com/content/3Eun1EEyX6p2e3VYNyRLSJzLuMV/using-load-shedding-to-avoid-overload>; additional helpful <https://builder.aws.com/content/3EuS9Sakq7L3VLQIF3qzfMfke1Y/avoiding-fallback-in-distributed-systems>
-- `dm_kill_switches`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html>; improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile-feature-flags.html>
-- `dm_status_comms`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_push_notify.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_event_response_dashboards.html>
+- Question: REL05-BP01 Implement graceful degradation (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html>
+- `dm_degraded_mode`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html>; improvement <https://builder.aws.com/content/3Eun1EEyX6p2e3VYNyRLSJzLuMV/using-load-shedding-to-avoid-overload>; additional helpful <https://builder.aws.com/content/3EuS9Sakq7L3VLQIF3qzfMfke1Y/avoiding-fallback-in-distributed-systems>
+- `dm_kill_switches`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html>; improvement <https://docs.aws.amazon.com/appconfig/latest/userguide/appconfig-creating-configuration-and-profile-feature-flags.html>
+- `dm_status_comms`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_push_notify.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_event_response_dashboards.html>
 
 ### 03 - After the event
 
@@ -2979,10 +2979,10 @@ Improvement plan: Run the scale-down plan as normal pipeline changes, confirm ea
 
 Sources:
 
-- Question: OPS11-BP02 Perform post-incident analysis (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html>
-- `px_retro`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_evolve_ops_perform_rca_process.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_testing_resiliency_rca_resiliency.html>
+- Question: OPS11-BP02 Perform post-incident analysis (AWS Well-Architected) <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html>
+- `px_retro`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_evolve_ops_perform_rca_process.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_rca_resiliency.html>
 - `px_lessons_fed`: helpful <https://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/appendix-a-creating-orr-guidance-from-an-incident.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/userguide/milestones.html>
-- `px_cost_review`: helpful <https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/framework/cost_manage_demand_resources_dynamic.html>
+- `px_cost_review`: helpful <https://docs.aws.amazon.com/cost-management/latest/userguide/ce-what-is.html>; improvement <https://docs.aws.amazon.com/wellarchitected/latest/cost-optimization-pillar/cost_manage_demand_resources_dynamic.html>
 
 ## ORR - Generative AI and Agents 1.0.2
 

@@ -19,7 +19,7 @@ description:
     their alarms run.
 helpful:
   display_text: OPS04-BP03 User experience telemetry (AWS Well-Architected)
-  url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_customer_telemetry.html
+  url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_observability_customer_telemetry.html
 statements:
   - id: can_coverage
     tier: core

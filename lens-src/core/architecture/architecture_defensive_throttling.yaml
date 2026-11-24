@@ -87,7 +87,7 @@ statements:
       Typical levers: block a caller with AWS WAF IP sets or rate-based rules; change limits through dynamic
       configuration such as AWS AppConfig; tune per-client fairness with API Gateway usage plans (best-effort, not
       hard limits).
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/rel_mitigate_interaction_failure_emergency_levers.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_emergency_levers.html
     improvement: >-
       Move limits into dynamic configuration with validation and a safe deployment strategy that rolls back on
       alarms, add runbook steps to change a limit and to block a caller, rehearse both in a game day, and record

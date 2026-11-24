@@ -105,7 +105,7 @@ statements:
       before they run. The approval works out of hours, is recorded with the change, and the emergency path for urgent
       fixes is logged and reviewed afterward. Previews of infrastructure as code changes are scored in
       releases_manual_changes. Approving a person's access request is scored in event_mutating_access.
-    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_ready_to_support_use_runbooks.html
+    helpful_url: https://docs.aws.amazon.com/wellarchitected/latest/operational-excellence-pillar/ops_ready_to_support_use_runbooks.html
     improvement: >-
       Classify operator commands by impact. For the high-impact ones, add a preview step that prints the intended
       actions and targets, and an approval step by someone other than the operator, for example the aws:approve
